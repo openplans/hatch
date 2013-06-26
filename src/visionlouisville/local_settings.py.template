@@ -1,0 +1,40 @@
+DEBUG = 'True'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'visionlouisville',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
+
+TWITTER_CONSUMER_KEY = ''
+TWITTER_CONSUMER_SECRET = ''
+
+LOGGING = {
+   'version': 1,
+   'disable_existing_loggers': True,
+   'formatters': {
+       'simple': {
+           'format': '%(levelname)s %(message)s',
+       },
+   },
+   'handlers': {
+       'console':{
+           'level':'DEBUG',
+           'class':'logging.StreamHandler',
+           'formatter': 'simple'
+       },
+   },
+   'loggers': {
+       'django': {
+           'handlers': ['console'],
+           'level': 'DEBUG',
+       },
+   }
+}

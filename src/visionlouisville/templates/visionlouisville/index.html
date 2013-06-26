@@ -1,0 +1,47 @@
+{% load jstemplate %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html dir="ltr" lang="en-US" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html dir="ltr" lang="en-US" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html dir="ltr" lang="en-US" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html dir="ltr" lang="en-US" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html dir="ltr" lang="en-US"> <!--<![endif]-->
+
+<head>
+  <title>VisionLouisville</title>
+
+  <meta charset="utf-8">
+  <meta name="description" content="VisionLouisville">
+  <meta name="author" content="OpenPlans">
+
+  <!--  Mobile Viewport Fix -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- Favicon & Progressively-Enhanced Touch Icons: http://mathiasbynens.be/notes/touch-icons#sizes -->
+  <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}images/apple-touch-icon-144x144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}images/apple-touch-icon-114x114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}images/apple-touch-icon-72x72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}images/apple-touch-icon-precomposed.png">
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}components/normalize-css/normalize.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css" type="text/css" media="screen, projection" />
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <marquee>oh hai louisville</marquee>
+
+  <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
+  <script src="{{ STATIC_URL }}components/underscore/underscore-min.js"></script>
+  <script src="{{ STATIC_URL }}components/backbone/backbone.js"></script>
+  <script src="{{ STATIC_URL }}components/backbone.marionette/lib/backbone.marionette.js"></script>
+  <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
+  <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
+  <script src="{{ STATIC_URL }}js/handlebars-helpers.js"></script>
+  <script src="{{ STATIC_URL }}js/app.js"></script>
+</body>
+</html>

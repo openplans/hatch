@@ -1,0 +1,48 @@
+# ==============================
+# Web server
+# ==============================
+
+Django
+
+
+
+# ==============================
+# Database and Model Management
+# ==============================
+
+psycopg2
+south
+
+
+# ==============================
+# Authentication
+# ==============================
+
+django-social-auth
+
+
+
+# ==============================
+# APIs
+# ==============================
+
+djangorestframework
+
+
+
+# ==============================
+# Routes and Templating
+# ==============================
+
+django-jstemplate
+django-shorturls
+
+
+
+# ==============================
+# Testing / QA
+# ==============================
+
+nose
+django-nose
+django-debug-toolbar

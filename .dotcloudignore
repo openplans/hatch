@@ -1,0 +1,22 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+env/
+.env/
+*.sublime-project
+*.sublime-workspace
+local_settings.py
