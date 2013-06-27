@@ -73,18 +73,22 @@ var VisionLouisville = VisionLouisville || {};
     template: '#no-items-tpl'
   });
 
-  NS.VisionItemView = Backbone.Marionette.ItemView.extend({
+
+  NS.VisionListItemView = Backbone.Marionette.ItemView.extend({
     template: '#list-item-tpl',
     tagName: 'li'
   });
 
-  NS.VisionCollectionView = Backbone.Marionette.CompositeView.extend({
+  NS.VisionListView = Backbone.Marionette.CompositeView.extend({
     template: '#list-tpl',
-    itemView: NS.VisionItemView,
+    itemView: NS.VisionListItemView,
     itemViewContainer: 'ul',
     emptyView: NS.NoItemsView
   });
 
+  NS.VisionItemView = Backbone.Marionette.ItemView.extend({
+    template: '#item-tpl'
+  });
 
 
 }(VisionLouisville));

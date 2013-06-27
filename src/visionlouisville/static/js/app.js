@@ -25,12 +25,30 @@ var VisionLouisville = VisionLouisville || {};
         }
       });
 
-      NS.app.mainRegion.show(new NS.VisionCollectionView({
+      NS.app.mainRegion.show(new NS.VisionListView({
         collection: collection
       }));
     },
     new: function() {},
-    item: function() {},
+    item: function(id) {
+      id = parseInt(id, 10);
+      var render = function(modelId) {
+            var model = NS.app.visionCollection.get(id);
+            NS.app.mainRegion.show(new NS.VisionItemView({
+              model: model
+            }));
+          };
+
+      // Nothing in the collection? It's not done fetching. Let's wait for it.
+      if (NS.app.visionCollection.size() === 0) {
+        // Render when the collection resets
+        NS.app.visionCollection.once('reset', function() {
+          render(id);
+        });
+      } else {
+        render(id);
+      }
+    },
     home: function() {
       NS.app.mainRegion.show(NS.app.homeView);
       // Init this here b/c we know we're inserted into the dom at this point.
