@@ -125,6 +125,7 @@ img {
   box-shadow: 0.125em 0.125em 0 rgba(0,0,0,0.25);
   font-family: "Riona";
   font-weight: 500;
+  border: 0;
 }
 .btn:hover,
 .btn:focus,
@@ -134,8 +135,13 @@ img {
 .btn-primary,
 .btn-primary:visited,
 .btn-primary:link {
-  background-color: #92ab2d;
+  background-color: #b0cc3f;
   color: #fff;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #92ab2d;
 }
 .btn-block, 
 .btn-block:visited, 
@@ -144,9 +150,26 @@ img {
   margin: 0 0 1.2em;
   padding-top: 1em;
   padding-bottom: 0.75em;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+  width: 100%;
 }
 .btn-large {
   font-size: 1.25em;
+}
+
+/* Forms */
+form {}
+textarea {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+  width: 100%;
+  height: 6.5em;
+  resize: none;
+  border: 0.25em solid #e7e7d7;
+  padding: 0.5em;
 }
 
 
