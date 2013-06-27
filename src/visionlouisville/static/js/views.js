@@ -47,6 +47,7 @@ var VisionLouisville = VisionLouisville || {};
 
     onRender: function() {
       this.renderRegions();
+      this.delegateEvents();
     },
 
     onClose: function() {
