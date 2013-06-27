@@ -70,7 +70,8 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   NS.VisionItemView = Backbone.Marionette.ItemView.extend({
-    template: '#list-item-tpl'
+    template: '#list-item-tpl',
+    tagName: 'li'
   });
 
   NS.VisionCollectionView = Backbone.Marionette.CompositeView.extend({
