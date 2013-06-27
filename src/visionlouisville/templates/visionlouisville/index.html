@@ -34,6 +34,8 @@
   <![endif]-->
 </head>
 <body>
+  {% handlebarsjs '(.*)' %}
+
   <div class="site-header">
     <div class="container">
       <h1 class="site-title"><span><a href="#" title="Vision West Louisville" rel="home">Vision West Louisville</a></span></h1>
@@ -41,7 +43,7 @@
   </div><!-- end .site-header -->
 
   <div class="main">
-    <div class="container">
+<!--     <div class="container">
 
       <div class="intro-text">
         <p class="intro-prompt">Check out your neighbors' vision of West Louisville's future!</p>
@@ -114,7 +116,7 @@
         </ul>
       </nav>
 
-    </div>
+    </div> -->
   </div><!-- end .main -->
 
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
@@ -125,6 +127,8 @@
   <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
   <script src="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper-2.0.js"></script>
   <script src="{{ STATIC_URL }}js/handlebars-helpers.js"></script>
+  <script src="{{ STATIC_URL }}js/models.js"></script>
+  <script src="{{ STATIC_URL }}js/views.js"></script>
   <script src="{{ STATIC_URL }}js/app.js"></script>
 
   <script type="text/javascript">
