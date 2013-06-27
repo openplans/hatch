@@ -1,37 +1,56 @@
 /* =Web Fonts
 -------------------------------------------------------------- */
 
+/* Light 100 */
 @font-face {
-  font-family: "Riona Sans";
-  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Regular.otf') format('opentype');
-}
-@font-face {
-  font-family: "Riona Light";
+  font-family: "Riona";
   src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Light.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* Regular 400 */
+@font-face {
+  font-family: "Riona";
+  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
 }
 @font-face {
-  font-family: "Riona Black";
-  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Black.otf') format('opentype');
-  font-weight: bold;
-}
-@font-face {
-  font-family: "Riona Medium";
-  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Medium.otf') format('opentype');
-  font-weight: bold;
-}
-@font-face {
-  font-family: "Riona Bold";
-  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Bold.otf') format('opentype');
-  font-weight: bold;
-}
-@font-face {
-  font-family: "Riona Italic";
+  font-family: "Riona";
   src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Medium 500 */
+@font-face {
+  font-family: "Riona";
+  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Bold 700 */
+@font-face {
+  font-family: "Riona";
+  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Black 900 */
+@font-face {
+  font-family: "Riona";
+  src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
 }
 @font-face {
   font-family: "Riona Black Italic";
   src: url('http://vision_louisville.s3.amazonaws.com/static/stylesheets/fonts/Riona Sans Complete/Mika Melvas - RionaSans-BlackItalic.otf') format('opentype');
-  font-weight: bold;
+  font-weight: 900;
+  font-style: italic;
 }
 @font-face {
   font-family: "Riona Medium Italic";
@@ -49,7 +68,7 @@ body, select, input, textarea {
   color: #444;
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
-h1,h2,h3,h4,h5,h6 { margin: 0 0 0.5em 0; font-family: "Riona Sans"; }
+h1,h2,h3,h4,h5,h6 { margin: 0 0 0.5em 0; font-family: "Riona"; }
 h1 { font-size: 1.75em; }
 h2 { font-size: 1.75em; }
 h3 { font-size: 1.75em; }
@@ -89,36 +108,45 @@ img {
 }
 
 /* Buttons */
-a.btn {
+.btn, 
+.btn:visited, 
+.btn:link {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-  padding: 0.25em 0.5em;
+  padding: 0.325em 0.5em 0.125em;
   margin-bottom: 0;
-  font-weight: bold;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
   color: #333;
   text-decoration: none;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.75);
-  background-color: Gainsboro;
-  border: 0.1em solid #fff;
-  border-color: rgba(255,255,255,0.5) rgba(255,255,255,0.5) rgba(255,255,255,0.5);
-  border-bottom-color: rgba(255,255,255,0.1);
-  border-radius: 0.25em;
-  box-shadow: 0 0.1em 0.2em rgba(0,0,0,0.5), inset 0 1em 0 rgba(255,255,255,0.2);
+  background-color: #e7e7d7;
+  box-shadow: 0.125em 0.125em 0 rgba(0,0,0,0.25);
+  font-family: "Riona";
+  font-weight: 500;
 }
 .btn:hover,
 .btn:focus,
 .btn:active {
-  color: #333;
-  box-shadow: 0 0.1em 0.2em rgba(0,0,0,0.5), inset 0 1em 0 rgba(255,255,255,0.2), inset 0 2em 0 rgba(255,255,255,0.2);
+  background-color: #d4d4b7;
 }
-a.btn-primary {
-  background-color: #308fbf;
-  color: White !important;
-  text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
+.btn-primary,
+.btn-primary:visited,
+.btn-primary:link {
+  background-color: #92ab2d;
+  color: #fff;
+}
+.btn-block, 
+.btn-block:visited, 
+.btn-block:link {
+  display: block;
+  margin: 0 0 1.2em;
+  padding-top: 1em;
+  padding-bottom: 0.75em;
+}
+.btn-large {
+  font-size: 1.25em;
 }
 
 
@@ -164,8 +192,8 @@ body {
 }
 .site-title {
   font-size: 1.25em;
-  font-family: "Riona Black";
-  font-weight: bold;
+  font-family: "Riona";
+  font-weight: 900;
   margin: 0;
 }
 .site-title a {
@@ -183,15 +211,16 @@ body {
 }
 .intro-prompt {
   font-size: 1.125em;
-  font-family: "Riona Light";
-  font-weight: bold;
+  font-family: "Riona";
+  font-weight: 700;
   margin-bottom: 0.5em;
 }
 .category-list {
   list-style: none;
   padding: 0;
   margin: 0 0 1em;
-  font-family: "Riona Black";
+  font-family: "Riona";
+  font-weight: 900;
   font-size: 1.5em;
   line-height: 1.5;
 }
