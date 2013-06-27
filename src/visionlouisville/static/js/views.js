@@ -20,6 +20,10 @@ var VisionLouisville = VisionLouisville || {};
       creativity: '.creativity .vision'
     },
 
+    events: {
+      'click .swiper-link': 'handleSwiperLinkClick'
+    },
+
     initialize: function() {
       this.listenTo(this.collection, 'reset', this.renderRegions);
     },
@@ -43,6 +47,16 @@ var VisionLouisville = VisionLouisville || {};
 
     onClose: function() {
       this.stopListeningobject(this.collection);
+    },
+
+    handleSwiperLinkClick: function(evt) {
+      var $link = $(evt.target),
+          $parent = $link.parents('li'),
+          index = $parent.index();
+
+      evt.preventDefault();
+
+      this.swiper.swipeTo(index, 500, true);
     }
   });
 

@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ */
+/*globals Backbone Handlebars $ _ Swiper */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -14,13 +14,16 @@ var VisionLouisville = VisionLouisville || {};
     this.homeView = new NS.HomeView({
       collection: this.visionCollection
     });
-    // this.recentVisionsView = new NS.RecentVisionsView({
-    //   collection: this.visionCollection
-    // });
 
     this.mainRegion.show(this.homeView);
 
-    // this.homeView.visionsRegion.show(this.recentVisionsView);
+    // Init this here b/c we know we're inserted into the dom at this point.
+    // Important for height calculations.
+    this.homeView.swiper = new Swiper(this.homeView.$('.swiper-container').get(0), {
+      loop: true,
+      calculateHeight: true
+    });
+
   });
 
 
