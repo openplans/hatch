@@ -264,6 +264,11 @@ a.identity-link { color: #1A534C; }
 a.creativity-link { color: #29867B; }
 
 /* Visions */
+.vision-wrapper {
+  position: relative;
+  margin: 0 0 0 3.5em;
+  padding: 0;
+}
 .vision {
   position: relative;
   margin: 0;
@@ -317,7 +322,8 @@ a.creativity-link { color: #29867B; }
   padding: 0;
   position: relative;
 }
-.vision-list .user-link {
+.vision-list .user-link,
+.vision-wrapper .user-link {
   width: 2.5em;
   display: block;
   position: absolute;
