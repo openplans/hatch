@@ -45,8 +45,12 @@ var VisionLouisville = VisionLouisville || {};
       });
     },
 
+    onRender: function() {
+      this.renderRegions();
+    },
+
     onClose: function() {
-      this.stopListeningobject(this.collection);
+      this.stopListening(this.collection);
     },
 
     handleSwiperLinkClick: function(evt) {
@@ -64,5 +68,17 @@ var VisionLouisville = VisionLouisville || {};
     template: '#home-vision-tpl',
     tagName: 'p'
   });
+
+  NS.VisionItemView = Backbone.Marionette.ItemView.extend({
+    template: '#list-item-tpl'
+  });
+
+  NS.VisionCollectionView = Backbone.Marionette.CompositeView.extend({
+    template: '#list-tpl',
+    itemView: NS.VisionItemView,
+    itemViewContainer: 'ul'
+  });
+
+
 
 }(VisionLouisville));

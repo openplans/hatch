@@ -13,6 +13,15 @@ class AppView (TemplateView):
 class VisionViewSet (ModelViewSet):
     model = Vision
 
+    def get_queryset(self):
+        queryset = super(VisionViewSet, self).get_queryset()
+
+        category = self.request.GET.get('category')
+        if (category):
+            queryset = queryset.filter(category__iexact=category)
+
+        return queryset
+
 # Views
 app_view = AppView.as_view()
 
