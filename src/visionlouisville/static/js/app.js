@@ -15,24 +15,30 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.controller = {
     list: function(category) {
-      // TODO: this is not very efficient
-      var collection = new NS.VisionCollection();
+      var render = function() {
+        NS.app.mainRegion.show(new NS.VisionListView({
+          collection: new Backbone.Collection(
+            NS.app.visionCollection.filter(function(model) {
+              return model.get('category').toLowerCase() === category;
+            })
+          )
+        }));
+      };
 
-      collection.fetch({
-        reset: true,
-        data: {
-          category: category
-        }
-      });
-
-      NS.app.mainRegion.show(new NS.VisionListView({
-        collection: collection
-      }));
+      // Nothing in the collection? It's not done fetching. Let's wait for it.
+      if (NS.app.visionCollection.size() === 0) {
+        // Render when the collection resets
+        NS.app.visionCollection.once('reset', function() {
+          render();
+        });
+      } else {
+        render();
+      }
     },
     new: function() {},
     item: function(id) {
       id = parseInt(id, 10);
-      var render = function(modelId) {
+      var render = function() {
             var model = NS.app.visionCollection.get(id);
             NS.app.mainRegion.show(new NS.VisionItemView({
               model: model
@@ -43,10 +49,10 @@ var VisionLouisville = VisionLouisville || {};
       if (NS.app.visionCollection.size() === 0) {
         // Render when the collection resets
         NS.app.visionCollection.once('reset', function() {
-          render(id);
+          render();
         });
       } else {
-        render(id);
+        render();
       }
     },
     home: function() {
