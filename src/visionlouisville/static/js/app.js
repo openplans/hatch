@@ -35,7 +35,12 @@ var VisionLouisville = VisionLouisville || {};
         render();
       }
     },
-    new: function() {},
+    new: function(category) {
+        NS.app.mainRegion.show(new NS.VisionFormView({
+          category: category,
+          collection: NS.app.visionCollection
+        }));
+    },
     item: function(id) {
       id = parseInt(id, 10);
       var render = function() {

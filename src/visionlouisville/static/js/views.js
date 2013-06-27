@@ -91,5 +91,11 @@ var VisionLouisville = VisionLouisville || {};
     template: '#item-tpl'
   });
 
+  NS.VisionFormView = Backbone.Marionette.ItemView.extend({
+    template: '#form-tpl',
+    onRender: function() {
+      console.log(this.options, this.collection);
+    }
+  });
 
 }(VisionLouisville));
