@@ -4,12 +4,22 @@
     <blockquote class="vision">
       <p>{{ content }}</p>
     </blockquote>
-    <a href="/#!/{{ id }}" class="user-link"><img src="/static/images/avatar.png" class="avatar" /></a>
+    <a href="#" class="user-link"><img src="/static/images/avatar.png" class="avatar" /></a><!-- FIXME: link to list of user's visions -->
   </div>
 </div>
 
 <hr/>
 
 <div class="container">
-  Sharing stuff goes here...
+  <span class='st_facebook_hcount' displayText='Facebook'></span>
+  <span class='st_twitter_hcount' displayText='Tweet' st_via=''></span>
+  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+  <script type="text/javascript">
+    stLight.options({
+      publisher: "ur-b9846a61-9e48-968d-641f-faa02f559bbf", 
+      doNotHash: false, 
+      doNotCopy: false, 
+      hashAddressBar: false
+    });
+  </script>
 </div>
