@@ -17,6 +17,7 @@ var VisionLouisville = VisionLouisville || {};
     list: function(category) {
       var render = function() {
         NS.app.mainRegion.show(new NS.VisionListView({
+          model: new Backbone.Model({category: category}),
           collection: new Backbone.Collection(
             NS.app.visionCollection.filter(function(model) {
               return model.get('category').toLowerCase() === category;

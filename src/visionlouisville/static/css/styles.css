@@ -108,8 +108,8 @@ img {
 }
 
 /* Buttons */
-.btn, 
-.btn:visited, 
+.btn,
+.btn:visited,
 .btn:link {
   display: inline-block;
   *display: inline;
@@ -143,8 +143,8 @@ img {
 .btn-primary:active {
   background-color: #92ab2d;
 }
-.btn-block, 
-.btn-block:visited, 
+.btn-block,
+.btn-block:visited,
 .btn-block:link {
   display: block;
   margin: 0 0 1.2em;
@@ -237,6 +237,9 @@ body {
   font-family: "Riona";
   font-weight: 700;
   margin-bottom: 0.5em;
+}
+.category-label {
+  text-transform: capitalize;
 }
 .category-list {
   list-style: none;
