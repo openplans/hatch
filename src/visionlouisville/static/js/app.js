@@ -6,9 +6,9 @@ var VisionLouisville = VisionLouisville || {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      '!\/list/:category': 'list',
-      '!\/new/:category': 'new',
-      '!\/:id': 'item',
+      '!\/visions/:category/new': 'new',
+      '!\/visions/:category/list': 'list',
+      '!\/visions/:id': 'item',
       '*anything': 'home'
     }
   });
