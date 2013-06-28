@@ -116,7 +116,7 @@ var VisionLouisville = VisionLouisville || {};
           window.alert('Unable to save your vision. Please try again.');
         },
         success: function(model) {
-          NS.app.router.navigate('!/visions/' + model.id);
+          NS.app.router.navigate('!/visions/' + model.id, {trigger: true});
         }
       });
     }
