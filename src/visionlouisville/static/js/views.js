@@ -1,3 +1,5 @@
+/*globals Backbone Handlebars $ _ */
+
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
@@ -93,8 +95,30 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.VisionFormView = Backbone.Marionette.ItemView.extend({
     template: '#form-tpl',
-    onRender: function() {
-      console.log(this.options, this.collection);
+    events: {
+      'submit form': 'handleFormSubmission'
+    },
+    handleFormSubmission: function(evt) {
+      evt.preventDefault();
+      var form = evt.target,
+          formArray = $(form).serializeArray(),
+          attrs = {};
+
+      _.each(formArray, function(obj){
+        attrs[obj.name] = obj.value;
+      });
+
+      this.model.set(attrs, {silent: true});
+      this.collection.add(this.model);
+      this.model.save(null, {
+        wait: true,
+        error: function() {
+          window.alert('Unable to save your vision. Please try again.');
+        },
+        success: function(model) {
+          NS.app.router.navigate('!/' + model.id);
+        }
+      });
     }
   });
 

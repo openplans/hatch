@@ -7,7 +7,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
       '!\/list/:category': 'list',
-      '!\/new': 'new',
+      '!\/new/:category': 'new',
       '!\/:id': 'item',
       '*anything': 'home'
     }
@@ -39,7 +39,8 @@ var VisionLouisville = VisionLouisville || {};
     new: function(category) {
         NS.app.mainRegion.show(new NS.VisionFormView({
           category: category,
-          collection: NS.app.visionCollection
+          collection: NS.app.visionCollection,
+          model: new Backbone.Model({category: category})
         }));
     },
     item: function(id) {
