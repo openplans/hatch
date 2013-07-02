@@ -12,7 +12,7 @@ dotcloud_get_env() {
 }
 
 echo "Writing the local settings file..."
-cat >> src/visionlouisville/local_settings.py <<EOF
+cat > src/visionlouisville/local_settings.py <<EOF
 
 import json
 with open('/home/dotcloud/environment.json') as f:
@@ -38,27 +38,36 @@ TEMPLATE_DEBUG = DEBUG
 # Set these explicitly here to override whatever may have come from settings
 STATIC_URL = '/static/'
 
+# For authenticating users with Twitter
+TWITTER_CONSUMER_KEY = env['TWITTER_CONSUMER_KEY']
+TWITTER_CONSUMER_SECRET = env['TWITTER_CONSUMER_SECRET']
+
+# For accessing the app's Twitter account
+TWITTER_USERNAME = env['TWITTER_USERNAME']
+TWITTER_ACCESS_TOKEN = env['TWITTER_ACCESS_TOKEN']
+TWITTER_ACCESS_SECRET = env['TWITTER_ACCESS_SECRET']
+
 LOGGING = {
-   'version': 1,
-   'disable_existing_loggers': True,
-   'formatters': {
-       'simple': {
-           'format': '%(levelname)s %(message)s',
-       },
-   },
-   'handlers': {
-       'console': {
-           'level': 'DEBUG',
-           'class': 'logging.StreamHandler',
-           'formatter': 'simple'
-       },
-   },
-   'loggers': {
-       'django': {
-           'handlers': ['console'],
-           'level': 'DEBUG',
-       },
-   }
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
 }
 EOF
 

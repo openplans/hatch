@@ -13,28 +13,34 @@ DATABASES = {
 
 SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 
+# For authenticating users with Twitter
 TWITTER_CONSUMER_KEY = ''
 TWITTER_CONSUMER_SECRET = ''
 
+# For accessing the app's Twitter account
+TWITTER_USERNAME = ''
+TWITTER_ACCESS_TOKEN = ''
+TWITTER_ACCESS_SECRET = ''
+
 LOGGING = {
-   'version': 1,
-   'disable_existing_loggers': True,
-   'formatters': {
-       'simple': {
-           'format': '%(levelname)s %(message)s',
-       },
-   },
-   'handlers': {
-       'console':{
-           'level':'DEBUG',
-           'class':'logging.StreamHandler',
-           'formatter': 'simple'
-       },
-   },
-   'loggers': {
-       'django': {
-           'handlers': ['console'],
-           'level': 'DEBUG',
-       },
-   }
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
 }
