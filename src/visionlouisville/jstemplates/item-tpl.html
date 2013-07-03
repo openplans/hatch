@@ -2,7 +2,7 @@
   <div class="vision-wrapper">
     <span class="balloon"></span><span class="tail tail-left">&#9664;</span>
     <blockquote class="vision">
-      <p>{{ content }}</p>
+      <p>{{ title }}</p>
     </blockquote>
     <a href="/#!/visions/{{ id }}" class="user-link"><img src="/static/images/avatar.png" class="avatar" /></a><!-- FIXME: link to list of user's visions -->
   </div>
@@ -11,8 +11,8 @@
 <hr/>
 
 <div class="container">
-  <span class='st_facebook_hcount' displayText='Facebook' st_title="{{ content }}" st_url="{{ window_location }}"></span>
-  <span class='st_twitter_hcount' displayText='Tweet' st_title="{{ content }}" st_url="{{ window_location }}"></span>
+  <span class='st_facebook_hcount' displayText='Facebook' st_title="{{ title }}" st_url="{{ window_location }}"></span>
+  <span class='st_twitter_hcount' displayText='Tweet' st_title="{{ title }}" st_url="{{ window_location }}"></span>
   <script>
     stButtons.locateElements();
   </script>
