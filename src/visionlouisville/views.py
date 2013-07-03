@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from .models import Vision
+from .serializers import VisionSerializer
 
 
 # App
@@ -12,9 +13,10 @@ class AppView (TemplateView):
 # API
 class VisionViewSet (ModelViewSet):
     model = Vision
+    serializer_class = VisionSerializer
 
     def get_queryset(self):
-        queryset = super(VisionViewSet, self).get_queryset()
+        queryset = Vision.objects.all().select_related('author').prefetch_related('author__social_auth')
 
         category = self.request.GET.get('category')
         if (category):
