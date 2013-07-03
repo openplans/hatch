@@ -66,8 +66,23 @@ class User (BaseUser):
 class Vision (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    content = models.CharField(max_length=160)
+    author = models.ForeignKey(User, related_name='visions')
     category = models.CharField(max_length=20)
+    title = models.CharField(max_length=160)
+    description = models.TextField()
+
+    def get_tweet_text(self, request):
+        vision_url = request.build_absolute_uri(
+            reverse('vision-detail', kwargs={'pk': self.pk}))
+        category = self.category.lower()
+        username = self.author.username
+
+        return \
+            'Check out this vision about %s in Louisville, from @%s: %s' % (
+                category, 
+                username, 
+                vision_url
+            )
 
     def __unicode__(self):
-        return self.content
+        return self.title
