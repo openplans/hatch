@@ -15,8 +15,8 @@ install:
   - cp src/visionlouisville/local_settings.py.template src/visionlouisville/local_settings.py
 
 before_script:
+  - "python src/manage.py runserver &"
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
-  - python src/manage.py runserver
 
 script:
   - python src/manage.py test --with-coverage --cover-package=visionlouisville
