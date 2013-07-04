@@ -22,6 +22,10 @@ TWITTER_USERNAME = ''
 TWITTER_ACCESS_TOKEN = ''
 TWITTER_ACCESS_SECRET = ''
 
+# For testing
+from os import environ
+SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME') + ':' + environ.get('SAUCE_ACCESS_KEY') + '@ondemand.saucelabs.com:80/wd/hub'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,

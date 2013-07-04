@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+env:
+  global:
+    # The SAUCE_USERNAME
+    - secure: "beT2Qo2xQBJitPZktH6fSFbdAB4ICKDort3Jb3IpzlT5tMtXYRuI5uziY86W\ncl89dbs5k5K7GvvDv3pn7BNUdqkqDida0GA/GrU9MBO4cCOHfRuNDji3qX3a\n1tmwSU7jx9n10bMHAeF3IZi0wD4fkQSYyxrdmVITnzVCa/tDyPs="
+    # The SAUCE_ACCESS_KEY
+    - secure: "hUHTPDJKesEZCosKqye/24slOF1qiEzFCk704vTbUCDP53WAQupgnclhQl1o\nRaawtNd0EZhgPOfF2H6NGDVXAWBav3ZNxAV66fJ7op2nyai/W3P5mOsHEVA5\nyWAn5ItOcHdxQFZIUi7XTJnvv7m26QUZMIMbR02fvPuPqDKAzqw="
+
+install:
+  - pip install -r requirements.txt
+  - pip install coverage selenium
+  - cp src/visionlouisville/local_settings.py.template src/visionlouisville/local_settings.py
+
+before_script:
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+  - python src/manage.py runserver
+
+script:
+  - python src/manage.py test --with-coverage --cover-package=visionlouisville
