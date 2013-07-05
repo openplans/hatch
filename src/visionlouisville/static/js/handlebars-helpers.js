@@ -12,4 +12,21 @@ var VisionLouisville = VisionLouisville || {};
     return window.location.toString();
   });
 
+  Handlebars.registerHelper('select', function(value, options) {
+  	var $el = $('<div/>').html(options.fn(this)),
+  		selectValue = function(v) {
+  		  $el.find('[value="'+v+'"]').attr({
+  		  	checked: 'checked', 
+  		  	selected: 'selected'
+  		  });
+  		}
+
+  	if (_.isArray(value))
+  	  _.each(value, selectValue);
+  	else
+  	  selectValue(value);
+
+  	return $el.html();
+  })
+
 }(VisionLouisville));

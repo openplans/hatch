@@ -2,7 +2,32 @@
   <h5>Add Your Vision: <em class="category-label">{{ category }}</em></h5>
   <p>{{ category_prompt category }}</p>
   <form>
-    <p><textarea name="content" placeholder="My vision for West Louisville..."></textarea></p>
-    <input type="submit" class="btn btn-block btn-primary" value="Share My Vision" />
+
+    <input type="hidden" name="author" value="{{ author }}">
+
+    <div class="vision-category">
+      {{#select category}}
+        <div class="vision-category-economy"><input type="radio" name="category" value="economy">Economy</input></div>
+        <div class="vision-category-health"><input type="radio" name="category" value="health">Health</input></div>
+        <div class="vision-category-identity"><input type="radio" name="category" value="identity">Identity</input></div>
+        <div class="vision-category-energy"><input type="radio" name="category" value="energy">Energy</input></div>
+        <div class="vision-category-creativity"><input type="radio" name="category" value="creativity">Creativity</input></div>
+        <div class="vision-category-connectivity"><input type="radio" name="category" value="connectivity">Connectivity</input></div>
+        <div class="vision-category-living"><input type="radio" name="category" value="living">Living</input></div>
+      {{/select}}
+    </div>
+    
+    <div class="vision-title">
+  	  <input name="title" placeholder="My vision for Lousiville...">
+    </div>
+
+    <div class="vision-description">
+      <textarea name="description" placeholder="My vision for West Louisville..."></textarea>
+    </div>
+
+    <div class="vision-save-action">
+	    <input type="submit" class="btn btn-block btn-primary" value="Share My Vision" />
+    </div>
+
   </form>
 </div>
