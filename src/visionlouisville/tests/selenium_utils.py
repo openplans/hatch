@@ -31,6 +31,7 @@ def selenium_test(func, **options):
     options.setdefault('name', func.__name__)
     options.setdefault('javascriptEnabled', True)
     options.setdefault('build', environ['TRAVIS_BUILD_NUMBER'])
+    options.setdefault('tags', [environ['TRAVIS_PYTHON_VERSION'], 'CI'])
     options.setdefault('tunnel-identifier', environ['TRAVIS_JOB_NUMBER'])
 
     if 'browserName' not in options and 'browser' in options:

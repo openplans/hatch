@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from .selenium_tools import selenium_test
+from .selenium_utils import selenium_test
 
 
 # ============================================================
