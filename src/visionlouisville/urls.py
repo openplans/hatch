@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from .views import app_view, api_router
+from .views import app_view, api_router, current_user_api_view
 
 # Admin
 from django.contrib import admin
@@ -14,6 +14,8 @@ urlpatterns = patterns('',
         kwargs={'next_page': '/'}),
 
     # API
+    url(r'^api/users/(?P<pk>current)/$', current_user_api_view,
+        name='current-user-detail'),
     url(r'^api/', include(api_router.urls)),
 
     # Admin
