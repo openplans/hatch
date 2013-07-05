@@ -8,6 +8,10 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 from django.conf import settings
 from nose.tools import nottest
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from functools import wraps
+from os import environ
 
 
 # ============================================================
@@ -94,3 +98,4 @@ class SimpleTest (TestCase):
     test_get_app_iphone5 = selenium_test(do_get_app, browser='iPhone', version='5.1')
     test_get_app_android4 = selenium_test(do_get_app, browser='Android', version='4.0')
     test_get_app_firefox21 = selenium_test(do_get_app, browser='Firefox', version='21')
+
