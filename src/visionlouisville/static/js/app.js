@@ -40,7 +40,11 @@ var VisionLouisville = VisionLouisville || {};
         NS.app.mainRegion.show(new NS.VisionFormView({
           category: category,
           collection: NS.app.visionCollection,
-          model: new Backbone.Model({category: category})
+          model: new Backbone.Model({
+            category: category,
+            author: NS.app.currentUser.get('id'),
+            author_avatar_url: NS.app.currentUser.get('author_avatar_url')
+          })
         }));
     },
     item: function(id) {
@@ -100,6 +104,10 @@ var VisionLouisville = VisionLouisville || {};
     NS.app.visionCollection.fetch({
       reset: true
     });
+
+    // TODO: This user should be bootstrapped by the server
+    NS.app.currentUser = new Backbone.Model({}, {url: '/api/users/current/'});
+    NS.app.currentUser.fetch();
 
     NS.app.start({
       visionCollection: NS.app.visionCollection
