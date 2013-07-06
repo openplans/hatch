@@ -83,7 +83,8 @@ class Vision (models.Model):
 
     def get_tweet_text(self, request):
         vision_url = request.build_absolute_uri(
-            reverse('vision-detail', kwargs={'pk': self.pk}))
+            '/#!/visions/%s' % self.pk)
+            # reverse('vision-detail', kwargs={'pk': self.pk}))
         category = self.category.lower()
         username = self.author.username
 
