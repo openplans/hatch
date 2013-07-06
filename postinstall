@@ -47,6 +47,8 @@ TWITTER_USERNAME = env['TWITTER_USERNAME']
 TWITTER_ACCESS_TOKEN = env['TWITTER_ACCESS_TOKEN']
 TWITTER_ACCESS_SECRET = env['TWITTER_ACCESS_SECRET']
 
+ALLOWED_HOSTS = ['*']
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
