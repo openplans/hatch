@@ -1,4 +1,6 @@
 from django.views.generic import TemplateView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 from django.db.models import Count
 from django.http import Http404
 from rest_framework.routers import DefaultRouter
@@ -9,8 +11,14 @@ from .serializers import UserSerializer, VisionSerializer
 from .services import TwitterService
 
 
+class EnsureCSRFCookieMixin (object):
+    @method_decorator(ensure_csrf_cookie)
+    def dispatch(self, request, *args, **kwargs):
+        return super(EnsureCSRFCookieMixin, self).dispatch(request, *args, **kwargs)
+
+
 # App
-class AppView (TemplateView):
+class AppView (EnsureCSRFCookieMixin, TemplateView):
     template_name = 'visionlouisville/index.html'
 
 
