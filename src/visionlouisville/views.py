@@ -34,6 +34,16 @@ class VisionViewSet (ModelViewSet):
 
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        result = super(VisionViewSet, self).create(request, *args, **kwargs)
+
+        if result.status_code == 201 and request.META['HTTP_X_SEND_TO_TWITTER']:
+            tweet_text = self.object.get_tweet_text(request)
+            service = TwitterService()
+            service.tweet(tweet_text)
+
+        return result
+
 
 class UserViewSet (ModelViewSet):
     model = User

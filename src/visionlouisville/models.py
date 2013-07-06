@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from django.utils.timezone import now
 from django.conf import settings
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import UserManager
 from twitter import Twitter, OAuth

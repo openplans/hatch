@@ -7,22 +7,40 @@
 
     <div class="vision-category">
       {{#select category}}
-        <div class="vision-category-economy"><input type="radio" name="category" value="economy">Economy</input></div>
-        <div class="vision-category-health"><input type="radio" name="category" value="health">Health</input></div>
-        <div class="vision-category-identity"><input type="radio" name="category" value="identity">Identity</input></div>
-        <div class="vision-category-energy"><input type="radio" name="category" value="energy">Energy</input></div>
-        <div class="vision-category-creativity"><input type="radio" name="category" value="creativity">Creativity</input></div>
-        <div class="vision-category-connectivity"><input type="radio" name="category" value="connectivity">Connectivity</input></div>
-        <div class="vision-category-living"><input type="radio" name="category" value="living">Living</input></div>
+        <div class="vision-category-economy">
+          <label><input type="radio" name="category" value="economy"> Economy</label>
+        </div>
+        <div class="vision-category-health">
+          <label<input type="radio" name="category" value="health"> Health</label>
+        </div>
+        <div class="vision-category-identity">
+          <label><input type="radio" name="category" value="identity"> Identity</label>
+        </div>
+        <div class="vision-category-energy">
+          <label><input type="radio" name="category" value="energy"> Energy</label>
+        </div>
+        <div class="vision-category-creativity">
+          <label><input type="radio" name="category" value="creativity"> Creativity</label>
+        </div>
+        <div class="vision-category-connectivity">
+          <label><input type="radio" name="category" value="connectivity"> Connectivity</label>
+        </div>
+        <div class="vision-category-living">
+          <label><input type="radio" name="category" value="living"> Living</label>
+        </div>
       {{/select}}
     </div>
-    
+
     <div class="vision-title">
   	  <input name="title" placeholder="My vision for Lousiville...">
     </div>
 
     <div class="vision-description">
       <textarea name="description" placeholder="My vision for West Louisville..."></textarea>
+    </div>
+
+    <div class="vision-tweet">
+      <label><input type="checkbox" data-placement="header" name="x-send-to-twitter"> Tweet this vision</label>
     </div>
 
     <div class="vision-save-action">

@@ -101,17 +101,25 @@ var VisionLouisville = VisionLouisville || {};
     handleFormSubmission: function(evt) {
       evt.preventDefault();
       var form = evt.target,
-          formArray = $(form).serializeArray(),
-          attrs = {};
+          $form = $(form),
+          formArray = $form.serializeArray(),
+          attrs = {},
+          headers = {};
 
       _.each(formArray, function(obj){
-        attrs[obj.name] = obj.value;
+        var $field = $form.find('[name="' + obj.name + '"]');
+        if ($field.attr('data-placement') == 'header') {
+          headers[obj.name] = obj.value;
+        } else {
+          attrs[obj.name] = obj.value;
+        }
       });
 
       this.model.set(attrs, {silent: true});
       this.collection.add(this.model);
       this.model.save(null, {
         wait: true,
+        headers: headers,
         error: function() {
           window.alert('Unable to save your vision. Please try again.');
         },
