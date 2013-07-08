@@ -1,3 +1,4 @@
+import json
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -16,6 +17,20 @@ class AppMixin (object):
         return request.build_absolute_uri(
             '/#!/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
+    
+    def get_context_data(self):
+        context = super(AppMixin, self).get_context_data()
+
+        context['NS'] = 'VisionLouisville'
+
+        if self.request.user.is_authenticated():
+            user = self.request.user
+            serializer = UserSerializer(user)
+            context['user_json'] = json.dumps(serializer.data)
+        else:
+            context['user_json'] = '{}'
+
+        return context
 
 
 class EnsureCSRFCookieMixin (object):
@@ -25,7 +40,7 @@ class EnsureCSRFCookieMixin (object):
 
 
 # App
-class AppView (EnsureCSRFCookieMixin, TemplateView):
+class AppView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
     template_name = 'visionlouisville/index.html'
 
 
