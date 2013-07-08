@@ -1,5 +1,6 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField, URLField
-from .models import User, Vision
+from rest_framework.serializers import (
+    ModelSerializer, SerializerMethodField, URLField)
+from .models import User, Vision, Reply
 from .services import SocialMediaException
 
 
@@ -18,8 +19,16 @@ class UserSerializer (ModelSerializer):
             return None
 
 
+class ReplySerializer (ModelSerializer):
+    author_details = UserSerializer(source='author', read_only=True)
+
+    class Meta:
+        model = Reply
+
+
 class VisionSerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
+    replies = ReplySerializer(many=True, read_only=True)
 
     class Meta:
         model = Vision

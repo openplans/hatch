@@ -40,3 +40,14 @@ class Vision (models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Reply (models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    vision = models.ForeignKey(Vision, related_name='replies')
+    author = models.ForeignKey(User, related_name='replies')
+    text = models.CharField(max_length=140)
+
+    class Meta:
+        verbose_name_plural = 'replies'
