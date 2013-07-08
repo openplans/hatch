@@ -35,10 +35,10 @@ class TwitterService (object):
         user_info = self.get_user_info(user, on_behalf_of)
         return user_info['name']
 
-    def get_user_id(self, on_behalf_of):
+    def get_user_id(self, user):
         try:
             # Assume the first one is the one we want
-            social_auth = on_behalf_of.social_auth.all()[0]
+            social_auth = user.social_auth.all()[0]
         except IndexError:
             # If we don't have any, just return empty
             raise SocialMediaException(
@@ -54,10 +54,10 @@ class TwitterService (object):
 
         return extra_data['id']
 
-    def get_user_oauth(self, on_behalf_of):
+    def get_user_oauth(self, user):
         try:
             # Assume the first one is the one we want
-            social_auth = on_behalf_of.social_auth.all()[0]
+            social_auth = user.social_auth.all()[0]
         except IndexError:
             # If we don't have any, just return empty
             raise SocialMediaException(
@@ -89,9 +89,11 @@ class TwitterService (object):
 
     def get_api(self, on_behalf_of=None):
         # If user is None, tweet from the app's account
-        if on_behalf_of is None: oauth = self.get_app_oauth()
+        if on_behalf_of is None:
+            oauth = self.get_app_oauth()
         # Otherwise, tweet from the user's twitter account
-        else: oauth = self.get_user_oauth(on_behalf_of)
+        else:
+            oauth = self.get_user_oauth(on_behalf_of)
 
         return Twitter(auth=oauth)
 
