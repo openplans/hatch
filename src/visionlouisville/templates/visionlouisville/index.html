@@ -56,7 +56,7 @@
         <ul>
           {% if user.is_authenticated %}
           <li class="user-menu-item">
-            <a href="#" class="user-menu-avatar"><img src="https://si0.twimg.com/profile_images/378800000097665633/6bf91a2cb9b7a9db783c8c9f0baf9c84_bigger.jpeg"></a>
+            <a href="#" class="user-menu-avatar"><img src="{{ user_data.avatar_url }}"></a>
             <ul class="user-menu">
               <li class="sub-menu-item"><a href="{% url 'logout' %}" class="authentication-link authentication-link-logout">Log out</a></li>
             </ul>

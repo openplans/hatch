@@ -16,6 +16,11 @@ class AppMixin (object):
     def get_twitter_service(self):
         return TwitterService()
 
+    def get_serializer_context(self):
+        context = super(AppMixin, self).get_serializer_context()
+        context['twitter_service'] = self.get_twitter_service()
+        return context
+
     def get_vision_url(self, request, vision):
         return request.build_absolute_uri(
             '/#!/visions/%s' % vision.pk)
@@ -29,7 +34,10 @@ class AppMixin (object):
         if self.request.user.is_authenticated():
             user = self.request.user
             serializer = UserSerializer(user)
-            context['user_json'] = json.dumps(serializer.data)
+            serializer.context['twitter_service'] = self.get_twitter_service()
+            user_data = serializer.data
+            context['user_data'] = user_data
+            context['user_json'] = json.dumps(user_data)
         else:
             context['user_json'] = '{}'
 
@@ -52,11 +60,6 @@ class AppView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
-
-    def get_serializer_context(self):
-        context = super(VisionViewSet, self).get_serializer_context()
-        context['twitter_service'] = self.get_twitter_service()
-        return context
 
     def get_queryset(self):
         queryset = Vision.objects.all()\
@@ -97,13 +100,9 @@ class VisionViewSet (AppMixin, ModelViewSet):
         return result
 
 
-class UserViewSet (ModelViewSet):
+class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
-
-    def get_serializer_context(self):
-        context = super(UserViewSet, self).get_serializer_context()
-        context['twitter_service'] = TwitterService()
 
     def get_queryset(self):
         queryset = User.objects\
@@ -112,7 +111,7 @@ class UserViewSet (ModelViewSet):
         return queryset
 
 
-class CurrentUserAPIView (RetrieveAPIView):
+class CurrentUserAPIView (AppMixin, RetrieveAPIView):
     model = User
     serializer_class = UserSerializer
 
