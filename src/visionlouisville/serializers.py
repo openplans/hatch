@@ -6,15 +6,32 @@ from .services import SocialMediaException
 
 class UserSerializer (ModelSerializer):
     avatar_url = SerializerMethodField('get_avatar_url')
+    full_name = SerializerMethodField('get_full_name')
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url')
+        fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url',
+                  'full_name')
+
+    def get_twitter_service(self):
+        return self.context['twitter_service']
+
+    def get_requesting_user(self):
+        return self.context['requesting_user']
 
     def get_avatar_url(self, obj):
-        twitter_service = self.context['twitter_service']
+        service = self.get_twitter_service()
+        on_behalf_of = self.get_requesting_user()
         try:
-            return twitter_service.get_avatar_url(obj)
+            return service.get_avatar_url(obj, on_behalf_of)
+        except SocialMediaException:
+            return None
+
+    def get_full_name(self, obj):
+        service = self.get_twitter_service()
+        on_behalf_of = self.get_requesting_user()
+        try:
+            return service.get_full_name(obj, on_behalf_of)
         except SocialMediaException:
             return None
 

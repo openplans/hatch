@@ -16,25 +16,29 @@ class TwitterService (object):
     def get_user_cache_key(self, user, extra):
         return ':'.join([self.get_user_cache_key_prefix(user), extra])
 
-    def get_user_info(self, user):
+    def get_user_info(self, user, on_behalf_of=None):
         cache_key = self.get_user_cache_key(user, 'info')
         info = cache.get(cache_key)
 
         if info is None:
-            t = self.get_api(user)
+            t = self.get_api(on_behalf_of)
             info = t.users.show(user_id=self.get_user_id(user))
             info = dict(info.items())  # info is a WrappedTwitterResponse
             cache.set(cache_key, info)
         return info
 
-    def get_avatar_url(self, user):
-        user_info = self.get_user_info(user)
+    def get_avatar_url(self, user, on_behalf_of):
+        user_info = self.get_user_info(user, on_behalf_of)
         return user_info['profile_image_url']
 
-    def get_user_id(self, user):
+    def get_full_name(self, user, on_behalf_of):
+        user_info = self.get_user_info(user, on_behalf_of)
+        return user_info['name']
+
+    def get_user_id(self, on_behalf_of):
         try:
             # Assume the first one is the one we want
-            social_auth = user.social_auth.all()[0]
+            social_auth = on_behalf_of.social_auth.all()[0]
         except IndexError:
             # If we don't have any, just return empty
             raise SocialMediaException(
@@ -50,10 +54,10 @@ class TwitterService (object):
 
         return extra_data['id']
 
-    def get_user_oauth(self, user):
+    def get_user_oauth(self, on_behalf_of):
         try:
             # Assume the first one is the one we want
-            social_auth = user.social_auth.all()[0]
+            social_auth = on_behalf_of.social_auth.all()[0]
         except IndexError:
             # If we don't have any, just return empty
             raise SocialMediaException(
@@ -83,14 +87,17 @@ class TwitterService (object):
             settings.TWITTER_CONSUMER_SECRET,
         )
 
-    def get_api(self, user=None):
+    def get_api(self, on_behalf_of=None):
         # If user is None, tweet from the app's account
-        if user is None: oauth = self.get_app_oauth()
+        if on_behalf_of is None: oauth = self.get_app_oauth()
         # Otherwise, tweet from the user's twitter account
-        else: oauth = self.get_user_oauth(user)
+        else: oauth = self.get_user_oauth(on_behalf_of)
 
         return Twitter(auth=oauth)
 
-    def tweet(self, text, user=None):
-        t = self.get_api()
+    def tweet(self, text, on_behalf_of=None):
+        t = self.get_api(on_behalf_of)
         t.statuses.update(status=text)
+
+
+default_twitter_service = TwitterService()

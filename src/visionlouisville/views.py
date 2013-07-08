@@ -9,16 +9,23 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from .models import User, Vision
 from .serializers import UserSerializer, VisionSerializer
-from .services import TwitterService
+from .services import default_twitter_service
 
 
 class AppMixin (object):
     def get_twitter_service(self):
-        return TwitterService()
+        return default_twitter_service
+
+    def get_requesting_user(self):
+        if self.request.user.is_authenticated():
+            return self.request.user
+        else:
+            return None
 
     def get_serializer_context(self):
         context = super(AppMixin, self).get_serializer_context()
         context['twitter_service'] = self.get_twitter_service()
+        context['requesting_user'] = self.get_requesting_user()
         return context
 
     def get_vision_url(self, request, vision):
@@ -34,7 +41,10 @@ class AppMixin (object):
         if self.request.user.is_authenticated():
             user = self.request.user
             serializer = UserSerializer(user)
-            serializer.context['twitter_service'] = self.get_twitter_service()
+            serializer.context = {
+                'twitter_service': self.get_twitter_service(),
+                'requesting_user': self.get_requesting_user(),
+            }
             user_data = serializer.data
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data)
@@ -83,6 +93,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
     def get_user_tweet_text(self, request, vision):
         vision_url = self.get_vision_url(request, vision)
+        return vision.title + ' ' + vision_url
 
     def create(self, request, *args, **kwargs):
         result = super(VisionViewSet, self).create(request, *args, **kwargs)

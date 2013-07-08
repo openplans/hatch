@@ -36,26 +36,31 @@ class UserSerializerTest (TestCase):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
         serializer = UserSerializer(user)
         serializer.context['twitter_service'] = TwitterService()
+        serializer.context['requesting_user'] = None
 
         data = serializer.data
         self.assertIn('avatar_url', data)
         self.assertIsNone(data.get('avatar_url'))
 
-    def test_avatar_url(self):
+    def test_user_contents(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
         social_auth = UserSocialAuth.objects.create(user=user, provider='twitter', extra_data='{"access_token": "oauth_token_secret=abc&oauth_token=123", "id": 42}')
         serializer = UserSerializer(user)
         serializer.context['twitter_service'] = TwitterService()
+        serializer.context['requesting_user'] = None
 
         def get_stub_api(self, user=None):
             class StubTwitter (object):
                 class users:
                     @staticmethod
                     def show(user_id):
-                        return {'profile_image_url': 'http://www.google.com/happy_ducks.png'}
+                        return {
+                            'name': 'Mjumbe Poe', 
+                            'profile_image_url': 'http://www.google.com/happy_ducks.png'
+                        }
             return StubTwitter()
 
         with patch('visionlouisville.services.TwitterService.get_api', get_stub_api):
             data = serializer.data
-            self.assertIn('avatar_url', data)
             self.assertEqual(data.get('avatar_url'), 'http://www.google.com/happy_ducks.png')
+            self.assertEqual(data.get('full_name'), 'Mjumbe Poe')

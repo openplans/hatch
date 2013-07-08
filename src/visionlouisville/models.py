@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 BaseUser = get_user_model()
+
+
 class User (BaseUser):
     class Meta:
         proxy = True
@@ -23,20 +25,6 @@ class Vision (models.Model):
     category = models.CharField(max_length=20)
     title = models.CharField(max_length=160)
     description = models.TextField()
-
-    def get_user_tweet_text(self, request):
-        vision_url = request.build_absolute_uri(
-            '/#!/visions/%s' % self.pk)
-            # reverse('vision-detail', kwargs={'pk': self.pk}))
-        category = self.category.lower()
-        username = self.author.username
-
-        return \
-            'Check out this vision about %s in Louisville, from @%s: %s' % (
-                category, 
-                username, 
-                vision_url
-            )
 
     def __unicode__(self):
         return self.title
