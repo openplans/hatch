@@ -2,9 +2,17 @@
   <div class="vision-wrapper">
     <span class="balloon"></span><span class="tail tail-left">&#9664;</span>
     <blockquote class="vision">
+      <p>{{ author_details.first_name }} 
+         {{ author_details.last_name }} 
+         @{{ author_details.username }} 
+         {{ formatdatetime created_at "MMMM Do YYYY" }}
+      </p>
       <p>{{ title }}</p>
+      <p>{{ description }}</p>
+      <p>Category: <span style="text-transform: capitalize">{{ category }}</span></p>
     </blockquote>
-    <a href="/#!/visions/{{ id }}" class="user-link"><img src="{{ author_avatar_url }}" class="avatar" /></a><!-- FIXME: link to list of user's visions -->
+
+    <a href="/#!/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a><!-- FIXME: link to list of user's visions -->
   </div>
 </div>
 

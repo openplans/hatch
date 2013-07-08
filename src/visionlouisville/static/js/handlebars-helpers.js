@@ -1,4 +1,4 @@
-/*globals Handlebars */
+/*globals Handlebars $ _ moment */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -12,21 +12,36 @@ var VisionLouisville = VisionLouisville || {};
     return window.location.toString();
   });
 
+  Handlebars.registerHelper('fromnow', function(datetime) {
+    if (datetime) {
+      return moment(datetime).fromNow();
+    }
+    return '';
+  });
+
+  Handlebars.registerHelper('formatdatetime', function(datetime, format) {
+    if (datetime) {
+      return moment(datetime).format(format);
+    }
+    return '';
+  });
+
   Handlebars.registerHelper('select', function(value, options) {
-  	var $el = $('<div/>').html(options.fn(this)),
-  		selectValue = function(v) {
-  		  $el.find('[value="'+v+'"]').attr({
-  		  	checked: 'checked', 
-  		  	selected: 'selected'
-  		  });
-  		}
+    var $el = $('<div/>').html(options.fn(this)),
+      selectValue = function(v) {
+        $el.find('[value="'+v+'"]').attr({
+          checked: 'checked',
+          selected: 'selected'
+        });
+      };
 
-  	if (_.isArray(value))
-  	  _.each(value, selectValue);
-  	else
-  	  selectValue(value);
+    if (_.isArray(value)) {
+      _.each(value, selectValue);
+    } else {
+      selectValue(value);
+    }
 
-  	return $el.html();
-  })
+    return $el.html();
+  });
 
 }(VisionLouisville));
