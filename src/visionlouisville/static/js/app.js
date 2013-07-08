@@ -42,8 +42,7 @@ var VisionLouisville = VisionLouisville || {};
           collection: NS.app.visionCollection,
           model: new Backbone.Model({
             category: category,
-            author: NS.app.currentUser.get('id'),
-            author_avatar_url: NS.app.currentUser.get('author_avatar_url')
+            author: NS.app.currentUser.get('id')
           })
         }));
     },
