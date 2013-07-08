@@ -13,7 +13,7 @@ from .services import TwitterService
 
 class AppMixin (object):
     def get_vision_url(self, request, vision):
-        vision_url = request.build_absolute_uri(
+        return request.build_absolute_uri(
             '/#!/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
 
@@ -65,7 +65,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
         result = super(VisionViewSet, self).create(request, *args, **kwargs)
 
         # Always tweet with the app's account
-        if results.status_code == 201:
+        if result.status_code == 201:
             tweet_text = self.get_app_tweet_text(request, self.object)
             service = TwitterService()
             service.tweet(tweet_text)
