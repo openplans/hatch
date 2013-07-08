@@ -1,3 +1,4 @@
+import json
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -11,6 +12,27 @@ from .serializers import UserSerializer, VisionSerializer
 from .services import TwitterService
 
 
+class AppMixin (object):
+    def get_vision_url(self, request, vision):
+        return request.build_absolute_uri(
+            '/#!/visions/%s' % vision.pk)
+            # reverse('vision-detail', kwargs={'pk': self.pk}))
+    
+    def get_context_data(self):
+        context = super(AppMixin, self).get_context_data()
+
+        context['NS'] = 'VisionLouisville'
+
+        if self.request.user.is_authenticated():
+            user = self.request.user
+            serializer = UserSerializer(user)
+            context['user_json'] = json.dumps(serializer.data)
+        else:
+            context['user_json'] = '{}'
+
+        return context
+
+
 class EnsureCSRFCookieMixin (object):
     @method_decorator(ensure_csrf_cookie)
     def dispatch(self, request, *args, **kwargs):
@@ -18,12 +40,12 @@ class EnsureCSRFCookieMixin (object):
 
 
 # App
-class AppView (EnsureCSRFCookieMixin, TemplateView):
+class AppView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
     template_name = 'visionlouisville/index.html'
 
 
 # API
-class VisionViewSet (ModelViewSet):
+class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
 
@@ -42,13 +64,30 @@ class VisionViewSet (ModelViewSet):
 
         return queryset
 
+    def get_app_tweet_text(self, request, vision):
+        vision_url = self.get_vision_url(request, vision)
+        category = vision.category.lower()
+        username = vision.author.username
+
+        return \
+            'Check out this vision about %s in Louisville, from @%s: %s' % (
+                category, username, vision_url)
+
+    def get_user_tweet_text(self, request, vision):
+        vision_url = self.get_vision_url(request, vision)
+
     def create(self, request, *args, **kwargs):
         result = super(VisionViewSet, self).create(request, *args, **kwargs)
 
-        if result.status_code == 201 and request.META['HTTP_X_SEND_TO_TWITTER']:
-            tweet_text = self.object.get_tweet_text(request)
+        # Always tweet with the app's account
+        if result.status_code == 201:
+            tweet_text = self.get_app_tweet_text(request, self.object)
             service = TwitterService()
             service.tweet(tweet_text)
+
+            # Also tweet from user's account if requested
+            if result.status_code == 201 and request.META.get('HTTP_X_SEND_TO_TWITTER', False):
+                service.tweet(tweet_text, self.request.user)
 
         return result
 

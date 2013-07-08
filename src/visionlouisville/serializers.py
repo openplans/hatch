@@ -14,12 +14,7 @@ class UserSerializer (ModelSerializer):
 
 
 class VisionSerializer (ModelSerializer):
-    author_avatar_url = SerializerMethodField('get_avatar_url')
+    author_details = UserSerializer(source='author', read_only=True)
 
     class Meta:
         model = Vision
-
-    def get_avatar_url(self, obj):
-        return obj.author.avatar_url
-        # twitter_service = self.context['twitter_service']
-        # return twitter_service.get_avatar_url(obj.author_pk)
