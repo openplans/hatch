@@ -13,11 +13,14 @@ from .services import TwitterService
 
 
 class AppMixin (object):
+    def get_twitter_service(self):
+        return TwitterService()
+
     def get_vision_url(self, request, vision):
         return request.build_absolute_uri(
             '/#!/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
-    
+
     def get_context_data(self):
         context = super(AppMixin, self).get_context_data()
 
@@ -36,7 +39,8 @@ class AppMixin (object):
 class EnsureCSRFCookieMixin (object):
     @method_decorator(ensure_csrf_cookie)
     def dispatch(self, request, *args, **kwargs):
-        return super(EnsureCSRFCookieMixin, self).dispatch(request, *args, **kwargs)
+        return super(EnsureCSRFCookieMixin, self).dispatch(
+            request, *args, **kwargs)
 
 
 # App
@@ -51,7 +55,8 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
     def get_serializer_context(self):
         context = super(VisionViewSet, self).get_serializer_context()
-        context['twitter_service'] = TwitterService()
+        context['twitter_service'] = self.get_twitter_service()
+        return context
 
     def get_queryset(self):
         queryset = Vision.objects.all()\
@@ -86,7 +91,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
             service.tweet(tweet_text)
 
             # Also tweet from user's account if requested
-            if result.status_code == 201 and request.META.get('HTTP_X_SEND_TO_TWITTER', False):
+            if request.META.get('HTTP_X_SEND_TO_TWITTER', False):
                 service.tweet(tweet_text, self.request.user)
 
         return result

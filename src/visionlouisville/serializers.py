@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField, URLField
 from .models import User, Vision
+from .services import SocialMediaException
 
 
 class UserSerializer (ModelSerializer):
@@ -10,7 +11,11 @@ class UserSerializer (ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url')
 
     def get_avatar_url(self, obj):
-        return obj.avatar_url
+        twitter_service = self.context['twitter_service']
+        try:
+            return twitter_service.get_avatar_url(obj)
+        except SocialMediaException:
+            return None
 
 
 class VisionSerializer (ModelSerializer):
