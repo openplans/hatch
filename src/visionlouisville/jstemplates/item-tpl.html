@@ -19,9 +19,19 @@
 <hr/>
 
 <div class="container">
-  <span class='st_facebook_hcount' displayText='Facebook' st_title="{{ title }}" st_url="{{ window_location }}"></span>
-  <span class='st_twitter_hcount' displayText='Tweet' st_title="{{ title }}" st_url="{{ window_location }}"></span>
-  <script>
-    stButtons.locateElements();
-  </script>
+  <div class="replies-wrapper">
+    <ul>
+      {{#each replies }}
+        <li>
+          <img src="{{ author_details.avatar_url }}" class="avatar">
+          <span class="full-name">{{ author_details.full_name }}</span>
+          <span class="username">@{{ author_details.username }}</span>
+          <span class="reply-datetime"><time datetime="{{ created_at }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
+          <div class="content">{{ text }}</div>
+        </li>
+      {{^}}
+        <li>(No replies yet)</li>
+      {{/each}}
+    </ul>
+  </div>
 </div>
