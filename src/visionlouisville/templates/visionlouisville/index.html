@@ -50,13 +50,13 @@
     <div class="container">
       <h1 class="site-title"><span><a href="#" title="Vision West Louisville" rel="home">Vision West Louisville</a></span></h1>
 
-      <span class="authentication">
+      <nav class="authentication-menu">
         {% if user.is_authenticated %}
           {{ user.username }} <a href="{% url 'logout' %}">Log out</a>
         {% else %}
           <a href="{% url 'socialauth_begin' backend='twitter' %}">Log in</a>
         {% endif %}
-      </span>
+      </nav>
     </div>
   </div><!-- end .site-header -->
 
