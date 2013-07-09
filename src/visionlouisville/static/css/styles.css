@@ -25,10 +25,10 @@ body, select, input, textarea {
   font-family: 'Raleway', sans-serif;
   font-weight: 400;
 }
-h1,h2,h3,h4,h5,h6 { 
-  margin: 0 0 0.5em 0; 
-  font-family: 'Raleway', sans-serif; 
-  font-weight: 800; 
+h1,h2,h3,h4,h5,h6 {
+  margin: 0 0 0.5em 0;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
   text-shadow: 0 1px 1px rgba(255,255,255,0.75);
 }
 h1 { font-size: 1.75em; }
@@ -36,8 +36,8 @@ h2 { font-size: 1.75em; }
 h3 { font-size: 1.75em; }
 h4 { font-size: 1.5em; }
 h5 { font-size: 1.25em; }
-h6 { 
-  font-size: 1em; 
+h6 {
+  font-size: 1em;
   font-weight: 700;
   color: #808073;
   text-transform: uppercase;
@@ -103,7 +103,7 @@ img {
   text-transform: uppercase;
   background-color: #a1cbcf;
   box-shadow: 0 0 0.325em rgba(0,0,0,0.25);
-  font-family: 'Raleway', sans-serif; 
+  font-family: 'Raleway', sans-serif;
   font-weight: 600;
   border: 3px solid #7ec4d8;
   border-radius: 3px;
@@ -136,7 +136,7 @@ form {
 }
 label {
 }
-.input-block, 
+.input-block,
 textarea {
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
@@ -146,7 +146,7 @@ textarea {
   padding: 0.5em;
   outline: 0;
 }
-.input-block:focus, 
+.input-block:focus,
 textarea:focus {
   outline: 2px solid #268099;
 }
@@ -473,13 +473,13 @@ ul.user-menu:after {
   display: block;
 }
 .category-prompt {
-  
+
 }
 .category-title {
   color: #268099;
 }
 
-.reply-container {
+.reply-form {
   display: none;
 }
 

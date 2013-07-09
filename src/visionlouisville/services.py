@@ -9,7 +9,33 @@ class SocialMediaException (Exception):
 
 
 class TwitterService (object):
+    # ==================================================================
+    # General Twitter info, cached
+    # ==================================================================
+    def get_config_cache_key(self):
+        return 'twitter-config'
 
+    def get_config(self, on_behalf_of=None):
+        cache_key = self.get_config_cache_key()
+        config = cache.get(cache_key)
+
+        if config is None:
+            t = self.get_api(on_behalf_of)
+            config = t.help.configuration()
+            config = dict(config.items())
+            cache.set(cache_key, config)
+        return config
+
+    def get_url_length(self, https=False, on_behalf_of=None):
+        config = self.get_config(on_behalf_of)
+        if https:
+            return config['short_url_length_https']
+        else:
+            return config['short_url_length']
+
+    # ==================================================================
+    # User specific info, from Twitter, cached
+    # ==================================================================
     def get_user_cache_key_prefix(self, user):
         return 'user-%s' % user.pk
 
@@ -35,6 +61,10 @@ class TwitterService (object):
         user_info = self.get_user_info(user, on_behalf_of)
         return user_info['name']
 
+    # ==================================================================
+    # User-specific info, from the database, used for authenticating 
+    # against Twitter on behalf of a specific user
+    # ==================================================================
     def get_user_id(self, user):
         try:
             # Assume the first one is the one we want
@@ -79,6 +109,10 @@ class TwitterService (object):
             settings.TWITTER_CONSUMER_SECRET
         )
 
+    # ==================================================================
+    # App-specific info, from the database, used for authenticating 
+    # against Twitter on behalf of the app
+    # ==================================================================
     def get_app_oauth(self):
         return OAuth(
             settings.TWITTER_ACCESS_TOKEN,
@@ -97,10 +131,10 @@ class TwitterService (object):
 
         return Twitter(auth=oauth)
 
-    def tweet(self, text, on_behalf_of=None):
+    def tweet(self, text, on_behalf_of=None, **extra):
         t = self.get_api(on_behalf_of)
         try:
-            return True, t.statuses.update(status=text)
+            return True, t.statuses.update(status=text, **extra)
         except TwitterHTTPError as e:
             return False, e.response_data
 

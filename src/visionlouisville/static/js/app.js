@@ -123,11 +123,11 @@ var VisionLouisville = VisionLouisville || {};
           url;
 
       // Allow shift+click for new tabs, etc.
-      if (!evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
+      if (href.indexOf('/visions') === 0 && !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
         // Remove leading slashes and hash bangs (backward compatablility)
-        url = href; //.replace(/^\//, '').replace('#!/', '');
+        url = href.replace(/^\//, '').replace('#!/', '');
 
         // # Instruct Backbone to trigger routing events
         NS.app.router.navigate(url, { trigger: true });

@@ -1,4 +1,5 @@
 import json
+from django.conf import settings
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -51,7 +52,7 @@ class AppMixin (object):
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data)
         else:
-            context['user_json'] = '{}'
+            context['user_json'] = 'null'
 
         return context
 
@@ -77,6 +78,9 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
 # API
 class TweetException (APIException):
     status_code = 400
+
+    def __init__(self, detail):
+        self.detail = detail
 
 
 class VisionViewSet (AppMixin, ModelViewSet):
@@ -105,7 +109,12 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
     def get_user_tweet_text(self, request, vision):
         vision_url = self.get_vision_url(request, vision)
-        return vision.title + ' ' + vision_url
+        service = self.get_twitter_service()
+        url_length = service.get_url_length()
+        return ' '.join([
+            truncatechars(vision.title, 140 - url_length - 1),
+            vision_url
+        ])
 
     def post_save(self, vision, created):
         """
@@ -128,6 +137,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
             # Also tweet from user's account if requested
             if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):
+                tweet_text = self.get_user_tweet_text(self.request, vision)
                 success, response = service.tweet(tweet_text,
                                                   self.request.user)
                 if not success:
@@ -143,24 +153,25 @@ class ReplyViewSet (AppMixin, ModelViewSet):
         if not app_username.startswith('@'):
             app_username = '@' + app_username
 
-        if app_username not in reply.content:
-            tweet_text = app_username + ' ' + reply.content
+        if app_username not in reply.text:
+            tweet_text = app_username + ' ' + reply.text
         else:
-            tweet_text = reply.content
+            tweet_text = reply.text
 
         return truncatechars(tweet_text, 140)
 
     def pre_save(self, reply):
         """
         This is called in the create handler, before the serializer saves the
-        reply. We do it _before_ saving so that we don't need to delete the 
+        reply. We do it _before_ saving so that we don't need to delete the
         model instance if the tweet fails.
         """
         if reply.pk is None:
             tweet_text = self.get_tweet_text(self.request, reply)
             service = self.get_twitter_service()
-            success, response = service.tweet(tweet_text,
-                                              self.request.user)
+            success, response = service.tweet(
+                tweet_text, self.request.user,
+                in_reply_to_status_id=reply.vision.tweet_id)
 
             if success:
                 reply.tweet_id = response['id']

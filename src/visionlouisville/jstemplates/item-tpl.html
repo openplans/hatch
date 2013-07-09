@@ -33,9 +33,13 @@
     <h5>What people are saying:</h5>
     <ul></ul>
   </div>
+  {{#authenticated}}
   <button class="show-reply-btn">Reply to this vision</button>
-  <div class="reply-container">
-    <textarea class="reply-text"></textarea>
-    <span class='reply-count'></span><button>Tweet a reply</button>
-  </div>
+  <form class="reply-form">
+    <textarea name="text" class="reply-text"></textarea>
+    <span class='reply-count'></span><button class="reply-btn" disabled>Tweet a reply</button>
+  </form>
+  {{^}}
+  <a href="/login/twitter/?next={{ window_location }}">Login to reply</a>
+  {{/authenticated}}
 </div>
