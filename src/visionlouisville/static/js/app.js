@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Swiper */
+/*globals Backbone Handlebars $ _ Swiper Modernizr */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -6,10 +6,10 @@ var VisionLouisville = VisionLouisville || {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      '!\/visions/:category/new': 'new',
-      '!\/visions/:category/list': 'list',
-      '!\/visions/:id': 'item',
-      '*anything': 'home'
+      'visions/:category/new': 'new',
+      'visions/:category/list': 'list',
+      'visions/:id': 'item',
+      '': 'home'
     }
   });
 
@@ -94,7 +94,47 @@ var VisionLouisville = VisionLouisville || {};
     this.router = new NS.Router({
       controller: NS.controller
     });
-    Backbone.history.start();
+
+    Backbone.history.start({ pushState: Modernizr.history, silent: true });
+    if(!Modernizr.history) {
+        var rootLength = Backbone.history.options.root.length,
+            fragment = window.location.pathname.substr(rootLength),
+            url;
+
+        if (fragment) {
+          Backbone.history.navigate(fragment, { trigger: true });
+          url = window.location.protocol + '//' + window.location.host +
+              Backbone.history.options.root + '#' + fragment;
+
+          // Do a full redirect so we don't get urls like /visions/7#visions/7
+          window.location = url;
+        } else {
+          Backbone.history.loadUrl(Backbone.history.getFragment());
+        }
+    } else {
+        Backbone.history.loadUrl(Backbone.history.getFragment());
+    }
+
+    // Globally capture clicks. If they are internal and not in the pass
+    // through list, route them through Backbone's navigate method.
+    $(document).on("click", "a[href^='/']", function(evt) {
+      var href = $(evt.currentTarget).attr('href'),
+          url;
+
+      // Allow shift+click for new tabs, etc.
+      if (!evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
+        evt.preventDefault();
+
+        // Remove leading slashes and hash bangs (backward compatablility)
+        url = href; //.replace(/^\//, '').replace('#!/', '');
+
+        // # Instruct Backbone to trigger routing events
+        NS.app.router.navigate(url, { trigger: true });
+
+        return false;
+      }
+
+    });
   });
 
   // Init =====================================================================
@@ -105,7 +145,7 @@ var VisionLouisville = VisionLouisville || {};
     });
 
     // TODO: This user should be bootstrapped by the server
-    NS.app.currentUser = new Backbone.Model(NS.currentUserData || {}, 
+    NS.app.currentUser = new Backbone.Model(NS.currentUserData || {},
                                             {url: '/api/users/current/'});
     NS.app.currentUser.fetch();
 

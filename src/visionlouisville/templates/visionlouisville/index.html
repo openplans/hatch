@@ -17,6 +17,21 @@
   <!--  Mobile Viewport Fix -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+  {% if vision %}
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@vizlou">
+  <meta name="twitter:creator" content="@{{ vision.author.username }}">
+  <meta name="twitter:title" content="{{ vision.title }}">
+  <meta name="twitter:description" content="{{ vision.description }}">
+
+  <!-- Facebook -->
+  <meta property="og:site_name" content="VizLou"/>
+  <meta property="og:title" content="{{ vision.title }}"/>
+  <meta property="og:description" content="{{ vision.description }}"/>
+
+  {% endif %}
+
   <!-- Favicon & Progressively-Enhanced Touch Icons: http://mathiasbynens.be/notes/touch-icons#sizes -->
   <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico">
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}images/apple-touch-icon-144x144-precomposed.png">
@@ -45,13 +60,15 @@
       hashAddressBar: false
     });
   </script>
+
+  <script src="{{ STATIC_URL }}components/modernizr/modernizr.js"></script>
 </head>
 <body>
   {% handlebarsjs '(.*)' %}
 
   <div class="site-header">
     <div class="container clearfix">
-      <h1 class="site-title"><a href="#" title="Vision West Louisville" rel="home"><img src="{{ STATIC_URL }}images/vizlou-logo.png" class="logo"><span class="is-hidden">Vision West Louisville</span></a></h1>
+      <h1 class="site-title"><a href="/" title="Vision West Louisville" rel="home"><img src="{{ STATIC_URL }}images/vizlou-logo.png" class="logo"><span class="is-hidden">Vision West Louisville</span></a></h1>
       <nav class="main-menu">
         <ul>
           {% if user.is_authenticated %}

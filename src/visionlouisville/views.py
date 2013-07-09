@@ -1,5 +1,5 @@
 import json
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.db.models import Count
@@ -30,11 +30,11 @@ class AppMixin (object):
 
     def get_vision_url(self, request, vision):
         return request.build_absolute_uri(
-            '/#!/visions/%s' % vision.pk)
+            '/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
 
-    def get_context_data(self):
-        context = super(AppMixin, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super(AppMixin, self).get_context_data(**kwargs)
 
         context['NS'] = 'VisionLouisville'
 
@@ -64,6 +64,12 @@ class EnsureCSRFCookieMixin (object):
 # App
 class AppView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
     template_name = 'visionlouisville/index.html'
+
+
+class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
+    template_name = 'visionlouisville/index.html'
+    model = Vision
+    context_object_name = 'vision'
 
 
 # API
@@ -134,6 +140,7 @@ class CurrentUserAPIView (AppMixin, RetrieveAPIView):
 
 # Views
 app_view = AppView.as_view()
+vision_instance_view = VisionInstanceView.as_view()
 current_user_api_view = CurrentUserAPIView.as_view()
 
 # Setup the API routes

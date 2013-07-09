@@ -9,6 +9,7 @@
     "handlebars.js": "~1.0.12",
     "backbone.marionette": "~1.0.3",
     "moment": "~2.1.0",
-    "swiper": "latest"
+    "swiper": "latest",
+    "modernizr": "~2.6.2"
   }
 }

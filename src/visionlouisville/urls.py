@@ -1,16 +1,15 @@
 from django.conf.urls import patterns, include, url
-from .views import app_view, api_router, current_user_api_view
+from .views import app_view, api_router, current_user_api_view, vision_instance_view
 
 # Admin
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # App
-    url(r'^$', app_view, name='app'),
+    # Social Auth
     url(r'^', include('social_auth.urls')),
 
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', 
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout',
         kwargs={'next_page': '/'}),
 
     # API
@@ -20,4 +19,8 @@ urlpatterns = patterns('',
 
     # Admin
     url(r'^admin/', include(admin.site.urls)),
+
+    # App
+    url(r'^visions/(?P<pk>\d+)$', vision_instance_view, name='vision-instance'),
+    url(r'^', app_view, name='app'),
 )
