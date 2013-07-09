@@ -1,0 +1,5 @@
+  <img src="{{ author_details.avatar_url }}" class="avatar">
+  <span class="full-name">{{ author_details.full_name }}</span>
+  <span class="username">@{{ author_details.username }}</span>
+  <span class="reply-datetime"><time datetime="{{ created_at }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
+  <div class="content">{{ text }}</div>

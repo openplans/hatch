@@ -89,8 +89,20 @@ var VisionLouisville = VisionLouisville || {};
     emptyView: NS.NoItemsView
   });
 
-  NS.VisionItemView = Backbone.Marionette.ItemView.extend({
+  NS.NoRepliesView = Backbone.Marionette.ItemView.extend({
+    template: '#no-replies-tpl'
+  });
+
+  NS.VisionReplyView = Backbone.Marionette.ItemView.extend({
+    template: '#reply-item-tpl',
+    tagName: 'li'
+  });
+
+  NS.VisionDetailView = Backbone.Marionette.CompositeView.extend({
     template: '#item-tpl',
+    itemView: NS.VisionReplyView,
+    itemViewContainer: 'ul',
+    emptyView: NS.NoRepliesView,
     events: {
       'click button.show-reply-btn': 'showReplyForm'
     },

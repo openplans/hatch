@@ -11,6 +11,7 @@
     "moment": "~2.1.0",
     "swiper": "latest",
     "modernizr": "~2.6.2",
-    "Countable": "~2.0.0"
+    "Countable": "~2.0.0",
+    "backbone-relational": "~0.8.5"
   }
 }

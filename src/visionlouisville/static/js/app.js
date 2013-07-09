@@ -50,8 +50,9 @@ var VisionLouisville = VisionLouisville || {};
       id = parseInt(id, 10);
       var render = function() {
             var model = NS.app.visionCollection.get(id);
-            NS.app.mainRegion.show(new NS.VisionItemView({
-              model: model
+            NS.app.mainRegion.show(new NS.VisionDetailView({
+              model: model,
+              collection: model.get('replies')
             }));
           };
 
