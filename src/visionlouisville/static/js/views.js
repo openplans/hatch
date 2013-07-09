@@ -116,25 +116,27 @@ var VisionLouisville = VisionLouisville || {};
 
       this.$replyArea = this.$('.reply-text');
 
-      Countable.live(this.$replyArea.get(0), function (counter) {
-        self.chars = counter.all;
-        self.charsLeft = max - counter.all;
-        $countLabel.html(self.charsLeft);
+      if (this.$replyArea.length) {
+        Countable.live(this.$replyArea.get(0), function (counter) {
+          self.chars = counter.all;
+          self.charsLeft = max - counter.all;
+          $countLabel.html(self.charsLeft);
 
-        if (self.chars > 0 && self.chars <= max) {
-          $submitBtn.prop('disabled', false);
-        } else {
-          $submitBtn.prop('disabled', true);
-        }
+          if (self.chars > 0 && self.chars <= max) {
+            $submitBtn.prop('disabled', false);
+          } else {
+            $submitBtn.prop('disabled', true);
+          }
 
-        if (self.charsLeft < 0) {
-          $replyForm.removeClass('warning').addClass('error');
-        } else if (self.charsLeft < 20) {
-          $replyForm.removeClass('error').addClass('warning');
-        } else {
-          $replyForm.removeClass('warning error');
-        }
-      });
+          if (self.charsLeft < 0) {
+            $replyForm.removeClass('warning').addClass('error');
+          } else if (self.charsLeft < 20) {
+            $replyForm.removeClass('error').addClass('warning');
+          } else {
+            $replyForm.removeClass('warning error');
+          }
+        });
+      }
     },
     showReplyForm: function() {
       this.$('.reply-form').show();
