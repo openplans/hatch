@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
-from twitter import Twitter, OAuth
+from twitter import Twitter, OAuth, TwitterHTTPError
 from urlparse import parse_qs
 
 
@@ -99,7 +99,11 @@ class TwitterService (object):
 
     def tweet(self, text, on_behalf_of=None):
         t = self.get_api(on_behalf_of)
-        t.statuses.update(status=text)
+        try:
+            return True, t.statuses.update(status=text)
+        except TwitterHTTPError as e:
+            return False, e.response_data
+
 
 
 default_twitter_service = TwitterService()

@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ */
+/*globals Backbone Handlebars $ _ Countable */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -89,8 +89,47 @@ var VisionLouisville = VisionLouisville || {};
     emptyView: NS.NoItemsView
   });
 
-  NS.VisionItemView = Backbone.Marionette.ItemView.extend({
-    template: '#item-tpl'
+  NS.NoRepliesView = Backbone.Marionette.ItemView.extend({
+    template: '#no-replies-tpl'
+  });
+
+  NS.VisionReplyView = Backbone.Marionette.ItemView.extend({
+    template: '#reply-item-tpl',
+    tagName: 'li'
+  });
+
+  NS.VisionDetailView = Backbone.Marionette.CompositeView.extend({
+    template: '#item-tpl',
+    itemView: NS.VisionReplyView,
+    itemViewContainer: 'ul',
+    emptyView: NS.NoRepliesView,
+    events: {
+      'click button.show-reply-btn': 'showReplyForm'
+    },
+    onRender: function() {
+      console.log('init the char limit plugin');
+      var self = this,
+          area = this.$('.reply-text').get(0),
+          $countLabel = this.$('.reply-count'),
+          max = 132;
+
+      Countable.live(area, function (counter) {
+        var charsLeft = max - counter.all;
+        $countLabel.html(charsLeft);
+
+        if (charsLeft < 0) {
+          self.$('.reply-container').removeClass('warning').addClass('error');
+        } else if (charsLeft < 20) {
+          self.$('.reply-container').removeClass('error').addClass('warning');
+        } else {
+          self.$('.reply-container').removeClass('warning error');
+        }
+      });
+    },
+    showReplyForm: function() {
+      this.$('.reply-container').show();
+      console.log('handleReplyBtnClick');
+    }
   });
 
   NS.VisionFormView = Backbone.Marionette.ItemView.extend({
@@ -108,7 +147,7 @@ var VisionLouisville = VisionLouisville || {};
 
       _.each(formArray, function(obj){
         var $field = $form.find('[name="' + obj.name + '"]');
-        if ($field.attr('data-placement') == 'header') {
+        if ($field.attr('data-placement') === 'header') {
           headers[obj.name] = obj.value;
         } else {
           attrs[obj.name] = obj.value;
