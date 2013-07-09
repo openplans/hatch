@@ -1,5 +1,5 @@
 from rest_framework.serializers import (
-    ModelSerializer, SerializerMethodField, URLField)
+    IntegerField, ModelSerializer, SerializerMethodField, URLField)
 from .models import User, Vision, Reply
 from .services import SocialMediaException
 
@@ -38,6 +38,7 @@ class UserSerializer (ModelSerializer):
 
 class ReplySerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
+    tweet_id = IntegerField(read_only=True)
 
     class Meta:
         model = Reply
@@ -46,6 +47,7 @@ class ReplySerializer (ModelSerializer):
 class VisionSerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
+    tweet_id = IntegerField(read_only=True)
 
     class Meta:
         model = Vision
