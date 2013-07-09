@@ -78,6 +78,9 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
 class TweetException (APIException):
     status_code = 400
 
+    def __init__(self, detail):
+        self.detail = detail
+
 
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
@@ -105,7 +108,12 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
     def get_user_tweet_text(self, request, vision):
         vision_url = self.get_vision_url(request, vision)
-        return vision.title + ' ' + vision_url
+        service = self.get_twitter_service()
+        url_length = service.get_url_length()
+        return ' '.join([
+            truncatechars(vision.title, 140 - url_length - 1),
+            vision_url
+        ])
 
     def post_save(self, vision, created):
         """
@@ -128,6 +136,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
             # Also tweet from user's account if requested
             if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):
+                tweet_text = self.get_user_tweet_text(self.request, vision)
                 success, response = service.tweet(tweet_text,
                                                   self.request.user)
                 if not success:
