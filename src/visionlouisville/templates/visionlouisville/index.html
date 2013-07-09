@@ -66,6 +66,7 @@
       <h1 class="site-title"><a href="/" title="Vision West Louisville" rel="home"><img src="{{ STATIC_URL }}images/vizlou-logo.png" class="logo"><span class="is-hidden">Vision West Louisville</span></a></h1>
       <nav class="main-menu">
         <ul class="unstyled-list">
+
           {% if user.is_authenticated %}
           <li class="user-menu-item">
             <a href="#" class="user-menu-avatar"><img src="{{ user_data.avatar_url }}"></a>
@@ -76,9 +77,12 @@
           {% else %}
           <li class="main-menu-item"><a href="{% url 'socialauth_begin' backend='twitter' %}" class="authentication-link authentication-link-login">Sign In <img src="{{ STATIC_URL }}images/nav-twitter.png" class="twitter-icon"></a></li>
           {% endif %}
-          <li class="main-menu-item add-vision"><a href="#"><img src="{{ STATIC_URL }}images/nav-addviz.png" class="menu-icon"><span class="is-hidden">Add My Vision</span></a></li>
-          <li class="main-menu-item list-users"><a href="#"><img src="{{ STATIC_URL }}images/nav-users.png" class="menu-icon"><span class="is-hidden">Users</span></a></li>
-          <li class="main-menu-item list-visions"><a href="#"><img src="{{ STATIC_URL }}images/nav-list.png" class="menu-icon"><span class="is-hidden">Visions</span></a></li>
+          
+          {% if user.is_authenticated %}
+          <li class="main-menu-item add-vision"><a href="/visions/new"><img src="{{ STATIC_URL }}images/nav-addviz.png" class="menu-icon"><span class="is-hidden">Add My Vision</span></a></li>
+          {% endif %}
+          <li class="main-menu-item list-users"><a href="/users/list"><img src="{{ STATIC_URL }}images/nav-users.png" class="menu-icon"><span class="is-hidden">Users</span></a></li>
+          <li class="main-menu-item list-visions"><a href="/visions/list"><img src="{{ STATIC_URL }}images/nav-list.png" class="menu-icon"><span class="is-hidden">Visions</span></a></li>
         </ul>
       </nav>
     </div>
@@ -91,6 +95,7 @@
     var {{NS}} = {{NS}} || {};
     {{NS}}.currentUserData = {{ user_json|safe }};
     {{NS}}.staticURL = '{{ STATIC_URL|safe }}';
+    {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}'
   </script>
 
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>

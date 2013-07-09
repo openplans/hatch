@@ -8,6 +8,8 @@ var VisionLouisville = VisionLouisville || {};
     appRoutes: {
       'visions/:category/new': 'new',
       'visions/:category/list': 'list',
+      'visions/new': 'new',
+      'visions/list': 'list',
       'visions/:id': 'item',
       '': 'home'
     }
@@ -16,13 +18,22 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     list: function(category) {
       var render = function() {
-        NS.app.mainRegion.show(new NS.VisionListView({
-          model: new Backbone.Model({category: category}),
-          collection: new Backbone.Collection(
+        var visionModel, visionCollection
+
+        if (category) {
+          visionModel = new Backbone.Model({category: category});
+          visionCollection = new Backbone.Collection(
             NS.app.visionCollection.filter(function(model) {
               return model.get('category').toLowerCase() === category;
-            })
-          )
+            }));
+        } else {
+          visionModel = new Backbone.Model();
+          visionCollection = NS.app.visionCollection;
+        }
+
+        NS.app.mainRegion.show(new NS.VisionListView({
+          model: visionModel,
+          collection: visionCollection
         }));
       };
 
@@ -94,6 +105,13 @@ var VisionLouisville = VisionLouisville || {};
     // Construct a new app router
     this.router = new NS.Router({
       controller: NS.controller
+    });
+
+    this.router.bind('all', function(route, router) {
+      var root = Backbone.history.root,
+          fragment = Backbone.history.fragment,
+          path = root + fragment;
+      $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path)
     });
 
     Backbone.history.start({ pushState: Modernizr.history, silent: true });

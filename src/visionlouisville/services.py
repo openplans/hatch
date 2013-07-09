@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.cache import cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from urlparse import parse_qs
+import re
 
 
 class SocialMediaException (Exception):
@@ -55,7 +56,14 @@ class TwitterService (object):
 
     def get_avatar_url(self, user, on_behalf_of):
         user_info = self.get_user_info(user, on_behalf_of)
-        return user_info['profile_image_url']
+        url = user_info['profile_image_url']
+
+        url_pattern = '^(?P<path>.*?)(?:_normal|_mini|_bigger|)(?P<ext>\.[^\.]*)$'
+        match = re.match(url_pattern, url)
+        if match:
+            return match.group('path') + '_bigger' + match.group('ext')
+        else:
+            return url
 
     def get_full_name(self, user, on_behalf_of):
         user_info = self.get_user_info(user, on_behalf_of)
