@@ -1,26 +1,36 @@
-<div class="container">
-  <div class="vision-wrapper">
-    <span class="balloon"></span><span class="tail tail-left">&#9664;</span>
-    <blockquote class="vision">
-      <p>{{ author_details.first_name }}
-         {{ author_details.last_name }}
-         @{{ author_details.username }}
-         {{ formatdatetime created_at "MMMM Do YYYY" }}
-      </p>
-      <p>{{ title }}</p>
-      <p>{{ description }}</p>
-      <p>Category: <span style="text-transform: capitalize">{{ category }}</span></p>
-    </blockquote>
+<div class="container container-primary">
+  <article class="vision">
 
-    <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a><!-- FIXME: link to list of user's visions -->
-  </div>
+    <header class="vision-header clearfix">
+
+      <!-- FIXME: link to list of user's visions -->
+      <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+
+      <a href="/visions/{{ id }}" class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></a>
+
+      <span class="author">
+        <strong class="author-name">{{ author_details.first_name }} {{ author_details.last_name }}</strong>
+        <em class="twitter-handle">@{{ author_details.username }}</em>
+      </span>
+
+    </header>
+
+    <h1 class="vision-title">{{ title }}</h1>
+    <p class="vision-description">{{ description }}</p>
+
+    <footer class="vision-footer clearfix">
+      <a href="#" class="retweet-link">Retweet</a>
+      <a href="#" class="reply-link">Reply</a>
+      <!-- FIXME: link to category vision list -->
+      <a href="#" class="category-link">Category: <strong class="capitalize">{{ category }}</strong></a>
+    </footer>
+
+  </article><!-- end .vision -->
 </div>
-
-<hr/>
 
 <div class="container">
   <div class="replies-wrapper">
-    <h3>What people are saying:</h3>
+    <h5>What people are saying:</h5>
     <ul></ul>
   </div>
   <button class="show-reply-btn">Reply to this vision</button>

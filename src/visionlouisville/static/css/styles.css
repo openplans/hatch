@@ -43,8 +43,8 @@ h6 {
   text-transform: uppercase;
 }
 a:hover, a:active { outline: none; }
-a, a:active, a:visited { color: #27948b; }
-a:hover { color: #1b6760; }
+a, a:active, a:visited { color: #268099; }
+a:hover { color: #48a5bf; }
 p { margin: 0 0 1.2em; }
 p:last-child { margin-bottom: 0; }
 ul, ol { margin-left: 1.8em; }
@@ -59,6 +59,9 @@ ul.unstyled-list, ol.unstyled-list {
 ul.unstyled-list li, ol.unstyled-list li {
   padding-bottom: 0;
 }
+strong { 
+  font-weight: 800; 
+}
 hr {
   margin: 1.2em 0; border: 0;
   border: 1px solid #eeeeee;
@@ -67,6 +70,7 @@ hr {
   border-right: 0;
   border-left: 0;
 }
+.capitalize { text-transform:capitalize; }
 
 /* Images */
 img {
@@ -183,10 +187,18 @@ body {
 }
 
 .container {
-  padding: 0.5em;
+  padding: 20px 10px;
 }
+.container-primary {
+  background: #fff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
 .main {
-  clear: both;
+  position: relative;
+  z-index: 1;
+  font-size: small;
+  line-height: 1.5;
 }
 
 
@@ -197,10 +209,12 @@ body {
   height: 40px;
   margin: 0;
   overflow: visible;
+  position: relative;
+  z-index: 2;
 }
 .site-header .container {
   height: 40px;
-  box-shadow: inset 0 20px 20px #7ec4d8, 0 0 0.375em rgba(0,0,0,0.5);
+  box-shadow: inset 0 20px 20px #7ec4d8, 0 0 8px rgba(0,0,0,0.5);
   padding: 0;
   margin: 0;
 }
@@ -339,7 +353,7 @@ ul.user-menu:after {
   border: 2px solid #7ec4d8;
   border-top: 0;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 2px rgba(0,0,0,0.3);
 }
 .user-menu-avatar img {
   display: block;
@@ -349,55 +363,71 @@ ul.user-menu:after {
 }
 
 
-/* =Content Elements
+/* =Visions
 -------------------------------------------------------------- */
 
-/* Visions */
-.vision-wrapper {
-  position: relative;
-  margin: 0 0 0 3.5em;
-  padding: 0;
-}
 .vision {
   position: relative;
-  margin: 0;
-  padding: 1em 1.5em;
+  padding-left: 40px;
 }
-.vision p {
-  position: relative;
-  margin: 0;
-  z-index: 3;
-  min-height: 3.875em;
+
+.vision-header {}
+.datetime {
+  float: right;
+  font-size: x-small;
+  padding: 10px 0;
+  text-decoration: none;
 }
-.balloon {
-  background: #fff;
-  border-radius: 1em;
-  box-shadow: 0 0.125em 0.25em rgba(0,0,0,0.25);
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  bottom: 0.5em;
-  left: 0.5em;
-  z-index: 1;
+.author {
+  display: block;
+  padding: 10px 0;
 }
-.tail {
-  color: #fff;
-  text-shadow: 0 0.125em 0.1em rgba(0,0,0,0.25);
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  left: 50%;
-  font-size: 2em;
-  margin-top: -0.325em;
-  margin-left: -0.5em;
-  line-height: 1;
+.user-link {
+  float: left;
+  background-color: #48a5bf;
+  border: 2px solid #7ec4d8;
+  border-left: 0;
+  border-radius: 0 20px 20px 0;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  margin-left: -50px;
 }
-.tail-left {
-  top: 1.25em;
-  left: 0;
-  margin-top: -0.5em;
-  margin-left: -0.5em;
-  text-shadow: -0.1em 0.05em 0.1em rgba(0,0,0,0.1);
+.user-link .avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 0 18px 18px 0;
+}
+.vision-title {
+  font-size: medium;
+  font-weight: 700;
+}
+.vision-description {}
+
+.vision-footer {
+  margin: 0 -10px -20px -50px;
+  background-color: #d5d5c6;
+  box-shadow: inset 0 3px 3px rgba(0,0,0,0.15);
+}
+
+.category-link,
+.retweet-link,
+.reply-link {
+  float: left;
+  padding: 0.5em 1em;
+  text-decoration: none;
+}
+.category-link {
+  float: right;
+}
+.retweet-link,
+.reply-link {
+  font-weight: 800;
+  background: #48a5bf;
+  box-shadow: inset 0 20px 20px #7ec4d8;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
+.reply-link {
+  border-left: 1px solid #48a5bf;
 }
 
 /* Vision List */
@@ -411,27 +441,12 @@ ul.user-menu:after {
   padding: 0;
   position: relative;
 }
-.vision-list .user-link,
-.vision-wrapper .user-link {
-  width: 2.5em;
-  display: block;
-  position: absolute;
-  top: 1.125em;
-  right: 100%;
-  margin-right: 1em;
-  background-color: #d7d7c7;
-}
 .vision-list .vision-link {
   display: block;
   text-decoration: none;
   color: #444;
   margin: -0.5em -1em -0.5em -1.25em;
   padding: 0.5em 1em 0.5em 1.25em;
-}
-.user-link .avatar {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* Vision Form */
