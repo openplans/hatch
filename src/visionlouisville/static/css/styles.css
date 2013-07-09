@@ -21,7 +21,7 @@
 body { line-height: 1.25; }
 body, select, input, textarea {
   color: #444;
-  font-family: 'Raleway', sans-serif; 
+  font-family: 'Raleway', sans-serif;
   font-weight: 400;
 }
 h1,h2,h3,h4,h5,h6 { margin: 0 0 0.5em 0; font-family: 'Raleway', sans-serif; font-weight: 800; }
@@ -79,7 +79,7 @@ img {
   text-decoration: none;
   background-color: #e7e7d7;
   box-shadow: 0.125em 0.125em 0 rgba(0,0,0,0.25);
-  font-family: 'Raleway', sans-serif; 
+  font-family: 'Raleway', sans-serif;
   font-weight: 800;
   border: 0;
 }
@@ -162,8 +162,8 @@ body {
 .container {
   padding: 0.5em;
 }
-.main { 
-  clear: both; 
+.main {
+  clear: both;
 }
 
 
@@ -173,7 +173,7 @@ body {
   background-color: #48a5bf;
   height: 40px;
   margin: 0;
-  overflow: visible; 
+  overflow: visible;
 }
 .site-header .container {
   height: 40px;
@@ -303,8 +303,8 @@ ul.user-menu:after {
   border-left-color: transparent;
 }
 .user-menu-item:hover .user-menu,
-.user-menu.is-open { 
-  display: block; 
+.user-menu.is-open {
+  display: block;
 }
 .sub-menu-item {
   background-color: #268099;
@@ -445,6 +445,10 @@ ul.user-menu:after {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.reply-container {
+  display: none;
 }
 
 /* Swiper */
