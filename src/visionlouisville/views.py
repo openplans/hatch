@@ -7,6 +7,7 @@ from django.http import Http404
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.exceptions import APIException
 from .models import User, Vision
 from .serializers import UserSerializer, VisionSerializer
 from .services import default_twitter_service
@@ -73,6 +74,10 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
 
 
 # API
+class TweetException (APIException):
+    status_code = 400
+
+
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
@@ -101,20 +106,24 @@ class VisionViewSet (AppMixin, ModelViewSet):
         vision_url = self.get_vision_url(request, vision)
         return vision.title + ' ' + vision_url
 
-    def create(self, request, *args, **kwargs):
-        result = super(VisionViewSet, self).create(request, *args, **kwargs)
+    def post_save(self, vision, created):
+        if created:
+            # Always tweet with the app's account
+            tweet_text = self.get_app_tweet_text(self.request, vision)
+            service = self.get_twitter_service()
+            success, response = service.tweet(tweet_text)
 
-        # Always tweet with the app's account
-        if result.status_code == 201:
-            tweet_text = self.get_app_tweet_text(request, self.object)
-            service = TwitterService()
-            service.tweet(tweet_text)
+            if success:
+                vision.tweet_id = response['id']
+                vision.save()
+            else:
+                raise TweetException('App tweet not sent: ' + response)
 
             # Also tweet from user's account if requested
-            if request.META.get('HTTP_X_SEND_TO_TWITTER', False):
-                service.tweet(tweet_text, self.request.user)
-
-        return result
+            if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):
+                success, response = service.tweet(tweet_text, self.request.user)
+                if not success:
+                    raise TweetException('User tweet not sent: ' + response)
 
 
 class UserViewSet (AppMixin, ModelViewSet):
