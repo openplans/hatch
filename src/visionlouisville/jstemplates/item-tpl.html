@@ -30,6 +30,6 @@
     <span class='reply-count'></span><button class="reply-btn" disabled>Tweet a reply</button>
   </form>
   {{^}}
-  <a href="/login/twitter">Login to reply</button>
+  <a href="/login/twitter/?next={{ window_location }}">Login to reply</a>
   {{/authenticated}}
 </div>
