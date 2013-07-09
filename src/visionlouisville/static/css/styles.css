@@ -384,6 +384,11 @@ ul.user-menu:after {
   display: block;
   padding: 10px 0;
 }
+.twitter-handle {
+  font-style: normal;
+  font-weight: 700;
+  color: #808073;
+}
 .user-link {
   float: left;
   background-color: #48a5bf;
@@ -393,7 +398,7 @@ ul.user-menu:after {
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
   margin-left: -50px;
 }
-.user-link .avatar {
+.avatar {
   display: block;
   width: 40px;
   height: 40px;
@@ -430,6 +435,20 @@ ul.user-menu:after {
 }
 .reply-link {
   border-left: 1px solid #48a5bf;
+}
+
+/* Conversation */
+.replies {}
+.reply {
+  padding-left: 50px;
+}
+.replies .avatar {
+  float: left;
+  border-radius: 0;
+  margin-left: -50px;
+}
+.replies .datetime {
+  padding: 0;
 }
 
 /* Vision List */
