@@ -8,6 +8,7 @@
 /* Color Palette (These aren't semantic; just here for reference. No YOLO! ) */
 .pink { color: #ff5db1; }
 .hotpink { color: #ef037d; }
+.paleblue { color: #a1cbcf; }
 .lighterblue { color: #7ec4d8; }
 .lightblue { color: #48a5bf; }
 .blue { color: #268099; }
@@ -24,13 +25,23 @@ body, select, input, textarea {
   font-family: 'Raleway', sans-serif; 
   font-weight: 400;
 }
-h1,h2,h3,h4,h5,h6 { margin: 0 0 0.5em 0; font-family: 'Raleway', sans-serif; font-weight: 800; }
+h1,h2,h3,h4,h5,h6 { 
+  margin: 0 0 0.5em 0; 
+  font-family: 'Raleway', sans-serif; 
+  font-weight: 800; 
+  text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+}
 h1 { font-size: 1.75em; }
 h2 { font-size: 1.75em; }
 h3 { font-size: 1.75em; }
 h4 { font-size: 1.5em; }
 h5 { font-size: 1.25em; }
-h6 { font-size: 1em; }
+h6 { 
+  font-size: 1em; 
+  font-weight: 700;
+  color: #808073;
+  text-transform: uppercase;
+}
 a:hover, a:active { outline: none; }
 a, a:active, a:visited { color: #27948b; }
 a:hover { color: #1b6760; }
@@ -40,6 +51,14 @@ ul, ol { margin-left: 1.8em; }
 ol { list-style-type: decimal; }
 ul, ol, dl { margin-bottom: 0.6em; }
 ul li, ol li { padding-bottom: 0.6em; }
+ul.unstyled-list, ol.unstyled-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ul.unstyled-list li, ol.unstyled-list li {
+  padding-bottom: 0;
+}
 hr {
   margin: 1.2em 0; border: 0;
   border: 1px solid #eeeeee;
@@ -75,37 +94,30 @@ img {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: #333;
+  color: #268099;
   text-decoration: none;
-  background-color: #e7e7d7;
-  box-shadow: 0.125em 0.125em 0 rgba(0,0,0,0.25);
+  text-transform: uppercase;
+  background-color: #a1cbcf;
+  box-shadow: 0 0 0.325em rgba(0,0,0,0.25);
   font-family: 'Raleway', sans-serif; 
-  font-weight: 800;
-  border: 0;
-}
-.btn:hover,
-.btn:focus,
-.btn:active {
-  background-color: #d4d4b7;
+  font-weight: 600;
+  border: 3px solid #7ec4d8;
+  border-radius: 3px;
 }
 .btn-primary,
 .btn-primary:visited,
 .btn-primary:link {
-  background-color: #b0cc3f;
+  background-color: #268099;
+  border-color: #48a5bf;
   color: #fff;
-}
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-  background-color: #92ab2d;
 }
 .btn-block,
 .btn-block:visited,
 .btn-block:link {
   display: block;
   margin: 0 0 1.2em;
-  padding-top: 1em;
-  padding-bottom: 0.75em;
+  padding-top: 0.75em;
+  padding-bottom: 0.5em;
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 	        box-sizing: border-box;
@@ -116,16 +128,27 @@ img {
 }
 
 /* Forms */
-form {}
+form {
+}
+label {
+}
+.input-block, 
 textarea {
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 	        box-sizing: border-box;
   width: 100%;
+  border: 0.25em solid #a1cbcf;
+  padding: 0.5em;
+  outline: 0;
+}
+.input-block:focus, 
+textarea:focus {
+  outline: 2px solid #268099;
+}
+textarea {
   height: 6.5em;
   resize: none;
-  border: 0.25em solid #e7e7d7;
-  padding: 0.5em;
 }
 
 
@@ -207,14 +230,6 @@ body {
 /* Navigation Menus */
 .main-menu {
   float: right;
-}
-.main-menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.main-menu ul li {
-  padding-bottom: 0;
 }
 .main-menu-item {
   float: right;
@@ -337,34 +352,6 @@ ul.user-menu:after {
 /* =Content Elements
 -------------------------------------------------------------- */
 
-.intro-text {
-  text-align: center;
-}
-.intro-prompt {
-  font-size: 1.125em;
-  font-weight: 800;
-  margin-bottom: 0.5em;
-}
-.category-label {
-  text-transform: capitalize;
-}
-.category-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1em;
-  font-weight: 800;
-  font-size: 1.5em;
-  line-height: 1.5;
-}
-.category-list li {
-  display: inline;
-  padding: 0 0.125em;
-  margin: 0;
-}
-.category-list a {
-  text-decoration: none;
-}
-
 /* Visions */
 .vision-wrapper {
   position: relative;
@@ -445,6 +432,36 @@ ul.user-menu:after {
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* Vision Form */
+.category-icon + img {
+  background-color: #b2b2a6;
+  cursor: pointer;
+}
+.category-icon:checked + img {
+  background-color: #268099;
+}
+.vision-category-list {
+  float: left;
+  width: 100%;
+}
+.vision-category-list li {
+  float: left;
+  width: 14%;
+  padding: 0;
+  margin: 0;
+}
+.vision-category-list img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.category-prompt {
+  
+}
+.category-title {
+  color: #268099;
 }
 
 /* Swiper */

@@ -1,51 +1,61 @@
 <div class="container">
-  <h5>Add Your Vision: <em class="category-label">{{ category }}</em></h5>
-  <p>{{ category_prompt category }}</p>
+  <h5>What's Your vision for Louisville?</h5>
   <form>
 
     <input type="hidden" name="author" value="{{ author }}">
 
-    <div class="vision-category">
+    <h6>Select a Category:</h6>
+    <ul class="vision-category-list unstyled-list">
       {{#select category}}
-        <div class="vision-category-economy">
-          <label><input type="radio" name="category" value="economy"> Economy</label>
-        </div>
-        <div class="vision-category-health">
-          <label><input type="radio" name="category" value="health"> Health</label>
-        </div>
-        <div class="vision-category-identity">
-          <label><input type="radio" name="category" value="identity"> Identity</label>
-        </div>
-        <div class="vision-category-energy">
-          <label><input type="radio" name="category" value="energy"> Energy</label>
-        </div>
-        <div class="vision-category-creativity">
-          <label><input type="radio" name="category" value="creativity"> Creativity</label>
-        </div>
-        <div class="vision-category-connectivity">
-          <label><input type="radio" name="category" value="connectivity"> Connectivity</label>
-        </div>
-        <div class="vision-category-living">
-          <label><input type="radio" name="category" value="living"> Living</label>
-        </div>
+        <li class="vision-category-economy">
+          <label><input type="radio" name="category" value="economy" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-economy.png"><span class="is-visuallyhidden">Economy</span></label>
+        </li>
+        <li class="vision-category-health">
+          <label><input type="radio" name="category" value="health" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-health.png"><span class="is-visuallyhidden">Health</span></label>
+        </li>
+        <li class="vision-category-energy">
+          <label><input type="radio" name="category" value="energy" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-energy.png"><span class="is-visuallyhidden">Energy</span></label>
+        </li>
+        <li class="vision-category-living">
+          <label><input type="radio" name="category" value="living" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-living.png"><span class="is-visuallyhidden">Living</span></label>
+        </li>
+        <li class="vision-category-connectivity">
+          <label><input type="radio" name="category" value="connectivity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-connectivity.png"><span class="is-visuallyhidden">Connectivity</span></label>
+        </li>
+        <li class="vision-category-identity">
+          <label><input type="radio" name="category" value="identity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-identity.png"><span class="is-visuallyhidden">Identity</span></label>
+        </li>
+        <li class="vision-category-creativity">
+          <label><input type="radio" name="category" value="creativity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-creativity.png"><span class="is-visuallyhidden">Creativity</span></label>
+        </li>
       {{/select}}
-    </div>
+    </ul>
+    <p class="category-prompt is-hidden default-prompt">Please select a category from the list above.</p>
+    <p class="category-prompt economy-prompt"><strong class="category-title">Economy</strong> &raquo; {{ category_prompt 'economy' }}</p>
+    <p class="category-prompt is-hidden health-prompt"><strong class="category-title">Health</strong> &raquo; {{ category_prompt 'health' }}</p>
+    <p class="category-prompt is-hidden energy-prompt"><strong class="category-title">Energy</strong> &raquo; {{ category_prompt 'energy' }}</p>
+    <p class="category-prompt is-hidden living-prompt"><strong class="category-title">Living</strong> &raquo; {{ category_prompt 'living' }}</p>
+    <p class="category-prompt is-hidden connectivity-prompt"><strong class="category-title">Connectivity</strong> &raquo; {{ category_prompt 'connectivity' }}</p>
+    <p class="category-prompt is-hidden identity-prompt"><strong class="category-title">Identity</strong> &raquo; {{ category_prompt 'identity' }}</p>
+    <p class="category-prompt is-hidden creativity-prompt"><strong class="category-title">Creativity</strong> &raquo; {{ category_prompt 'creativity' }}</p>
 
-    <div class="vision-title">
-  	  <input name="title" placeholder="My vision for Lousiville...">
-    </div>
+    <p class="vision-title">
+      <h6>Title Your Vision:</h6>
+  	  <input name="title" placeholder="My vision..." class="input-block">
+    </p>
 
-    <div class="vision-description">
-      <textarea name="description" placeholder="My vision for West Louisville..."></textarea>
-    </div>
+    <p class="vision-description">
+      <h6>Describe Your Vision:</h6>
+      <textarea name="description" placeholder="My vision for Louisville is..."></textarea>
+    </p>
 
-    <div class="vision-tweet">
+    <p class="vision-tweet">
       <label><input type="checkbox" data-placement="header" name="x-send-to-twitter"> Tweet this vision</label>
-    </div>
+    </p>
 
-    <div class="vision-save-action">
+    <p class="vision-save-action">
 	    <input type="submit" class="btn btn-block btn-primary" value="Share My Vision" />
-    </div>
+    </p>
 
   </form>
 </div>
