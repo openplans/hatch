@@ -110,7 +110,8 @@ class VisionViewSet (AppMixin, ModelViewSet):
     def post_save(self, vision, created):
         """
         This is called in the create handler, after the serializer saves the
-        vision.
+        vision. We do it _after_ saving, because we need the object's id to
+        build the vision's URL to put in the tweet.
         """
         if created:
             # Always tweet with the app's account
@@ -122,6 +123,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
                 vision.tweet_id = response['id']
                 vision.save()
             else:
+                vision.delete()
                 raise TweetException('App tweet not sent: ' + response)
 
             # Also tweet from user's account if requested
@@ -132,7 +134,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
                     raise TweetException('User tweet not sent: ' + response)
 
 
-class ReplyViewSet (ModelViewSet):
+class ReplyViewSet (AppMixin, ModelViewSet):
     model = Reply
     serializer_class = ReplySerializer
 
@@ -147,6 +149,23 @@ class ReplyViewSet (ModelViewSet):
             tweet_text = reply.content
 
         return truncatechars(tweet_text, 140)
+
+    def pre_save(self, reply):
+        """
+        This is called in the create handler, before the serializer saves the
+        reply. We do it _before_ saving so that we don't need to delete the 
+        model instance if the tweet fails.
+        """
+        if reply.pk is None:
+            tweet_text = self.get_tweet_text(self.request, reply)
+            service = self.get_twitter_service()
+            success, response = service.tweet(tweet_text,
+                                              self.request.user)
+
+            if success:
+                reply.tweet_id = response['id']
+            else:
+                raise TweetException('User reply not tweeted: ' + response)
 
 
 class UserViewSet (AppMixin, ModelViewSet):
