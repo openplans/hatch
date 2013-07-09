@@ -46,7 +46,6 @@ a:hover, a:active { outline: none; }
 a, a:active, a:visited { color: #268099; }
 a:hover { color: #48a5bf; }
 p { margin: 0 0 1.2em; }
-p:last-child { margin-bottom: 0; }
 ul, ol { margin-left: 1.8em; }
 ol { list-style-type: decimal; }
 ul, ol, dl { margin-bottom: 0.6em; }
@@ -129,6 +128,7 @@ img {
 }
 .btn-large {
   font-size: 1.25em;
+  padding: 0.75em 1em 0.5em;
 }
 
 /* Forms */
@@ -371,7 +371,9 @@ ul.user-menu:after {
   padding-left: 40px;
 }
 
-.vision-header {}
+.vision-header {
+  margin-top: -10px;
+}
 .datetime {
   float: right;
   font-size: x-small;
@@ -404,7 +406,7 @@ ul.user-menu:after {
 .vision-description {}
 
 .vision-footer {
-  margin: 0 -10px -20px -50px;
+  margin: 20px -10px -20px -50px;
   background-color: #d5d5c6;
   box-shadow: inset 0 3px 3px rgba(0,0,0,0.15);
 }
@@ -481,6 +483,20 @@ ul.user-menu:after {
 
 .reply-form {
   display: none;
+}
+.reply-text {
+  height: 4.5em;
+  margin-bottom: 10px;
+}
+.reply-count {
+  font-size: medium;
+  font-weight: 800;
+  background-color: #a1cbcf;
+  float: right;
+  margin: -10px 10px 0 0;
+  padding: 0.25em 0.5em;
+}
+.reply-btn {
 }
 
 /* Swiper */

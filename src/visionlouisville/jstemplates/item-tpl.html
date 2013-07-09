@@ -30,14 +30,14 @@
 
 <div class="container">
   <div class="replies-wrapper">
-    <h5>What people are saying:</h5>
-    <ul></ul>
+    <h6>What people are saying:</h6>
+    <ul class="replies-list unstyled-list"></ul>
   </div>
   {{#authenticated}}
-  <button class="show-reply-btn">Reply to this vision</button>
+  <button class="show-reply-btn btn btn-block">Reply to this vision</button>
   <form class="reply-form">
     <textarea name="text" class="reply-text"></textarea>
-    <span class='reply-count'></span><button class="reply-btn" disabled>Tweet a reply</button>
+    <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>
   </form>
   {{^}}
   <a href="/login/twitter/?next={{ window_location }}">Login to reply</a>
