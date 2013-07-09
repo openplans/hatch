@@ -91,6 +91,7 @@
     var {{NS}} = {{NS}} || {};
     {{NS}}.currentUserData = {{ user_json|safe }};
     {{NS}}.staticURL = '{{ STATIC_URL|safe }}';
+    {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}'
   </script>
 
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>

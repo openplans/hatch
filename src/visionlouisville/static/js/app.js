@@ -96,6 +96,13 @@ var VisionLouisville = VisionLouisville || {};
       controller: NS.controller
     });
 
+    this.router.bind('all', function(route, router) {
+      var root = Backbone.history.root,
+          fragment = Backbone.history.fragment,
+          path = root + fragment;
+      $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path)
+    });
+
     Backbone.history.start({ pushState: Modernizr.history, silent: true });
     if(!Modernizr.history) {
         var rootLength = Backbone.history.options.root.length,
