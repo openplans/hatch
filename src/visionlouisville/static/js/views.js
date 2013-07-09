@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Countable */
+/*globals Backbone Handlebars $ _ Countable Event */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -104,31 +104,66 @@ var VisionLouisville = VisionLouisville || {};
     itemViewContainer: 'ul',
     emptyView: NS.NoRepliesView,
     events: {
-      'click button.show-reply-btn': 'showReplyForm'
+      'click button.show-reply-btn': 'showReplyForm',
+      'submit form.reply-form': 'handleFormSubmission'
     },
     onRender: function() {
-      console.log('init the char limit plugin');
       var self = this,
-          area = this.$('.reply-text').get(0),
           $countLabel = this.$('.reply-count'),
+          $replyForm = this.$('.reply-form'),
+          $submitBtn = this.$('.reply-btn'),
           max = 132;
 
-      Countable.live(area, function (counter) {
-        var charsLeft = max - counter.all;
-        $countLabel.html(charsLeft);
+      this.$replyArea = this.$('.reply-text');
 
-        if (charsLeft < 0) {
-          self.$('.reply-container').removeClass('warning').addClass('error');
-        } else if (charsLeft < 20) {
-          self.$('.reply-container').removeClass('error').addClass('warning');
+      Countable.live(this.$replyArea.get(0), function (counter) {
+        self.chars = counter.all;
+        self.charsLeft = max - counter.all;
+        $countLabel.html(self.charsLeft);
+
+        if (self.chars > 0 && self.chars <= max) {
+          $submitBtn.prop('disabled', false);
         } else {
-          self.$('.reply-container').removeClass('warning error');
+          $submitBtn.prop('disabled', true);
+        }
+
+        if (self.charsLeft < 0) {
+          $replyForm.removeClass('warning').addClass('error');
+        } else if (self.charsLeft < 20) {
+          $replyForm.removeClass('error').addClass('warning');
+        } else {
+          $replyForm.removeClass('warning error');
         }
       });
     },
     showReplyForm: function() {
-      this.$('.reply-container').show();
-      console.log('handleReplyBtnClick');
+      this.$('.reply-form').show();
+    },
+    handleFormSubmission: function(evt) {
+      evt.preventDefault();
+      var form = evt.target,
+          data = NS.Utils.serializeObject(form),
+          reply = data.attrs;
+
+      reply.author = NS.app.currentUser.get('id');
+      reply.author_details = NS.app.currentUser.toJSON();
+      reply.created_at = (new Date()).toISOString();
+
+      if (this.charsLeft >= 0 && this.chars > 0) {
+        // Save the reply
+        this.model.get('replies').create(reply);
+
+        // Reset the form
+        form.reset();
+
+        // Really force the counter to reset
+        if ('oninput' in document) {
+          // This is because jQuery doens't support input for some reason
+          this.$replyArea.get(0).dispatchEvent(new Event('input'));
+        } else {
+          this.$replyArea.trigger('keyup');
+        }
+      }
     }
   });
 
@@ -140,25 +175,13 @@ var VisionLouisville = VisionLouisville || {};
     handleFormSubmission: function(evt) {
       evt.preventDefault();
       var form = evt.target,
-          $form = $(form),
-          formArray = $form.serializeArray(),
-          attrs = {},
-          headers = {};
+          data = NS.Utils.serializeObject(form);
 
-      _.each(formArray, function(obj){
-        var $field = $form.find('[name="' + obj.name + '"]');
-        if ($field.attr('data-placement') === 'header') {
-          headers[obj.name] = obj.value;
-        } else {
-          attrs[obj.name] = obj.value;
-        }
-      });
-
-      this.model.set(attrs, {silent: true});
+      this.model.set(data.attrs, {silent: true});
       this.collection.add(this.model);
       this.model.save(null, {
         wait: true,
-        headers: headers,
+        headers: data.headers,
         error: function() {
           window.alert('Unable to save your vision. Please try again.');
         },
