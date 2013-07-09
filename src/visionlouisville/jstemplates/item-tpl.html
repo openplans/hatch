@@ -22,24 +22,9 @@
   <div class="replies-wrapper">
     {{#if replies }}
       <h3>What people are saying:</h3>
-      <ul>
-        {{#each replies }}
-          <li>
-            <img src="{{ author_details.avatar_url }}" class="avatar">
-            <span class="full-name">{{ author_details.full_name }}</span>
-            <span class="username">@{{ author_details.username }}</span>
-            <span class="reply-datetime"><time datetime="{{ created_at }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
-            <div class="content">{{ text }}</div>
-          </li>
-        {{^}}
-          <li>(No replies yet)</li>
-        {{/each}}
-      </ul>
-    {{^}}
-      <p>Be the first to leave your thoughts!</p>
-    {{/if}}
-    <button class="reply-btn">Reply to this vision</button>
+      <ul></ul>
   </div>
+  <button class="show-reply-btn">Reply to this vision</button>
   <div class="reply-container">
     <textarea class="reply-text"></textarea>
     <span class='reply-count'></span><button>Tweet a reply</button>

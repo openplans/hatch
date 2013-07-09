@@ -92,7 +92,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionItemView = Backbone.Marionette.ItemView.extend({
     template: '#item-tpl',
     events: {
-      'click button.reply-btn': 'handleReplyBtnClick'
+      'click button.show-reply-btn': 'showReplyForm'
     },
     onRender: function() {
       console.log('init the char limit plugin');
@@ -114,7 +114,7 @@ var VisionLouisville = VisionLouisville || {};
         }
       });
     },
-    handleReplyBtnClick: function() {
+    showReplyForm: function() {
       this.$('.reply-container').show();
       console.log('handleReplyBtnClick');
     }
