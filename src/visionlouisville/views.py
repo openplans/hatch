@@ -1,4 +1,5 @@
 import json
+from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -8,8 +9,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
-from .models import User, Vision
-from .serializers import UserSerializer, VisionSerializer
+from .models import Reply, User, Vision
+from .serializers import ReplySerializer, UserSerializer, VisionSerializer
 from .services import default_twitter_service
 
 
@@ -107,6 +108,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
         return vision.title + ' ' + vision_url
 
     def post_save(self, vision, created):
+        """
+        This is called in the create handler, after the serializer saves the
+        vision.
+        """
         if created:
             # Always tweet with the app's account
             tweet_text = self.get_app_tweet_text(self.request, vision)
@@ -121,9 +126,27 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
             # Also tweet from user's account if requested
             if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):
-                success, response = service.tweet(tweet_text, self.request.user)
+                success, response = service.tweet(tweet_text,
+                                                  self.request.user)
                 if not success:
                     raise TweetException('User tweet not sent: ' + response)
+
+
+class ReplyViewSet (ModelViewSet):
+    model = Reply
+    serializer_class = ReplySerializer
+
+    def get_tweet_text(self, request, reply):
+        app_username = settings.TWITTER_USERNAME
+        if not app_username.startswith('@'):
+            app_username = '@' + app_username
+
+        if app_username not in reply.content:
+            tweet_text = app_username + ' ' + reply.content
+        else:
+            tweet_text = reply.content
+
+        return truncatechars(tweet_text, 140)
 
 
 class UserViewSet (AppMixin, ModelViewSet):
@@ -131,6 +154,9 @@ class UserViewSet (AppMixin, ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        """
+        Only get users that have an associated social media account.
+        """
         queryset = User.objects\
             .annotate(social_count=Count('social_auth'))\
             .filter(social_count__gt=0)
@@ -156,3 +182,4 @@ current_user_api_view = CurrentUserAPIView.as_view()
 api_router = DefaultRouter()
 api_router.register('visions', VisionViewSet)
 api_router.register('users', UserViewSet)
+api_router.register('replies', ReplyViewSet)
