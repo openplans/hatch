@@ -1,10 +1,11 @@
 from django.test import TestCase, RequestFactory
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
-from ..views import VisionViewSet, UserViewSet
-from ..models import Vision, User
+from ..views import VisionViewSet, UserViewSet, ReplyViewSet
+from ..models import Vision, User, Reply
 from social_auth.models import UserSocialAuth
 from mock import patch, Mock
 import json
@@ -127,6 +128,72 @@ class VisionsTest (TestCase):
 
             self.assertEqual(Vision.objects.all().count(), 0)
             self.assertEqual(response.status_code, 400)
+
+
+class ReplyTest (TestCase):
+    def tearDown(self):
+        User.objects.all().delete()
+        Vision.objects.all().delete()
+        Reply.objects.all().delete()
+        cache.clear()
+
+    def test_reply_tweeting(self):
+        user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        vision = Vision.objects.create(author=user, title='a', description='b', tweet_id='c')
+        factory = RequestFactory()
+        url = reverse('reply-list')
+
+        class StubTwitterService (object):
+            tweet = Mock(return_value=(True, {'id': 12345}))
+
+            def get_avatar_url(self, user, actor=None):
+                return ''
+
+            def get_full_name(self, user, actor=None):
+                return ''
+
+        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', lambda self: StubTwitterService()):
+            view = ReplyViewSet.as_view({'post': 'create'})
+            request = factory.post(url, data=json.dumps({
+                    'author': user.pk,
+                    'vision': vision.pk,
+                    'text': 'This is a reply',
+                }), content_type='application/json')
+            request.user = user
+            request.csrf_processing_done = True
+
+            response = view(request)
+            response.render()
+
+            self.assertEqual(StubTwitterService.tweet.call_count, 1)
+            self.assertIn('in_reply_to_status_id', StubTwitterService.tweet.call_args[1])
+            self.assertEqual(len(StubTwitterService.tweet.call_args[0]), 2)
+            self.assertEqual(StubTwitterService.tweet.call_args[0][1], user)
+            self.assertIn('@'+settings.TWITTER_USERNAME, StubTwitterService.tweet.call_args[0][0])
+
+    def test_handle_reply_tweeting_failure(self):
+        user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        vision = Vision.objects.create(author=user, title='a', description='b', tweet_id='c')
+        factory = RequestFactory()
+        url = reverse('reply-list')
+
+        class StubTwitterService (object):
+            tweet = Mock(return_value=(False, 'Something happened!'))
+
+        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', lambda self: StubTwitterService()):
+            view = ReplyViewSet.as_view({'post': 'create'})
+            request = factory.post(url, data=json.dumps({
+                    'author': user.pk,
+                    'vision': vision.pk,
+                    'text': 'This is a reply',
+                }), content_type='application/json')
+
+            response = view(request)
+            response.render()
+
+            self.assertEqual(Reply.objects.all().count(), 0)
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('tweet', response.content)
 
 
 class UserSerializerTest (TestCase):

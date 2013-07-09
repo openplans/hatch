@@ -1,4 +1,5 @@
 import json
+from django.conf import settings
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -152,24 +153,25 @@ class ReplyViewSet (AppMixin, ModelViewSet):
         if not app_username.startswith('@'):
             app_username = '@' + app_username
 
-        if app_username not in reply.content:
-            tweet_text = app_username + ' ' + reply.content
+        if app_username not in reply.text:
+            tweet_text = app_username + ' ' + reply.text
         else:
-            tweet_text = reply.content
+            tweet_text = reply.text
 
         return truncatechars(tweet_text, 140)
 
     def pre_save(self, reply):
         """
         This is called in the create handler, before the serializer saves the
-        reply. We do it _before_ saving so that we don't need to delete the 
+        reply. We do it _before_ saving so that we don't need to delete the
         model instance if the tweet fails.
         """
         if reply.pk is None:
             tweet_text = self.get_tweet_text(self.request, reply)
             service = self.get_twitter_service()
-            success, response = service.tweet(tweet_text,
-                                              self.request.user)
+            success, response = service.tweet(
+                tweet_text, self.request.user,
+                in_reply_to_status_id=reply.vision.tweet_id)
 
             if success:
                 reply.tweet_id = response['id']

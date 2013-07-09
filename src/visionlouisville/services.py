@@ -131,10 +131,10 @@ class TwitterService (object):
 
         return Twitter(auth=oauth)
 
-    def tweet(self, text, on_behalf_of=None):
+    def tweet(self, text, on_behalf_of=None, **extra):
         t = self.get_api(on_behalf_of)
         try:
-            return True, t.statuses.update(status=text)
+            return True, t.statuses.update(status=text, **extra)
         except TwitterHTTPError as e:
             return False, e.response_data
 
