@@ -52,7 +52,7 @@ class AppMixin (object):
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data)
         else:
-            context['user_json'] = '{}'
+            context['user_json'] = 'null'
 
         return context
 

@@ -23,9 +23,13 @@
     <h3>What people are saying:</h3>
     <ul></ul>
   </div>
+  {{#authenticated}}
   <button class="show-reply-btn">Reply to this vision</button>
   <form class="reply-form">
     <textarea name="text" class="reply-text"></textarea>
     <span class='reply-count'></span><button class="reply-btn" disabled>Tweet a reply</button>
   </form>
+  {{^}}
+  <a href="/login/twitter">Login to reply</button>
+  {{/authenticated}}
 </div>

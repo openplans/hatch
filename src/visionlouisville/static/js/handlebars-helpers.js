@@ -3,6 +3,9 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
+  Handlebars.registerHelper('authenticated', function(options) {
+    return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
+  });
 
   Handlebars.registerHelper('STATIC_URL', function() {
     return NS.staticURL;
