@@ -227,5 +227,6 @@ class UserSerializerTest (TestCase):
 
         with patch('visionlouisville.services.TwitterService.get_api', get_stub_api):
             data = serializer.data
-            self.assertEqual(data.get('avatar_url'), 'http://www.google.com/happy_ducks.png')
+            # Note that we're using the 'bigger' avatar variants.
+            self.assertEqual(data.get('avatar_url'), 'http://www.google.com/happy_ducks_bigger.png')
             self.assertEqual(data.get('full_name'), 'Mjumbe Poe')

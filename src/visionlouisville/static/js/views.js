@@ -104,7 +104,7 @@ var VisionLouisville = VisionLouisville || {};
     itemViewContainer: 'ul.replies-list',
     emptyView: NS.NoRepliesView,
     events: {
-      'click button.show-reply-btn': 'showReplyForm',
+      'click .show-reply': 'showReplyForm',
       'submit form.reply-form': 'handleFormSubmission'
     },
     onRender: function() {
@@ -138,8 +138,10 @@ var VisionLouisville = VisionLouisville || {};
         });
       }
     },
-    showReplyForm: function() {
-      this.$('.reply-form').show();
+    showReplyForm: function(evt) {
+      evt.preventDefault();
+      this.$('.reply-form').show()
+          .find(':input[type!=hidden]:first').focus();
     },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
@@ -172,7 +174,11 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionFormView = Backbone.Marionette.ItemView.extend({
     template: '#form-tpl',
     events: {
-      'submit form': 'handleFormSubmission'
+      'submit form': 'handleFormSubmission',
+      'change .vision-category-list input': 'handleCategoryChange'
+    },
+    onRender: function() {
+      this.handleCategoryChange();
     },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
@@ -191,6 +197,11 @@ var VisionLouisville = VisionLouisville || {};
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
       });
+    },
+    handleCategoryChange: function() {
+      var category = this.$('.vision-category-list input:checked').val();
+      this.$('.category-prompt').addClass('is-hidden')
+        .filter('.' + category + '-prompt').removeClass('is-hidden');
     }
   });
 
