@@ -107,12 +107,17 @@ var VisionLouisville = VisionLouisville || {};
       controller: NS.controller
     });
 
+    // Gobal-level events
     this.router.bind('all', function(route, router) {
       var root = Backbone.history.root,
           fragment = Backbone.history.fragment,
           path = root + fragment;
       $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path)
     });
+
+    $('.user-menu-item').click(function() {
+      $('.user-menu').toggleClass('is-open');
+    })
 
     Backbone.history.start({ pushState: Modernizr.history, silent: true });
     if(!Modernizr.history) {

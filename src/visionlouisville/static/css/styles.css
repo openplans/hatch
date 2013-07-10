@@ -331,7 +331,6 @@ ul.user-menu:after {
   border-right-color: transparent;
   border-left-color: transparent;
 }
-.user-menu-item:hover .user-menu,
 .user-menu.is-open {
   display: block;
 }
