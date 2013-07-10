@@ -101,7 +101,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionDetailView = Backbone.Marionette.CompositeView.extend({
     template: '#item-tpl',
     itemView: NS.VisionReplyView,
-    itemViewContainer: 'ul',
+    itemViewContainer: 'ul.replies-list',
     emptyView: NS.NoRepliesView,
     events: {
       'click button.show-reply-btn': 'showReplyForm',

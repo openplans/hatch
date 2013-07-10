@@ -1,5 +1,21 @@
-<span class="balloon"></span><span class="tail tail-left">&#9664;</span>
-<blockquote class="vision">
-  <p><a href="/visions/{{ id }}" class="vision-link">{{ title }}</a>{{ description }}</p>
-</blockquote>
-<a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+<article class="vision clearfix">
+
+  <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+
+  <a href="/visions/{{ id }}" class="vision-link">
+
+    <span class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
+
+    <span class="author">
+      <strong class="author-name">{{ author_details.first_name }} {{ author_details.last_name }}</strong>
+      <em class="twitter-handle">@{{ author_details.username }}</em>
+    </span>
+
+    <span class="vision-title">{{ title }}</span>
+
+    <span class="vision-list-category-icon">Category: <strong class="capitalize">{{ category }}</strong></span>
+
+    <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count visionary-support-count">8,675,309</span> Visionary(s) &amp; <span class="support-count ally-support-count">42</span> Ally(s)</span>
+  </a>
+
+</article><!-- end .vision -->

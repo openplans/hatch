@@ -452,21 +452,72 @@ ul.user-menu:after {
 
 /* Vision List */
 .vision-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1em;
 }
 .vision-list li {
-  margin: 0 0 0 3.5em;
-  padding: 0;
+  background: #fff;
+  margin-bottom: 10px;
   position: relative;
 }
-.vision-list .vision-link {
+.vision-list .user-link {
+  margin-top: 5px;
+}
+.vision-list .vision-title {
+  font-weight: 400;
   display: block;
+}
+.vision-link {
+  display: block;
+  padding: 0 10px 10px 40px;
+  margin-left: -40px;
   text-decoration: none;
-  color: #444;
-  margin: -0.5em -1em -0.5em -1.25em;
-  padding: 0.5em 1em 0.5em 1.25em;
+}
+.vision-list-category-icon {
+  float: right;
+  color: #b2b2a6;
+  padding: 5px 0 10px;
+}
+
+/* Support */
+.support {
+  color: #ef037d;
+  font-weight: 600;
+}
+.heart {
+  display: block;
+  background-color: #d5d5c6;
+  box-shadow: inset 0 0.75em 0.75em rgba(255,255,255,0.5);
+  width: 26px;
+  height: 21px;
+  font-size: 21px;
+}
+.vision-list .support {
+  font-size: x-small;
+}
+.vision-header a.support {
+  display: block;
+  width: 46px;
+  position: absolute;
+  top: 56px;
+  left: -10px;
+  font-size: large;
+  text-align: center;
+  text-decoration: none;
+}
+.vision-header a.support .heart {
+  margin-left: 10px;
+}
+.supported .heart {
+  background-color: #ef037d;
+}
+.support-count {
+  font-weight: 800;
+}
+.heart-inline {
+  display: inline-block;
+  height: 1.25em;
+  width: auto;
+  margin-bottom: -0.25em;
+  font-size: 1em;
 }
 
 /* Vision Form */
