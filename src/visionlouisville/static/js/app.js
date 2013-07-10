@@ -128,7 +128,8 @@ var VisionLouisville = VisionLouisville || {};
       $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path);
     });
 
-    $('.user-menu-item').click(function() {
+    $('.user-menu-item').click(function(evt) {
+      evt.preventDefault();
       $('.user-menu').toggleClass('is-open');
     });
 
