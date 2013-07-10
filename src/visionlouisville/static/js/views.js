@@ -174,7 +174,11 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionFormView = Backbone.Marionette.ItemView.extend({
     template: '#form-tpl',
     events: {
-      'submit form': 'handleFormSubmission'
+      'submit form': 'handleFormSubmission',
+      'change .vision-category-list input': 'handleCategoryChange'
+    },
+    onRender: function() {
+      this.handleCategoryChange();
     },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
@@ -193,6 +197,11 @@ var VisionLouisville = VisionLouisville || {};
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
       });
+    },
+    handleCategoryChange: function() {
+      var category = this.$('.vision-category-list input:checked').val();
+      this.$('.category-prompt').addClass('is-hidden')
+        .filter('.' + category + '-prompt').removeClass('is-hidden');
     }
   });
 

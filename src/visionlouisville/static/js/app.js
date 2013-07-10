@@ -18,7 +18,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     list: function(category) {
       var render = function() {
-        var visionModel, visionCollection
+        var visionModel, visionCollection;
 
         if (category) {
           visionModel = new Backbone.Model({category: category});
@@ -112,31 +112,31 @@ var VisionLouisville = VisionLouisville || {};
       var root = Backbone.history.root,
           fragment = Backbone.history.fragment,
           path = root + fragment;
-      $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path)
+      $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path);
     });
 
     $('.user-menu-item').click(function() {
       $('.user-menu').toggleClass('is-open');
-    })
+    });
 
     Backbone.history.start({ pushState: Modernizr.history, silent: true });
     if(!Modernizr.history) {
-        var rootLength = Backbone.history.options.root.length,
-            fragment = window.location.pathname.substr(rootLength),
-            url;
+      var rootLength = Backbone.history.options.root.length,
+          fragment = window.location.pathname.substr(rootLength),
+          url;
 
-        if (fragment) {
-          Backbone.history.navigate(fragment, { trigger: true });
-          url = window.location.protocol + '//' + window.location.host +
-              Backbone.history.options.root + '#' + fragment;
+      if (fragment) {
+        Backbone.history.navigate(fragment, { trigger: true });
+        url = window.location.protocol + '//' + window.location.host +
+            Backbone.history.options.root + '#' + fragment;
 
-          // Do a full redirect so we don't get urls like /visions/7#visions/7
-          window.location = url;
-        } else {
-          Backbone.history.loadUrl(Backbone.history.getFragment());
-        }
-    } else {
+        // Do a full redirect so we don't get urls like /visions/7#visions/7
+        window.location = url;
+      } else {
         Backbone.history.loadUrl(Backbone.history.getFragment());
+      }
+    } else {
+      Backbone.history.loadUrl(Backbone.history.getFragment());
     }
 
     // Globally capture clicks. If they are internal and not in the pass
