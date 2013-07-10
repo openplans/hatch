@@ -19,6 +19,11 @@ var VisionLouisville = VisionLouisville || {};
     return window.location.toString();
   });
 
+  // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
+  Handlebars.registerHelper('pluralize', function(number, single, plural) {
+    return (number === 1) ? single : plural;
+  });
+
   Handlebars.registerHelper('fromnow', function(datetime) {
     if (datetime) {
       return moment(datetime).fromNow();

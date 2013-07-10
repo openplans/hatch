@@ -177,15 +177,15 @@ var VisionLouisville = VisionLouisville || {};
     template: '#no-support-tpl'
   });
 
-  NS.SupportView = Backbone.Marionette.ItemView.extend({
-    template: '#support-item-tpl',
+  NS.UserAvatarView = Backbone.Marionette.ItemView.extend({
+    template: '#user-avatar-tpl',
     tagName: 'li'
   });
 
   NS.SupportListView = Backbone.Marionette.CompositeView.extend({
     template: '#support-list-tpl',
-    itemView: NS.SupportView,
-    itemViewContainer: 'ul.support-list',
+    itemView: NS.UserAvatarView,
+    itemViewContainer: 'ul.user-list',
     emptyView: NS.NoSupportView
   });
 
