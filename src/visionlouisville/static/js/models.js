@@ -19,6 +19,16 @@ var VisionLouisville = VisionLouisville || {};
         key: 'vision',
         includeInJSON: Backbone.Model.prototype.idAttribute,
       }
+    },{
+      type: Backbone.HasMany,
+      key: 'support',
+      relatedModel: 'SupportModel',
+      includeInJSON: Backbone.Model.prototype.idAttribute,
+      collectionType: 'SupportCollection',
+      reverseRelation: {
+        key: 'vision',
+        includeInJSON: Backbone.Model.prototype.idAttribute,
+      }
     }]
   });
 
@@ -37,4 +47,12 @@ var VisionLouisville = VisionLouisville || {};
     model: NS.ReplyModel
   });
 
+  // Support ==================================================================
+  NS.SupportModel = Backbone.RelationalModel.extend({});
+
+  NS.SupportCollection = Backbone.Collection.extend({
+    url: '/api/support/',
+    comparator: 'created_at',
+    model: NS.SupportModel
+  });
 }(VisionLouisville));

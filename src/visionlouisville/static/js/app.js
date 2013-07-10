@@ -70,6 +70,10 @@ var VisionLouisville = VisionLouisville || {};
             layout.replies.show(new NS.ReplyListView({
               collection: model.get('replies')
             }));
+
+            layout.support.show(new NS.SupportListView({
+              collection: model.get('support')
+            }));
           };
 
       // Nothing in the collection? It's not done fetching. Let's wait for it.

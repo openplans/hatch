@@ -72,10 +72,10 @@ var VisionLouisville = VisionLouisville || {};
     tagName: 'p'
   });
 
+  // Vision List ==============================================================
   NS.NoItemsView = Backbone.Marionette.ItemView.extend({
     template: '#no-items-tpl'
   });
-
 
   NS.VisionListItemView = Backbone.Marionette.ItemView.extend({
     template: '#list-item-tpl',
@@ -89,6 +89,7 @@ var VisionLouisville = VisionLouisville || {};
     emptyView: NS.NoItemsView
   });
 
+  // Replies ==================================================================
   NS.NoRepliesView = Backbone.Marionette.ItemView.extend({
     template: '#no-replies-tpl'
   });
@@ -99,7 +100,7 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   NS.ReplyListView = Backbone.Marionette.CompositeView.extend({
-    template: '#reply-list-item-tpl',
+    template: '#reply-list-tpl',
     itemView: NS.ReplyView,
     itemViewContainer: 'ul.replies-list',
     emptyView: NS.NoRepliesView,
@@ -171,11 +172,29 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  // Support ==================================================================
+  NS.NoSupportView = Backbone.Marionette.ItemView.extend({
+    template: '#no-support-tpl'
+  });
+
+  NS.SupportView = Backbone.Marionette.ItemView.extend({
+    template: '#support-item-tpl',
+    tagName: 'li'
+  });
+
+  NS.SupportListView = Backbone.Marionette.CompositeView.extend({
+    template: '#support-list-tpl',
+    itemView: NS.SupportView,
+    itemViewContainer: 'ul.support-list',
+    emptyView: NS.NoSupportView
+  });
+
+  // Vision Details ===========================================================
   NS.VisionDetailLayout = Backbone.Marionette.Layout.extend({
     template: '#item-tpl',
     regions: {
-      replies: '.replies',
-      support: '.support'
+      replies: '.replies-region',
+      support: '.support-region'
     },
     events: {
       'click .show-reply': 'showReplyForm'
@@ -186,6 +205,7 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  // Vision Form ==============================================================
   NS.VisionFormView = Backbone.Marionette.ItemView.extend({
     template: '#form-tpl',
     events: {

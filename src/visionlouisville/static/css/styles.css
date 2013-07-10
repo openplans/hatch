@@ -58,8 +58,8 @@ ul.unstyled-list, ol.unstyled-list {
 ul.unstyled-list li, ol.unstyled-list li {
   padding-bottom: 0;
 }
-strong { 
-  font-weight: 800; 
+strong {
+  font-weight: 800;
 }
 hr {
   margin: 1.5em 0; 
@@ -452,16 +452,16 @@ ul.user-menu:after {
 }
 
 /* Conversation */
-.replies {}
+.replies-region {}
 .reply {
   padding-left: 50px;
 }
-.replies .avatar {
+.replies-region .avatar {
   float: left;
   border-radius: 0;
   margin-left: -50px;
 }
-.replies .datetime {
+.replies-region .datetime {
   padding: 0;
 }
 
