@@ -83,6 +83,9 @@ var VisionLouisville = VisionLouisville || {};
       // Important for height calculations.
       NS.app.homeView.swiper = new Swiper(NS.app.homeView.$('.swiper-container').get(0), {
         loop: true,
+        pagination: '.pagination',
+        paginationClickable: true,
+        // autoplay: 4000,
         calculateHeight: true
       });
     }

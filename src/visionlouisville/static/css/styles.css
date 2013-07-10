@@ -193,6 +193,10 @@ body {
   background: #fff;
   box-shadow: 0 0 8px rgba(0,0,0,0.5);
 }
+.container-fullwidth {
+  margin-right: -10px;
+  margin-left: -10px;
+}
 
 .main {
   position: relative;
@@ -404,6 +408,7 @@ ul.user-menu:after {
   border-radius: 0 18px 18px 0;
 }
 .vision-title {
+  display: block;
   font-size: medium;
   font-weight: 700;
 }
@@ -457,13 +462,13 @@ ul.user-menu:after {
   background: #fff;
   margin-bottom: 10px;
   position: relative;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 .vision-list .user-link {
   margin-top: 5px;
 }
 .vision-list .vision-title {
   font-weight: 400;
-  display: block;
 }
 .vision-link {
   display: block;
@@ -569,26 +574,61 @@ ul.user-menu:after {
 }
 
 /* Swiper */
+.vision-gallery {
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 5px;
+}
 .swiper-container {
   width: 100%;
   height: auto;
+  margin-bottom: 10px;
 }
 .swiper-slide {
   width: 100%;
-  height: 100%;
-  position: relative;
+/*  height: 100%;*/
+  height: auto !important;
   opacity: 0;
   -webkit-transition: opacity 1.2s;
           transition: opacity 1.2s;
 }
-.swiper-slide-active {}
+.swiper-slide-active { }
 .swiper-slide-visible { opacity: 1; }
 .swiper-pagination-switch {}
 .swiper-active-switch {}
 .swiper-visible-switch {}
 
 .swiper-slide .vision {
-  padding: 1em 1.5em 2.25em;
+  padding: 10px 10px 10px 40px;
+  margin: 5px 10px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+.swiper-slide .vision p {
+  margin: 0;
+}
+.swiper-slide .support {
+  font-size: x-small;
+}
+.pagination {
+  position: absolute;
+  left: 0;
+  text-align: center;
+  bottom: 5px;
+  width: 100%;
+}
+.swiper-pagination-switch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background: #b2b2a6;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  margin: 0 3px;
+  cursor: pointer;
+}
+.swiper-active-switch {
+  background: #48a5bf;
 }
 
 
