@@ -2,6 +2,7 @@ import json
 from django.conf import settings
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView
+from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.db.models import Count
@@ -9,7 +10,7 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
 from .models import Reply, User, Vision
@@ -209,8 +210,9 @@ class CurrentUserAPIView (AppMixin, RetrieveAPIView):
             raise Http404('No user is logged in.')
 
 
-class SupportVisionViewSet (AppMixin, GenericViewSet):
-    model = Vision
+class SupportVisionViewSet (SingleObjectMixin, ViewSet):
+    def get_queryset(self):
+        return Vision.objects.all()
 
     def support(self, request, *args, **kwargs):
         vision = self.get_object()
