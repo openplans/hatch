@@ -72,7 +72,7 @@ var VisionLouisville = VisionLouisville || {};
             }));
 
             layout.support.show(new NS.SupportListView({
-              collection: model.get('support')
+              collection: model.get('supporters')
             }));
           };
 
