@@ -539,48 +539,6 @@ ul.user-menu:after {
 .swiper-slide .vision {
   padding: 1em 1.5em 2.25em;
 }
-.swiper-slide .balloon {
-  bottom: 1.5em;
-}
-.first .tail    { left: 14%; }
-.second .tail   { left: 26%; }
-.third .tail    { left: 38%; }
-.fourth .tail   { left: 50%; }
-.fifth .tail    { left: 62%; }
-.sixth .tail    { left: 74%; }
-.seventh .tail  { left: 86%; }
-
-/* Swiper Navigation */
-.swiper-nav {
-  margin: 0 0 2em;
-}
-.swiper-nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.swiper-nav-list li {
-  float: left;
-  width: 12%;
-  padding: 0;
-  margin: 0;
-}
-.swiper-nav .avatar {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.swiper-nav li:first-child {
-  margin-left: 8%;
-}
-
-.economy-swiper-link .avatar { background-color: #1C6722; }
-.health-swiper-link .avatar { background-color: #DD3226; }
-.energy-swiper-link .avatar { background-color: #F7B000; }
-.living-swiper-link .avatar { background-color: #8CB800; }
-.connectivity-swiper-link .avatar { background-color: #EA7518; }
-.identity-swiper-link .avatar { background-color: #1A534C; }
-.creativity-swiper-link .avatar { background-color: #29867B; }
 
 
 /* =Media Queries for Responsive Layout
