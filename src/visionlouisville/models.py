@@ -18,6 +18,12 @@ class User (BaseUser):
     class Meta:
         proxy = True
 
+    def support(self, vision):
+        vision.supporters.add(self)
+
+    def unsupport(self, vision):
+        vision.supporters.remove(self)
+
 
 class Vision (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

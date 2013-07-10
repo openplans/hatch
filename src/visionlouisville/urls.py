@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-from .views import app_view, api_router, current_user_api_view, vision_instance_view
+from .views import (app_view, api_router, current_user_api_view, 
+    support_api_view, unsupport_api_view, vision_instance_view)
 
 # Admin
 from django.contrib import admin
@@ -14,6 +15,10 @@ urlpatterns = patterns('',
 
     # API
     url(r'^api/users/(?P<pk>current)/$', current_user_api_view,
+        name='current-user-detail'),
+    url(r'^api/visions/(?P<pk>\d+)/support$', support_api_view,
+        name='current-user-detail'),
+    url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,
         name='current-user-detail'),
     url(r'^api/', include(api_router.urls)),
 
