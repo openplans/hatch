@@ -25,11 +25,19 @@ class Vision (models.Model):
     category = models.CharField(max_length=20)
     title = models.CharField(max_length=160)
     description = models.TextField()
+    supporters = models.ManyToManyField(User, through='Support', related_name='supporters')
 
     tweet_id = models.CharField(max_length=64, null=True)
 
     def __unicode__(self):
         return self.title
+
+
+# We only spell out this through model so that it's easier to work with in the
+# serializers.
+class Support (models.Model):
+    vision = models.ForeignKey(Vision, related_name='support')
+    supporter = models.ForeignKey(User, related_name='support')
 
 
 class Reply (models.Model):
