@@ -410,6 +410,7 @@ ul.user-menu:after {
   border-radius: 0 20px 20px 0;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
   margin-left: -50px;
+  margin-bottom: 75px;
 }
 .avatar {
   display: block;
@@ -425,6 +426,7 @@ ul.user-menu:after {
 .vision-description {}
 
 .vision-footer {
+  clear: both;
   margin: 20px -10px -20px -50px;
   background-color: #d5d5c6;
   box-shadow: inset 0 3px 3px rgba(0,0,0,0.15);
