@@ -74,7 +74,8 @@ var VisionLouisville = VisionLouisville || {};
 
   // Vision List ==============================================================
   NS.NoItemsView = Backbone.Marionette.ItemView.extend({
-    template: '#no-items-tpl'
+    template: '#no-items-tpl',
+    tagName: 'li'
   });
 
   NS.VisionListItemView = Backbone.Marionette.ItemView.extend({
@@ -91,7 +92,8 @@ var VisionLouisville = VisionLouisville || {};
 
   // Replies ==================================================================
   NS.NoRepliesView = Backbone.Marionette.ItemView.extend({
-    template: '#no-replies-tpl'
+    template: '#no-replies-tpl',
+    tagName: 'li'
   });
 
   NS.ReplyView = Backbone.Marionette.ItemView.extend({
@@ -174,7 +176,8 @@ var VisionLouisville = VisionLouisville || {};
 
   // Support ==================================================================
   NS.NoSupportView = Backbone.Marionette.ItemView.extend({
-    template: '#no-support-tpl'
+    template: '#no-support-tpl',
+    tagName: 'li'
   });
 
   NS.UserAvatarView = Backbone.Marionette.ItemView.extend({
