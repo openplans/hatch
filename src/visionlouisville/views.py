@@ -10,7 +10,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
-from .models import Reply, Support, User, Vision
+from .models import Reply, User, Vision
 from .serializers import (
     ReplySerializer, SupportSerializer, UserSerializer,
     VisionSerializer)
@@ -94,7 +94,6 @@ class VisionViewSet (AppMixin, ModelViewSet):
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('replies')\
-            .prefetch_related('support')\
             .prefetch_related('supporters')
 
         category = self.request.GET.get('category')
@@ -185,7 +184,7 @@ class ReplyViewSet (AppMixin, ModelViewSet):
 
 
 class SupportViewSet (AppMixin, ModelViewSet):
-    model = Support
+    model = Vision.supporters.through
     serializer_class = SupportSerializer
 
     def pre_save(self, support):
