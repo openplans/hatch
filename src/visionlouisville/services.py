@@ -139,6 +139,9 @@ class TwitterService (object):
 
         return Twitter(auth=oauth)
 
+    # ==================================================================
+    # Twitter actions
+    # ==================================================================
     def tweet(self, text, on_behalf_of=None, **extra):
         t = self.get_api(on_behalf_of)
         try:
@@ -146,6 +149,19 @@ class TwitterService (object):
         except TwitterHTTPError as e:
             return False, e.response_data
 
+    def add_favorite(self, on_behalf_of, tweet_id, **extra):
+        t = self.get_api(on_behalf_of)
+        try:
+            return True, t.favorites.create(_id=tweet_id, **extra)
+        except TwitterHTTPError as e:
+            return False, e.response_data
+
+    def remove_favorite(self, on_behalf_of, tweet_id, **extra):
+        t = self.get_api(on_behalf_of)
+        try:
+            return True, t.favorites.destroy(_id=tweet_id, **extra)
+        except TwitterHTTPError as e:
+            return False, e.response_data
 
 
 default_twitter_service = TwitterService()
