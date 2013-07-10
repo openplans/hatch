@@ -6,14 +6,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.db.models import Count
 from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
 from .models import Reply, User, Vision
 from .serializers import (
-    ReplySerializer, SupportSerializer, UserSerializer,
-    VisionSerializer)
+    ReplySerializer, UserSerializer, VisionSerializer)
 from .services import default_twitter_service
 
 
@@ -183,11 +184,6 @@ class ReplyViewSet (AppMixin, ModelViewSet):
                 raise TweetException('User reply not tweeted: ' + response)
 
 
-class SupportViewSet (AppMixin, ModelViewSet):
-    model = Vision.supporters.through
-    serializer_class = SupportSerializer
-
-
 class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
@@ -212,14 +208,32 @@ class CurrentUserAPIView (AppMixin, RetrieveAPIView):
         else:
             raise Http404('No user is logged in.')
 
+
+class SupportVisionViewSet (AppMixin, GenericViewSet):
+    model = Vision
+
+    def support(self, request, *args, **kwargs):
+        vision = self.get_object()
+        self.request.user.support(vision)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def unsupport(self, request, *args, **kwargs):
+        vision = self.get_object()
+        self.request.user.unsupport(vision)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 # Views
 app_view = AppView.as_view()
 vision_instance_view = VisionInstanceView.as_view()
 current_user_api_view = CurrentUserAPIView.as_view()
+support_api_view = SupportVisionViewSet.as_view({'post': 'support',
+                                                 'put': 'support',
+                                                 'delete': 'unsupport'})
+unsupport_api_view = SupportVisionViewSet.as_view({'post': 'unsupport'})
 
 # Setup the API routes
 api_router = DefaultRouter()
 api_router.register('visions', VisionViewSet)
 api_router.register('users', UserViewSet)
 api_router.register('replies', ReplyViewSet)
-api_router.register('support', SupportViewSet)
