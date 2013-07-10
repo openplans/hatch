@@ -505,8 +505,9 @@ ul.user-menu:after {
   height: 21px;
   font-size: 21px;
 }
-.vision-list .support {
-  font-size: x-small;
+.support-small {
+  font-size: 80%;
+  line-height: 3;
 }
 .vision-header a.support {
   display: block;
@@ -609,16 +610,16 @@ ul.user-menu:after {
 .swiper-visible-switch {}
 
 .swiper-slide .vision {
-  padding: 10px 10px 10px 40px;
+  padding: 0 0 0 40px;
   margin: 5px 10px;
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
+.swiper-slide .user-link {
+  margin-top: 5px;
+}
 .swiper-slide .vision p {
   margin: 0;
-}
-.swiper-slide .support {
-  font-size: x-small;
 }
 .pagination {
   position: absolute;
