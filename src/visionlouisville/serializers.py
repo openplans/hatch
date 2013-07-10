@@ -45,19 +45,10 @@ class ReplySerializer (ModelSerializer):
         model = Reply
 
 
-class SupportSerializer (ModelSerializer):
-    supporter_details = UserSerializer(source='user', read_only=True)
-    supporter = PrimaryKeyRelatedField(source='user')
-
-    class Meta:
-        model = Vision.supporters.through
-        fields = ('supporter', 'vision', 'supporter_details')
-
-
 class VisionSerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
-    support = SupportSerializer(many=True, read_only=True)
+    supporters = UserSerializer(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
 
     class Meta:
