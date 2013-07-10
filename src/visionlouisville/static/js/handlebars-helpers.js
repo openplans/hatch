@@ -7,6 +7,12 @@ var VisionLouisville = VisionLouisville || {};
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('if_supported', function(options) {
+    var userId = NS.currentUserData['id'],
+        supportingIds = _.pluck(this.supporters, 'id');
+    return _.contains(supportingIds, userId) ? options.fn(this) : options.inverse(this);
+  });
+
   Handlebars.registerHelper('STATIC_URL', function() {
     return NS.staticURL;
   });

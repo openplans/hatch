@@ -13,7 +13,6 @@ var VisionLouisville = VisionLouisville || {};
       type: Backbone.HasMany,
       key: 'replies',
       relatedModel: 'ReplyModel',
-      includeInJSON: Backbone.Model.prototype.idAttribute,
       collectionType: 'ReplyCollection',
       reverseRelation: {
         key: 'vision',
@@ -23,7 +22,6 @@ var VisionLouisville = VisionLouisville || {};
       type: Backbone.HasMany,
       key: 'supporters',
       relatedModel: 'UserModel',
-      includeInJSON: Backbone.Model.prototype.idAttribute
     }]
   });
 
@@ -43,6 +41,33 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // User ====================================================================`
-  NS.UserModel = Backbone.RelationalModel.extend({});
+  NS.UserModel = Backbone.RelationalModel.extend({
+    support: function(vision) {
+      var supporters = vision.get('supporters');
+
+      if (!supporters.contains(this)) {
+        supporters.add(this);
+
+        $.ajax({
+          type: 'PUT',
+          url: vision.url() + '/support',
+          error: function() { supporters.remove(this); }
+        });
+      }
+    },
+    unsupport: function(vision) {
+      var supporters = vision.get('supporters');
+
+      if (supporters.contains(this)) {
+        supporters.remove(this);
+
+        $.ajax({
+          type: 'DELETE',
+          url: vision.url() + '/support',
+          error: function() { supporters.add(this); }
+        });
+      }
+    }
+  });
 
 }(VisionLouisville));

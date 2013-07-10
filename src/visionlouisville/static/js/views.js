@@ -200,11 +200,26 @@ var VisionLouisville = VisionLouisville || {};
       support: '.support-region'
     },
     events: {
-      'click .show-reply': 'showReplyForm'
+      'click .show-reply': 'showReplyForm',
+      'click .support-link': 'handleSupport'
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
       this.regionManager.get('replies').currentView.showReplyForm(evt);
+    },
+    handleSupport: function(evt) {
+      evt.preventDefault();
+      var vision = this.model,
+          supporters = vision.get('supporters'),
+          user = NS.app.currentUser;
+
+      if (supporters.contains(user)) {
+        user.unsupport(vision);
+        this.$('.support').removeClass('supported');
+      } else {
+        user.support(vision);
+        this.$('.support').addClass('supported');
+      }
     }
   });
 

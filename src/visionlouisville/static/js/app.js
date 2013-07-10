@@ -183,8 +183,8 @@ var VisionLouisville = VisionLouisville || {};
     });
 
     // TODO: This user should be bootstrapped by the server
-    NS.app.currentUser = new Backbone.Model(NS.currentUserData || {},
-                                            {url: '/api/users/current/'});
+    NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
+                                          {url: '/api/users/current/'});
     NS.app.currentUser.fetch();
 
     NS.app.start({
