@@ -22,7 +22,7 @@
 
     <footer class="vision-footer clearfix">
       <a href="#" class="retweet-link">Retweet</a>
-      <a href="#" class="reply-link show-reply">Reply</a>
+      <a href="#login-to-reply" class="reply-link show-reply">Reply</a>
       <a href="/visions/{{ category }}/list" class="category-link">Category: <strong class="capitalize">{{ category }}</strong></a>
     </footer>
 
@@ -30,23 +30,6 @@
 </div>
 
 <div class="container">
-
-  <div class="support">
-    <p class="support supported"><img class="heart heart-inline" src="/static/images/heart-beige.png"> You, <span class="support-count visionary-support-count">610</span> Visionary(s) &amp; <span class="support-count ally-support-count">31</span> Ally(s) support this.</p>
-    <ul class="supporters-list unstyled-list"></ul>
-  </div>
-
-  <div class="replies">
-    <h6>What people are saying:</h6>
-    <ul class="replies-list unstyled-list"></ul>
-  </div>
-  {{#authenticated}}
-  <button class="show-reply btn btn-block">Reply to this vision</button>
-  <form class="reply-form">
-    <textarea name="text" class="reply-text"></textarea>
-    <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>
-  </form>
-  {{^}}
-  <a href="/login/twitter/?next={{ window_location }}">Login to reply</a>
-  {{/authenticated}}
+  <div class="support"></div>
+  <div class="replies"></div>
 </div>

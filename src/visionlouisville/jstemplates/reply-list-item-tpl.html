@@ -1,0 +1,12 @@
+    <h6>What people are saying:</h6>
+    <ul class="replies-list unstyled-list"></ul>
+
+    {{#authenticated}}
+    <button class="show-reply btn btn-block">Reply to this vision</button>
+    <form class="reply-form">
+      <textarea name="text" class="reply-text"></textarea>
+      <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>
+    </form>
+    {{^}}
+    <a id="login-to-reply" href="/login/twitter/?next={{ window_location }}">Login to reply</a>
+    {{/authenticated}}

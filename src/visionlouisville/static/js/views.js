@@ -93,14 +93,14 @@ var VisionLouisville = VisionLouisville || {};
     template: '#no-replies-tpl'
   });
 
-  NS.VisionReplyView = Backbone.Marionette.ItemView.extend({
+  NS.ReplyView = Backbone.Marionette.ItemView.extend({
     template: '#reply-item-tpl',
     tagName: 'li'
   });
 
-  NS.VisionDetailView = Backbone.Marionette.CompositeView.extend({
-    template: '#item-tpl',
-    itemView: NS.VisionReplyView,
+  NS.ReplyListView = Backbone.Marionette.CompositeView.extend({
+    template: '#reply-list-item-tpl',
+    itemView: NS.ReplyView,
     itemViewContainer: 'ul.replies-list',
     emptyView: NS.NoRepliesView,
     events: {
@@ -168,6 +168,21 @@ var VisionLouisville = VisionLouisville || {};
           this.$replyArea.trigger('keyup');
         }
       }
+    }
+  });
+
+  NS.VisionDetailLayout = Backbone.Marionette.Layout.extend({
+    template: '#item-tpl',
+    regions: {
+      replies: '.replies',
+      support: '.support'
+    },
+    events: {
+      'click .show-reply': 'showReplyForm'
+    },
+    showReplyForm: function(evt) {
+      evt.preventDefault();
+      this.regionManager.get('replies').currentView.showReplyForm(evt);
     }
   });
 
