@@ -708,6 +708,9 @@ ul.user-list {
   margin-bottom: 10px;
 }
 .user-list li {
+  display: inline;
+}
+.user-list li a {
   float: left;
   width: 10%;
 }
