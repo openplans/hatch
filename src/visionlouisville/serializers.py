@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
-    IntegerField, ModelSerializer, SerializerMethodField, URLField)
-from .models import User, Vision, Reply, Support
+    IntegerField, ModelSerializer, PrimaryKeyRelatedField, 
+    SerializerMethodField, URLField)
+from .models import User, Vision, Reply
 from .services import SocialMediaException
 
 
@@ -45,10 +46,12 @@ class ReplySerializer (ModelSerializer):
 
 
 class SupportSerializer (ModelSerializer):
-    supporter_details = UserSerializer(source='supporter', read_only=True)
+    supporter_details = UserSerializer(source='user', read_only=True)
+    supporter = PrimaryKeyRelatedField(source='user')
 
     class Meta:
-        model = Support
+        model = Vision.supporters.through
+        fields = ('supporter', 'vision', 'supporter_details')
 
 
 class VisionSerializer (ModelSerializer):

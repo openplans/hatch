@@ -10,7 +10,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
-from .models import Reply, Support, User, Vision
+from .models import Reply, User, Vision
 from .serializers import (
     ReplySerializer, SupportSerializer, UserSerializer,
     VisionSerializer)
@@ -94,7 +94,6 @@ class VisionViewSet (AppMixin, ModelViewSet):
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('replies')\
-            .prefetch_related('support')\
             .prefetch_related('supporters')
 
         category = self.request.GET.get('category')
@@ -185,39 +184,8 @@ class ReplyViewSet (AppMixin, ModelViewSet):
 
 
 class SupportViewSet (AppMixin, ModelViewSet):
-    model = Support
+    model = Vision.supporters.through
     serializer_class = SupportSerializer
-
-    def pre_save(self, support):
-        """
-        This is called in the create handler, before the serializer saves the
-        reply. We do it _before_ saving so that we don't need to delete the
-        model instance if the favorite fails.
-        """
-        if support.pk is None:
-            service = self.get_twitter_service()
-            success, response = service.add_favorite(
-                self.request.user, support.vision.tweet_id)
-
-            if not success:
-                raise TweetException('Tweet not favorited: ' + response)
-
-    def pre_delete(self, support):
-        service = self.get_twitter_service()
-        success, response = service.remove_favorite(
-            self.request.user, support.vision.tweet_id)
-
-        if not success:
-            raise TweetException('Tweet not unfavorited: ' + response)
-
-    def destroy(self, *args, **kwargs):
-        from rest_framework.response import Response
-        from rest_framework import status
-
-        obj = self.get_object()
-        self.pre_delete(obj)
-        obj.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserViewSet (AppMixin, ModelViewSet):
