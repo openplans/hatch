@@ -700,6 +700,22 @@ a.welcome-close-btn {
 }
 
 
+/* =User Lists
+-------------------------------------------------------------- */
+
+ul.user-list {
+  margin-bottom: 10px;
+}
+.user-list li {
+  float: left;
+  width: 10%;
+}
+.user-list .avatar {
+  border-radius: 0;
+  width: 100%;
+  height: auto;
+}
+
 /* =Media Queries for Responsive Layout
 -------------------------------------------------------------- */
 
