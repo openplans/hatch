@@ -20,7 +20,7 @@
 
     <footer class="vision-footer clearfix">
       <a href="#" class="retweet-link">Retweet</a>
-      <a href="#" class="reply-link">Reply</a>
+      <a href="#" class="reply-link show-reply">Reply</a>
       <!-- FIXME: link to category vision list -->
       <a href="/visions/{{ category }}/list" class="category-link">Category: <strong class="capitalize">{{ category }}</strong></a>
     </footer>
@@ -34,7 +34,7 @@
     <ul class="replies-list unstyled-list"></ul>
   </div>
   {{#authenticated}}
-  <button class="show-reply-btn btn btn-block">Reply to this vision</button>
+  <button class="show-reply btn btn-block">Reply to this vision</button>
   <form class="reply-form">
     <textarea name="text" class="reply-text"></textarea>
     <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>

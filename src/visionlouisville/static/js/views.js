@@ -104,7 +104,7 @@ var VisionLouisville = VisionLouisville || {};
     itemViewContainer: 'ul',
     emptyView: NS.NoRepliesView,
     events: {
-      'click button.show-reply-btn': 'showReplyForm',
+      'click .show-reply': 'showReplyForm',
       'submit form.reply-form': 'handleFormSubmission'
     },
     onRender: function() {
@@ -138,8 +138,10 @@ var VisionLouisville = VisionLouisville || {};
         });
       }
     },
-    showReplyForm: function() {
-      this.$('.reply-form').show();
+    showReplyForm: function(evt) {
+      evt.preventDefault();
+      this.$('.reply-form').show()
+          .find(':input[type!=hidden]:first').focus();
     },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
