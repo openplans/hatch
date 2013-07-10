@@ -90,7 +90,8 @@ class VisionViewSet (AppMixin, ModelViewSet):
     def get_queryset(self):
         queryset = Vision.objects.all()\
             .select_related('author')\
-            .prefetch_related('author__social_auth')
+            .prefetch_related('author__social_auth')\
+            .prefetch_related('replies')
 
         category = self.request.GET.get('category')
         if (category):
