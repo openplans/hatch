@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Vision, Reply
+from .models import Vision, Reply, Share
+
+
+class ShareInline (admin.TabularInline):
+    model = Share
+    extra = 1
 
 
 class ReplyInline (admin.TabularInline):
@@ -8,7 +13,7 @@ class ReplyInline (admin.TabularInline):
 
 
 class VisionAdmin (admin.ModelAdmin):
-    inlines = [ReplyInline]
+    inlines = [ReplyInline, ShareInline]
 
 
 admin.site.register(Vision, VisionAdmin)
