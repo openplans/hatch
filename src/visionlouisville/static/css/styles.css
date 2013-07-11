@@ -478,13 +478,14 @@ ul.user-menu:after {
 }
 .vision-list .user-link {
   margin-top: 5px;
+  margin-bottom: 0;
 }
 .vision-list .vision-title {
   font-weight: 400;
 }
 .vision-link {
   display: block;
-  padding: 0 10px 10px 40px;
+  padding: 0 10px 0 40px;
   margin-left: -40px;
   text-decoration: none;
 }
@@ -624,6 +625,7 @@ a.support {
 }
 .swiper-slide .vision p {
   margin: 0;
+  padding: 0 0 10px 0;
 }
 .pagination {
   position: absolute;
@@ -653,7 +655,7 @@ a.support {
 .welcome { 
   margin-top: -20px;
   margin-bottom: 20px;
-  padding: 20px 10px 10px 10px; 
+  padding: 15px 10px 10px 10px; 
   background: #808073;
   color: #e7e7d7;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
@@ -676,12 +678,12 @@ a.welcome-close-btn {
 }
 .welcome-avatar {
   float: left;
-  width: 55px;
-  height: 55px;
-  margin: 5px 10px 20px -65px;
+  width: 50px;
+  height: 50px;
+  margin: 5px 10px 20px -55px;
 }
 .welcome-header {
-  padding-left: 65px;
+  padding-left: 55px;
   margin-bottom: 1em;
 }
 .welcome h1, .welcome h2, .welcome h3, .welcome h4, .welcome h5, .welcome h6 {
@@ -693,7 +695,7 @@ a.welcome-close-btn {
 }
 .welcome-question {
   display: inline;
-  font-size: large;
+  font-size: 1.25em;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -702,6 +704,7 @@ a.welcome-close-btn {
   text-decoration: none;
   font-weight: 600;
   white-space: nowrap;
+  font-size: 0.8em;
 }
 
 
