@@ -31,15 +31,15 @@
 
       {{#authenticated}}
       <div class="confirm-retweet-prompt retweet-prompt-box is-hidden">
-        <span>Retweet this?:</span>
+        <h5>Retweet this to your Twitter followers?</h5>
         
-        <div class="tweet-preview">
-          <img src="{{ STATIC_URL }}images/avatar.png" width="40" height="40">
-          <span class="text">{{> default-vision-tweet-tpl }}</span>
+        <div class="tweet-preview clearfix">
+          <img src="{{ STATIC_URL }}images/apple-touch-icon-72x72-precomposed.png" class="tweet-preview-avatar">
+          <p class="tweet-preview-text">{{> default-vision-tweet-tpl }}</p>
         </div>
 
-        <button class="btn confirm-retweet-action">Yes</button>
-        <a href="#" class="cancel-retweet-action">Cancel</a>
+        <a href="#" class="btn btn-cancel cancel-retweet-action">Cancel</a> &nbsp;
+        <a href="#" class="btn btn-primary confirm-retweet-action">Retweet</a>
       </div>
       {{^}}
       <div class="retweet-login-prompt retweet-prompt-box is-hidden"><a href="{{ LOGIN_URL }}" class="btn btn-secondary btn-small">Sign in to share or reply to this vision! <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a></div>

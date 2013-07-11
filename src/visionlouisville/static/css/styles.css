@@ -17,6 +17,7 @@
 .lightgray { color: #b2b2a6; }
 .gray { color: #808073; }
 .darkgray { color: #444; }
+.lightgreen { color: #549926; }
 .green { color: #468020; }
 
 /* Typography */
@@ -126,6 +127,13 @@ img {
   background-color: #48a5bf;
   border-color: #7ec4d8;
   color: #e7e7d7;
+}
+.btn-cancel,
+.btn-cancel:visited,
+.btn-cancel:link {
+  background-color: #e7e7d7;
+  border-color: #d5d5c6;
+  color: #ef037d;
 }
 .btn-block,
 .btn-block:visited,
@@ -468,16 +476,6 @@ a.user-link {
 .reply-link {
   border-left: 1px solid #48a5bf;
 }
-.retweet-login-prompt {
-  position: absolute;
-  z-index: 2;
-  top: -15px;
-  left: 0;
-  background: #fff;
-  padding: 15px 15px 15px 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  border-radius: 0 6px 6px 0;
-}
 .tweet-icon {
   display: block;
   width: 20px;
@@ -502,6 +500,38 @@ a.user-link {
 .reply-link:hover img {
   width: 100%;
   top: -15px;
+}
+
+.retweet-login-prompt {
+  position: absolute;
+  z-index: 2;
+  top: -15px;
+  left: 0;
+  background: #fff;
+  padding: 15px 15px 15px 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  border-radius: 0 6px 6px 0;
+}
+
+.confirm-retweet-prompt {
+  clear: both;
+  background-color: #fff;
+  box-shadow: 0 -3px 3px rgba(0,0,0,0.15);
+  padding: 10px;
+}
+.tweet-preview {}
+.tweet-preview-avatar {
+  float: left;
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 5px 10px 20px 0;
+  border-radius: 5px;
+}
+.tweet-preview-text {
+  font-size: medium;
+  font-weight: 600;
+  padding-left: 50px;
 }
 
 /* Conversation */
