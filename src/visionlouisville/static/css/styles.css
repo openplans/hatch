@@ -119,6 +119,13 @@ img {
   border-color: #48a5bf;
   color: #fff;
 }
+.btn-secondary,
+.btn-secondary:visited,
+.btn-secondary:link {
+  background-color: #48a5bf;
+  border-color: #7ec4d8;
+  color: #e7e7d7;
+}
 .btn-block,
 .btn-block:visited,
 .btn-block:link {
@@ -135,6 +142,11 @@ img {
 .btn-large {
   font-size: 1.25em;
   padding: 0.75em 1em 0.5em;
+}
+.btn .icon {
+  height: 1.5em;
+  width: auto;
+  margin: 0 0.5em -0.25em 0.5em;
 }
 
 /* Forms */
@@ -355,7 +367,8 @@ ul.user-menu:after {
 }
 .sub-menu-item a {
   display: block;
-  padding: 0.5em 0.75em;
+  text-align: center;
+  padding: 0.5em 1em;
   white-space: nowrap;
   color: #d5d5c6;
   text-decoration: none;
@@ -572,7 +585,6 @@ a.support {
 }
 
 .reply-form {
-  display: none;
 }
 .reply-text {
   height: 4.5em;
