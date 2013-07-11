@@ -1,6 +1,6 @@
 <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
 
-<a href="/visions/{{ id }}" class="vision-link">
+<a href="/visions/{{ id }}" class="vision-link clearfix">
 
   <span class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
 
@@ -13,5 +13,5 @@
 
   <span class="vision-list-category-icon">Category: <strong class="capitalize">{{ category }}</strong></span>
 
-  <span class="support support-small supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">42</span></span>
+  <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">42</span></span>
 </a>

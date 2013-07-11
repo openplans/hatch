@@ -501,6 +501,8 @@ a.user-link {
 a.support {
   color: #ef037d;
   font-weight: 600;
+  padding: 5px 0 10px;
+  float: left;
 }
 .heart {
   display: block;
@@ -510,22 +512,19 @@ a.support {
   height: 21px;
   font-size: 21px;
 }
-.support-small {
-  font-size: 80%;
-  line-height: 3;
-}
 .vision-header a.support {
   display: block;
-  width: 46px;
+  width: 50px;
   position: absolute;
   top: 56px;
-  left: -10px;
+  left: -13px;
   font-size: large;
   text-align: center;
   text-decoration: none;
+  padding: 0;
 }
 .vision-header a.support .heart {
-  margin-left: 10px;
+  margin-left: 11px;
 }
 .supported .heart {
   background-color: #ef037d;
@@ -626,7 +625,6 @@ a.support {
 }
 .swiper-slide .vision p {
   margin: 0;
-  padding: 0 0 10px 0;
 }
 .pagination {
   position: absolute;
@@ -713,6 +711,7 @@ a.welcome-close-btn {
 -------------------------------------------------------------- */
 
 ul.user-list {
+  clear: both;
   margin-bottom: 10px;
 }
 .user-list li {
