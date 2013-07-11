@@ -6,6 +6,7 @@ var VisionLouisville = VisionLouisville || {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
+      'visions/inspired-by-moment-:momentId/new': 'newWithInspiration',
       'visions/:category/new': 'new',
       'visions/:category/list': 'list',
       'visions/new': 'new',
@@ -47,15 +48,19 @@ var VisionLouisville = VisionLouisville || {};
         render();
       }
     },
-    new: function(category) {
+    new: function(category, momentId) {
         NS.app.mainRegion.show(new NS.VisionFormView({
           category: category,
           collection: NS.app.visionCollection,
           model: new NS.VisionModel({
             category: category,
+            inspiration: momentId,
             author: NS.app.currentUser.get('id')
           })
         }));
+    },
+    newWithInspiration: function(momentId) {
+      this.new(undefined, momentId);
     },
     item: function(id) {
       id = parseInt(id, 10);
