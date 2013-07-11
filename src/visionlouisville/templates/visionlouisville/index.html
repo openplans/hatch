@@ -67,7 +67,7 @@
           {% else %}
           <li class="main-menu-item"><a href="{% url 'socialauth_begin' backend='twitter' %}" class="authentication-link authentication-link-login">Sign In <img src="{{ STATIC_URL }}images/nav-twitter.png" class="twitter-icon"></a></li>
           {% endif %}
-          
+
           {% if user.is_authenticated %}
           <li class="main-menu-item add-vision"><a href="/visions/new"><img src="{{ STATIC_URL }}images/nav-addviz.png" class="menu-icon"><span class="is-hidden">Add My Vision</span></a></li>
           {% endif %}
@@ -106,5 +106,14 @@
   <script src="{{ STATIC_URL }}js/views.js"></script>
   <script src="{{ STATIC_URL }}js/app.js"></script>
 
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42333855-1', 'vizlou.org');
+  ga('send', 'pageview');
+  </script>
 </body>
 </html>
