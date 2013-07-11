@@ -46,6 +46,9 @@ class Vision (models.Model):
 
     tweet_id = models.CharField(max_length=64, null=True)
 
+    class Meta:
+        ordering = ('created_at',)
+
     def __unicode__(self):
         return self.title
 
@@ -56,7 +59,7 @@ class Share (models.Model):
     tweet_id = models.CharField(max_length=64, null=True)
 
     def __unicode__(self):
-        return '%s shared %s' % (self.user, self.vision)
+        return '%s shared "%s"' % (self.user, self.vision)
 
 
 class Moment (models.Model):
@@ -68,8 +71,11 @@ class Moment (models.Model):
     media_url = models.URLField()
     tweet_id = models.CharField(max_length=64, null=True)
 
+    class Meta:
+        ordering = ('created_at',)
+
     def __unicode__(self):
-        return '%s momented %s' % (self.username, self.description)
+        return '%s (%s)' % (self.text, self.media_url)
 
 
 class Reply (models.Model):
@@ -83,3 +89,6 @@ class Reply (models.Model):
 
     class Meta:
         verbose_name_plural = 'replies'
+
+    def __unicode__(self):
+        return '%s replied to "%s"' % (self.author, self.vision)
