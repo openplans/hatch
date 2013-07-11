@@ -51,7 +51,7 @@ var VisionLouisville = VisionLouisville || {};
         NS.app.mainRegion.show(new NS.VisionFormView({
           category: category,
           collection: NS.app.visionCollection,
-          model: new Backbone.Model({
+          model: new NS.VisionModel({
             category: category,
             author: NS.app.currentUser.get('id')
           })
