@@ -67,6 +67,9 @@ var VisionLouisville = VisionLouisville || {};
           error: function() { supporters.add(this); }
         });
       }
+    },
+    isAuthenticated: function() {
+      return !this.isNew();
     }
   });
 

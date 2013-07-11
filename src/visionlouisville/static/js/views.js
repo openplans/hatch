@@ -224,19 +224,24 @@ var VisionLouisville = VisionLouisville || {};
     },
     handleSupport: function(evt) {
       evt.preventDefault();
-      var vision = this.model,
-          supporters = vision.get('supporters'),
-          user = NS.app.currentUser;
 
-      if (supporters.contains(user)) {
-        user.unsupport(vision);
-        this.$('.support').removeClass('supported');
+      if (NS.app.currentUser.isAuthenticated()) {
+        var vision = this.model,
+            supporters = vision.get('supporters'),
+            user = NS.app.currentUser;
+
+        if (supporters.contains(user)) {
+          user.unsupport(vision);
+          this.$('.support').removeClass('supported');
+        } else {
+          user.support(vision);
+          this.$('.support').addClass('supported');
+        }
+
+        this.$('.total-support-count').html(this.totalSupportString());
       } else {
-        user.support(vision);
-        this.$('.support').addClass('supported');
+        this.$('.support-login-prompt').toggleClass('is-hidden');
       }
-
-      this.$('.total-support-count').html(this.totalSupportString());
     },
     totalSupportString: function() {
       var count = this.model.get('supporters').length,

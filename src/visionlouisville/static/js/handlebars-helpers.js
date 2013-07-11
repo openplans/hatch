@@ -8,13 +8,25 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   Handlebars.registerHelper('if_supported', function(options) {
-    var userId = NS.currentUserData['id'],
-        supportingIds = _.pluck(this.supporters, 'id');
+    var userId, supportingIDs;
+    
+    if (!NS.currentUserData) return options.inverse(this);
+
+    userId = NS.currentUserData['id'],
+    supportingIds = _.pluck(this.supporters, 'id');
     return _.contains(supportingIds, userId) ? options.fn(this) : options.inverse(this);
   });
 
   Handlebars.registerHelper('STATIC_URL', function() {
     return NS.staticURL;
+  });
+
+  Handlebars.registerHelper('LOGIN_URL', function(redirectTo, options) {
+    if (arguments.length === 1) {
+      options = redirectTo;
+      redirectTo = undefined;
+    }
+    return NS.getLoginUrl(redirectTo);
   });
 
   Handlebars.registerHelper('category_prompt', function(category) {

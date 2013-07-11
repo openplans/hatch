@@ -15,6 +15,10 @@
 
       <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}}"><img class="heart" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
 
+      {{^authenticated}}
+      <div class="support-login-prompt is-hidden"><a href="{{ LOGIN_URL }}">Log in</a> to support this vision!</div>
+      {{/authenticated}}
+
     </header>
 
     <h1 class="vision-title">{{ title }}</h1>

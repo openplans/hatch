@@ -101,6 +101,14 @@ var VisionLouisville = VisionLouisville || {};
     }
   };
 
+  NS.getLoginUrl = function(redirect) {
+    var root = Backbone.history.root,
+        fragment = Backbone.history.fragment,
+        currentPath = root + fragment;
+
+    return NS.loginURL + '?next=' + (redirect ? redirect : currentPath);
+  };
+
   // App ======================================================================
   NS.app = new Backbone.Marionette.Application();
 
@@ -122,13 +130,10 @@ var VisionLouisville = VisionLouisville || {};
 
     // Gobal-level events
     this.router.bind('all', function(route, router) {
-      var root = Backbone.history.root,
-          fragment = Backbone.history.fragment,
-          path = root + fragment;
-      $('.authentication-link-login').attr('href', NS.loginURL + '?next=' + path);
+      $('.authentication-link-login').attr('href', NS.getLoginUrl());
     });
 
-    $('.user-menu-item').click(function(evt) {
+    $('.user-menu-avatar').click(function(evt) {
       evt.preventDefault();
       $('.user-menu').toggleClass('is-open');
     });
