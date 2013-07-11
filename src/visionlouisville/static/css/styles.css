@@ -17,6 +17,7 @@
 .lightgray { color: #b2b2a6; }
 .gray { color: #808073; }
 .darkgray { color: #444; }
+.green { color: #468020; }
 
 /* Typography */
 body { line-height: 1.25; }
@@ -449,7 +450,7 @@ a.user-link {
 .retweet-link,
 .reply-link {
   float: left;
-  padding: 0.5em 1em;
+  padding: 0.5em 10px;
   text-decoration: none;
 }
 .category-link {
@@ -457,10 +458,12 @@ a.user-link {
 }
 .retweet-link,
 .reply-link {
+  position: relative;
   font-weight: 800;
   background: #48a5bf;
   box-shadow: inset 0 20px 20px #7ec4d8;
   text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+  padding-left: 30px;
 }
 .reply-link {
   border-left: 1px solid #48a5bf;
@@ -474,6 +477,31 @@ a.user-link {
   padding: 15px 15px 15px 15px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
   border-radius: 0 6px 6px 0;
+}
+.tweet-icon {
+  display: block;
+  width: 20px;
+  height: 15px;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  overflow: hidden;
+  margin-top: -7px;
+}
+.tweet-icon img {
+  width: 100%;
+  position: relative;
+}
+.retweet-link:hover,
+.retweet-link.retweeted,
+.reply-link:hover {
+  color: #468020;
+}
+.retweet-link:hover img,
+.retweet-link.retweeted img,
+.reply-link:hover img {
+  width: 100%;
+  top: -15px;
 }
 
 /* Conversation */

@@ -25,8 +25,8 @@
     <p class="vision-description">{{ description }}</p>
 
     <footer class="vision-footer clearfix">
-      <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}">Retweet</a>
-      <a href="#login-to-reply" class="reply-link show-reply">Reply</a>
+      <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}"><span class="tweet-icon"><img class="tweet-icon-retweet" src="/static/images/retweet-icon.png"></span> Retweet</a>
+      <a href="#login-to-reply" class="reply-link show-reply"><span class="tweet-icon"><img class="tweet-icon-reply" src="/static/images/reply-icon.png"></span> Reply</a>
       <a href="/visions/{{ category }}/list" class="category-link">Category: <strong class="capitalize">{{ category }}</strong></a>
 
       {{#authenticated}}
