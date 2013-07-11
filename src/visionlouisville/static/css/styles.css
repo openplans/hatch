@@ -86,7 +86,11 @@ img {
 .icon-inline {
   height: 1.5em;
   width: auto;
-  margin: 0 0.5em -0.25em 0.5em;
+  margin: 0 0.5em -0.325em 0.5em;
+}
+.vision .icon-inline {
+  height: 2em;
+  margin: 0 0 -0.75em 0.5em;
 }
 .icon-muted {
   opacity: 0.75;
@@ -459,24 +463,23 @@ a.user-link {
   background-color: #d5d5c6;
   box-shadow: inset 0 3px 3px rgba(0,0,0,0.15);
 }
-.category-link,
+.category-link {
+  float: right;
+  padding: 0 10px;
+  text-decoration: none;
+  line-height: 2.5em;
+}
 .retweet-link,
 .reply-link {
   float: left;
-  padding: 0.5em 10px;
   text-decoration: none;
-}
-.category-link {
-  float: right;
-}
-.retweet-link,
-.reply-link {
   position: relative;
   font-weight: 800;
   background: #48a5bf;
   box-shadow: inset 0 20px 20px #7ec4d8;
   text-shadow: 0 1px 1px rgba(255,255,255,0.5);
-  padding-left: 30px;
+  padding: 0 10px 0 30px;
+  line-height: 2.5em;
 }
 .reply-link {
   border-left: 1px solid #48a5bf;
