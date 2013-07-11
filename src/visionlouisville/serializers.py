@@ -38,6 +38,12 @@ class UserSerializer (ModelSerializer):
             return None
 
 
+class MinimalUserSerializer (ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
+
 class ReplySerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
     tweet_id = IntegerField(read_only=True)
@@ -55,7 +61,7 @@ class VisionSerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
     supporters = UserSerializer(many=True, read_only=True)
-    sharers = UserSerializer(many=True, read_only=True)
+    sharers = MinimalUserSerializer(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
 
     class Meta:

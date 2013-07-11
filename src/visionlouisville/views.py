@@ -14,7 +14,7 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Reply, User, Vision
+from .models import Moment, Reply, User, Vision
 from .serializers import (
     ReplySerializer, UserSerializer, VisionSerializer)
 from .services import default_twitter_service
@@ -42,6 +42,22 @@ class AppMixin (object):
         return request.build_absolute_uri(
             '/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
+
+    def get_vision_queryset(self):
+        return Vision.objects.all()\
+            .select_related('author')\
+            .prefetch_related('author__social_auth')\
+            .prefetch_related('author__groups')\
+            .prefetch_related('replies')\
+            .prefetch_related('replies__author__social_auth')\
+            .prefetch_related('replies__author__groups')\
+            .prefetch_related('supporters')\
+            .prefetch_related('supporters__social_auth')\
+            .prefetch_related('supporters__groups')\
+            .prefetch_related('sharers')
+
+    def get_moment_queryset(self):
+        return Moment.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
@@ -95,12 +111,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
     serializer_class = VisionSerializer
 
     def get_queryset(self):
-        queryset = Vision.objects.all()\
-            .select_related('author')\
-            .prefetch_related('author__social_auth')\
-            .prefetch_related('replies')\
-            .prefetch_related('supporters')\
-            .prefetch_related('sharers')
+        queryset = self.get_vision_queryset()
 
         category = self.request.GET.get('category')
         if (category):
