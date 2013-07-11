@@ -300,6 +300,7 @@ a.authentication-link-login {
   float: right;
   padding: 0 10px 0 8px;
   margin: 8px 10px 0 10px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 .user-menu-item:after {
   content: "";
@@ -402,7 +403,7 @@ ul.user-menu:after {
   font-weight: 700;
   color: #808073;
 }
-.user-link {
+a.user-link {
   float: left;
   background-color: #48a5bf;
   border: 2px solid #7ec4d8;
@@ -654,12 +655,12 @@ a.support {
 
 .welcome { 
   margin-top: -20px;
-  margin-bottom: 20px;
-  padding: 15px 10px 10px 10px; 
+  margin-bottom: 15px;
+  padding: 15px 10px 1px 10px; 
   background: #808073;
   color: #e7e7d7;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-  box-shadow: 0 1px 1px rgba(255,255,255,0.75);
+  box-shadow: 0 1px 1px rgba(255,255,255,0.75), inset 0 -3px 3px rgba(0,0,0,0.1);
 }
 .welcome a { 
   color: #7ec4d8;
