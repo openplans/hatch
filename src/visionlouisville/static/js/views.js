@@ -161,7 +161,7 @@ var VisionLouisville = VisionLouisville || {};
 
       if (this.charsLeft >= 0 && this.chars > 0) {
         // Save the reply
-        this.model.get('replies').create(reply);
+        this.collection.create(reply);
 
         // Reset the form
         form.reset();
