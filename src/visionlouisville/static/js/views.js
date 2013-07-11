@@ -274,6 +274,8 @@ var VisionLouisville = VisionLouisville || {};
         user.share(vision);
         this.$('.retweet').addClass('retweeted');
       }
+
+      this.$('.confirm-retweet-prompt').addClass('is-hidden');
     },
     handleCancelRetweet: function(evt) {
       evt.preventDefault();
