@@ -59,6 +59,19 @@ class Share (models.Model):
         return '%s shared %s' % (self.user, self.vision)
 
 
+class Moment (models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    username = models.CharField(max_length=20)
+    text = models.TextField()
+    media_url = models.URLField()
+    tweet_id = models.CharField(max_length=64, null=True)
+
+    def __unicode__(self):
+        return '%s momented %s' % (self.username, self.description)
+
+
 class Reply (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
