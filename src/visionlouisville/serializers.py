@@ -1,7 +1,7 @@
 from rest_framework.serializers import (
     IntegerField, ModelSerializer,
     SerializerMethodField, RelatedField)
-from .models import User, Vision, Reply
+from .models import User, Vision, Reply, Moment
 from .services import SocialMediaException
 
 
@@ -44,6 +44,11 @@ class ReplySerializer (ModelSerializer):
 
     class Meta:
         model = Reply
+
+
+class MomentSerializer (ModelSerializer):
+    class Meta:
+        model = Moment
 
 
 class VisionSerializer (ModelSerializer):
