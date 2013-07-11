@@ -232,7 +232,12 @@ var VisionLouisville = VisionLouisville || {};
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
-      this.regionManager.get('replies').currentView.showReplyForm(evt);
+      if (NS.app.currentUser.isAuthenticated()) {
+        this.regionManager.get('replies').currentView.showReplyForm(evt);
+      } else {
+        this.$('.support-login-prompt').addClass('is-hidden');
+        this.$('.retweet-login-prompt').toggleClass('is-hidden');
+      }
     },
     handleSupport: function(evt) {
       evt.preventDefault();
