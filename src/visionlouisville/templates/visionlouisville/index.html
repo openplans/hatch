@@ -49,7 +49,6 @@
   <script src="{{ STATIC_URL }}components/modernizr/modernizr.js"></script>
 </head>
 <body>
-  {% handlebarsjs '(.*)' %}
 
   <div class="site-header">
     <div class="container clearfix">
@@ -89,11 +88,12 @@
   </script>
 
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
+  <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
+  {% handlebarsjs '(.*)' register_partials %}
   <script src="{{ STATIC_URL }}components/underscore/underscore-min.js"></script>
   <script src="{{ STATIC_URL }}components/backbone/backbone.js"></script>
   <script src="{{ STATIC_URL }}components/backbone-relational/backbone-relational.js"></script>
   <script src="{{ STATIC_URL }}components/backbone.marionette/lib/backbone.marionette.js"></script>
-  <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
   <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
   <script src="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper-2.0.js"></script>
   <script src="{{ STATIC_URL }}components/Countable/Countable.js"></script>
