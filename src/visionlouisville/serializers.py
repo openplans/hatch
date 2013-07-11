@@ -1,6 +1,6 @@
 from rest_framework.serializers import (
-    IntegerField, ModelSerializer, PrimaryKeyRelatedField, 
-    SerializerMethodField, URLField)
+    IntegerField, ModelSerializer,
+    SerializerMethodField, RelatedField)
 from .models import User, Vision, Reply
 from .services import SocialMediaException
 
@@ -8,11 +8,12 @@ from .services import SocialMediaException
 class UserSerializer (ModelSerializer):
     avatar_url = SerializerMethodField('get_avatar_url')
     full_name = SerializerMethodField('get_full_name')
+    groups = RelatedField(many=True)
 
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url',
-                  'full_name')
+                  'full_name', 'groups')
 
     def get_twitter_service(self):
         return self.context['twitter_service']

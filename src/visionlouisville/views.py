@@ -199,7 +199,17 @@ class UserViewSet (AppMixin, ModelViewSet):
         """
         queryset = User.objects\
             .annotate(social_count=Count('social_auth'))\
-            .filter(social_count__gt=0)
+            .filter(social_count__gt=0)\
+            .prefetch_related('groups')
+
+        not_group_names = self.request.GET.getlist('notgroup')
+        if (not_group_names):
+            queryset = queryset.exclude(groups__name__in=not_group_names)
+
+        group_names = self.request.GET.getlist('group')
+        if (group_names):
+            queryset = queryset.filter(groups__name__in=group_names)
+
         return queryset
 
 
