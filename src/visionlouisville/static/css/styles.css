@@ -135,6 +135,11 @@ img {
   border-color: #d5d5c6;
   color: #ef037d;
 }
+.btn:disabled {
+  background-color: #b2b2a6;
+  border-color: #d5d5c6;
+  color: #d5d5c6;
+}
 .btn-block,
 .btn-block:visited,
 .btn-block:link {
