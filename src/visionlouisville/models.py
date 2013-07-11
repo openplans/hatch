@@ -24,6 +24,15 @@ class User (BaseUser):
     def unsupport(self, vision):
         vision.supporters.remove(self)
 
+    def share(self, vision, share_id=None):
+        share = Share(vision=vision, user=self, tweet_id=share_id)
+        share.save()
+        return share
+
+    def unshare(self, vision):
+        share = Share.objects.get(user=self, vision=vision)
+        share.delete()
+
 
 class Vision (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,12 +41,22 @@ class Vision (models.Model):
     category = models.CharField(max_length=20)
     title = models.CharField(max_length=160)
     description = models.TextField()
-    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supporters')
+    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported')
+    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers')
 
     tweet_id = models.CharField(max_length=64, null=True)
 
     def __unicode__(self):
         return self.title
+
+
+class Share (models.Model):
+    vision = models.ForeignKey(Vision)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shares')
+    tweet_id = models.CharField(max_length=64, null=True)
+
+    def __unicode__(self):
+        return '%s shared %s' % (self.user, self.vision)
 
 
 class Reply (models.Model):

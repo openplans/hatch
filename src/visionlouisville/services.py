@@ -163,5 +163,12 @@ class TwitterService (object):
         except TwitterHTTPError as e:
             return False, e.response_data
 
+    def retweet(self, tweet_id, on_behalf_of, **extra):
+        t = self.get_api(on_behalf_of)
+        try:
+            return True, t.statuses.retweet(id=tweet_id, **extra)
+        except TwitterHTTPError as e:
+            return False, e.response_data
+
 
 default_twitter_service = TwitterService()

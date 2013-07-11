@@ -13,6 +13,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Reply, User, Vision
 from .serializers import (
     ReplySerializer, UserSerializer, VisionSerializer)
@@ -20,6 +21,8 @@ from .services import default_twitter_service
 
 
 class AppMixin (object):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
     def get_twitter_service(self):
         return default_twitter_service
 
@@ -96,7 +99,8 @@ class VisionViewSet (AppMixin, ModelViewSet):
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('replies')\
-            .prefetch_related('supporters')
+            .prefetch_related('supporters')\
+            .prefetch_related('sharers')
 
         category = self.request.GET.get('category')
         if (category):
@@ -210,7 +214,7 @@ class CurrentUserAPIView (AppMixin, RetrieveAPIView):
             raise Http404('No user is logged in.')
 
 
-class SupportVisionViewSet (SingleObjectMixin, ViewSet):
+class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
     def get_queryset(self):
         return Vision.objects.all()
 
@@ -224,15 +228,30 @@ class SupportVisionViewSet (SingleObjectMixin, ViewSet):
         self.request.user.unsupport(vision)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def share(self, request, *args, **kwargs):
+        vision = self.get_object()
+        service = self.get_twitter_service()
+        success, response = service.retweet(
+            vision.tweet_id, self.request.user)
+
+        if success:
+            tweet_id = response['id']
+        else:
+            raise TweetException('User reply not tweeted: ' + response)
+
+        self.request.user.share(vision, tweet_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # Views
 app_view = AppView.as_view()
 vision_instance_view = VisionInstanceView.as_view()
 current_user_api_view = CurrentUserAPIView.as_view()
-support_api_view = SupportVisionViewSet.as_view({'post': 'support',
-                                                 'put': 'support',
-                                                 'delete': 'unsupport'})
-unsupport_api_view = SupportVisionViewSet.as_view({'post': 'unsupport'})
+support_api_view = VisionActionViewSet.as_view({'post': 'support',
+                                                'put': 'support',
+                                                'delete': 'unsupport'})
+unsupport_api_view = VisionActionViewSet.as_view({'post': 'unsupport'})
+share_api_view = VisionActionViewSet.as_view({'post': 'share'})
 
 # Setup the API routes
 api_router = DefaultRouter()
