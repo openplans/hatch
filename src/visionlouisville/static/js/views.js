@@ -252,6 +252,7 @@ var VisionLouisville = VisionLouisville || {};
 
         this.$('.total-support-count').html(this.totalSupportString());
       } else {
+        this.$('.retweet-login-prompt').addClass('is-hidden');
         this.$('.support-login-prompt').toggleClass('is-hidden');
       }
     },
@@ -261,6 +262,7 @@ var VisionLouisville = VisionLouisville || {};
       if (NS.app.currentUser.isAuthenticated()) {
         this.$('.confirm-retweet-prompt').removeClass('is-hidden');
       } else {
+        this.$('.support-login-prompt').addClass('is-hidden');
         this.$('.retweet-login-prompt').toggleClass('is-hidden');
       }
     },
