@@ -88,10 +88,33 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     home: function() {
-      NS.app.mainRegion.show(NS.app.homeView);
+      var homeView = new NS.HomeView({
+            collection: NS.app.visionCollection
+          }),
+          visionaryCollection = new NS.UserCollection(),
+          allyCollection = new NS.UserCollection();
+
+      NS.app.mainRegion.show(homeView);
+
+      visionaryCollection.fetch({
+        data: {ally: false}
+      });
+      homeView.visionaries.show(new NS.UserAvatarListView({
+        collection: visionaryCollection,
+        template: '#home-visionaries-tpl'
+      }));
+
+      allyCollection.fetch({
+        data: {ally: true}
+      });
+      homeView.allies.show(new NS.UserAvatarListView({
+        collection: allyCollection,
+        template: '#home-allies-tpl'
+      }));
+
       // Init this here b/c we know we're inserted into the dom at this point.
       // Important for height calculations.
-      NS.app.homeView.swiper = new Swiper(NS.app.homeView.$('.swiper-container').get(0), {
+      homeView.swiper = new Swiper(homeView.$('.swiper-container').get(0), {
         loop: true,
         pagination: '.pagination',
         paginationClickable: true,
@@ -114,12 +137,6 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.app.addRegions({
     mainRegion: '.main'
-  });
-
-  NS.app.addInitializer(function(options){
-    this.homeView = new NS.HomeView({
-      collection: this.visionCollection
-    });
   });
 
   NS.app.addInitializer(function(options){

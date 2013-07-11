@@ -1,4 +1,4 @@
-/*globals Backbone */
+/*globals Backbone $ */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -40,7 +40,7 @@ var VisionLouisville = VisionLouisville || {};
     model: NS.ReplyModel
   });
 
-  // User ====================================================================`
+  // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
     support: function(vision) {
       var supporters = vision.get('supporters');
@@ -71,6 +71,11 @@ var VisionLouisville = VisionLouisville || {};
     isAuthenticated: function() {
       return !this.isNew();
     }
+  });
+
+  NS.UserCollection = Backbone.Collection.extend({
+    url: '/api/users/',
+    model: NS.UserModel
   });
 
 }(VisionLouisville));
