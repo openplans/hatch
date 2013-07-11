@@ -1,7 +1,7 @@
   <div class="reply clearfix">
 
     <img src="{{ author_details.avatar_url }}" class="avatar">
-    <strong class="author-name">{{ author_details.first_name }} {{ author_details.last_name }}</strong>
+    <strong class="author-name">{{ author_details.full_name }}</strong>
     <em class="twitter-handle">@{{ author_details.username }}</em>
 
     <span class="datetime"><time datetime="{{ created_at }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
