@@ -72,7 +72,7 @@ var VisionLouisville = VisionLouisville || {};
         });
       }
     },
-    retweet: function(vision) {
+    share: function(vision) {
       var sharers = vision.get('sharers');
 
       if (!sharers.contains(this)) {
@@ -81,7 +81,7 @@ var VisionLouisville = VisionLouisville || {};
         $.ajax({
           type: 'POST',
           url: vision.url() + '/share',
-          error: function() { supporters.remove(this); }
+          error: function() { sharers.remove(this); }
         });
       }
     },
