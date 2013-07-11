@@ -11,12 +11,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ViewSet, ModelViewSet
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Moment, Reply, User, Vision
 from .serializers import (
-    ReplySerializer, UserSerializer, VisionSerializer)
+    MomentSerializer, ReplySerializer, UserSerializer, VisionSerializer,
+    MomentSerializerWithType, VisionSerializerWithType)
 from .services import default_twitter_service
 
 
@@ -264,6 +265,39 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class InputSteamAPIView (AppMixin, GenericAPIView):
+    def get(self, request):
+        visions = self.get_vision_queryset()
+        moments = self.get_moment_queryset()
+        
+        vision_serializer = VisionSerializerWithType(visions, many=True)
+        vision_serializer.context = self.get_serializer_context()
+
+        moment_serializer = MomentSerializerWithType(moments, many=True)
+        vision_serializer.context = self.get_serializer_context()
+
+        serialized_visions = vision_serializer.data
+        serialized_moments = moment_serializer.data
+
+        integrated_list = []
+        while serialized_visions and serialized_moments:
+            try:
+                integrated_list.append(serialized_visions.pop(0))
+                integrated_list.append(serialized_visions.pop(0))
+                integrated_list.append(serialized_visions.pop(0))
+                integrated_list.append(serialized_moments.pop(0))
+            except IndexError:
+                pass
+
+        if serialized_visions:
+            integrated_list += serialized_visions
+
+        if serialized_moments:
+            integrated_list += serialized_moments
+
+        return Response(integrated_list)
+
+
 # Views
 app_view = AppView.as_view()
 vision_instance_view = VisionInstanceView.as_view()
@@ -273,6 +307,7 @@ support_api_view = VisionActionViewSet.as_view({'post': 'support',
                                                 'delete': 'unsupport'})
 unsupport_api_view = VisionActionViewSet.as_view({'post': 'unsupport'})
 share_api_view = VisionActionViewSet.as_view({'post': 'share'})
+input_stream_api_view = InputSteamAPIView.as_view()
 
 # Setup the API routes
 api_router = DefaultRouter()

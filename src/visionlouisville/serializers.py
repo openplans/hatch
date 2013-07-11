@@ -66,3 +66,17 @@ class VisionSerializer (ModelSerializer):
 
     class Meta:
         model = Vision
+
+
+class MomentSerializerWithType (MomentSerializer):
+    type = SerializerMethodField('get_input_type')
+
+    def get_input_type(self, obj):
+        return 'moment'
+
+
+class VisionSerializerWithType (VisionSerializer):
+    type = SerializerMethodField('get_input_type')
+
+    def get_input_type(self, obj):
+        return 'vision'
