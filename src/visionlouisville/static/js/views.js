@@ -89,7 +89,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionListView = Backbone.Marionette.CompositeView.extend({
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
-    itemViewContainer: 'ul',
+    itemViewContainer: 'ul.vision-list',
     emptyView: NS.NoItemsView
   });
 
