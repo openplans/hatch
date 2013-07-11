@@ -718,7 +718,7 @@ a.support {
   background: #808073;
   color: #e7e7d7;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-  box-shadow: 0 1px 1px rgba(255,255,255,0.75), inset 0 -3px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.75), inset 0 -3px 3px rgba(0,0,0,0.1);
 }
 .welcome a { 
   color: #7ec4d8;
@@ -794,6 +794,17 @@ ul.user-list {
 }
 
 @media only screen and (min-width: 480px) {
+  body {
+    width: 480px;
+    margin: 0 auto;
+    background: #444;
+    padding-bottom: 4em;
+  }
+  .main {
+    box-shadow: 0 0 50px rgba(0,0,0,0.75);
+    background-color: #e7e7d7;
+    border-radius: 0 0 5px 5px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
