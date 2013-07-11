@@ -189,7 +189,22 @@ var VisionLouisville = VisionLouisville || {};
     template: '#support-list-tpl',
     itemView: NS.UserAvatarView,
     itemViewContainer: 'ul.user-list',
-    emptyView: NS.NoSupportView
+    emptyView: NS.NoSupportView,
+
+    collectionEvents: {
+      "add": "collectionChanged",
+      "remove": "collectionChanged",
+      "reset": "collectionChanged"
+    },
+
+    collectionChanged: function() {
+      this.renderSummary();
+    },
+
+    renderSummary: function() {
+      var html = Handlebars.templates['support-summary-tpl'](this.model.toJSON());
+      this.$('.support-summary').html(html);
+    }
   });
 
   // Vision Details ===========================================================
@@ -220,6 +235,27 @@ var VisionLouisville = VisionLouisville || {};
         user.support(vision);
         this.$('.support').addClass('supported');
       }
+
+      this.$('.total-support-count').html(this.totalSupportString());
+    },
+    totalSupportString: function() {
+      var count = this.model.get('supporters').length,
+          countString;
+
+      if (count >= 1000000) {
+        countString = (Math.floor(count/100000))/10 + 'M';
+      }
+      else if (count >= 100000) {
+        countString = Math.floor(count/100000) + 'K';
+      }
+      else if (count >= 1000) {
+        countString = (Math.floor(count/100))/10 + 'K';
+      }
+      else {
+        countString = count.toString();
+      }
+
+      return countString;
     }
   });
 

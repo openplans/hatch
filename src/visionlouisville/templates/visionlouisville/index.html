@@ -89,7 +89,7 @@
 
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
   <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
-  {% handlebarsjs '(.*)' register_partials %}
+  {% handlebarsjs '(.*)' precompile register_partials %}
   <script src="{{ STATIC_URL }}components/underscore/underscore-min.js"></script>
   <script src="{{ STATIC_URL }}components/backbone/backbone.js"></script>
   <script src="{{ STATIC_URL }}components/backbone-relational/backbone-relational.js"></script>
