@@ -568,10 +568,32 @@ a.user-link {
 .vision-list {
 }
 .vision-list li {
-  background: #fff;
   margin-bottom: 10px;
   position: relative;
+}
+.vision-list .vision {
+  background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+.vision-list .moment {
+  margin: 15px 0;
+}
+.container-moment-media {
+  box-shadow: 0 3px 5px rgba(0,0,0,0.5), 0 -1px 0 #fff;
+}
+.moment-media {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+}
+.moment-text {
+  font-size: x-large;
+  font-weight: 600;
+}
+.moment-author {
+  font-weight: 400;
+  line-height: 1;
+  font-size: large;
 }
 .vision-list .user-link {
   margin-top: 5px;
@@ -850,6 +872,10 @@ ul.user-list {
     box-shadow: 0 0 50px rgba(0,0,0,0.75);
     background-color: #e7e7d7;
     border-radius: 0 0 5px 5px;
+  }
+  .container-moment-media {
+    margin-right: -15px;
+    margin-left: -15px;
   }
 }
 

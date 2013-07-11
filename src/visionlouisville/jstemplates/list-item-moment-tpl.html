@@ -1,11 +1,12 @@
 <article class="moment clearfix">
 
-  <img class="moment-media" src="{{ media_url }}">
-  <span class="moment-text">{{ text }}</span>
-
-  <span class="author">
-    <em class="twitter-handle">via @{{ username }}</em>
-  </span>
+  <div class="container-fullwidth container-moment-media">
+    <img class="moment-media" src="{{ media_url }}">
+  </div>
+  <p>
+    <span class="moment-text">{{ text }}</span>
+    <span class="moment-author nobreak">via <em class="twitter-handle">@{{ username }}</em></span>
+  </p>
 
   <a href="/visions/inspired-by-{{ id }}/new" class="btn btn-block">Add My Vision</a>
 
