@@ -16,7 +16,7 @@
       <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}}"><img class="heart" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
 
       {{^authenticated}}
-      <div class="support-login-prompt is-hidden"><a href="{{ LOGIN_URL }}">Log in</a> to support this vision!</div>
+      <div class="support-login-prompt is-hidden"><a href="{{ LOGIN_URL }}" class="btn btn-secondary btn-small">Sign in to support this vision! <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a></div>
       {{/authenticated}}
 
     </header>
