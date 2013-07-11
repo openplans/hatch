@@ -9,7 +9,7 @@
       <a href="/visions/{{ id }}" class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></a>
 
       <span class="author">
-        <strong class="author-name">{{ author_details.first_name }} {{ author_details.last_name }}</strong>
+        <strong class="author-name">{{ author_details.full_name }}</strong>
         <em class="twitter-handle">@{{ author_details.username }}</em>
       </span>
 
