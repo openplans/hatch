@@ -7,6 +7,10 @@ var VisionLouisville = VisionLouisville || {};
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('if_is_moment', function(options) {
+    return (this.id.toString().slice(0,6) === 'moment') ? options.fn(this) : options.inverse(this);
+  });
+
   Handlebars.registerHelper('if_supported', function(options) {
     var userId, supportingIDs;
     

@@ -18,29 +18,29 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     list: function(category) {
       var render = function() {
-        var visionModel, visionCollection;
+        var model, collection;
 
         if (category) {
-          visionModel = new Backbone.Model({category: category});
-          visionCollection = new Backbone.Collection(
+          model = new Backbone.Model({category: category});
+          collection = new Backbone.Collection(
             NS.app.visionCollection.filter(function(model) {
               return model.get('category').toLowerCase() === category;
             }));
         } else {
-          visionModel = new Backbone.Model();
-          visionCollection = NS.app.visionCollection;
+          model = new Backbone.Model();
+          collection = NS.app.inputStreamCollection;
         }
 
         NS.app.mainRegion.show(new NS.VisionListView({
-          model: visionModel,
-          collection: visionCollection
+          model: model,
+          collection: collection
         }));
       };
 
       // Nothing in the collection? It's not done fetching. Let's wait for it.
-      if (NS.app.visionCollection.size() === 0) {
+      if (NS.app.inputStreamCollection.size() === 0) {
         // Render when the collection resets
-        NS.app.visionCollection.once('reset', function() {
+        NS.app.inputStreamCollection.once('reset', function() {
           render();
         });
       } else {
@@ -203,6 +203,11 @@ var VisionLouisville = VisionLouisville || {};
     NS.app.visionCollection.fetch({
       reset: true
     });
+
+    NS.app.inputStreamCollection = new NS.InputStreamCollection();
+    NS.app.inputStreamCollection.fetch({
+      reset: true
+    })
 
     // TODO: This user should be bootstrapped by the server
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},

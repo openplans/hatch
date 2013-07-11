@@ -53,8 +53,13 @@ class ReplySerializer (ModelSerializer):
 
 
 class MomentSerializer (ModelSerializer):
+    id = SerializerMethodField('get_id')
+
     class Meta:
         model = Moment
+
+    def get_id(self, obj):
+        return 'moment-%s' % (obj.id,)
 
 
 class VisionSerializer (ModelSerializer):

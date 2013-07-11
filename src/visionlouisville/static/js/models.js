@@ -35,6 +35,10 @@ var VisionLouisville = VisionLouisville || {};
     model: NS.VisionModel
   });
 
+  NS.InputStreamCollection = Backbone.Collection.extend({
+    url: '/api/stream/'
+  });
+
   // Replies ==================================================================
   NS.ReplyModel = Backbone.RelationalModel.extend({});
 
