@@ -25,9 +25,26 @@
     <p class="vision-description">{{ description }}</p>
 
     <footer class="vision-footer clearfix">
-      <a href="#" class="retweet-link">Retweet</a>
+      <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}">Retweet</a>
       <a href="#login-to-reply" class="reply-link show-reply">Reply</a>
       <a href="/visions/{{ category }}/list" class="category-link">Category: <strong class="capitalize">{{ category }}</strong></a>
+
+      {{#authenticated}}
+      <div class="confirm-retweet-prompt retweet-prompt-box is-hidden">
+        <span>Retweet this?:</span>
+        
+        <div class="tweet-preview">
+          <img src="{{ STATIC_URL }}images/avatar.png" width="40" height="40">
+          <span class="text">{{> default-vision-tweet-tpl }}</span>
+        </div>
+
+        <button class="btn confirm-retweet-action">Yes</button>
+        <a href="#" class="cancel-retweet-action">Cancel</a>
+      </div>
+      {{^}}
+      <div class="retweet-login-prompt retweet-prompt-box is-hidden"><a href="{{ LOGIN_URL }}" class="btn btn-secondary btn-small">Sign in to share this vision! <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a></div>
+      </div>
+      {{/authenticated}}
     </footer>
 
   </article><!-- end .vision -->

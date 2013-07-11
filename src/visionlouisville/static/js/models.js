@@ -22,6 +22,10 @@ var VisionLouisville = VisionLouisville || {};
       type: Backbone.HasMany,
       key: 'supporters',
       relatedModel: 'UserModel',
+    },{
+      type: Backbone.HasMany,
+      key: 'sharers',
+      relatedModel: 'UserModel',
     }]
   });
 
@@ -65,6 +69,19 @@ var VisionLouisville = VisionLouisville || {};
           type: 'DELETE',
           url: vision.url() + '/support',
           error: function() { supporters.add(this); }
+        });
+      }
+    },
+    retweet: function(vision) {
+      var sharers = vision.get('sharers');
+
+      if (!sharers.contains(this)) {
+        sharers.add(this);
+
+        $.ajax({
+          type: 'POST',
+          url: vision.url() + '/share',
+          error: function() { supporters.remove(this); }
         });
       }
     },

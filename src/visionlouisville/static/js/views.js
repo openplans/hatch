@@ -225,7 +225,10 @@ var VisionLouisville = VisionLouisville || {};
     },
     events: {
       'click .show-reply': 'showReplyForm',
-      'click .support-link': 'handleSupport'
+      'click .support-link': 'handleSupport',
+      'click .retweet-link': 'handleRetweet',
+      'click .confirm-retweet-action': 'handleConfirmRetweet',
+      'click .cancel-retweet-action': 'handleCancelRetweet'
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
@@ -251,6 +254,30 @@ var VisionLouisville = VisionLouisville || {};
       } else {
         this.$('.support-login-prompt').toggleClass('is-hidden');
       }
+    },
+    handleRetweet: function(evt) {
+      evt.preventDefault();
+
+      if (NS.app.currentUser.isAuthenticated()) {
+        this.$('.confirm-retweet-prompt').removeClass('is-hidden');
+      } else {
+        this.$('.retweet-login-prompt').toggleClass('is-hidden');
+      }
+    },
+    handleConfirmRetweet: function(evt) {
+      evt.preventDefault();
+      var vision = this.model,
+          sharers = vision.get('sharers'),
+          user = NS.app.currentUser;
+
+      if (!sharers.contains(user)) {
+        user.share(vision);
+        this.$('.retweet').addClass('retweeted');
+      }
+    },
+    handleCancelRetweet: function(evt) {
+      evt.preventDefault();
+      this.$('.confirm-retweet-prompt').addClass('is-hidden');
     },
     totalSupportString: function() {
       var count = this.model.get('supporters').length,
