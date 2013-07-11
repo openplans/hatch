@@ -83,7 +83,7 @@ class TwitterService (object):
                 'User is not authenticated with a social media account')
 
         if social_auth.provider == 'twitter':
-            extra_data = social_auth.extra_data
+            return social_auth.uid
         else:
             raise SocialMediaException(
                 ('Can\'t get info for a user authenticated with a %r '
