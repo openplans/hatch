@@ -693,8 +693,22 @@ a.support {
   height: auto;
   display: block;
 }
-.category-prompt {
 
+a.category-list-link {
+  background: #b2b2a6;
+  display: block;
+}
+.is-current-economy .vision-category-economy a.category-list-link,
+.is-current-health .vision-category-health a.category-list-link,
+.is-current-energy .vision-category-energy a.category-list-link,
+.is-current-living .vision-category-living a.category-list-link,
+.is-current-connectivity .vision-category-connectivity a.category-list-link,
+.is-current-identity .vision-category-identity a.category-list-link,
+.is-current-creativity .vision-category-creativity a.category-list-link {
+  background-color: #268099;
+}
+
+.category-prompt {
 }
 .category-title {
   color: #268099;
