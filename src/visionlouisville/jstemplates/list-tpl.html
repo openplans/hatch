@@ -1,11 +1,11 @@
 <div class="container">
 
-  <ul class="vision-category-list unstyled-list">
+  <ul class="vision-category-list unstyled-list is-current-{{ category }}">
       <li class="vision-category-economy">
         <a href="/visions/economy/list" class="category-list-link"><img src="/static/images/mask-e7e7d7-economy.png"><span class="is-visuallyhidden">Economy</span></a>
       </li>
       <li class="vision-category-health">
-        <a href="/visions/economy/list" class="category-list-link"><img src="/static/images/mask-e7e7d7-health.png"><span class="is-visuallyhidden">Health</span></a>
+        <a href="/visions/health/list" class="category-list-link"><img src="/static/images/mask-e7e7d7-health.png"><span class="is-visuallyhidden">Health</span></a>
       </li>
       <li class="vision-category-energy">
         <a href="/visions/energy/list" class="category-list-link"><img src="/static/images/mask-e7e7d7-energy.png"><span class="is-visuallyhidden">Energy</span></a>
@@ -26,7 +26,7 @@
 
   <h2><span style="text-transform:capitalize;">{{ category }}</span> Visions</h2>
   {{# if category }}
-  <h6>{{ category_prompt category }}</h6>
+  <h6 class="category-prompt">{{ category_prompt category }}</h6>
   {{/ if }}
   <ul class="vision-list unstyled-list"></ul>
 <div>

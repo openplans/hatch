@@ -708,7 +708,8 @@ a.category-list-link {
   background-color: #268099;
 }
 
-.category-prompt {
+h6.category-prompt {
+  margin: -10px 0 20px;
 }
 .category-title {
   color: #268099;
