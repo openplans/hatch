@@ -162,7 +162,7 @@ img {
   padding: 0.75em 1em 0.5em;
 }
 .btn-small {
-  font-size: 0.9em;
+  font-size: 0.85em;
 }
 
 /* Forms */
@@ -711,7 +711,7 @@ a.category-list-link {
 }
 
 h6.category-prompt {
-  margin: -10px 0 20px;
+  margin: -10px 0 10px;
 }
 .category-title {
   color: #268099;
