@@ -44,11 +44,20 @@
   <!-- Google Web Fonts -->
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css'>
 
+  {% if debug %}
   <link rel="stylesheet" href="{{ STATIC_URL }}components/normalize-css/normalize.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css" type="text/css" media="screen, projection" />
 
   <script src="{{ STATIC_URL }}components/modernizr/modernizr.js"></script>
+  {% else %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/components.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/swiper.min.css" type="text/css" media="screen, projection" />
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/styles.min.css" type="text/css" media="screen, projection" />
+  <script src="{{ STATIC_URL }}js/dist/modernizr.min.js"></script>
+  {% endif %}
+
 </head>
 <body>
 
@@ -90,9 +99,9 @@
     {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}'
   </script>
 
+  {% if debug %}
   <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
   <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
-  {% handlebarsjs '(.*)' precompile register_partials %}
   <script src="{{ STATIC_URL }}components/underscore/underscore-min.js"></script>
   <script src="{{ STATIC_URL }}components/backbone/backbone.js"></script>
   <script src="{{ STATIC_URL }}components/backbone-relational/backbone-relational.js"></script>
@@ -100,6 +109,7 @@
   <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
   <script src="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper-2.0.js"></script>
   <script src="{{ STATIC_URL }}components/Countable/Countable.js"></script>
+  {% handlebarsjs '(.*)' precompile register_partials %}
   <script src="{{ STATIC_URL }}js/django-csrf.js"></script>
   <script src="{{ STATIC_URL }}js/config.js"></script>
   <script src="{{ STATIC_URL }}js/utils.js"></script>
@@ -107,6 +117,10 @@
   <script src="{{ STATIC_URL }}js/models.js"></script>
   <script src="{{ STATIC_URL }}js/views.js"></script>
   <script src="{{ STATIC_URL }}js/app.js"></script>
+  {% else %}
+  <script src="{{ STATIC_URL }}js/dist/components.min.js"></script>
+  {% handlebarsjs '(.*)' precompile register_partials %}
+  <script src="{{ STATIC_URL }}js/dist/app.min.js"></script>
 
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -117,5 +131,6 @@
   ga('create', 'UA-42333855-1', 'vizlou.org');
   ga('send', 'pageview');
   </script>
+  {% endif %}
 </body>
 </html>

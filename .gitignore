@@ -40,5 +40,8 @@ env/
 *.sublime-workspace
 local_settings.py
 
-# Bower
+# App
+src/visionlouisville/node_modules/
 src/visionlouisville/static/components/
+src/visionlouisville/static/js/dist/
+src/visionlouisville/static/css/dist/

@@ -4,12 +4,32 @@ shout() { echo "$0: $*" >&2; }  # Just echo an error and the program name
 barf() { shout "$*"; exit 111; }
 safe() { "$@" || barf "cannot $*"; }
 
-# =============================================================================
-# Post-install hook file for configuring dotcloud server
-
 dotcloud_get_env() {
     sed -n "/$1/ s/.*: \"\(.*\)\".*/\1/p" < "/home/dotcloud/environment.json"
 }
+
+# =============================================================================
+# Post-install hook file for configuring dotcloud server
+
+echo "Install node and npm"
+wget http://nodejs.org/dist/v0.10.13/node-v0.10.13-linux-x64.tar.gz
+tar -xzf node-v0.10.13-linux-x64.tar.gz
+export PATH=$PATH:`pwd`/node-v0.10.13-linux-x64/bin
+
+which node
+which npm
+
+echo "Install bower and grunt"
+npm install -g bower grunt-cli
+
+echo "Fetch client dependencies"
+cd src/visionlouisville
+bower install
+
+echo "Minify client dependencies"
+npm install
+grunt
+cd ../..
 
 echo "Writing the local settings file..."
 cat > src/visionlouisville/local_settings.py <<EOF
@@ -102,5 +122,10 @@ safe src/manage.py collectstatic --noinput
 
 echo "Configuring nginx to serve static files..."
 cat >> nginx.conf <<EOF
-location /static/ { root /home/dotcloud/current ; }
+location /static/ {
+    root /home/dotcloud/current ;
+    expires max;
+}
+gzip on;
+gzip_types       text/plain application/json application/x-javascript text/css text/html;
 EOF
