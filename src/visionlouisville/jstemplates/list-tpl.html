@@ -24,9 +24,12 @@
       </li>
   </ul>
 
-  <h2><span style="text-transform:capitalize;">{{ category }}</span> Visions</h2>
   {{# if category }}
+  <a href="/visions/list" class="btn btn-small" style="float:right;">See All Visions</a>
+  <h2><span style="text-transform:capitalize;">{{ category }}</span> Visions</h2>
   <h6 class="category-prompt">{{ category_prompt category }}</h6>
   {{/ if }}
+
   <ul class="vision-list unstyled-list"></ul>
+
 <div>

@@ -566,6 +566,7 @@ a.user-link {
 
 /* Vision List */
 .vision-list {
+  clear: both;
 }
 .vision-list li {
   margin-bottom: 10px;
@@ -697,6 +698,7 @@ a.support {
 a.category-list-link {
   background: #b2b2a6;
   display: block;
+  margin-bottom: 10px;
 }
 .is-current-economy .vision-category-economy a.category-list-link,
 .is-current-health .vision-category-health a.category-list-link,
