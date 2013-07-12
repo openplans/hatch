@@ -73,6 +73,7 @@ var VisionLouisville = VisionLouisville || {};
             NS.app.mainRegion.show(layout);
 
             layout.replies.show(new NS.ReplyListView({
+              model: model,
               collection: model.get('replies')
             }));
 

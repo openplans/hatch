@@ -3,7 +3,7 @@
 
     {{#authenticated}}
     <form class="reply-form">
-      <textarea name="text" class="reply-text"></textarea>
+      <textarea name="text" class="reply-text">@{{ author_details.username }} </textarea>
       <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>
     </form>
     {{^}}

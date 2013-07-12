@@ -146,8 +146,11 @@ var VisionLouisville = VisionLouisville || {};
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
-      this.$('.reply-form').show()
-          .find(':input[type!=hidden]:first').focus();
+      var $form = this.$('.reply-form').show(),
+          $field = $form.find(':input[type!=hidden]:first'),
+          val = $field.val();
+
+      $field.focus().val('').val(val);
     },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
