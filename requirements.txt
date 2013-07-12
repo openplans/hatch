@@ -7,11 +7,13 @@ Django
 
 
 # ==============================
-# Database and Model Management
+# Persistence
 # ==============================
 
 psycopg2
 south
+django-redis
+
 
 
 # ==============================
