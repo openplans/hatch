@@ -94,15 +94,20 @@ class TwitterService (object):
 
     def get_users_info(self, users, on_behalf_of=None):
         # Build a mapping from cache_key => user_id
-        data = dict([
-            (self.get_user_cache_key(user, 'info'), 
-             self.get_user_id(user))
-            for user in users
-        ])
+        data = {}
+        for user in users:
+            try:
+                cache_key = self.get_user_cache_key(user, 'info')
+                user_id = self.get_user_id(user)
+                data[cache_key] = user_id
+            except SocialMediaException as e:
+                log.warning(e)
+                pass
+
         # Build a reverse mapping from user_id => cache_key
         reverse_data = dict([
             (user_id, cache_key)
-            for cache_key, user_id in data.items()
+            for cache_key, user_id in data.items() 
         ])
 
         # Get all the user info that is currently cached for the given users
@@ -170,14 +175,15 @@ class TwitterService (object):
         except IndexError:
             # If we don't have any, just return empty
             raise SocialMediaException(
-                'User is not authenticated with a social media account')
+                'User %s is not authenticated with a social media account'
+                % (user,))
 
         if social_auth.provider == 'twitter':
             return social_auth.uid
         else:
             raise SocialMediaException(
-                ('Can\'t get info for a user authenticated with a %r '
-                 'provider') % social_auth.provider
+                ('Can\'t get info for user %s authenticated with a %r '
+                 'provider') % (user, social_auth.provider)
             )
 
         return extra_data['id']

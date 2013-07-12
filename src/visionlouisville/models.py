@@ -41,8 +41,8 @@ class Vision (models.Model):
     category = models.CharField(max_length=20)
     title = models.CharField(max_length=160)
     description = models.TextField()
-    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported')
-    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', through='Share')
+    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
+    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
     inspiration = models.ForeignKey('Moment', null=True, blank=True)
 
     tweet_id = models.CharField(max_length=64, null=True)
