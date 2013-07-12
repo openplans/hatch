@@ -468,6 +468,10 @@ a.user-link {
   font-weight: 700;
 }
 .vision-description {}
+.vision-category-string {
+  display: none;
+}
+
 
 /* Vision Footer */
 .vision-footer {
@@ -900,6 +904,10 @@ ul.user-list {
   .container-moment-media {
     margin-right: -15px;
     margin-left: -15px;
+  }
+  .vision-list-category-icon:before,
+  .category-link:before {
+    content: 'Category: ';
   }
 }
 

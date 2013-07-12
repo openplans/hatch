@@ -49,15 +49,21 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     new: function(category, momentId) {
-        NS.app.mainRegion.show(new NS.VisionFormView({
+      // Protect against unauthenticated users.
+      if (!NS.app.currentUser.isAuthenticated()) {
+        NS.app.router.navigate('/', { trigger: true });
+        return;
+      }
+
+      NS.app.mainRegion.show(new NS.VisionFormView({
+        category: category,
+        collection: NS.app.visionCollection,
+        model: new NS.VisionModel({
           category: category,
-          collection: NS.app.visionCollection,
-          model: new NS.VisionModel({
-            category: category,
-            inspiration: momentId,
-            author: NS.app.currentUser.get('id')
-          })
-        }));
+          inspiration: momentId,
+          author: NS.app.currentUser.get('id')
+        })
+      }));
     },
     newWithInspiration: function(momentId) {
       this.new(undefined, momentId);
@@ -192,6 +198,13 @@ var VisionLouisville = VisionLouisville || {};
            href.indexOf('/visions') === 0)
           && !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
+
+        if (href.indexOf('new') !== -1) {
+          if (!NS.app.currentUser.isAuthenticated()) {
+            window.alert('Sign in to create a new vision!');
+            return;
+          }
+        }
 
         // Remove leading slashes and hash bangs (backward compatablility)
         url = href.replace(/^\//, '').replace('#!/', '');
