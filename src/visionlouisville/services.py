@@ -2,12 +2,37 @@ from django.conf import settings
 from django.core.cache import cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from urlparse import parse_qs
+from itertools import islice
 import re
 
+from logging import getLogger
+log = getLogger(__name__)
+
+
+# ============================================================
+# Utilities
+# ============================================================
+
+def chunk(iterable, n):
+    "Collect data into fixed-length chunks"
+    it = iter(iterable)
+    while True:
+        item = list(islice(it, n))
+        if item: yield item
+        else: break
+
+
+# ============================================================
+# Exceptions
+# ============================================================
 
 class SocialMediaException (Exception):
     pass
 
+
+# ============================================================
+# The Twitter service
+# ============================================================
 
 class TwitterService (object):
     # ==================================================================
@@ -48,11 +73,76 @@ class TwitterService (object):
         info = cache.get(cache_key)
 
         if info is None:
+            user_id = self.get_user_id(user)
+
+            log_string = (
+                '\n'
+                '============================================================\n'
+                'Hitting the API for %s to get info on %s (%s)\n'
+                '============================================================\n'
+            ) % (
+                on_behalf_of.username if on_behalf_of else 'the app',
+                user.username, user_id
+            )
+            log.info(log_string)
+
             t = self.get_api(on_behalf_of)
-            info = t.users.show(user_id=self.get_user_id(user))
+            info = t.users.show(user_id=user_id)
             info = dict(info.items())  # info is a WrappedTwitterResponse
             cache.set(cache_key, info)
         return info
+
+    def get_users_info(self, users, on_behalf_of=None):
+        # Build a mapping from cache_key => user_id
+        data = dict([
+            (self.get_user_cache_key(user, 'info'), 
+             self.get_user_id(user))
+            for user in users
+        ])
+        # Build a reverse mapping from user_id => cache_key
+        reverse_data = dict([
+            (user_id, cache_key)
+            for cache_key, user_id in data.items()
+        ])
+
+        # Get all the user info that is currently cached for the given users
+        all_info = cache.get_many(data.keys())
+
+        # Build a list of keys that have no cached data
+        uncached_keys = filter(lambda key: key not in all_info, data.keys())
+
+        if uncached_keys:
+            log_string = (
+                '\n'
+                '============================================================\n'
+                'Hitting the API for %s to get info on %s user(s)\n'
+                'IDs: %s\n'
+                '============================================================\n'
+            ) % (
+                on_behalf_of.username if on_behalf_of else 'the app',
+                len(uncached_keys),
+                ','.join([str(data[k]) for k in uncached_keys])
+            )
+            log.info(log_string)
+
+            # If there are uncached keys, fetch the user info for those users
+            # in chunks of 100
+            t = self.get_api(on_behalf_of)
+            user_ids = [data[key] for key in uncached_keys]
+            new_info = {}
+            for id_group in chunk(user_ids, 100):
+                bulk_info = t.users.lookup(user_id=','.join([str(user_id) for user_id in id_group]))
+
+                for info in bulk_info:
+                    cache_key = reverse_data[str(info['id'])]
+                    new_info[cache_key] = info
+
+            # Store any new information gotten in the cache
+            cache.set_many(new_info)
+
+            # Add the new info to the already cached info
+            all_info.update(new_info)
+        return all_info.values()
 
     def get_avatar_url(self, user, on_behalf_of):
         user_info = self.get_user_info(user, on_behalf_of)
