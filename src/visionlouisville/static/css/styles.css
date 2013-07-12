@@ -868,7 +868,8 @@ ul.user-list {
 .user-list li {
   display: inline;
 }
-.user-list li a {
+.user-list li a,
+.user-list li .pretend-a {
   float: left;
   width: 10%;
 }
