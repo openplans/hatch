@@ -31,7 +31,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s %(message)s',
+            'format': '%(levelname)s %(asctime)s\n%(message)s',
         },
     },
     'handlers': {
@@ -43,6 +43,10 @@ LOGGING = {
     },
     'loggers': {
         'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'visionlouisville': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
