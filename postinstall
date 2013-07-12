@@ -34,6 +34,7 @@ STATIC_ROOT = '/home/dotcloud/current/static/'
 # Debug is False by default, true if set in the environment.
 DEBUG = (env.get('DEBUG', 'False') in ['true', 'True'])
 TEMPLATE_DEBUG = DEBUG
+SHOW_DEBUG_TOOLBAR = DEBUG
 
 # Set these explicitly here to override whatever may have come from settings
 STATIC_URL = '/static/'
@@ -54,7 +55,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s %(message)s',
+            'format': '%(levelname)s %(asctime)s\n%(message)s',
         },
     },
     'handlers': {
@@ -63,10 +64,22 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
+        'log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'simple',
+            'filename': '/var/log/supervisor/app.log',
+            'maxBytes': 1024*1024*25, # 25 MB
+            'backupCount': 5,
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'log_file'],
+            'level': 'DEBUG',
+        },
+        'visionlouisville': {
+            'handlers': ['console', 'log_file'],
             'level': 'DEBUG',
         },
     }
