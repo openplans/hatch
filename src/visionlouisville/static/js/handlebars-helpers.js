@@ -43,6 +43,10 @@ var VisionLouisville = VisionLouisville || {};
     return NS.getLoginUrl(redirectTo);
   });
 
+  function linebreaks(text) {
+    return text.replace(/\n/g, '<br />');
+  }
+
   Handlebars.registerHelper('category_prompt', function(category) {
     return NS.Config.categories[category].prompt;
   });
@@ -87,5 +91,40 @@ var VisionLouisville = VisionLouisville || {};
 
     return $el.html();
   });
+
+  /* ============================================================
+   * Helper code for preparing blocks of user-contributed text 
+   * for output. Derived from https://gist.github.com/arbales/1654670
+   * ============================================================
+   */
+  var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
+   
+  // Handlebars is presumed, but you could swap out 
+  var ESCAPE_EXPRESSION_FUNCTION = Handlebars.Utils.escapeExpression;
+  var MARKSAFE_FUNCTION = function(str) { return new Handlebars.SafeString(str); };
+   
+  // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
+  function linkify(safeContent) {
+    return safeContent.replace(LINK_DETECTION_REGEX, function(match, url) {
+      var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
+      url = match.replace(/^https?:\/\//, '');
+      return "<a href='" + address + "' target='_blank'>" + url + "</a>";
+    });
+  }
+
+  // Line breaks become <br/>'s
+  function wrapify(safeContent) {
+    return safeContent.replace(/\n/g, '<br/>');
+  }
+
+  function formatTextForHTML(content) {
+    // Start by escaping expressions in the content to make them safe.
+    var safeContent = ESCAPE_EXPRESSION_FUNCTION(content);
+    safeContent = linkify(safeContent);
+    safeContent = wrapify(safeContent);
+    return MARKSAFE_FUNCTION(safeContent); // Mark our string as safe, since it is.
+  }
+
+  Handlebars.registerHelper('formattext', formatTextForHTML);
 
 }(VisionLouisville));
