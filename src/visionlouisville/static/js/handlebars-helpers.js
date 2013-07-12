@@ -55,6 +55,10 @@ var VisionLouisville = VisionLouisville || {};
     return window.location.toString();
   });
 
+  Handlebars.registerHelper('truncated_window_location', function(maxLength) {
+    return truncateChars(window.location.toString(), maxLength);
+  })
+
   // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
   Handlebars.registerHelper('pluralize', function(number, single, plural) {
     return (number === 1) ? single : plural;
@@ -108,6 +112,7 @@ var VisionLouisville = VisionLouisville || {};
     return safeContent.replace(LINK_DETECTION_REGEX, function(match, url) {
       var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
       url = match.replace(/^https?:\/\//, '');
+      url = truncateChars(url, 40)
       return "<a href='" + address + "' target='_blank'>" + url + "</a>";
     });
   }
@@ -115,6 +120,14 @@ var VisionLouisville = VisionLouisville || {};
   // Line breaks become <br/>'s
   function wrapify(safeContent) {
     return safeContent.replace(/\n/g, '<br/>');
+  }
+
+  function truncateChars(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength-3) + '...';
+    } else {
+      return text
+    }
   }
 
   function formatTextForHTML(content) {
@@ -126,5 +139,6 @@ var VisionLouisville = VisionLouisville || {};
   }
 
   Handlebars.registerHelper('formattext', formatTextForHTML);
+  Handlebars.registerHelper('truncatechars', truncateChars);
 
 }(VisionLouisville));
