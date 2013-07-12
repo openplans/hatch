@@ -12,6 +12,7 @@ DATABASES = {
 }
 
 SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
+ALLOWED_HOSTS = ['*']
 
 # For authenticating users with Twitter
 TWITTER_CONSUMER_KEY = ''
