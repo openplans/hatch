@@ -31,6 +31,10 @@ var VisionLouisville = VisionLouisville || {};
     return _.contains(sharingIds, userId) ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('CONTEXT', function() {
+    return JSON.stringify(this);
+  });
+
   Handlebars.registerHelper('STATIC_URL', function() {
     return NS.staticURL;
   });
