@@ -2,6 +2,12 @@
   display: none !important;
 }
 
+/* TEMPORARILY HIDE ELEMENTS THAT DON'T LINK TO ANYWHERE YET */
+.main-menu-item.list-users,
+.visionaries-region a.btn.btn-block,
+.allies-region a.btn.btn-block,
+.user-menu.unstyled-list li.sub-menu-item:last-child { display: none; }
+
 /* =Base Styles
 -------------------------------------------------------------- */
 
@@ -64,7 +70,7 @@ strong {
   font-weight: 800;
 }
 hr {
-  margin: 1.5em 0; 
+  margin: 1.5em 0;
   border: 0;
   border: 1px solid #eeeeee;
   border-top-color: rgba(0,0,0,0.2);
@@ -616,7 +622,7 @@ a.user-link {
 }
 
 /* Support */
-.support, 
+.support,
 a.support {
   color: #ef037d;
   font-weight: 600;
@@ -796,16 +802,16 @@ h6.category-prompt {
 /* =Welcome Message
 -------------------------------------------------------------- */
 
-.welcome { 
+.welcome {
   margin-top: -20px;
   margin-bottom: 15px;
-  padding: 15px 10px 1px 10px; 
+  padding: 15px 10px 1px 10px;
   background: #808073;
   color: #e7e7d7;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
   box-shadow: 0 1px 0 rgba(255,255,255,0.75), inset 0 -3px 3px rgba(0,0,0,0.1);
 }
-.welcome a { 
+.welcome a {
   color: #7ec4d8;
 }
 a.welcome-close-btn {
