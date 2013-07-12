@@ -48,7 +48,7 @@ class Vision (models.Model):
     tweet_id = models.CharField(max_length=64, null=True)
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
     def __unicode__(self):
         return self.title
@@ -73,7 +73,7 @@ class Moment (models.Model):
     tweet_id = models.CharField(max_length=64, null=True)
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
     def __unicode__(self):
         return '%s (%s)' % (self.text, self.media_url)
@@ -90,6 +90,7 @@ class Reply (models.Model):
 
     class Meta:
         verbose_name_plural = 'replies'
+        ordering = ('created_at',)
 
     def __unicode__(self):
         return '%s replied to "%s"' % (self.author, self.vision)
