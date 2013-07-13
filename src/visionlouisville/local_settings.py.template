@@ -11,6 +11,9 @@ DATABASES = {
     }
 }
 
+# For task queuing
+BROKER_URL = 'django://'
+
 SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 

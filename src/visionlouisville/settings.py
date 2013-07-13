@@ -166,6 +166,7 @@ COMMUNITY_APPS = (
     'shorturls',
     'rest_framework',
     'jstemplate',
+    'djcelery',
 )
 
 PROJECT_SPECIFIC_APPS = (
@@ -184,6 +185,14 @@ INSTALLED_APPS = (
     'django.contrib.comments',
 ) + PROJECT_SPECIFIC_APPS + COMMUNITY_APPS
 
+
+################################################################################
+#
+# Asynchronous tasks and processing
+#
+
+import djcelery
+djcelery.setup_loader()
 
 ################################################################################
 #
@@ -239,4 +248,11 @@ LOGGING = {
 try:
     from local_settings import *
 except ImportError:
+    pass
+
+try:
+    # Check whether the celery broker is the Django DB
+    if BROKER_URL == 'django://':
+        INSTALLED_APPS += ('kombu.transport.django',)
+except NameError:
     pass

@@ -2,24 +2,11 @@ from django.conf import settings
 from django.core.cache import cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from urlparse import parse_qs
-from itertools import islice
 import re
+from .utils import chunk
 
 from logging import getLogger
 log = getLogger(__name__)
-
-
-# ============================================================
-# Utilities
-# ============================================================
-
-def chunk(iterable, n):
-    "Collect data into fixed-length chunks"
-    it = iter(iterable)
-    while True:
-        item = list(islice(it, n))
-        if item: yield item
-        else: break
 
 
 # ============================================================
