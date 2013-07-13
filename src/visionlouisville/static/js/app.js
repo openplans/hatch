@@ -6,18 +6,18 @@ var VisionLouisville = VisionLouisville || {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      'visions/inspired-by-moment-:momentId/new': 'newWithInspiration',
-      'visions/:category/new': 'new',
-      'visions/:category/list': 'list',
-      'visions/new': 'new',
-      'visions/list': 'list',
-      'visions/:id': 'item',
+      'visions/inspired-by-moment-:momentId/new': 'newVisionWithInspiration',
+      'visions/:category/new': 'newVision',
+      'visions/:category/list': 'listVisions',
+      'visions/new': 'newVision',
+      'visions/list': 'listVisions',
+      'visions/:id': 'showVision',
       '': 'home'
     }
   });
 
   NS.controller = {
-    list: function(category) {
+    listVisions: function(category) {
       var render = function() {
         var model, collection;
 
@@ -48,7 +48,7 @@ var VisionLouisville = VisionLouisville || {};
         render();
       }
     },
-    new: function(category, momentId) {
+    newVision: function(category, momentId) {
       // Protect against unauthenticated users.
       if (!NS.app.currentUser.isAuthenticated()) {
         NS.app.router.navigate('/', { trigger: true });
@@ -65,10 +65,10 @@ var VisionLouisville = VisionLouisville || {};
         })
       }));
     },
-    newWithInspiration: function(momentId) {
-      this.new(undefined, momentId);
+    newVisionWithInspiration: function(momentId) {
+      this.newVision(undefined, momentId);
     },
-    item: function(id) {
+    showVision: function(id) {
       id = parseInt(id, 10);
       var render = function() {
             var model = NS.app.visionCollection.get(id),
