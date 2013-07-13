@@ -730,11 +730,13 @@ h6.category-prompt {
   line-height: 34px;
 }
 .on-off-switch-icon {
-  display: inline-block;
+  float: left;
+  display: block;
   width: 60px;
   height: 34px;
   overflow: hidden;
   cursor: pointer;
+  margin-right: 5px;
 }
 .on-off-switch-icon img {
   width: 100%;
