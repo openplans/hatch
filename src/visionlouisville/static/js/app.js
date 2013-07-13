@@ -230,6 +230,10 @@ var VisionLouisville = VisionLouisville || {};
       reset: true
     });
 
+    NS.app.visionCollection.on('add', function(model, collection, options) {
+      NS.app.inputStreamCollection.add(model, {at: 0});
+    })
+
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
                                           {url: '/api/users/current/'});
     NS.app.currentUser.fetch();
