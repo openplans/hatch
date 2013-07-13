@@ -228,9 +228,8 @@ var VisionLouisville = VisionLouisville || {};
     NS.app.inputStreamCollection = new NS.InputStreamCollection();
     NS.app.inputStreamCollection.fetch({
       reset: true
-    })
+    });
 
-    // TODO: This user should be bootstrapped by the server
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
                                           {url: '/api/users/current/'});
     NS.app.currentUser.fetch();
