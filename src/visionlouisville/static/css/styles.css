@@ -524,7 +524,6 @@ a.user-link {
 .retweet-link:hover img,
 .retweet-link.retweeted img,
 .reply-link:hover img {
-  width: 100%;
   top: -15px;
 }
 
@@ -727,6 +726,27 @@ h6.category-prompt {
   color: #268099;
 }
 
+.on-off-switch-label {
+  line-height: 34px;
+}
+.on-off-switch-icon {
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.on-off-switch-icon img {
+  width: 100%;
+  position: relative;
+  top: -34px;
+}
+.on-off-switch:checked + .on-off-switch-icon img {
+  width: 100%;
+  top: 0;
+}
+
+/* Reply Form */
 .reply-form {
 }
 .reply-text {
