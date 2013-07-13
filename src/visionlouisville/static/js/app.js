@@ -222,12 +222,14 @@ var VisionLouisville = VisionLouisville || {};
   $(function() {
     NS.app.visionCollection = new NS.VisionCollection();
     NS.app.visionCollection.fetch({
-      reset: true
+      reset: true,
+      cache: false
     });
 
     NS.app.inputStreamCollection = new NS.InputStreamCollection();
     NS.app.inputStreamCollection.fetch({
-      reset: true
+      reset: true,
+      cache: false
     });
 
     NS.app.visionCollection.on('add', function(model, collection, options) {
