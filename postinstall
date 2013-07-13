@@ -22,26 +22,6 @@ EOF
 # =============================================================================
 # Post-install hook file for configuring dotcloud server
 
-echo "Install node and npm"
-wget http://nodejs.org/dist/v0.10.13/node-v0.10.13-linux-x64.tar.gz
-tar -xzf node-v0.10.13-linux-x64.tar.gz
-export PATH=$PATH:`pwd`/node-v0.10.13-linux-x64/bin
-
-which node
-which npm
-
-echo "Install bower and grunt"
-npm install -g bower grunt-cli
-
-echo "Fetch client dependencies"
-cd src/visionlouisville
-bower install
-
-echo "Minify client dependencies"
-npm install
-grunt
-cd ../..
-
 echo "Writing the local settings file..."
 cat > src/visionlouisville/local_settings.py <<EOF
 
@@ -145,6 +125,7 @@ echo VIRTUAL_ENV is "$VIRTUAL_ENV"
 echo PYTHONPATH is "$PYTHONPATH"
 export PYTHONPATH=$PYTHONPATH:$PWD/src/
 export DJANGO_SETTINGS_MODULE=visionlouisville.settings
+
 echo "Creating database if needed..."
 safe python src/scripts/dotcloud_createdbs.py
 
@@ -156,8 +137,31 @@ if [ `dotcloud_get_env DOTCLOUD_SERVICE_NAME` = worker ] ; then
     setup_django_celery
 fi
 
-echo "Setting up static file service..."
-safe src/manage.py collectstatic --noinput
+
+if [ `dotcloud_get_env DOTCLOUD_SERVICE_NAME` = www ] ; then
+    echo "Install node and npm"
+    wget http://nodejs.org/dist/v0.10.13/node-v0.10.13-linux-x64.tar.gz
+    tar -xzf node-v0.10.13-linux-x64.tar.gz
+    export PATH=$PATH:`pwd`/node-v0.10.13-linux-x64/bin
+
+    which node
+    which npm
+
+    echo "Install bower and grunt"
+    npm install -g bower grunt-cli
+
+    echo "Fetch client dependencies"
+    cd src/visionlouisville
+    bower install
+
+    echo "Minify client dependencies"
+    npm install
+    grunt
+    cd ../..
+
+    echo "Setting up static file service..."
+    safe src/manage.py collectstatic --noinput
+fi
 
 echo "Configuring nginx to serve static files..."
 cat >> nginx.conf <<EOF
