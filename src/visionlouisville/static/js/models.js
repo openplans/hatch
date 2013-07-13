@@ -31,7 +31,11 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.VisionCollection = Backbone.Collection.extend({
     url: '/api/visions/',
-    comparator: 'created_at',
+    comparator: function(vision) {
+      var dateString = vision.get('created_at'),
+          date = new Date(_.isUndefined(dateString) ? null : dateString);
+      return -(date.valueOf());
+    },
     model: NS.VisionModel
   });
 
