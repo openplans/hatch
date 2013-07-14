@@ -599,6 +599,8 @@ a.user-link {
 .moment-text {
   font-size: x-large;
   font-weight: 600;
+  display: block;
+  overflow: hidden;
 }
 .moment-author {
   font-weight: 400;
