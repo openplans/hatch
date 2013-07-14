@@ -51,6 +51,9 @@ class VisionsTest (TestCase):
             def get_full_name(self, user, actor=None):
                 return ''
 
+            def get_users_info(self, users, actor=None):
+                return []
+
         with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
@@ -59,6 +62,8 @@ class VisionsTest (TestCase):
                     'title': 'This is a vision',
                     'description': 'More information about the vision'
                 }), content_type='application/json')
+            request.user = user
+            request.csrf_processing_done = True
 
             response = view(request)
             response.render()
@@ -83,6 +88,9 @@ class VisionsTest (TestCase):
 
             def get_url_length(self, actor=None):
                 return 20
+
+            def get_users_info(self, users, actor=None):
+                return []
 
         with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
             view = VisionViewSet.as_view({'post': 'create'})
@@ -122,6 +130,8 @@ class VisionsTest (TestCase):
                     'title': 'This is a vision',
                     'description': 'More information about the vision'
                 }), content_type='application/json')
+            request.user = user
+            request.csrf_processing_done = True
 
             response = view(request)
             response.render()
@@ -187,6 +197,8 @@ class ReplyTest (TestCase):
                     'vision': vision.pk,
                     'text': 'This is a reply',
                 }), content_type='application/json')
+            request.user = user
+            request.csrf_processing_done = True
 
             response = view(request)
             response.render()
@@ -209,7 +221,7 @@ class UserSerializerTest (TestCase):
 
     def test_user_contents(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        social_auth = UserSocialAuth.objects.create(user=user, provider='twitter', extra_data='{"access_token": "oauth_token_secret=abc&oauth_token=123", "id": 42}')
+        social_auth = UserSocialAuth.objects.create(user=user, uid=42, provider='twitter', extra_data='{"access_token": "oauth_token_secret=abc&oauth_token=123", "id": 42}')
         serializer = UserSerializer(user)
         serializer.context['twitter_service'] = TwitterService()
         serializer.context['requesting_user'] = None
