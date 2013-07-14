@@ -29,6 +29,8 @@ import json
 with open('/home/dotcloud/environment.json') as f:
     env = json.load(f)
 
+ADMINS = env.get('ADMINS', '').split(',')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -82,6 +84,9 @@ TWITTER_USERNAME = env['TWITTER_USERNAME']
 TWITTER_ACCESS_TOKEN = env['TWITTER_ACCESS_TOKEN']
 TWITTER_ACCESS_SECRET = env['TWITTER_ACCESS_SECRET']
 
+# For monitoring the Twitter streaming API
+MOMENT_KEYWORDS = ['#' + env['TWITTER_USERNAME']]
+
 ALLOWED_HOSTS = ['*']
 
 LOGGING = {
@@ -91,6 +96,11 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(asctime)s\n%(message)s',
         },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
     },
     'handlers': {
         'console': {
@@ -106,14 +116,19 @@ LOGGING = {
             'maxBytes': 1024*1024*25, # 25 MB
             'backupCount': 5,
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console', 'log_file', 'mail_admins'],
             'level': 'WARNING',
         },
         'visionlouisville': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console', 'log_file', 'mail_admins'],
             'level': 'DEBUG',
         },
     }
