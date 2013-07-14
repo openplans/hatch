@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from twitter import Twitter, OAuth, TwitterHTTPError
+from twitter.stream import TwitterStream
 from urlparse import parse_qs
 import re
 from .utils import chunk
@@ -222,6 +223,16 @@ class TwitterService (object):
 
         return Twitter(auth=oauth)
 
+    def get_stream(self, on_behalf_of=None):
+        # If user is None, tweet from the app's account
+        if on_behalf_of is None:
+            oauth = self.get_app_oauth()
+        # Otherwise, tweet from the user's twitter account
+        else:
+            oauth = self.get_user_oauth(on_behalf_of)
+
+        return TwitterStream(auth=oauth)
+
     # ==================================================================
     # Twitter actions
     # ==================================================================
@@ -252,6 +263,13 @@ class TwitterService (object):
             return True, t.statuses.retweet(id=tweet_id, **extra)
         except TwitterHTTPError as e:
             return False, e.response_data
+
+    #
+    # Streaming
+    #
+    def itertweets(self, on_behalf_of=None, **extra):
+        s = self.get_stream(on_behalf_of)
+        return s.statuses.filter(**extra)
 
 
 default_twitter_service = TwitterService()

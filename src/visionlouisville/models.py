@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db import models
+from django.db import models, IntegrityError, transaction
 from django.db.models import query
 from django.utils.translation import ugettext as _
 from django.utils.timezone import now
@@ -63,6 +63,29 @@ class Share (models.Model):
         return '%s shared "%s"' % (self.user, self.vision)
 
 
+class MomentManager (models.Manager):
+    def create_or_update_from_tweet(self, tweet):
+        try:
+            moment = Moment.objects.get(tweet_id=tweet['id'])
+            created = False
+        except Moment.DoesNotExist:
+            moment = Moment()
+            created = True
+
+        try:
+            # TODO: Change to transaction.atomic when upgrading to Django 1.6
+            with transaction.commit_on_success():
+                moment.load_from_tweet(tweet)
+        except IntegrityError:
+            # Since we've already checked for moments with this tweet_id, we would
+            # only have an integrity error at this point if some other thread or
+            # process created a moment with the same tweet ID right before the
+            # moment.save(). Since that's the case, just assume that we're ok with
+            # that.
+            pass
+
+        return moment, created
+
 class Moment (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -72,11 +95,24 @@ class Moment (models.Model):
     media_url = models.URLField()
     tweet_id = models.CharField(max_length=64, null=True)
 
+    objects = MomentManager()
+
     class Meta:
         ordering = ('-created_at',)
 
     def __unicode__(self):
         return '%s (%s)' % (self.text, self.media_url)
+
+    def load_from_tweet(self, tweet, commit=True):
+        self.text = tweet['text']
+        self.tweet_id = tweet['id']
+        self.username = tweet['user']['screen_name']
+        for media in tweet['entities']['media']:
+            if media['type'] == 'photo':
+                self.media_url = media['media_url']
+                break
+        if commit:
+            self.save()
 
 
 class Reply (models.Model):
