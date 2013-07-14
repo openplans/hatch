@@ -5,25 +5,25 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.Config.categories = {
     economy: {
-      prompt: 'How can we capitalize on existing strengths in Louisville and in the region, emphasizing job creation and growth?'
+      prompt: 'How can Louisville create jobs and grow?'
     },
     health: {
-      prompt: 'How can we incorporate healthy lifestyles into the future growth agenda?'
+      prompt: 'How can Louisville encourage healthy lifestyles?'
     },
     energy: {
-      prompt: 'How can we make Louisville a more sustainable city, by controlling current consumption trends and guiding a shift in resource usage?'
+      prompt: 'How can Louisville control resource consumption to be more sustainable?'
     },
     living: {
-      prompt: 'How can we improve Louisville\'s quality of place, focusing on housing, neighborhoods and districts?'
+      prompt: 'How can we improve Louisville&apos;s neighborhoods and housing?'
     },
     connectivity: {
-      prompt: 'How can we improve the overall connectivity through parks, transit, and bike/pedestrian networks?'
+      prompt: 'How can we improve Louisville&apos;s connectivity through parks, transit, and bike/pedestrian networks?'
     },
     identity: {
-      prompt: 'How can we establish, organize and capitalize on the shared identity of Louisville?'
+      prompt: 'How can we strengthen our shared identity as Louisvillians?'
     },
     creativity: {
-      prompt: 'How can we support the creative core of Louisville, including arts, culture, education, and entrepreneurship?'
+      prompt: 'How can Louisville support creativity through arts, culture, education, and entrepreneurship?'
     }
   };
 
