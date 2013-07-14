@@ -11,13 +11,13 @@ var VisionLouisville = VisionLouisville || {};
       prompt: 'How can Louisville encourage healthy lifestyles?'
     },
     energy: {
-      prompt: 'How can Louisville control resource consumption to be more sustainable?'
+      prompt: 'How can Louisville be more sustainable?'
     },
     living: {
       prompt: 'How can we improve Louisville\'s neighborhoods and housing?'
     },
     connectivity: {
-      prompt: 'How can we improve Louisville\'s connectivity through parks, transit, and bike/pedestrian networks?'
+      prompt: 'How can we improve Louisville\'s connections between the places people need to go?'
     },
     identity: {
       prompt: 'How can we strengthen our shared identity as Louisvillians?'
