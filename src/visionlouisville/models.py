@@ -65,6 +65,11 @@ class Share (models.Model):
 
 class MomentManager (models.Manager):
     def create_or_update_from_tweet(self, tweet):
+        if isinstance(tweet, (int, str, unicode)):
+            from services import default_twitter_service as twitter_service
+            t = twitter_service.get_api()
+            tweet = t.statuses.show(id=tweet)
+
         try:
             moment = Moment.objects.get(tweet_id=tweet['id'])
             created = False
