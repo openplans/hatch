@@ -322,10 +322,34 @@ var VisionLouisville = VisionLouisville || {};
     onRender: function() {
       this.handleCategoryChange();
     },
+    getFirstInvalidElement: function(form) {
+      var invalidEl = null,
+          $form = $(form);
+
+      // For each form element
+      $form.find('input, select, textarea').each(function(i, el) {
+        if (!el.validity.valid) {
+          invalidEl = el;
+          return false;
+        }
+      });
+
+      return invalidEl;
+    },
     handleFormSubmission: function(evt) {
       evt.preventDefault();
-      var form = evt.target,
-          data = NS.Utils.serializeObject(form);
+      var form = evt.currentTarget,
+          invalidEl = this.getFirstInvalidElement(form);
+
+      if (invalidEl) {
+        $(invalidEl).focus();
+        invalidEl.select();
+      } else {
+        this.saveForm(form);
+      }
+    },
+    saveForm: function(form) {
+       var data = NS.Utils.serializeObject(form);
 
       this.model.set(data.attrs, {silent: true});
       this.collection.add(this.model);
@@ -339,7 +363,9 @@ var VisionLouisville = VisionLouisville || {};
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
       });
+
     },
+
     handleCategoryChange: function() {
       var category = this.$('.vision-category-list input:checked').val();
       this.$('.category-prompt').addClass('is-hidden')
