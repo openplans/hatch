@@ -747,6 +747,12 @@ h6.category-prompt {
   width: 100%;
   top: 0;
 }
+.on-off-switch,
+.on-off-switch-label,
+.on-off-switch-icon,
+.on-off-switch-icon img {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
 /* Reply Form */
 .reply-form {
