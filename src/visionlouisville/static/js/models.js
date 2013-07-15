@@ -95,11 +95,40 @@ var VisionLouisville = VisionLouisville || {};
     },
     isAuthenticated: function() {
       return !this.isNew();
+    },
+    isInGroup: function(group) {
+      return (this.get('groups').indexOf(group) !== -1);
     }
   });
 
   NS.UserCollection = Backbone.Collection.extend({
     url: '/api/users/',
+    comparator: function(user1, user2) {
+      var orderByGroup = function(group) {
+            if (user1.isInGroup(group) && !user2.isInGroup(group)) {
+              return -1;
+            } else if (user2.isInGroup(group) && !user1.isInGroup(group)) {
+              return 1;
+            }
+          },
+          orderByLastLoginDate = function() {
+            var dateString1 = user1.get('last_login'),
+                dateString2 = user2.get('last_login');
+            if (dateString1 === dateString2) {
+              return 0;
+            } else if (dateString1 < dateString2) {
+              return 1;
+            } else if (dateString1 > dateString2) {
+              return -1;
+            }
+          }
+
+      // Mayors come first, then VIPs, then allies, then most recently active
+      return orderByGroup('mayors') || 
+            orderByGroup('vips') || 
+            orderByGroup('allies') ||
+            orderByLastLoginDate();
+    },
     model: NS.UserModel
   });
 

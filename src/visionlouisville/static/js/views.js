@@ -8,6 +8,38 @@ var VisionLouisville = VisionLouisville || {};
     return Handlebars.compile(rawTemplate);
   };
 
+  // Base mixins
+
+  NS.OrderedCollectionMixin = {
+    // https://github.com/marionettejs/backbone.marionette/wiki/Adding-support-for-sorted-collections
+    // Inspired by the above link, but it doesn't work when you start with an
+    // empty (or unsorted) list.
+    appendHtml: function(collectionView, itemView, index){
+      var childrenContainer = collectionView.itemViewContainer ? collectionView.$(collectionView.itemViewContainer) : collectionView.$el,
+          children = childrenContainer.children(),
+          indices = childrenContainer.data('indices') || [],
+          goHereIndex;
+      // console.log(index, $(itemView.el).find('.feed-item-title').text());
+
+      // console.log('before', indices);
+      indices.push(index);
+      indices.sort();
+      // console.log('after', indices);
+      goHereIndex = indices.indexOf(index);
+      // console.log('at', goHereIndex);
+
+      if(goHereIndex === 0) {
+        childrenContainer.prepend(itemView.el);
+        // console.log('prepend');
+      } else {
+        // console.log('insert after', childrenContainer.children().eq(goHereIndex-1).find('.feed-item-title').text());
+        childrenContainer.children().eq(goHereIndex-1).after(itemView.el);
+      }
+
+      childrenContainer.data('indices', indices);
+    }
+  };
+
   // Views ====================================================================
   NS.HomeView = Backbone.Marionette.Layout.extend({
     className: 'container',
@@ -188,7 +220,8 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.UserAvatarListView = Backbone.Marionette.CompositeView.extend({
     itemView: NS.UserAvatarView,
-    itemViewContainer: 'ul.user-list'
+    itemViewContainer: 'ul.user-list',
+    appendHtml: NS.OrderedCollectionMixin.appendHtml
   });
 
   // Support ==================================================================

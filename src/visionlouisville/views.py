@@ -14,6 +14,7 @@ from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.utils.encoders import JSONEncoder
 from .models import Moment, Reply, User, Vision
 from .serializers import (
     MomentSerializer, ReplySerializer, UserSerializer, VisionSerializer,
@@ -74,7 +75,7 @@ class AppMixin (object):
             }
             user_data = serializer.data
             context['user_data'] = user_data
-            context['user_json'] = json.dumps(user_data)
+            context['user_json'] = json.dumps(user_data, cls=JSONEncoder)
         else:
             context['user_json'] = 'null'
 

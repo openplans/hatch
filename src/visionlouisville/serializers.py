@@ -88,7 +88,7 @@ class UserSerializer (ManyToNativeMixin, ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url',
-                  'full_name', 'groups')
+                  'full_name', 'groups', 'last_login')
 
     def get_twitter_service(self):
         return self.context['twitter_service']
