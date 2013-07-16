@@ -163,7 +163,8 @@ var VisionLouisville = VisionLouisville || {};
     });
 
     // Gobal-level events
-    this.router.bind('all', function(route, router) {
+    this.router.bind('route', function(route, router) {
+      if (ga) ga('send', 'pageview');
       $('.authentication-link-login').attr('href', NS.getLoginUrl());
     });
 
