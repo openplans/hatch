@@ -299,9 +299,11 @@ class InputSteamAPIView (AppMixin, GenericAPIView):
         return Response(integrated_list)
 
 
-# Views
-app_view = AppView.as_view()
-vision_instance_view = VisionInstanceView.as_view()
+# App views
+home_app_view = AppView.as_view()
+vision_detail_app_view = VisionInstanceView.as_view()
+
+# API views
 current_user_api_view = CurrentUserAPIView.as_view()
 support_api_view = VisionActionViewSet.as_view({'post': 'support',
                                                 'put': 'support',
