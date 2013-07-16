@@ -296,6 +296,15 @@ body {
 }
 .site-title a span {
 }
+.site-title .beta {
+  font-size: x-small;
+  font-weight: 600;
+  color: #268099;
+  font-style: italic;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.25);
+  float: left;
+  margin-top: 10px;
+}
 
 /* Navigation Menus */
 .main-menu {
