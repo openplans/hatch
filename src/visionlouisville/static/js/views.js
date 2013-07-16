@@ -352,6 +352,9 @@ var VisionLouisville = VisionLouisville || {};
       'submit form': 'handleFormSubmission',
       'change .vision-category-list input': 'handleCategoryChange'
     },
+    ui: {
+      submit: 'input[type=submit]',
+    },
     onRender: function() {
       this.handleCategoryChange();
     },
@@ -382,7 +385,11 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     saveForm: function(form) {
-       var data = NS.Utils.serializeObject(form);
+      var self = this,
+          data = NS.Utils.serializeObject(form);
+
+      // Disable the submit button until we get a response
+      this.ui.submit.prop('disabled', true);
 
       this.model.set(data.attrs, {silent: true});
       this.collection.add(this.model);
@@ -394,11 +401,14 @@ var VisionLouisville = VisionLouisville || {};
         },
         success: function(model) {
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
+        },
+        complete: function() {
+          // Now complete. Enable the button on success or failure.
+          self.ui.submit.prop('disabled', false);
         }
       });
 
     },
-
     handleCategoryChange: function() {
       var category = this.$('.vision-category-list input:checked').val();
       this.$('.category-prompt').addClass('is-hidden')
