@@ -136,12 +136,17 @@ var VisionLouisville = VisionLouisville || {};
     }
   };
 
-  NS.getLoginUrl = function(redirect) {
+  NS.getCurrentPath = function() {
     var root = Backbone.history.root,
-        fragment = Backbone.history.fragment,
-        currentPath = root + fragment;
+        fragment = Backbone.history.fragment;
+    return root + fragment;
+  };
 
-    return NS.loginURL + '?next=' + (redirect ? redirect : currentPath);
+  NS.getLoginUrl = function(redirect) {
+    if (!redirect) {
+      redirect = NS.getCurrentPath();
+    }
+    return NS.loginURL + '?next=' + redirect;
   };
 
   // App ======================================================================
