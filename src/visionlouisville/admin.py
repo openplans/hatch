@@ -14,6 +14,10 @@ class ReplyInline (admin.TabularInline):
 
 class VisionAdmin (admin.ModelAdmin):
     inlines = [ReplyInline, ShareInline]
+    # date_hierarchy = 'created_at'
+    list_display = ('__unicode__', 'author', 'category', 'updated_at')
+    list_filter = ('category', 'created_at', 'updated_at')
+    search_fields = ('title', 'details', 'category')
 
 
 admin.site.register(Moment)
