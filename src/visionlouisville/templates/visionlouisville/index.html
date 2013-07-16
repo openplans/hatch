@@ -8,7 +8,11 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html dir="ltr" lang="en-US"> <!--<![endif]-->
 
 <head>
-  <title>VizLou</title>
+  {% if vision %}
+  <title>@{{ vision.author.username }}'s vision of {{ vision.category }} in Louisville (#VizLou {{ vision.id }})</title>
+  {% else %}
+  <title>VizLou.org | What's your vision for the future of Louisville?</title>
+  {% endif %}
 
   <meta charset="utf-8">
   <meta name="description" content="Share your vision. Come together. Change Louisville.">
@@ -63,7 +67,7 @@
 
   <div class="site-header">
     <div class="container clearfix">
-      <h1 class="site-title"><a href="/" title="Vision West Louisville" rel="home"><img src="{{ STATIC_URL }}images/vizlou-logo.png" class="logo"><span class="is-hidden">Vision West Louisville</span></a></h1>
+      <h1 class="site-title"><a href="/" title="VizLou.org" rel="home"><img src="{{ STATIC_URL }}images/vizlou-logo.png" class="logo"><span class="is-hidden">VizLou.org</span></a></h1>
       <nav class="main-menu">
         <ul class="unstyled-list">
 
