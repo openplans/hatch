@@ -58,6 +58,13 @@ class AppMixin (object):
             .prefetch_related('supporters__groups')\
             .prefetch_related('sharers')
 
+    def get_user_queryset(self):
+        return User.objects.all()\
+            .annotate(social_count=Count('social_auth'))\
+            .filter(social_count__gt=0)\
+            .prefetch_related('social_auth')\
+            .prefetch_related('groups')
+
     def get_moment_queryset(self):
         return Moment.objects.all()
 
@@ -210,10 +217,7 @@ class UserViewSet (AppMixin, ModelViewSet):
         """
         Only get users that have an associated social media account.
         """
-        queryset = User.objects\
-            .annotate(social_count=Count('social_auth'))\
-            .filter(social_count__gt=0)\
-            .prefetch_related('groups')
+        queryset = self.get_user_queryset()
 
         not_group_names = self.request.GET.getlist('notgroup')
         if (not_group_names):
