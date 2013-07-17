@@ -25,15 +25,16 @@ var VisionLouisville = VisionLouisville || {};
         model: NS.app.currentUser
       }));
     },
-    listVisions: function(category) {
+    listVisions: function(listCategory) {
       var render = function() {
         var model, collection;
 
-        if (category) {
-          model = new Backbone.Model({category: category});
+        if (listCategory) {
+          model = new Backbone.Model({category: listCategory});
           collection = new Backbone.Collection(
             NS.app.visionCollection.filter(function(model) {
-              return model.get('category').toLowerCase() === category;
+              var category = model.get('category');
+              return (!!category ? category : '').toLowerCase() === listCategory;
             }));
         } else {
           model = new Backbone.Model();

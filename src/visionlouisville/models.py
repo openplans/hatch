@@ -46,7 +46,7 @@ class Vision (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='visions')
-    category = models.CharField(max_length=20)
+    category = models.CharField(max_length=20, null=True, blank=True)
     text = models.TextField()
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
     sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')

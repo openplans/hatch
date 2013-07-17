@@ -1,5 +1,5 @@
 from rest_framework.serializers import (
-    IntegerField, ModelSerializer,
+    CharField, IntegerField, ModelSerializer,
     SerializerMethodField, RelatedField)
 from .models import User, Vision, Reply, Moment
 from .services import SocialMediaException
@@ -152,6 +152,7 @@ class VisionSerializer (ModelSerializer):
     supporters = UserSerializer(many=True, read_only=True)
     sharers = MinimalUserSerializer(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
+    category = CharField(required=False)
 
     class Meta:
         model = Vision
