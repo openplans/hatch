@@ -2,7 +2,7 @@ import json
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.template.defaultfilters import truncatechars
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
@@ -17,6 +17,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
 from .models import Moment, Reply, User, Vision
+from .forms import SecretAllySignupForm
 from .serializers import (
     MomentSerializer, ReplySerializer, UserSerializer, VisionSerializer,
     MomentSerializerWithType, VisionSerializerWithType)
@@ -108,14 +109,23 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
     context_object_name = 'vision'
 
 
-class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
+class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, FormView):
     template_name = 'visionlouisville/index.html'
+    form_class = SecretAllySignupForm
 
-    def post(self, request):
-        user = request.user
+    def get_success_url(self):
+        return self.request.get_full_path()
+
+    def form_valid(self, form):
+        user = self.request.user
         if user.is_authenticated():
+            user.email = form.cleaned_data['email']
             user.add_to_group('allies')
-        return HttpResponseRedirect(request.get_full_path())
+            user.save()
+        return super(SecretAllySignupView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        import pdb; pdb.set_trace()
 
 
 # API
