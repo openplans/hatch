@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Countable Event */
+/*globals Backbone Handlebars $ _ Countable Event Swiper */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -47,64 +47,8 @@ var VisionLouisville = VisionLouisville || {};
     regions: {
       visionaries: '.visionaries-region',
       allies: '.allies-region',
-      // Visions
-      economy: '.economy .vision',
-      health: '.health .vision',
-      energy: '.energy .vision',
-      living: '.living .vision',
-      connectivity: '.connectivity .vision',
-      identity: '.identity .vision',
-      creativity: '.creativity .vision'
-    },
-
-    events: {
-      'click .swiper-link': 'handleSwiperLinkClick'
-    },
-
-    initialize: function() {
-      this.listenTo(this.collection, 'reset', this.renderRegions);
-    },
-
-    renderRegions: function() {
-      var self = this;
-      _.each(this.regions, function(selector, id) {
-        var len = self.collection.size(),
-            i = 0,
-            model;
-
-        for (i=0; i<len; i++) {
-          model = self.collection.at(i);
-          if (model.get('category').toLowerCase() === id) {
-            self[id].show(new NS.HomeVisionView({model: model}));
-            break;
-          }
-        }
-      });
-    },
-
-    onRender: function() {
-      this.renderRegions();
-      this.delegateEvents();
-    },
-
-    onClose: function() {
-      this.stopListening(this.collection);
-    },
-
-    handleSwiperLinkClick: function(evt) {
-      var $link = $(evt.target),
-          $parent = $link.parents('li'),
-          index = $parent.index();
-
-      evt.preventDefault();
-
-      this.swiper.swipeTo(index, 500, true);
+      visionCarousel: '.vision-carousel-region'
     }
-  });
-
-  NS.HomeVisionView = Backbone.Marionette.ItemView.extend({
-    template: '#home-vision-tpl',
-    tagName: 'p'
   });
 
   NS.AllySignupView = Backbone.Marionette.ItemView.extend({
@@ -113,6 +57,28 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // Vision List ==============================================================
+  NS.VisionCarouselItemView = Backbone.Marionette.ItemView.extend({
+    template: '#vision-carousel-item-tpl',
+    className: 'swiper-slide'
+  });
+
+  NS.VisionCarouselView = Backbone.Marionette.CompositeView.extend({
+    template: '#vision-carousel-tpl',
+    itemView: NS.VisionCarouselItemView,
+    itemViewContainer: '.swiper-wrapper',
+    initCarousel: function() {
+      // It is important for this everything to be in the DOM for swiper to
+      // be a happy little plugin.
+      this.swiper = new Swiper(this.$('.swiper-container').get(0), {
+        loop: true,
+        pagination: this.$('.pagination').get(0),
+        paginationClickable: true,
+        autoplay: 4000,
+        calculateHeight: true
+      });
+    }
+  });
+
   NS.NoItemsView = Backbone.Marionette.ItemView.extend({
     template: '#no-items-tpl',
     tagName: 'li'

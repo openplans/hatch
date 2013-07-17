@@ -3,6 +3,8 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
+  'use strict';
+
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
@@ -75,25 +77,26 @@ var VisionLouisville = VisionLouisville || {};
       this.newVision(undefined, momentId);
     },
     showVision: function(id) {
+      function render() {
+        var model = NS.app.visionCollection.get(id),
+            layout = new NS.VisionDetailLayout({
+              model: model
+            });
+
+        NS.app.mainRegion.show(layout);
+
+        layout.replies.show(new NS.ReplyListView({
+          model: model,
+          collection: model.get('replies')
+        }));
+
+        layout.support.show(new NS.SupportListView({
+          model: model,
+          collection: model.get('supporters')
+        }));
+      }
+
       id = parseInt(id, 10);
-      var render = function() {
-            var model = NS.app.visionCollection.get(id),
-                layout = new NS.VisionDetailLayout({
-                  model: model
-                });
-
-            NS.app.mainRegion.show(layout);
-
-            layout.replies.show(new NS.ReplyListView({
-              model: model,
-              collection: model.get('replies')
-            }));
-
-            layout.support.show(new NS.SupportListView({
-              model: model,
-              collection: model.get('supporters')
-            }));
-          };
 
       // Nothing in the collection? It's not done fetching. Let's wait for it.
       if (NS.app.visionCollection.size() === 0) {
@@ -111,6 +114,20 @@ var VisionLouisville = VisionLouisville || {};
           }),
           visionaryCollection = new NS.UserCollection(),
           allyCollection = new NS.UserCollection();
+
+      function renderVisionCarousel() {
+        var visionCarouselView = new NS.VisionCarouselView({
+          collection: new NS.VisionCollection(
+            NS.app.visionCollection.getMostSupportedByCategory()
+          )
+        });
+
+        homeView.visionCarousel.on('show', function() {
+          // Init the carousel after we're in the DOM
+          visionCarouselView.initCarousel();
+        });
+        homeView.visionCarousel.show(visionCarouselView);
+      }
 
       NS.app.mainRegion.show(homeView);
 
@@ -130,15 +147,15 @@ var VisionLouisville = VisionLouisville || {};
         template: '#home-allies-tpl'
       }));
 
-      // Init this here b/c we know we're inserted into the dom at this point.
-      // Important for height calculations.
-      homeView.swiper = new Swiper(homeView.$('.swiper-container').get(0), {
-        loop: true,
-        pagination: '.pagination',
-        paginationClickable: true,
-        // autoplay: 4000,
-        calculateHeight: true
-      });
+      // Nothing in the collection? It's not done fetching. Let's wait for it.
+      if (NS.app.visionCollection.size() === 0) {
+        // Render when the collection resets
+        NS.app.visionCollection.once('reset', function() {
+          renderVisionCarousel();
+        });
+      } else {
+        renderVisionCarousel();
+      }
     }
   };
 
@@ -170,7 +187,9 @@ var VisionLouisville = VisionLouisville || {};
 
     // Gobal-level events
     this.router.bind('route', function(route, router) {
-      if (window.ga) ga('send', 'pageview', NS.getCurrentPath());
+      if (window.ga) {
+        window.ga('send', 'pageview', NS.getCurrentPath());
+      }
       $('.authentication-link-login').attr('href', NS.getLoginUrl());
     });
 
@@ -246,7 +265,7 @@ var VisionLouisville = VisionLouisville || {};
 
     NS.app.visionCollection.on('add', function(model, collection, options) {
       NS.app.inputStreamCollection.add(model, {at: 0});
-    })
+    });
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
                                           {url: '/api/users/current/'});

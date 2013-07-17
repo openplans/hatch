@@ -1,0 +1,19 @@
+<article class="vision">
+  <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+
+  <a href="/visions/{{ id }}" class="vision-link clearfix">
+
+    <span class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
+
+    <span class="author">
+      <strong class="author-name">{{ author_details.full_name }}</strong>
+      <em class="twitter-handle">@{{ author_details.username }}</em>
+    </span>
+
+    <span class="vision-title">{{ title }}</span>
+
+    <span class="vision-list-category-icon"><strong class="capitalize">{{ category }}</strong><img src="/static/images/category-icon-d5d5c6-{{ category }}.png" class="icon-inline"></span>
+
+    <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></span>
+  </a>
+</article>

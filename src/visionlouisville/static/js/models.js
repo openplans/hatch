@@ -1,4 +1,4 @@
-/*globals Backbone $ */
+/*globals Backbone $ _ */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -36,7 +36,30 @@ var VisionLouisville = VisionLouisville || {};
           date = new Date(_.isUndefined(dateString) ? null : dateString);
       return -(date.valueOf());
     },
-    model: NS.VisionModel
+    model: NS.VisionModel,
+    getMostSupportedByCategory: function() {
+      function sortByCategory(a, b) {
+        var aLen = a.get('supporters').length,
+            bLen = b.get('supporters').length;
+
+        if (aLen < bLen) {
+          return -1;
+        } else if (bLen < aLen) {
+          return 1;
+        }
+        return 0;
+      }
+
+      var visionsByCategory = this.groupBy('category'),
+          mostSupported = [];
+
+      _.each(visionsByCategory, function(modelList, cat) {
+        var model = _.last(modelList.sort(sortByCategory));
+        mostSupported.push(model);
+      });
+
+      return mostSupported;
+    }
   });
 
   NS.InputStreamCollection = Backbone.Collection.extend({
@@ -124,8 +147,8 @@ var VisionLouisville = VisionLouisville || {};
           }
 
       // Mayors come first, then VIPs, then allies, then most recently active
-      return orderByGroup('mayors') || 
-            orderByGroup('vips') || 
+      return orderByGroup('mayors') ||
+            orderByGroup('vips') ||
             orderByGroup('allies') ||
             orderByLastLoginDate();
     },
