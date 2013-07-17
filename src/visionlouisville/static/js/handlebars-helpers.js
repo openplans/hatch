@@ -62,7 +62,7 @@ var VisionLouisville = VisionLouisville || {};
         visionUrl = window.location.toString(),
         urlLength = NS.twitterConf.short_url_length,
         visionLength = 140 - preamble.length - urlLength - 1;
-    return preamble + truncateChars(vision.title, visionLength) + ' ' + visionUrl;
+    return preamble + truncateChars(vision.text, visionLength) + ' ' + visionUrl;
   };
 
   Handlebars.registerHelper('TWEET_TEXT', getTweetText);
@@ -156,23 +156,33 @@ var VisionLouisville = VisionLouisville || {};
   }
 
   function truncateChars(text, maxLength) {
-    if (text.length > maxLength) {
+    if (text && text.length > maxLength) {
       return text.slice(0, maxLength-3) + '...';
     } else {
       return text
     }
   }
 
-  function formatTextForHTML(content) {
+  function formatTextForHTML(content, options) {
     // Start by escaping expressions in the content to make them safe.
     var safeContent = ESCAPE_EXPRESSION_FUNCTION(content);
-    safeContent = linkify(safeContent);
-    safeContent = twitterify(safeContent);
-    safeContent = wrapify(safeContent);
+    options = _.defaults(options || {}, {links: true, wrap: true});
+    if (options.links) {
+      safeContent = linkify(safeContent);
+      safeContent = twitterify(safeContent);
+    }
+    if (options.wrap) {
+      safeContent = wrapify(safeContent);
+    }
     return MARKSAFE_FUNCTION(safeContent); // Mark our string as safe, since it is.
   }
 
   Handlebars.registerHelper('formattext', formatTextForHTML);
   Handlebars.registerHelper('truncatechars', truncateChars);
+
+  Handlebars.registerHelper('formattruncated', function(content, maxLength) {
+    content = truncateChars(content, maxLength);
+    return formatTextForHTML(content, {links: false});
+  })
 
 }(VisionLouisville));

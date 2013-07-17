@@ -47,8 +47,7 @@ class Vision (models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='visions')
     category = models.CharField(max_length=20)
-    title = models.CharField(max_length=160)
-    description = models.TextField()
+    text = models.TextField()
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
     sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
     inspiration = models.ForeignKey('Moment', null=True, blank=True)
@@ -59,7 +58,7 @@ class Vision (models.Model):
         ordering = ('-created_at',)
 
     def __unicode__(self):
-        return self.title
+        return self.text[:140]
 
 
 class Share (models.Model):

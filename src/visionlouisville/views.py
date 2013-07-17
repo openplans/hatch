@@ -163,7 +163,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
         vision_length = 140 - len(preamble) - url_length - 1
         return ''.join([
             preamble,
-            truncatechars(vision.title, vision_length),
+            truncatechars(vision.text, vision_length),
             ' ', vision_url
         ])
 
@@ -174,7 +174,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
         vision_length = 140 - url_length - 1
         return ''.join([
-            truncatechars(vision.title, vision_length),
+            truncatechars(vision.text, vision_length),
             ' ', vision_url
         ])
 
