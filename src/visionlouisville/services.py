@@ -40,9 +40,9 @@ class TwitterService (object):
             cache.set(cache_key, config)
         return config
 
-    def get_url_length(self, https=False, on_behalf_of=None):
+    def get_url_length(self, url, on_behalf_of=None):
         config = self.get_config(on_behalf_of)
-        if https:
+        if url.startswith('https'):
             return config['short_url_length_https']
         else:
             return config['short_url_length']

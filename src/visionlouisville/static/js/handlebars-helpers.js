@@ -56,6 +56,18 @@ var VisionLouisville = VisionLouisville || {};
     return NS.Utils.getCookie('csrftoken');
   });
 
+  // TODO: Move this into the config
+  getTweetText = function(vision) {
+    var preamble = "Check out @" + vision.author_details.username + "'s Vision: ",
+        visionUrl = window.location.toString(),
+        urlLength = NS.twitterConf.short_url_length,
+        visionLength = 140 - preamble.length - urlLength - 1;
+    return preamble + truncateChars(vision.title, visionLength) + ' ' + visionUrl;
+  };
+
+  Handlebars.registerHelper('TWEET_TEXT', getTweetText);
+  Handlebars.registerHelper('SAFE_TWEET_TEXT', _.compose(formatTextForHTML, getTweetText));
+
   function linebreaks(text) {
     return text.replace(/\n/g, '<br />');
   }
@@ -114,7 +126,8 @@ var VisionLouisville = VisionLouisville || {};
    * for output. Derived from https://gist.github.com/arbales/1654670
    * ============================================================
    */
-  var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
+  var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(localhost|(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
+  var TWITTER_USER_REGEX = /(\s|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/
    
   // Handlebars is presumed, but you could swap out 
   var ESCAPE_EXPRESSION_FUNCTION = Handlebars.Utils.escapeExpression;
@@ -127,6 +140,13 @@ var VisionLouisville = VisionLouisville || {};
       url = match.replace(/^https?:\/\//, '');
       url = truncateChars(url, 40)
       return "<a href='" + address + "' target='_blank'>" + url + "</a>";
+    });
+  }
+
+  function twitterify(safeContent) {
+    return safeContent.replace(TWITTER_USER_REGEX, function(match, leading, username, trailing) {
+      var address = 'http://www.twitter.com/' + username;
+      return leading + "<a href='" + address + "' target='_blank'>@" + username + "</a>" + trailing;
     });
   }
 
@@ -147,6 +167,7 @@ var VisionLouisville = VisionLouisville || {};
     // Start by escaping expressions in the content to make them safe.
     var safeContent = ESCAPE_EXPRESSION_FUNCTION(content);
     safeContent = linkify(safeContent);
+    safeContent = twitterify(safeContent);
     safeContent = wrapify(safeContent);
     return MARKSAFE_FUNCTION(safeContent); // Mark our string as safe, since it is.
   }

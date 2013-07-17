@@ -106,6 +106,7 @@
     {{NS}}.currentUserData = {{ user_json|safe }};
     {{NS}}.staticURL = '{{ STATIC_URL|safe }}';
     {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}';
+    {{NS}}.twitterConf = {{ twitter_config|safe }};
   </script>
 
   {% if debug %}

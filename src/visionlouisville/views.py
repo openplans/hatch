@@ -72,11 +72,17 @@ class AppMixin (object):
 
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
-
-        context['NS'] = 'VisionLouisville'
+        service = self.get_twitter_service()
 
         if self.request.user.is_authenticated():
             user = self.request.user
+        else:
+            user = None
+
+        context['NS'] = 'VisionLouisville'
+        context['twitter_config'] = json.dumps(service.get_config(user))
+
+        if user:
             serializer = UserSerializer(user)
             serializer.context = {
                 'twitter_service': self.get_twitter_service(),
@@ -124,9 +130,6 @@ class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, FormView):
             user.save()
         return super(SecretAllySignupView, self).form_valid(form)
 
-    def form_invalid(self, form):
-        import pdb; pdb.set_trace()
-
 
 # API
 class TweetException (APIException):
@@ -149,22 +152,30 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
         return queryset
 
+    # TODO: Move this into the settings/config
     def get_app_tweet_text(self, request, vision):
         vision_url = self.get_vision_url(request, vision)
-        category = vision.category.lower()
+        service = self.get_twitter_service()
         username = vision.author.username
+        url_length = service.get_url_length(vision_url)
 
-        return \
-            'Check out this vision about %s in Louisville, from @%s: %s' % (
-                category, username, vision_url)
+        preamble = "Check out @%s's Vision: " % (username,)
+        vision_length = 140 - len(preamble) - url_length - 1
+        return ''.join([
+            preamble,
+            truncatechars(vision.title, vision_length),
+            ' ', vision_url
+        ])
 
     def get_user_tweet_text(self, request, vision):
         vision_url = self.get_vision_url(request, vision)
         service = self.get_twitter_service()
-        url_length = service.get_url_length()
-        return ' '.join([
-            truncatechars(vision.title, 140 - url_length - 1),
-            vision_url
+        url_length = service.get_url_length(vision_url)
+
+        vision_length = 140 - url_length - 1
+        return ''.join([
+            truncatechars(vision.title, vision_length),
+            ' ', vision_url
         ])
 
     def post_save(self, vision, created):
