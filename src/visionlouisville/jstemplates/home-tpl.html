@@ -1,41 +1,29 @@
-      <div class="container-fullwidth welcome">
-        <!-- <a href="#" class="welcome-close-btn">&times;</a> -->
-        <div class="welcome-header">
-          <img src="https://si0.twimg.com/profile_images/2577247503/5x0gwbixfjv435lujqh3.jpeg" class="welcome-avatar">
-          <span class="welcome-prequestion"><span class="nobreak">Mayor Greg Fischer</span> <span class="nobreak">wants to know,</span></span>
-          <h1 class="welcome-question">&#8220;What's your vision for the future of Louisville?&#8221;</h1>
-          <a href="#site-footer" class="welcome-more-link">Read more&hellip;</a>
-        </div>
+<div class="container home">
+  {{> welcome-tpl }}
 
-        {{#if_authenticated}}
-        <a href="/visions/new" class="btn btn-block btn-primary">Add My Vision</a>
-        {{^}}
-        <a href="{{ LOGIN_URL '/visions/new' }}" class="btn btn-block btn-primary">Sign In and Add My Vision <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
-        {{/if_authenticated}}
-      </div>
+  <div class="vision-carousel-region"></div>
+  <a href="/visions/list" class="btn btn-block">See All Visions</a>
 
-      <div class="vision-carousel-region"></div>
-      <a href="/visions/list" class="btn btn-block">See All Visions</a>
+  <hr>
 
-      <hr>
+  <div class="visionaries-region"></div>
+  <div class="allies-region"></div>
 
-      <div class="visionaries-region"></div>
-      <div class="allies-region"></div>
+  <div class="container-fullwidth welcome site-footer" id="site-footer">
 
-      <div class="container-fullwidth welcome site-footer" id="site-footer">
+    <h5>What is #VizLou?</h5>
+    <p><strong>#VizLou</strong> is a place to share what you love about Louisville, and your ideas to make it better.</p>
 
-        <h5>What is #VizLou?</h5>
-        <p><strong>#VizLou</strong> is a place to share what you love about Louisville, and your ideas to make it better.</p>
+    <p>Want to share something you love about Louisville? Tweet your inspirations with the hashtag <strong>#vizlou</strong> and see what visions they inspire from others.</p>
 
-        <p>Want to share something you love about Louisville? Tweet your inspirations with the hashtag <strong>#vizlou</strong> and see what visions they inspire from others.</p>
+    <p>Have a great idea for the future of Louisville? Sign in with your Twitter account, and <a href="/visions/new"><strong>add it here!</strong></a> Explore visions from others, add comments and hearts to show your support.</p>
 
-        <p>Have a great idea for the future of Louisville? Sign in with your Twitter account, and <a href="/visions/new"><strong>add it here!</strong></a> Explore visions from others, add comments and hearts to show your support.</p>
+    <h5>Allies are listening.</h5>
+    <p>Led by Mayor Greg Fischer, <strong>allies</strong> are community leaders, city officials, mentors, and educators using #VizLou to hear ideas for the future of Louisville. They're engaging with visionary youth by reading and sharing visions, clicking to show support, and adding comments to help visions become better defined.
+    </p>
 
-        <h5>Allies are listening.</h5>
-        <p>Led by Mayor Greg Fischer, <strong>allies</strong> are community leaders, city officials, mentors, and educators using #VizLou to hear ideas for the future of Louisville. They're engaging with visionary youth by reading and sharing visions, clicking to show support, and adding comments to help visions become better defined.
-        </p>
+    <h5>Give us your feedback</h5>
+    <p>#VizLou is still in beta. Tweet your comments and suggestions to <a href="http://twitter.com/vizlou">@vizlou</a> or email <a href="mailto:hello@vizlou.org">hello@vizlou.org</a>.</p>
 
-        <h5>Give us your feedback</h5>
-        <p>#VizLou is still in beta. Tweet your comments and suggestions to <a href="http://twitter.com/vizlou">@vizlou</a> or email <a href="mailto:hello@vizlou.org">hello@vizlou.org</a>.</p>
-
-      </div>
+  </div>
+</div>

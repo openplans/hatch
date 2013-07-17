@@ -42,7 +42,6 @@ var VisionLouisville = VisionLouisville || {};
 
   // Views ====================================================================
   NS.HomeView = Backbone.Marionette.Layout.extend({
-    className: 'container',
     template: '#home-tpl',
     regions: {
       visionaries: '.visionaries-region',

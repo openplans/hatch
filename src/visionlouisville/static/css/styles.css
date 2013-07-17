@@ -893,6 +893,7 @@ a.welcome-close-btn {
   line-height: 1.2;
 }
 .welcome-more-link {
+  display: none;
   text-transform: uppercase;
   text-decoration: none;
   font-weight: 600;
@@ -900,6 +901,9 @@ a.welcome-close-btn {
   font-size: 0.8em;
 }
 
+.home .welcome-more-link {
+  display: inline;
+}
 
 /* =User Lists
 -------------------------------------------------------------- */

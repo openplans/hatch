@@ -1,4 +1,8 @@
 <div class="container container-primary">
+  {{^if_authenticated}}
+    {{> welcome-tpl }}
+  {{/if_authenticated}}
+
   <article class="vision clearfix">
 
     <header class="vision-header">
@@ -34,7 +38,7 @@
       {{#if_authenticated}}
       <div class="confirm-retweet-prompt retweet-prompt-box is-hidden">
         <h5>Retweet this to your Twitter followers?</h5>
-        
+
         <div class="tweet-preview clearfix">
           <img src="{{ STATIC_URL }}images/apple-touch-icon-72x72-precomposed.png" class="tweet-preview-avatar">
           <p class="tweet-preview-text">{{ SAFE_TWEET_TEXT . }}</p>
