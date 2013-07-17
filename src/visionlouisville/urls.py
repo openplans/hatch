@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, include, url
 from .views import (
-    home_app_view, vision_detail_app_view, api_router, current_user_api_view,
-    input_stream_api_view, share_api_view, support_api_view, unsupport_api_view)
+    home_app_view, secret_ally_signup_view, vision_detail_app_view, api_router,
+    current_user_api_view, input_stream_api_view, share_api_view, 
+    support_api_view, unsupport_api_view)
 
 # Admin
 from django.contrib import admin
@@ -11,6 +12,7 @@ urlpatterns = patterns('',
     # Social Auth
     url(r'^', include('social_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
+    url(r'^ally-signup$', secret_ally_signup_view, name='secret-ally-login'),
 
     # API
     url(r'^api/users/(?P<pk>current)/$',        current_user_api_view, name='current-user-detail'),
@@ -24,6 +26,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # App
-    url(r'^visions/(?P<pk>\d+)$', vision_detail_app_view, name='app-vision-detail'),
-    url(r'^',                     home_app_view,          name='app-home'),
+    url(r'^visions/(?P<pk>\d+)$', vision_detail_app_view,     name='app-vision-detail'),
+    url(r'^',                     home_app_view,              name='app-home'),
 )

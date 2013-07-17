@@ -12,11 +12,17 @@ var VisionLouisville = VisionLouisville || {};
       'visions/new': 'newVision',
       'visions/list': 'listVisions',
       'visions/:id': 'showVision',
+      'ally-signup': 'allySignup',
       '': 'home'
     }
   });
 
   NS.controller = {
+    allySignup: function() {
+      NS.app.mainRegion.show(new NS.AllySignupView({
+        model: NS.app.currentUser
+      }));
+    },
     listVisions: function(category) {
       var render = function() {
         var model, collection;

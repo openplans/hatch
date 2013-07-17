@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django.utils.timezone import now
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import UserManager
+from django.contrib.auth.models import UserManager, Group
 
 import logging
 logger = logging.getLogger(__name__)
@@ -32,6 +32,14 @@ class User (BaseUser):
     def unshare(self, vision):
         share = Share.objects.get(user=self, vision=vision)
         share.delete()
+
+    def add_to_group(self, group_name):
+        group = Group.objects.get(name=group_name)
+        self.groups.add(group)
+
+    def remove_from_group(self, group_name):
+        group = Group.objects.get(name=group_name)
+        self.groups.remove(group)
 
 
 class Vision (models.Model):

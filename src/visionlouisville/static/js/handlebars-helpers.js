@@ -7,6 +7,10 @@ var VisionLouisville = VisionLouisville || {};
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('if_in_group', function(groupName, options) {
+    return (NS.app.currentUser.isInGroup(groupName) ? options.fn(this) : options.inverse(this));
+  });
+
   Handlebars.registerHelper('if_is_moment', function(options) {
     return (this.id.toString().slice(0,6) === 'moment') ? options.fn(this) : options.inverse(this);
   });
@@ -45,6 +49,10 @@ var VisionLouisville = VisionLouisville || {};
       redirectTo = undefined;
     }
     return NS.getLoginUrl(redirectTo);
+  });
+
+  Handlebars.registerHelper('CSRF_TOKEN', function(options) {
+    return NS.Utils.getCookie('csrftoken');
   });
 
   function linebreaks(text) {

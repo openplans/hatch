@@ -107,6 +107,11 @@ var VisionLouisville = VisionLouisville || {};
     tagName: 'p'
   });
 
+  NS.AllySignupView = Backbone.Marionette.ItemView.extend({
+    template: '#ally-signup-tpl',
+    tagName: 'p'
+  });
+
   // Vision List ==============================================================
   NS.NoItemsView = Backbone.Marionette.ItemView.extend({
     template: '#no-items-tpl',

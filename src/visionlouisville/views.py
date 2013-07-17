@@ -1,5 +1,6 @@
 import json
 from django.conf import settings
+from django.http import HttpResponseRedirect
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.detail import SingleObjectMixin
@@ -105,6 +106,16 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
     template_name = 'visionlouisville/index.html'
     model = Vision
     context_object_name = 'vision'
+
+
+class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
+    template_name = 'visionlouisville/index.html'
+
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated():
+            user.add_to_group('allies')
+        return HttpResponseRedirect(request.get_full_path())
 
 
 # API
@@ -274,7 +285,7 @@ class InputSteamAPIView (AppMixin, GenericAPIView):
     def get(self, request):
         visions = self.get_vision_queryset()
         moments = self.get_moment_queryset()
-        
+
         vision_serializer = VisionSerializerWithType(visions, many=True)
         vision_serializer.context = self.get_serializer_context()
 
@@ -306,6 +317,7 @@ class InputSteamAPIView (AppMixin, GenericAPIView):
 # App views
 home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
+secret_ally_signup_view = SecretAllySignupView.as_view()
 
 # API views
 current_user_api_view = CurrentUserAPIView.as_view()
