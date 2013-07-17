@@ -61,6 +61,8 @@ CACHES = {
     }
 }
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 from datetime import timedelta
 CELERYBEAT_SCHEDULE = {
     'refresh-users-every-day': {
