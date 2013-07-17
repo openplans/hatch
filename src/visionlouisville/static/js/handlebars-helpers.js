@@ -3,7 +3,7 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
-  Handlebars.registerHelper('authenticated', function(options) {
+  Handlebars.registerHelper('if_authenticated', function(options) {
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
 

@@ -1,11 +1,11 @@
     <h6>What people are saying:</h6>
     <ul class="replies-list unstyled-list"></ul>
 
-    {{#authenticated}}
+    {{#if_authenticated}}
     <form class="reply-form">
       <textarea name="text" class="reply-text">@{{ author_details.username }} </textarea>
       <span class='reply-count'></span> <button class="reply-btn btn btn-primary btn-large" disabled>Tweet Reply</button>
     </form>
     {{^}}
     <a id="login-to-reply" class="btn btn-block btn-secondary" href="/login/twitter/?next={{ window_location }}">Sign in to reply <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
-    {{/authenticated}}
+    {{/if_authenticated}}
