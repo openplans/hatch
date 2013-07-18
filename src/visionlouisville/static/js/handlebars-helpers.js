@@ -17,21 +17,25 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   Handlebars.registerHelper('if_supported', function(options) {
-    var userId, supportingIDs;
-    
-    if (!NS.currentUserData) return options.inverse(this);
+    var userId, supportingIds;
 
-    userId = NS.currentUserData['id'],
+    if (!NS.currentUserData) {
+      return options.inverse(this);
+    }
+
+    userId = NS.currentUserData.id;
     supportingIds = _.pluck(this.supporters, 'id');
     return _.contains(supportingIds, userId) ? options.fn(this) : options.inverse(this);
   });
 
   Handlebars.registerHelper('if_shared', function(options) {
-    var userId, sharingIDs;
-    
-    if (!NS.currentUserData) return options.inverse(this);
+    var userId, sharingIds;
 
-    userId = NS.currentUserData['id'],
+    if (!NS.currentUserData) {
+      return options.inverse(this);
+    }
+
+    userId = NS.currentUserData.id;
     sharingIds = _.pluck(this.sharers, 'id');
     return _.contains(sharingIds, userId) ? options.fn(this) : options.inverse(this);
   });
@@ -57,16 +61,13 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // TODO: Move this into the config
-  getTweetText = function(vision) {
+  function getTweetText (vision) {
     var preamble = "Check out @" + vision.author_details.username + "'s Vision: ",
         visionUrl = window.location.toString(),
         urlLength = NS.twitterConf.short_url_length,
         visionLength = 140 - preamble.length - urlLength - 1;
     return preamble + truncateChars(vision.text, visionLength) + ' ' + visionUrl;
-  };
-
-  Handlebars.registerHelper('TWEET_TEXT', getTweetText);
-  Handlebars.registerHelper('SAFE_TWEET_TEXT', _.compose(formatTextForHTML, getTweetText));
+  }
 
   function linebreaks(text) {
     return text.replace(/\n/g, '<br />');
@@ -82,7 +83,7 @@ var VisionLouisville = VisionLouisville || {};
 
   Handlebars.registerHelper('truncated_window_location', function(maxLength) {
     return truncateChars(window.location.toString(), maxLength);
-  })
+  });
 
   // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
   Handlebars.registerHelper('pluralize', function(number, single, plural) {
@@ -122,23 +123,23 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   /* ============================================================
-   * Helper code for preparing blocks of user-contributed text 
+   * Helper code for preparing blocks of user-contributed text
    * for output. Derived from https://gist.github.com/arbales/1654670
    * ============================================================
    */
   var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(localhost|(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
-  var TWITTER_USER_REGEX = /(\s|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/
-   
-  // Handlebars is presumed, but you could swap out 
+  var TWITTER_USER_REGEX = /(\s|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
+
+  // Handlebars is presumed, but you could swap out
   var ESCAPE_EXPRESSION_FUNCTION = Handlebars.Utils.escapeExpression;
   var MARKSAFE_FUNCTION = function(str) { return new Handlebars.SafeString(str); };
-   
+
   // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
   function linkify(safeContent) {
     return safeContent.replace(LINK_DETECTION_REGEX, function(match, url) {
       var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
       url = match.replace(/^https?:\/\//, '');
-      url = truncateChars(url, 40)
+      url = truncateChars(url, 40);
       return "<a href='" + address + "' target='_blank'>" + url + "</a>";
     });
   }
@@ -159,7 +160,7 @@ var VisionLouisville = VisionLouisville || {};
     if (text && text.length > maxLength) {
       return text.slice(0, maxLength-3) + '...';
     } else {
-      return text
+      return text;
     }
   }
 
@@ -180,9 +181,12 @@ var VisionLouisville = VisionLouisville || {};
   Handlebars.registerHelper('formattext', formatTextForHTML);
   Handlebars.registerHelper('truncatechars', truncateChars);
 
+  Handlebars.registerHelper('TWEET_TEXT', getTweetText);
+  Handlebars.registerHelper('SAFE_TWEET_TEXT', _.compose(formatTextForHTML, getTweetText));
+
   Handlebars.registerHelper('formattruncated', function(content, maxLength) {
     content = truncateChars(content, maxLength);
     return formatTextForHTML(content, {links: false});
-  })
+  });
 
 }(VisionLouisville));
