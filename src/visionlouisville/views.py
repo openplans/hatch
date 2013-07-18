@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -6,6 +8,7 @@ from django.views.generic import TemplateView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.utils.text import Truncator
 from django.db.models import Count
 from django.http import Http404
 from rest_framework import status
@@ -159,10 +162,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        attribution = " - @%s " % (username,)
+        attribution = u' —@%s ' % (username,)
         vision_length = 140 - len(attribution) - url_length - 2
         return ''.join([
-            '"', truncatechars(vision.text, vision_length), '"',
+            '"', Truncator(vision.text).chars(vision_length, u'…'), '"',
             attribution,
             vision_url
         ])
