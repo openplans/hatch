@@ -4,19 +4,13 @@ from django.db.models import query
 from django.utils.translation import ugettext as _
 from django.utils.timezone import now
 from django.core.urlresolvers import reverse
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import UserManager, Group
+from django.contrib.auth.models import Group, AbstractUser
 
 import logging
 logger = logging.getLogger(__name__)
 
 
-BaseUser = get_user_model()
-
-
-class User (BaseUser):
-    class Meta:
-        proxy = True
+class User (AbstractUser):
 
     def support(self, vision):
         vision.supporters.add(self)

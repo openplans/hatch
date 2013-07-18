@@ -124,6 +124,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Authentication
 #
 
+AUTH_USER_MODEL = 'visionlouisville.User'
+
 AUTHENTICATION_BACKENDS = (
     # See http://django-social-auth.readthedocs.org/en/latest/configuration.html
     # for list of available backends.

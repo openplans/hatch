@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Vision, Reply, Share, Moment
+from django.contrib.auth.admin import UserAdmin
+from .models import Vision, Reply, Share, Moment, User
 
 
 class ShareInline (admin.TabularInline):
@@ -20,5 +21,10 @@ class VisionAdmin (admin.ModelAdmin):
     search_fields = ('title', 'details', 'category')
 
 
+class UserAdmin (UserAdmin):
+    pass
+
+
 admin.site.register(Moment)
 admin.site.register(Vision, VisionAdmin)
+admin.site.register(User, UserAdmin)
