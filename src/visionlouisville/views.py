@@ -159,12 +159,12 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        preamble = "Check out @%s's Vision: " % (username,)
-        vision_length = 140 - len(preamble) - url_length - 1
+        attribution = " - @%s " % (username,)
+        vision_length = 140 - len(attribution) - url_length - 2
         return ''.join([
-            preamble,
-            truncatechars(vision.text, vision_length),
-            ' ', vision_url
+            '"', truncatechars(vision.text, vision_length), '"',
+            attribution,
+            vision_url
         ])
 
     def get_user_tweet_text(self, request, vision):

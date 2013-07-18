@@ -42,6 +42,9 @@ class TwitterService (object):
 
     def get_url_length(self, url, on_behalf_of=None):
         config = self.get_config(on_behalf_of)
+        if url.startswith('http://localhost') or url.startswith('http://127.0.0.1'):
+            return len(url)
+
         if url.startswith('https'):
             return config['short_url_length_https']
         else:
@@ -95,7 +98,7 @@ class TwitterService (object):
         # Build a reverse mapping from user_id => cache_key
         reverse_data = dict([
             (user_id, cache_key)
-            for cache_key, user_id in data.items() 
+            for cache_key, user_id in data.items()
         ])
 
         # Get all the user info that is currently cached for the given users
@@ -153,7 +156,7 @@ class TwitterService (object):
         return user_info['name']
 
     # ==================================================================
-    # User-specific info, from the database, used for authenticating 
+    # User-specific info, from the database, used for authenticating
     # against Twitter on behalf of a specific user
     # ==================================================================
     def get_user_id(self, user):
@@ -202,7 +205,7 @@ class TwitterService (object):
         )
 
     # ==================================================================
-    # App-specific info, from the database, used for authenticating 
+    # App-specific info, from the database, used for authenticating
     # against Twitter on behalf of the app
     # ==================================================================
     def get_app_oauth(self):
