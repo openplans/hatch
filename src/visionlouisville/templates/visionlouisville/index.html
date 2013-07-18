@@ -8,7 +8,11 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html dir="ltr" lang="en-US"> <!--<![endif]-->
 
 <head>
+  {% if vision %}
+  <title>#VizLou | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
+  {% else %}
   <title>#VizLou | What's your vision for the future of Louisville?</title>
+  {% endif %}
 
   <meta charset="utf-8">
   <meta name="description" content="Share your vision. Come together. Change Louisville.">
