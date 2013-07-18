@@ -68,7 +68,7 @@ var VisionLouisville = VisionLouisville || {};
 
         attribution = ' —@' + username + ' ',
         visionLength = 140 - attribution.length - urlLength - 2;
-    return '"' + truncateChars(vision.text, visionLength, '…') + '"' + attribution + visionUrl;
+    return '"' + NS.Utils.truncateChars(vision.text, visionLength, '…') + '"' + attribution + visionUrl;
   }
 
   function linebreaks(text) {
@@ -84,7 +84,7 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   Handlebars.registerHelper('truncated_window_location', function(maxLength) {
-    return truncateChars(window.location.toString(), maxLength);
+    return NS.Utils.truncateChars(window.location.toString(), maxLength);
   });
 
   // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
@@ -124,74 +124,32 @@ var VisionLouisville = VisionLouisville || {};
     return $el.html();
   });
 
-  /* ============================================================
-   * Helper code for preparing blocks of user-contributed text
-   * for output. Derived from https://gist.github.com/arbales/1654670
-   * ============================================================
-   */
-  var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(localhost|(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
-  var TWITTER_USER_REGEX = /([^\w]|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
-
   // Handlebars is presumed, but you could swap out
   var ESCAPE_EXPRESSION_FUNCTION = Handlebars.Utils.escapeExpression;
   var MARKSAFE_FUNCTION = function(str) { return new Handlebars.SafeString(str); };
-
-  // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
-  function linkify(safeContent) {
-    return safeContent.replace(LINK_DETECTION_REGEX, function(match, url) {
-      var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
-      url = match.replace(/^https?:\/\//, '');
-      url = truncateChars(url, 40);
-      return "<a href='" + address + "' target='_blank'>" + url + "</a>";
-    });
-  }
-
-  function twitterify(safeContent) {
-    return safeContent.replace(TWITTER_USER_REGEX, function(match, leading, username, trailing) {
-      var address = 'http://www.twitter.com/' + username;
-      return leading + "<a href='" + address + "' target='_blank'>@" + username + "</a>" + trailing;
-    });
-  }
-
-  // Line breaks become <br/>'s
-  function wrapify(safeContent) {
-    return safeContent.replace(/\n/g, '<br/>');
-  }
-
-  function truncateChars(text, maxLength, continuationString) {
-    if (_.isUndefined(continuationString) || !_.isString(continuationString)) {
-      continuationString = '...';
-    }
-
-    if (text && text.length > maxLength) {
-      return text.slice(0, maxLength - continuationString.length) + continuationString;
-    } else {
-      return text;
-    }
-  }
 
   function formatTextForHTML(content, options) {
     // Start by escaping expressions in the content to make them safe.
     var safeContent = ESCAPE_EXPRESSION_FUNCTION(content);
     options = _.defaults(options || {}, {links: true, wrap: true});
     if (options.links) {
-      safeContent = linkify(safeContent);
-      safeContent = twitterify(safeContent);
+      safeContent = NS.Utils.linkify(safeContent);
+      safeContent = NS.Utils.twitterify(safeContent);
     }
     if (options.wrap) {
-      safeContent = wrapify(safeContent);
+      safeContent = NS.Utils.wrapify(safeContent);
     }
     return MARKSAFE_FUNCTION(safeContent); // Mark our string as safe, since it is.
   }
 
   Handlebars.registerHelper('formattext', formatTextForHTML);
-  Handlebars.registerHelper('truncatechars', truncateChars);
+  Handlebars.registerHelper('truncatechars', NS.Utils.truncateChars);
 
   Handlebars.registerHelper('TWEET_TEXT', getTweetText);
   Handlebars.registerHelper('SAFE_TWEET_TEXT', _.compose(formatTextForHTML, getTweetText));
 
   Handlebars.registerHelper('formattruncated', function(content, maxLength) {
-    content = truncateChars(content, maxLength);
+    content = NS.Utils.truncateChars(content, maxLength);
     return formatTextForHTML(content, {links: false});
   });
 

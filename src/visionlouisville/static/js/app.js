@@ -21,11 +21,17 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.controller = {
     allySignup: function() {
+      // TODO: Move to the config settings
+      document.title = "#VizLou | Become an ally!";
+
       NS.app.mainRegion.show(new NS.AllySignupView({
         model: NS.app.currentUser
       }));
     },
     listVisions: function(listCategory) {
+      // TODO: Move to the config settings
+      document.title = "#VizLou | Explore visions" + (listCategory ? ' — ' + listCategory : '');
+
       var render = function() {
         var model, collection;
 
@@ -58,6 +64,9 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     newVision: function(category, momentId) {
+      // TODO: Move to the config settings
+      document.title = "#VizLou | Add your vision.";
+
       // Protect against unauthenticated users.
       if (!NS.app.currentUser.isAuthenticated()) {
         NS.app.router.navigate('/', { trigger: true });
@@ -83,6 +92,9 @@ var VisionLouisville = VisionLouisville || {};
             layout = new NS.VisionDetailLayout({
               model: model
             });
+
+        // TODO: Move to the config settings
+        document.title = '#VizLou | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
 
         NS.app.mainRegion.show(layout);
 
@@ -110,6 +122,9 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     home: function() {
+      // TODO: Move to the config settings
+      document.title = "#VizLou | What's your vision for the future of Louisville?";
+
       var homeView = new NS.HomeView({
             collection: NS.app.visionCollection
           }),
