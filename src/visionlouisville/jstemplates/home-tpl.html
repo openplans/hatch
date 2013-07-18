@@ -16,7 +16,15 @@
 
     <p>Want to share something you love about Louisville? Tweet your inspirations with the hashtag <strong>#vizlou</strong> and see what visions they inspire from others.</p>
 
-    <p>Have a great idea for the future of Louisville? Sign in with your Twitter account, and <a href="/visions/new"><strong>add it here!</strong></a> Explore visions from others, add comments and hearts to show your support.</p>
+    <p>Have a great idea for the future of Louisville? 
+      {{#if_authenticated}}
+      <a href="/visions/new"><strong>Add it here!</strong></a> 
+      {{^}}
+      <a href="{{ LOGIN_URL '/visions/new' }}"><strong>Sign in with your Twitter account</strong></a>
+      to add it!
+      {{/if_authenticated}}
+      
+      Explore visions from others, add comments and hearts to show your support.</p>
 
     <h5>Allies are listening.</h5>
     <p>Led by Mayor Greg Fischer, <strong>Allies</strong> are community leaders, city officials, mentors, and educators using #VizLou to hear ideas for the future of Louisville. They're engaging with visionary youth by reading and sharing visions, clicking to show support, and adding comments to help visions become better defined.
