@@ -62,11 +62,13 @@ var VisionLouisville = VisionLouisville || {};
 
   // TODO: Move this into the config
   function getTweetText (vision) {
-    var preamble = "Check out @" + vision.author_details.username + "'s Vision: ",
-        visionUrl = window.location.toString(),
+    var visionUrl = window.location.toString(),
+        username = vision.author_details.username,
         urlLength = NS.twitterConf.short_url_length,
-        visionLength = 140 - preamble.length - urlLength - 1;
-    return preamble + truncateChars(vision.text, visionLength) + ' ' + visionUrl;
+
+        attribution = ' —@' + username + ' ',
+        visionLength = 140 - attribution.length - urlLength - 2;
+    return '"' + truncateChars(vision.text, visionLength, '…') + '"' + attribution + visionUrl;
   }
 
   function linebreaks(text) {
@@ -156,9 +158,13 @@ var VisionLouisville = VisionLouisville || {};
     return safeContent.replace(/\n/g, '<br/>');
   }
 
-  function truncateChars(text, maxLength) {
+  function truncateChars(text, maxLength, continuationString) {
+    if (_.isUndefined(continuationString) || !_.isString(continuationString)) {
+      continuationString = '...';
+    }
+
     if (text && text.length > maxLength) {
-      return text.slice(0, maxLength-3) + '...';
+      return text.slice(0, maxLength - continuationString.length) + continuationString;
     } else {
       return text;
     }
