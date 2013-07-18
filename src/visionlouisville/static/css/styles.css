@@ -949,10 +949,6 @@ ul.user-list {
     margin-right: -15px;
     margin-left: -15px;
   }
-  .vision-list-category-icon:before,
-  .category-link:before {
-    content: 'Category: ';
-  }
 }
 
 @media only screen and (min-width: 768px) {
