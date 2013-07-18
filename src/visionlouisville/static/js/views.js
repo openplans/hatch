@@ -66,15 +66,32 @@ var VisionLouisville = VisionLouisville || {};
     itemView: NS.VisionCarouselItemView,
     itemViewContainer: '.swiper-wrapper',
     initCarousel: function() {
+      var self = this,
+          interval = 8000,
+          intervalId;
+
       // It is important for this everything to be in the DOM for swiper to
       // be a happy little plugin.
       this.swiper = new Swiper(this.$('.swiper-container').get(0), {
         loop: true,
         pagination: this.$('.pagination').get(0),
         paginationClickable: true,
-        autoplay: 8000,
-        calculateHeight: true
+        calculateHeight: true,
+        onTouchStart: function() {
+          if (intervalId) {
+            window.clearInterval(intervalId);
+          }
+        },
+        onTouchEnd: function(swiper) {
+          intervalId = window.setInterval(function() {
+            swiper.swipeNext();
+          }, interval);
+        }
       });
+
+      intervalId = window.setInterval(function() {
+        self.swiper.swipeNext();
+      }, interval);
     }
   });
 
