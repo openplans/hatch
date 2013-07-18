@@ -66,9 +66,9 @@ var VisionLouisville = VisionLouisville || {};
         username = vision.author_details.username,
         urlLength = NS.twitterConf.short_url_length,
 
-        attribution = ' —@' + username + ' ',
+        attribution = ' \u2014@' + username + ' ',
         visionLength = 140 - attribution.length - urlLength - 2;
-    return '"' + NS.Utils.truncateChars(vision.text, visionLength, '…') + '"' + attribution + visionUrl;
+    return '"' + NS.Utils.truncateChars(vision.text, visionLength, '\u2026') + '"' + attribution + visionUrl;
   }
 
   function linebreaks(text) {

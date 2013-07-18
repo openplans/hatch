@@ -1,4 +1,4 @@
-/*globals $ */
+/*globals _ jQuery */
 
 var VisionLouisville = VisionLouisville || {};
 
@@ -14,7 +14,7 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.Utils = {
     serializeObject: function(form) {
-      var $form = $(form),
+      var $form = jQuery(form),
           formArray = $form.serializeArray(),
           attrs = {},
           headers = {};

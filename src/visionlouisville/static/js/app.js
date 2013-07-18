@@ -30,7 +30,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     listVisions: function(listCategory) {
       // TODO: Move to the config settings
-      document.title = "#VizLou | Explore visions" + (listCategory ? ' — ' + listCategory : '');
+      document.title = "#VizLou | Explore visions" + (listCategory ? ' \u2014 ' + listCategory : '');
 
       var render = function() {
         var model, collection;
