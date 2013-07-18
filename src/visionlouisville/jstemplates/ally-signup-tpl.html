@@ -13,7 +13,7 @@
     <p>Enter your email address to finish becoming an ally.</p>
 
     {{# if_authenticated }}
-      <form method="POST">
+      <form method="POST" action="/ally-signup">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ CSRF_TOKEN }}">
 
         <p class="vision-title">
