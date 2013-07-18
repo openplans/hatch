@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import Vision, Reply, Share, Moment, User
 
 
@@ -21,8 +21,8 @@ class VisionAdmin (admin.ModelAdmin):
     search_fields = ('title', 'details', 'category')
 
 
-class UserAdmin (UserAdmin):
-    pass
+class UserAdmin (BaseUserAdmin):
+    list_display = BaseUserAdmin.list_display + ('date_joined',)
 
 
 admin.site.register(Moment)
