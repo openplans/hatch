@@ -34,6 +34,7 @@ def listen_for_moments():
 
     tweets = twitter_service.itertweets(track=','.join(settings.MOMENT_KEYWORDS))
     for tweet in tweets:
+        log.info('\n  - I see a tweet!: %s\n' % (tweet['id'],))
         tweet_media = tweet.get('entities', {}).get('media', [])
         if any(m['type'] == 'photo' for m in tweet_media):
             # Now we're interested. Check if we already have it.
@@ -42,3 +43,5 @@ def listen_for_moments():
                 log.info('\n  - Created a new moment "%s"\n' % (moment,))
             else:
                 log.info('\n  - Modified an existing moment "%s"\n' % (moment,))
+        else:
+            log.info('\n  - Nevermind, not interested.\n')
