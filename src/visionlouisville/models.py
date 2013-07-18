@@ -66,14 +66,23 @@ class Share (models.Model):
 
 
 class MomentManager (models.Manager):
+    def get_tweet_id(self, tweet):
+        try:
+            if isinstance(tweet, (int, str, unicode)):
+                return int(tweet)
+            else:
+                return tweet['id']
+
+        except (ValueError, TypeError, KeyError):
+            raise ValueError('Expected the numeric id of a tweet, or a '
+                'dictionary-like object representing a tweet: %r'
+                % tweet)
+
     def create_or_update_from_tweet(self, tweet):
-        if isinstance(tweet, (int, str, unicode)):
-            from services import default_twitter_service as twitter_service
-            t = twitter_service.get_api()
-            tweet = t.statuses.show(id=tweet)
+        tweet_id = self.get_tweet_id(tweet)
 
         try:
-            moment = Moment.objects.get(tweet_id=tweet['id'])
+            moment = Moment.objects.get(tweet_id=tweet_id)
             created = False
         except Moment.DoesNotExist:
             moment = Moment()
@@ -97,9 +106,9 @@ class Moment (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    username = models.CharField(max_length=20)
-    text = models.TextField()
-    media_url = models.URLField()
+    username = models.CharField(max_length=20, blank=True)
+    text = models.TextField(blank=True)
+    media_url = models.URLField(blank=True)
     tweet_id = models.CharField(max_length=64, null=True)
 
     objects = MomentManager()
@@ -111,6 +120,11 @@ class Moment (models.Model):
         return '%s (%s)' % (self.text, self.media_url)
 
     def load_from_tweet(self, tweet, commit=True):
+        if isinstance(tweet, (int, str, unicode)):
+            from services import default_twitter_service as twitter_service
+            t = twitter_service.get_api()
+            tweet = t.statuses.show(id=tweet)
+
         self.text = tweet['text']
         self.tweet_id = tweet['id']
         self.username = tweet['user']['screen_name']
@@ -118,8 +132,14 @@ class Moment (models.Model):
             if media['type'] == 'photo':
                 self.media_url = media['media_url']
                 break
+
         if commit:
             self.save()
+
+    def save(self, *args, **kwargs):
+        if self.tweet_id and not self.username and not self.text and not self.media_url:
+            self.load_from_tweet(self.tweet_id, commit=False)
+        return super(Moment, self).save(*args, **kwargs)
 
 
 class Reply (models.Model):
