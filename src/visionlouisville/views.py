@@ -259,6 +259,11 @@ class UserViewSet (AppMixin, ModelViewSet):
         if (group_names):
             queryset = queryset.filter(groups__name__in=group_names)
 
+        visible_status = self.request.GET.get('visible_on_home', None)
+        if (visible_status is not None):
+            visible_status = (visible_status.lower() not in ('false', 'off', 'no'))
+            queryset = queryset.filter(visible_on_home=visible_status)
+
         return queryset
 
 

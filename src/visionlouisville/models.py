@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class User (AbstractUser):
+    visible_on_home = models.BooleanField(default=True)
 
     def support(self, vision):
         vision.supporters.add(self)

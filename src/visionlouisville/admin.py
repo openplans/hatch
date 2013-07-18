@@ -22,7 +22,8 @@ class VisionAdmin (admin.ModelAdmin):
 
 
 class UserAdmin (BaseUserAdmin):
-    list_display = BaseUserAdmin.list_display + ('date_joined',)
+    list_display = BaseUserAdmin.list_display + ('date_joined', 'visible_on_home',)
+    list_editable = BaseUserAdmin.list_editable + ('visible_on_home',)
 
 
 admin.site.register(Moment)

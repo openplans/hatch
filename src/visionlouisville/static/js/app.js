@@ -133,7 +133,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.app.mainRegion.show(homeView);
 
       visionaryCollection.fetch({
-        data: {notgroup: 'allies'}
+        data: {notgroup: 'allies', visible_on_home: true}
       });
       homeView.visionaries.show(new NS.UserAvatarListView({
         collection: visionaryCollection,
@@ -141,7 +141,7 @@ var VisionLouisville = VisionLouisville || {};
       }));
 
       allyCollection.fetch({
-        data: {group: 'allies'}
+        data: {group: 'allies', visible_on_home: true}
       });
       homeView.allies.show(new NS.UserAvatarListView({
         collection: allyCollection,
