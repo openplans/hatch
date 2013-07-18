@@ -351,7 +351,7 @@ var VisionLouisville = VisionLouisville || {};
 
       // For each form element
       $form.find('input, select, textarea').each(function(i, el) {
-        if (!el.validity.valid) {
+        if (el.validity && el.validity.valid === false) {
           invalidEl = el;
           return false;
         }
