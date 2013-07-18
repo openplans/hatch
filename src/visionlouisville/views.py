@@ -2,7 +2,6 @@
 
 import json
 from django.conf import settings
-from django.http import HttpResponseRedirect
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -22,7 +21,7 @@ from rest_framework.utils.encoders import JSONEncoder
 from .models import Moment, Reply, User, Vision
 from .forms import SecretAllySignupForm
 from .serializers import (
-    MomentSerializer, ReplySerializer, UserSerializer, VisionSerializer,
+    ReplySerializer, UserSerializer, VisionSerializer,
     MomentSerializerWithType, VisionSerializerWithType)
 from .services import default_twitter_service
 

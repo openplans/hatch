@@ -16,16 +16,16 @@ var VisionLouisville = VisionLouisville || {};
       collectionType: 'ReplyCollection',
       reverseRelation: {
         key: 'vision',
-        includeInJSON: Backbone.Model.prototype.idAttribute,
+        includeInJSON: Backbone.Model.prototype.idAttribute
       }
     },{
       type: Backbone.HasMany,
       key: 'supporters',
-      relatedModel: 'UserModel',
+      relatedModel: 'UserModel'
     },{
       type: Backbone.HasMany,
       key: 'sharers',
-      relatedModel: 'UserModel',
+      relatedModel: 'UserModel'
     }]
   });
 
@@ -144,7 +144,7 @@ var VisionLouisville = VisionLouisville || {};
             } else if (dateString1 > dateString2) {
               return -1;
             }
-          }
+          };
 
       // Mayors come first, then VIPs, then allies, then most recently active
       return orderByGroup('mayors') ||

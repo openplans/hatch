@@ -1,9 +1,6 @@
 from django.conf import settings
 from django.db import models, IntegrityError, transaction
-from django.db.models import query
 from django.utils.translation import ugettext as _
-from django.utils.timezone import now
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group, AbstractUser
 
 import logging
@@ -74,8 +71,9 @@ class MomentManager (models.Manager):
                 return tweet['id']
 
         except (ValueError, TypeError, KeyError):
-            raise ValueError('Expected the numeric id of a tweet, or a '
-                'dictionary-like object representing a tweet: %r'
+            raise ValueError(
+                'Expected the numeric id of a tweet, or a dictionary-like '
+                'object representing a tweet: %r'
                 % tweet)
 
     def create_or_update_from_tweet(self, tweet):
@@ -102,14 +100,17 @@ class MomentManager (models.Manager):
 
         return moment, created
 
+
 class Moment (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tweet_id = models.CharField(max_length=64, null=True, 
-        help_text=("You can fill in the tweet id and leave the other fields"
+    tweet_id = models.CharField(
+        max_length=64, null=True,
+        help_text=(_(
+            "You can fill in the tweet id and leave the other fields "
             "blank. For example, if the tweet URL is http://www.twitter.com/"
-            "myuser/status/1234567890, then the tweet id is 1234567890."))
+            "myuser/status/1234567890, then the tweet id is 1234567890.")))
     username = models.CharField(max_length=20, blank=True)
     text = models.TextField(blank=True)
     media_url = models.URLField(blank=True)

@@ -1,14 +1,16 @@
 from django.conf.urls import patterns, include, url
 from .views import (
     home_app_view, secret_ally_signup_view, vision_detail_app_view, api_router,
-    current_user_api_view, input_stream_api_view, share_api_view, 
+    current_user_api_view, input_stream_api_view, share_api_view,
     support_api_view, unsupport_api_view)
 
 # Admin
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+
     # Social Auth
     url(r'^', include('social_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),

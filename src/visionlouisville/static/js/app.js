@@ -227,8 +227,8 @@ var VisionLouisville = VisionLouisville || {};
 
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
-           href.indexOf('/visions') === 0)
-          && !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
+           href.indexOf('/visions') === 0) &&
+           !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
         if (href.indexOf('new') !== -1) {

@@ -323,7 +323,7 @@ var VisionLouisville = VisionLouisville || {};
       'change .vision-category-list input': 'handleCategoryChange'
     },
     ui: {
-      submit: 'input[type=submit]',
+      submit: 'input[type=submit]'
     },
     onRender: function() {
       this.handleCategoryChange();
