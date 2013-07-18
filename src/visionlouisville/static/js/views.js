@@ -72,7 +72,7 @@ var VisionLouisville = VisionLouisville || {};
         loop: true,
         pagination: this.$('.pagination').get(0),
         paginationClickable: true,
-        autoplay: 4000,
+        autoplay: 8000,
         calculateHeight: true
       });
     }
