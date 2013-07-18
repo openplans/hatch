@@ -130,7 +130,7 @@ var VisionLouisville = VisionLouisville || {};
    * ============================================================
    */
   var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(localhost|(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
-  var TWITTER_USER_REGEX = /(\s|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
+  var TWITTER_USER_REGEX = /([^\w]|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
 
   // Handlebars is presumed, but you could swap out
   var ESCAPE_EXPRESSION_FUNCTION = Handlebars.Utils.escapeExpression;
