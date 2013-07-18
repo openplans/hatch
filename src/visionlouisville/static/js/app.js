@@ -65,7 +65,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
-      document.title = "#VizLou | Add your vision.";
+      document.title = "#VizLou | Add your vision";
 
       // Protect against unauthenticated users.
       if (!NS.app.currentUser.isAuthenticated()) {
