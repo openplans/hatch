@@ -35,7 +35,10 @@ import json
 with open('/home/dotcloud/environment.json') as f:
     env = json.load(f)
 
-ADMINS = env.get('ADMINS', '').split(',')
+ADMINS = zip(
+    env.get('ADMINS', '').split(','),
+    env.get('ADMINS', '').split(',')
+)
 
 DATABASES = {
     'default': {
