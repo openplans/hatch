@@ -60,11 +60,10 @@
 
   <script src="{{ STATIC_URL }}components/modernizr/modernizr.js"></script>
   {% else %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/components.min.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/swiper.min.css" type="text/css" media="screen, projection" />
-
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/dist/styles.min.css" type="text/css" media="screen, projection" />
-  <script src="{{ STATIC_URL }}js/dist/modernizr.min.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/components.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/swiper.min.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.min.css" type="text/css" media="screen, projection" />
+  <script src="{{ STATIC_URL }}js/modernizr.min.js"></script>
   {% endif %}
 
 </head>
@@ -128,7 +127,7 @@
   <script src="{{ STATIC_URL }}js/views.js"></script>
   <script src="{{ STATIC_URL }}js/app.js"></script>
   {% else %}
-  <script src="{{ STATIC_URL }}js/dist/components.min.js"></script>
+  <script src="{{ STATIC_URL }}js/components.min.js"></script>
   {% handlebarsjs '(.*)' precompile register_partials %}
 
   <script>
@@ -141,7 +140,7 @@
   ga('send', 'event', 'browser', 'arrived');
   </script>
 
-  <script src="{{ STATIC_URL }}js/dist/app.min.js"></script>
+  <script src="{{ STATIC_URL }}js/app.min.js"></script>
   {% endif %}
 </body>
 </html>

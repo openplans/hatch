@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       dist: {
         files: [
           {
-            dest: 'static/js/dist/components.min.js',
+            dest: 'static/js/components.min.js',
             src: [
               'static/components/jquery/jquery.js',
               'static/components/handlebars.js/dist/handlebars.js',
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             ]
           },
           {
-            dest: 'static/js/dist/app.min.js',
+            dest: 'static/js/app.min.js',
             src: [
               'static/js/django-csrf.js',
               'static/js/config.js',
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             ]
           },
           {
-            dest: 'static/js/dist/modernizr.min.js',
+            dest: 'static/js/modernizr.min.js',
             src: [
               'static/components/modernizr/modernizr.js'
             ]
@@ -51,19 +51,19 @@ module.exports = function(grunt) {
       dist: {
         files: [
           {
-            dest: 'static/css/dist/components.min.css',
+            dest: 'static/css/components.min.css',
             src: [
               'static/components/normalize-css/normalize.css'
             ]
           },
           {
-            dest: 'static/css/dist/swiper.min.css',
+            dest: 'static/css/swiper.min.css',
             src: [
               'static/components/swiper/dist/idangerous.swiper.css'
             ]
           },
           {
-            dest: 'static/css/dist/styles.min.css',
+            dest: 'static/css/styles.min.css',
             src: [
               'static/css/styles.css'
             ]

@@ -43,5 +43,5 @@ local_settings.py
 # App
 src/visionlouisville/node_modules/
 src/visionlouisville/static/components/
-src/visionlouisville/static/js/dist/
-src/visionlouisville/static/css/dist/
+src/visionlouisville/static/js/*.min.js
+src/visionlouisville/static/css/*.min.css
