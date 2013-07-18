@@ -44,14 +44,19 @@ def listen_for_moments():
                 (msg.get('reason'), msg.get('code')))
             break
 
-        log.info('\n  - I see a tweet!: %s\n' % (tweet.get('id', str(tweet)),))
+        log.info('\n  - I see a tweet!: %s; Checking it out.\n' % (tweet.get('id', str(tweet)),))
+
+        if 'retweeted_status' in tweet or tweet.get('text', '').startswith('RT'):
+            log.info('\n  - Oh, nevermind, it\'s a retweet.\n')
+            continue
+
         tweet_media = tweet.get('entities', {}).get('media', [])
         if any(m['type'] == 'photo' for m in tweet_media):
             # Now we're interested. Check if we already have it.
             moment, created = Moment.objects.create_or_update_from_tweet(tweet)
             if created:
-                log.info('\n  - Created a new moment "%s"\n' % (moment,))
+                log.info('\n  - Created a new moment "%s", yay!\n' % (moment,))
             else:
-                log.info('\n  - Modified a moment "%s"\n' % (moment,))
+                log.info('\n  - Modified a moment "%s", yay!\n' % (moment,))
         else:
-            log.info('\n  - Nevermind, not interested.\n')
+            log.info('\n  - Eh, there\'s no photos in it. Not interested.\n')
