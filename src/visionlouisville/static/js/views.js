@@ -367,14 +367,11 @@ var VisionLouisville = VisionLouisville || {};
         wait: true,
         headers: data.headers,
         error: function() {
+          self.ui.submit.prop('disabled', false);
           window.alert('Unable to save your vision. Please try again.');
         },
         success: function(model) {
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
-        },
-        complete: function() {
-          // Now complete. Enable the button on success or failure.
-          self.ui.submit.prop('disabled', false);
         }
       });
 
