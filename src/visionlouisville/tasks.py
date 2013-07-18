@@ -34,7 +34,13 @@ def listen_for_moments():
 
     tweets = twitter_service.itertweets(track=','.join(settings.MOMENT_KEYWORDS))
     for tweet in tweets:
-        log.info('\n  - I see a tweet!: %s\n' % (tweet['id'],))
+        if 'disconnect' in tweet:
+            log.info("\n*** Twitter doesn't like you anymore: %s (%s)\n" % 
+                     (tweet['disconnect'].get('reason'), 
+                      tweet['disconnect'].get('code')))
+            break
+
+        log.info('\n  - I see a tweet!: %s\n' % (tweet.get('id', str(tweet)),))
         tweet_media = tweet.get('entities', {}).get('media', [])
         if any(m['type'] == 'photo' for m in tweet_media):
             # Now we're interested. Check if we already have it.

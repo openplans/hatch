@@ -19,6 +19,7 @@ class Command(BaseCommand):
             try:
                 last_connect_attempt_time = now()
                 listen_for_moments()
+                reconnect_delay = 0
 
             except SSLError as e:
                 log.error('\n*** Received an SSL error while streaming from '
