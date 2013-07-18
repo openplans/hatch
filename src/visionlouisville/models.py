@@ -106,10 +106,13 @@ class Moment (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    tweet_id = models.CharField(max_length=64, null=True, 
+        help_text=("You can fill in the tweet id and leave the other fields"
+            "blank. For example, if the tweet URL is http://www.twitter.com/"
+            "myuser/status/1234567890, then the tweet id is 1234567890."))
     username = models.CharField(max_length=20, blank=True)
     text = models.TextField(blank=True)
     media_url = models.URLField(blank=True)
-    tweet_id = models.CharField(max_length=64, null=True)
 
     objects = MomentManager()
 
