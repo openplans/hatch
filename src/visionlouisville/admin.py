@@ -17,7 +17,7 @@ class VisionAdmin (admin.ModelAdmin):
     inlines = [ReplyInline, ShareInline]
     # date_hierarchy = 'created_at'
     filter_horizontal = ('supporters',)
-    list_display = ('__unicode__', 'author', 'category', 'updated_at')
+    list_display = ('__unicode__', 'author', 'category', 'created_at', 'updated_at')
     list_filter = ('category', 'created_at', 'updated_at')
     search_fields = ('text', 'category')
 
