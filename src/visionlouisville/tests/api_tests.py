@@ -19,7 +19,7 @@ class VisionsTest (TestCase):
 
     def test_vision_contents(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        vision = Vision.objects.create(author=user, title='my vision')
+        vision = Vision.objects.create(author=user, text='my vision')
         factory = RequestFactory()
         params = {'pk': vision.pk}
         url = reverse('vision-detail', kwargs=params)
@@ -34,8 +34,7 @@ class VisionsTest (TestCase):
         self.assertIn('author_details', data)
         self.assertEqual(data['author_details'].get('username'), user.username)
         self.assertEqual(data.get('id'), vision.pk)
-        self.assertEqual(data.get('title'), vision.title)
-        self.assertEqual(data.get('description'), vision.description)
+        self.assertEqual(data.get('text'), vision.text)
 
     def test_vision_app_tweeting(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
@@ -54,13 +53,15 @@ class VisionsTest (TestCase):
             def get_users_info(self, users, actor=None):
                 return []
 
+            def get_url_length(self, url, actor=None):
+                return 20
+
         with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
                     'category': 'economy',
-                    'title': 'This is a vision',
-                    'description': 'More information about the vision'
+                    'text': 'This is a vision -- More information about the vision'
                 }), content_type='application/json')
             request.user = user
             request.csrf_processing_done = True
@@ -86,7 +87,7 @@ class VisionsTest (TestCase):
             def get_full_name(self, user, actor=None):
                 return ''
 
-            def get_url_length(self, actor=None):
+            def get_url_length(self, url, actor=None):
                 return 20
 
             def get_users_info(self, users, actor=None):
@@ -97,8 +98,7 @@ class VisionsTest (TestCase):
             vision_data = {
                 'author': user.pk,
                 'category': 'economy',
-                'title': 'This is a vision',
-                'description': 'More information about the vision'
+                'text': 'This is a vision'
             }
             request = factory.post(url, data=json.dumps(vision_data), 
                 content_type='application/json',
@@ -110,7 +110,7 @@ class VisionsTest (TestCase):
             response.render()
 
             self.assertEqual(StubTwitterService.tweet.call_count, 2)
-            self.assert_(StubTwitterService.tweet.call_args_list[1][0][0].startswith(vision_data['title']))
+            self.assert_(StubTwitterService.tweet.call_args_list[1][0][0].startswith(vision_data['text']), vision_data['text'])
             self.assertEqual(len(StubTwitterService.tweet.call_args_list[1][0]), 2)
             self.assertEqual(StubTwitterService.tweet.call_args_list[1][0][1], user)
 
@@ -122,13 +122,15 @@ class VisionsTest (TestCase):
         class StubTwitterService (object):
             tweet = Mock(return_value=(False, 'Something happened!'))
 
+            def get_url_length(self, url, actor=None):
+                return 20
+
         with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
                     'category': 'economy',
-                    'title': 'This is a vision',
-                    'description': 'More information about the vision'
+                    'text': 'This is a vision',
                 }), content_type='application/json')
             request.user = user
             request.csrf_processing_done = True
@@ -149,7 +151,7 @@ class ReplyTest (TestCase):
 
     def test_reply_tweeting(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        vision = Vision.objects.create(author=user, title='a', description='b', tweet_id='c')
+        vision = Vision.objects.create(author=user, text='abc', tweet_id='c')
         factory = RequestFactory()
         url = reverse('reply-list')
 
@@ -161,6 +163,9 @@ class ReplyTest (TestCase):
 
             def get_full_name(self, user, actor=None):
                 return ''
+
+            def get_url_length(self, url, actor=None):
+                return 20
 
         with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', lambda self: StubTwitterService()):
             view = ReplyViewSet.as_view({'post': 'create'})
@@ -183,7 +188,7 @@ class ReplyTest (TestCase):
 
     def test_handle_reply_tweeting_failure(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        vision = Vision.objects.create(author=user, title='a', description='b', tweet_id='c')
+        vision = Vision.objects.create(author=user, text='abc', tweet_id='c')
         factory = RequestFactory()
         url = reverse('reply-list')
 
