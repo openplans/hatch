@@ -1,1 +1,1 @@
-[{"pk": 1, "model": "auth.group", "fields": {"name": "allies", "permissions": []}}, {"pk": 2, "model": "auth.group", "fields": {"name": "mayors", "permissions": []}}]
+[{"pk": 1, "model": "auth.group", "fields": {"name": "allies", "permissions": []}}, {"pk": 2, "model": "auth.group", "fields": {"name": "mayors", "permissions": []}}, {"pk": 3, "model": "auth.group", "fields": {"name": "vips", "permissions": []}}]
