@@ -1,5 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.forms import (
+    UserCreationForm as BaseUserCreationForm,
+    UserChangeForm as BaseUserChangeForm,
+)
 from .models import Vision, Reply, Share, Moment, User
 
 
@@ -23,7 +27,32 @@ class VisionAdmin (admin.ModelAdmin):
     search_fields = ('text', 'category')
 
 
+class UserCreationForm (BaseUserCreationForm):
+    class Meta:
+        model = User
+        fields = ("username",)
+
+    def clean_username(self):
+        # Since User.username is unique, this check is redundant,
+        # but it sets a nicer error message than the ORM. See #13147.
+        username = self.cleaned_data["username"]
+        try:
+            self._meta.model._default_manager.get(username=username)
+        except self._meta.model.DoesNotExist:
+            return username
+        from django import forms
+        raise forms.ValidationError(self.error_messages['duplicate_username'])
+
+
+class UserChangeForm (BaseUserChangeForm):
+    class Meta:
+        model = User
+
+
 class UserAdmin (BaseUserAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+
     list_display = BaseUserAdmin.list_display + ('date_joined', 'last_login', 'visible_on_home',)
     list_editable = BaseUserAdmin.list_editable + ('visible_on_home',)
 
