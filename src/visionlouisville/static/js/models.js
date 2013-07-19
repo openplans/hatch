@@ -37,6 +37,9 @@ var VisionLouisville = VisionLouisville || {};
       return -(date.valueOf());
     },
     model: NS.VisionModel,
+    getFeatured: function() {
+      return this.where({'featured': true});
+    },
     getMostSupportedByCategory: function() {
       function sortByCategory(a, b) {
         var aLen = a.get('supporters').length,

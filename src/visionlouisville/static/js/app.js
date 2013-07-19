@@ -134,7 +134,7 @@ var VisionLouisville = VisionLouisville || {};
       function renderVisionCarousel() {
         var visionCarouselView = new NS.VisionCarouselView({
           collection: new NS.VisionCollection(
-            NS.app.visionCollection.getMostSupportedByCategory()
+            NS.app.visionCollection.getFeatured()
           )
         });
 
