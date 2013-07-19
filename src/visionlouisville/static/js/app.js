@@ -148,20 +148,24 @@ var VisionLouisville = VisionLouisville || {};
       NS.app.mainRegion.show(homeView);
 
       visionaryCollection.fetch({
-        data: {notgroup: 'allies', visible_on_home: true}
+        data: {notgroup: 'allies', visible_on_home: true},
+        success: function(collection, response, options) {
+          homeView.visionaries.show(new NS.UserAvatarListView({
+            collection: new NS.UserCollection(collection.slice(0, 20)),
+            template: '#home-visionaries-tpl'
+          }));
+        }
       });
-      homeView.visionaries.show(new NS.UserAvatarListView({
-        collection: visionaryCollection,
-        template: '#home-visionaries-tpl'
-      }));
 
       allyCollection.fetch({
-        data: {group: 'allies', visible_on_home: true}
+        data: {group: 'allies', visible_on_home: true},
+        success: function(collection, response, options) {
+          homeView.allies.show(new NS.UserAvatarListView({
+            collection: new NS.UserCollection(collection.slice(0, 20)),
+            template: '#home-allies-tpl'
+          }));
+        }
       });
-      homeView.allies.show(new NS.UserAvatarListView({
-        collection: allyCollection,
-        template: '#home-allies-tpl'
-      }));
 
       // Nothing in the collection? It's not done fetching. Let's wait for it.
       if (NS.app.visionCollection.size() === 0) {
