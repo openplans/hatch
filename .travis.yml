@@ -21,3 +21,8 @@ before_script:
 
 script:
   - python src/manage.py test --with-coverage --cover-package=visionlouisville
+
+notifications:
+  email:
+    - dev@openplans.org
+    - mpoe@openplans.org
