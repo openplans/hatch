@@ -32,6 +32,9 @@ class UserCreationForm (BaseUserCreationForm):
         model = User
         fields = ("username",)
 
+    # NOTE: We must override clean_username because of this bug:
+    #       https://code.djangoproject.com/ticket/19353
+    # TODO: Get rid of this whenever that patch gets merged in.
     def clean_username(self):
         # Since User.username is unique, this check is redundant,
         # but it sets a nicer error message than the ORM. See #13147.
