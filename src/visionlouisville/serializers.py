@@ -1,6 +1,6 @@
 from rest_framework.serializers import (
-    CharField, IntegerField, ModelSerializer,
-    SerializerMethodField, RelatedField)
+    CharField, ImageField, IntegerField, ModelSerializer,
+    SerializerMethodField, RelatedField, ValidationError)
 from .models import User, Vision, Reply, Moment
 from .services import SocialMediaException
 
@@ -156,6 +156,24 @@ class VisionSerializer (ModelSerializer):
 
     class Meta:
         model = Vision
+
+    def from_native(self, data, files):
+        # Validate any uploaded media
+        media_field = ImageField(required=False)
+        media_file = files.get('media', None)
+        try:
+            media = media_field.from_native(media_file)
+        except ValidationError as err:
+            if not hasattr(self, '_errors') or self._errors is None:
+                self._errors = {}
+            self._errors['media'] = list(err.messages)
+            return
+
+        # Attach uploaded media, if appropriate
+        if media and 'media_url' not in data:
+            data['media_url'] = Vision.upload_photo(media)
+
+        return super(VisionSerializer, self).from_native(data, {})
 
 
 class MomentSerializerWithType (MomentSerializer):

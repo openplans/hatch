@@ -1,7 +1,11 @@
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.db import models, IntegrityError, transaction
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import Group, AbstractUser
+from os.path import join as path_join
+from uuid import uuid4
 
 import logging
 logger = logging.getLogger(__name__)
@@ -54,6 +58,26 @@ class Vision (models.Model):
 
     def __unicode__(self):
         return self.text[:140]
+
+    @classmethod
+    def get_photo_path(cls, filename):
+        if '.' in filename:
+            ext = filename.split('.')[-1]
+            filename = "%s.%s" % (uuid4(), ext)
+        else:
+            filename = str(uuid4())
+        return path_join('photos', now().strftime('%Y/%m/%d'), filename)
+
+    @classmethod
+    def upload_photo(cls, photo, storage=default_storage):
+        path = cls.get_photo_path(photo.name)
+        with storage.open(path, 'wb+') as destination:
+            for chunk in photo.chunks():
+                destination.write(chunk)
+        return storage.url(path)
+
+    def attach_photo(self, photo, storage=default_storage):
+        self.media_url = self.upload_photo(photo, storage)
 
 
 class Share (models.Model):
