@@ -40,7 +40,9 @@ class Vision (models.Model):
     author = models.ForeignKey(User, related_name='visions')
     category = models.CharField(max_length=20, null=True, blank=True)
     text = models.TextField()
+    media_url = models.URLField(default='', blank=True)
     featured = models.BooleanField(default=False)
+
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
     sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
     inspiration = models.ForeignKey('Moment', null=True, blank=True)
