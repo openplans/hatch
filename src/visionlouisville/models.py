@@ -4,6 +4,7 @@ from django.db import models, IntegrityError, transaction
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import Group, AbstractUser
+from random import randint
 from os.path import join as path_join
 from uuid import uuid4
 
@@ -89,7 +90,16 @@ class Share (models.Model):
         return '%s shared "%s"' % (self.user, self.vision)
 
 
-class MomentManager (models.Manager):
+class TweetedObjectManager (models.Manager):
+    """
+    Using this manager requires the associated model to:
+      * Have a tweet_id attribute, and
+      * Have a load_from_tweet method that takes either a tweet id or a 
+        dictionary that represents tweet
+    """
+    def __init__(self, model):
+        self.model = model
+
     def get_tweet_id(self, tweet):
         try:
             if isinstance(tweet, (int, str, unicode)):
@@ -106,17 +116,20 @@ class MomentManager (models.Manager):
     def create_or_update_from_tweet(self, tweet):
         tweet_id = self.get_tweet_id(tweet)
 
+        qs = self.get_queryset()
+        ModelClass = self.model
+
         try:
-            moment = Moment.objects.get(tweet_id=tweet_id)
+            obj = qs.get(tweet_id=tweet_id)
             created = False
-        except Moment.DoesNotExist:
-            moment = Moment()
+        except ModelClass.DoesNotExist:
+            obj = ModelClass()
             created = True
 
         try:
             # TODO: Change to transaction.atomic when upgrading to Django 1.6
             with transaction.commit_on_success():
-                moment.load_from_tweet(tweet)
+                obj.load_from_tweet(tweet)
         except IntegrityError:
             # Since we've already checked for moments with this tweet_id, we would
             # only have an integrity error at this point if some other thread or
@@ -125,10 +138,25 @@ class MomentManager (models.Manager):
             # that.
             pass
 
-        return moment, created
+        return obj, created
 
 
-class Moment (models.Model):
+class TweetedModelMixin (object):
+    def get_tweet(tweet_id):
+        """
+        Take either a tweet id or a tweet dictionary and normalize into a
+        tweet dictionary.
+        """
+        if isinstance(tweet_id, (int, str, unicode)):
+            from services import default_twitter_service as twitter_service
+            t = twitter_service.get_api()
+            tweet = t.statuses.show(id=tweet_id)
+        else:
+            tweet = tweet_id
+        return tweet
+
+
+class Moment (TweetedModelMixin, models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -142,7 +170,7 @@ class Moment (models.Model):
     text = models.TextField(blank=True)
     media_url = models.URLField(blank=True)
 
-    objects = MomentManager()
+    objects = TweetedObjectManager()
 
     class Meta:
         ordering = ('-created_at',)
@@ -150,11 +178,8 @@ class Moment (models.Model):
     def __unicode__(self):
         return '%s (%s)' % (self.text, self.media_url)
 
-    def load_from_tweet(self, tweet, commit=True):
-        if isinstance(tweet, (int, str, unicode)):
-            from services import default_twitter_service as twitter_service
-            t = twitter_service.get_api()
-            tweet = t.statuses.show(id=tweet)
+    def load_from_tweet(self, tweet_id, commit=True):
+        tweet = self.get_tweet(tweet_id)
 
         self.text = tweet['text']
         self.tweet_id = tweet['id']
@@ -182,9 +207,58 @@ class Reply (models.Model):
 
     tweet_id = models.CharField(max_length=64, null=True)
 
+    objects = TweetedObjectManager()
+
     class Meta:
         verbose_name_plural = 'replies'
         ordering = ('created_at',)
 
     def __unicode__(self):
         return '%s replied to "%s"' % (self.author, self.vision)
+
+    def load_from_tweet(self, tweet_id, commit=True):
+        tweet = self.get_tweet(tweet_id)
+
+        self.text = tweet['text']
+        self.tweet_id = tweet['id']
+
+        user_id = tweet['user']['id']
+        username = tweet['user']['screen_name']
+        try:
+            user_social_auth = UserSocialAuth(uid=user_id, provider='twitter')
+            user = user_social_auth.user
+        except UserSocialAuth.DoesNotExist:
+            suffix = ''
+            while True:
+                user, created = User.objects.get_or_create(username=username + suffix)
+                if created:
+                    user_full_name = tweet['user']['name'].split(' ', 1)
+                    user.first_name = user_full_name[0]
+                    if len(user_full_name) > 1:
+                        user.last_name = user_full_name[1]
+                    user.save()
+
+                    user_social_auth = UserSocialAuth.objects.create(
+                        user=user,
+                        uid=user_id,
+                        provider='twitter',
+                        extra_data='{"access_token": "oauth_token_secret=123&oauth_token=abc", "id": %s}' % (user_id,),
+                    )
+
+                    break
+                else:
+                    suffix = str(randint(0, 999999))
+
+        self.username = tweet['user']['screen_name']
+        for media in tweet['entities']['media']:
+            if media['type'] == 'photo':
+                self.media_url = media['media_url']
+                break
+
+        if commit:
+            self.save()
+
+    def save(self, *args, **kwargs):
+        if self.tweet_id and not self.username and not self.text and not self.media_url:
+            self.load_from_tweet(self.tweet_id, commit=False)
+        return super(Moment, self).save(*args, **kwargs)
