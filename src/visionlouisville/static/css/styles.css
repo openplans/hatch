@@ -940,6 +940,10 @@ ul.user-list {
   border-bottom: 1px solid #d5d5c6;
   box-shadow: 0 1px 0 rgba(255,255,255,0.75);
 }
+li:last-child .user-card {
+  border-bottom: 0;
+  box-shadow: none;
+}
 .user-card .author {
   display: block;
   padding: 5px 0;
