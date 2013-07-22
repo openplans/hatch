@@ -37,6 +37,7 @@ django-social-auth
 # ==============================
 
 djangorestframework
+PIL  # For image verification
 
 
 
