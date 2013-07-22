@@ -1,7 +1,9 @@
-<article class="user clearfix">
+<article class="user user-card clearfix">
 
-  <img src="{{ avatar_url }}" alt="{{ full_name }}" title="{{ full_name }}">
-  <strong>{{ full_name }}</strong>
-  <a href="http://twitter.com/{{ username }}" target="_blank">@{{ username }}</a>
+  <a class="user-link"><img class="avatar" src="{{ avatar_url }}" alt="{{ full_name }}" title="{{ full_name }}"></a>
+  <span  class="author">
+    <strong class="author-name">{{ full_name }}</strong>
+    <a class="twitter-handle" href="http://twitter.com/{{ username }}" target="_blank">@{{ username }}</a>
+  </span>
 
 </article>

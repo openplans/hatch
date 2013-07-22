@@ -80,7 +80,7 @@
             <a href="#" class="user-menu-avatar"><img src="{{ user_data.avatar_url }}"></a>
             <ul class="user-menu unstyled-list">
               <li class="sub-menu-item"><a href="{% url 'logout' %}" class="authentication-link authentication-link-logout">Sign out</a></li>
-              <li class="sub-menu-item"><a href="#" class="">My Visions</a></li>
+              <!-- <li class="sub-menu-item"><a href="#" class="">My Visions</a></li> -->
             </ul>
           </li>
           {% else %}
@@ -90,7 +90,7 @@
           {% if user.is_authenticated %}
           <li class="main-menu-item add-vision"><a href="/visions/new"><img src="{{ STATIC_URL }}images/nav-addviz.png" class="menu-icon"><span class="is-hidden">Add My Vision</span></a></li>
           {% endif %}
-          <li class="main-menu-item list-users"><a href="/users/list"><img src="{{ STATIC_URL }}images/nav-users.png" class="menu-icon"><span class="is-hidden">Users</span></a></li>
+          <li class="main-menu-item list-users"><a href="/users/list/visionaries"><img src="{{ STATIC_URL }}images/nav-users.png" class="menu-icon"><span class="is-hidden">Users</span></a></li>
           <li class="main-menu-item list-visions"><a href="/visions/list"><img src="{{ STATIC_URL }}images/nav-list.png" class="menu-icon"><span class="is-hidden">Visions</span></a></li>
         </ul>
       </nav>
