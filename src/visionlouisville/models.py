@@ -42,7 +42,7 @@ class Vision (models.Model):
     text = models.TextField()
     featured = models.BooleanField(default=False)
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
-    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
+    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='shared', blank=True, through='Share')
     inspiration = models.ForeignKey('Moment', null=True, blank=True)
 
     tweet_id = models.CharField(max_length=64, null=True)

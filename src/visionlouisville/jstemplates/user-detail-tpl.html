@@ -1,0 +1,28 @@
+<div class="container">
+  <article class="user user-card clearfix">
+
+    <div class="user-summary clearfix">
+    <a href="/users/{{ id }}" class="user-link"><img class="avatar" src="{{ avatar_url }}" alt="{{ full_name }}" title="{{ full_name }}"></a>
+    <span  class="author">
+      <strong class="author-name">{{ full_name }}</strong>
+      <a class="twitter-handle" href="http://twitter.com/{{ username }}" target="_blank">@{{ username }}</a>
+    </span>
+    <span class="user-meta">
+      <span class="user-vision-count nobreak">{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</span>
+      <span class="meta-sep">|</span>
+      <span class="user-support-count nobreak">{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</span>
+      <span class="meta-sep">|</span>
+      <span class="user-reply-count nobreak">{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</span>
+    </span>
+    </div>
+
+    <div class="activity clearfix">
+      <h5>My Visions</h5>
+      <div class="visions-region"></div>
+
+      <h5>Visions I Support</h5>
+      <div class="supported-region"></div>
+    </div>
+
+  </article>
+</div>

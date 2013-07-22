@@ -80,6 +80,20 @@ var VisionLouisville = VisionLouisville || {};
 
   // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
+    relations: [{
+      type: Backbone.HasMany,
+      key: 'visions',
+      relatedModel: 'VisionModel'
+    },{
+      type: Backbone.HasMany,
+      key: 'supported',
+      relatedModel: 'VisionModel'
+    },{
+      type: Backbone.HasMany,
+      key: 'replies',
+      relatedModel: 'ReplyModel'
+    }],
+
     support: function(vision) {
       var supporters = vision.get('supporters');
 

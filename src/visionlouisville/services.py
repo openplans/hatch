@@ -155,6 +155,10 @@ class TwitterService (object):
         user_info = self.get_user_info(user, on_behalf_of)
         return user_info['name']
 
+    def get_bio(self, user, on_behalf_of):
+        user_info = self.get_user_info(user, on_behalf_of)
+        return user_info['description']
+
     # ==================================================================
     # User-specific info, from the database, used for authenticating
     # against Twitter on behalf of a specific user

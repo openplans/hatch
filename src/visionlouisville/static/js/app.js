@@ -36,6 +36,7 @@ var VisionLouisville = VisionLouisville || {};
       'visions/:id': 'showVision',
       'users/list': 'listUsers',
       'users/list/:id': 'listUsers',
+      'users/:id': 'showUser',
       'ally-signup': 'allySignup',
       '': 'home'
     }
@@ -156,15 +157,22 @@ var VisionLouisville = VisionLouisville || {};
           },
 
           getVisionariesListView = function(collection) {
+            var visionaries = collection.filter(function(model) {
+                  return _.indexOf(model.get('groups'), 'allies') === -1;
+                }).slice(0, 20);
             return new NS.UserAvatarListView({
-              collection: new NS.UserCollection(collection.slice(0, 20)),
+              collection: new NS.UserCollection(visionaries),
               template: '#home-visionaries-tpl'
             });
           },
 
           getAlliesListView = function(collection) {
+            var allies = collection.filter(function(model) {
+                  return _.indexOf(model.get('groups'), 'allies') > -1;
+                }).slice(0, 20);
+
             return new NS.UserAvatarListView({
-              collection: new NS.UserCollection(collection.slice(0, 20)),
+              collection: new NS.UserCollection(allies),
               template: '#home-allies-tpl'
             });
           };
@@ -173,19 +181,52 @@ var VisionLouisville = VisionLouisville || {};
       NS.app.mainRegion.show(homeView);
       // Render the carousel
       NS.showViewInRegion(NS.app.visionCollection, homeView.visionCarousel, getVisionCarouselView);
-      // // Render visionaries
-      NS.showViewInRegion(NS.app.visionaryCollection, homeView.visionaries, getVisionariesListView);
-      // // Render allies
-      NS.showViewInRegion(NS.app.allyCollection, homeView.allies, getAlliesListView);
+      // Render visionaries
+      NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView);
+      // Render allies
+      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
-      var userListLayout = new NS.UserListLayout(),
-          userListView = new NS.UserListView({
-            collection: id === 'allies' ? NS.app.allyCollection : NS.app.visionaryCollection
-          });
+      var userListLayout = new NS.UserListLayout({
+            model: new Backbone.Model({show_allies: id === 'allies'})
+          }),
+          getUserListView = function(collection, options) {
+            var filterUsers;
+
+            if (options.id === 'allies') {
+              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') > -1; };
+            } else {
+              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') === -1; };
+            }
+
+            return new NS.UserListWithFilterView({
+              collection: new NS.UserCollection(collection.filter(filterUsers)),
+            });
+          };
 
       NS.app.mainRegion.show(userListLayout);
-      userListLayout.userList.show(userListView);
+      NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id});
+    },
+    showUser: function(id) {
+      var getUserDetailView = function(collection, options) {
+        var model = collection.get(options.id),
+            view = new NS.UserDetailView({
+              model: model
+            });
+
+        view.on('show', function() {
+          view.visions.show(new NS.UserListView({
+            collection: model.get('visions')
+          }));
+
+          view.supported.show(new NS.UserListView({
+            collection: model.get('supported')
+          }));
+        });
+
+        return view;
+      };
+      NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id});
     }
   };
 
@@ -294,18 +335,11 @@ var VisionLouisville = VisionLouisville || {};
       cache: false
     });
 
-    NS.app.visionaryCollection = new NS.UserCollection();
-    NS.app.visionaryCollection.fetch({
+    NS.app.userCollection = new NS.UserCollection();
+    NS.app.userCollection.fetch({
       reset: true,
       cache: false,
-      data: { notgroup: 'allies', visible_on_home: true }
-    });
-
-    NS.app.allyCollection = new NS.UserCollection();
-    NS.app.allyCollection.fetch({
-      reset: true,
-      cache: false,
-      data: { group: 'allies', visible_on_home: true }
+      data: { visible_on_home: true }
     });
 
     NS.app.visionCollection.on('add', function(model, collection, options) {
