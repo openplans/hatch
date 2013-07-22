@@ -4,8 +4,6 @@
 
 /* TEMPORARILY HIDE ELEMENTS THAT DON'T LINK TO ANYWHERE YET */
 .main-menu-item.list-users,
-.visionaries-region a.btn.btn-block,
-.allies-region a.btn.btn-block,
 .user-menu.unstyled-list li.sub-menu-item:last-child { display: none; }
 
 /* =Base Styles

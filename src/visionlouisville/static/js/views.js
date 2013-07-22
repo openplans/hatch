@@ -400,4 +400,24 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  // Users ====================================================================
+  NS.UserListLayout = Backbone.Marionette.Layout.extend({
+    template: '#user-list-layout-tpl',
+    regions: {
+      userList: '.user-list-region'
+    }
+  });
+
+  NS.UserListItemView = Backbone.Marionette.ItemView.extend({
+    template: '#user-list-item-tpl',
+    tagName: 'li'
+  });
+
+  NS.UserListView = Backbone.Marionette.CollectionView.extend({
+    tagName: 'ul',
+    className: 'unstyled-list',
+    itemView: NS.UserListItemView
+  });
+
+
 }(VisionLouisville));

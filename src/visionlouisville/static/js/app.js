@@ -5,6 +5,26 @@ var VisionLouisville = VisionLouisville || {};
 (function(NS) {
   'use strict';
 
+  // Helpers ==================================================================
+  // Create a view and show it in a region only AFTER you get results back from
+  // a collection.
+  NS.showViewInRegion = function(collection, region, getView, options) {
+    var render = function() {
+      var view = getView(collection, options);
+      region.show(view);
+    };
+
+    // Nothing in the collection? It's not done fetching. Let's wait for it.
+    if (collection.size() === 0) {
+      // Render when the collection resets
+      collection.once('reset', function() {
+        render();
+      });
+    } else {
+      render();
+    }
+  };
+
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
@@ -14,6 +34,8 @@ var VisionLouisville = VisionLouisville || {};
       'visions/new': 'newVision',
       'visions/list': 'listVisions',
       'visions/:id': 'showVision',
+      'users/list': 'listUsers',
+      'users/list/:id': 'listUsers',
       'ally-signup': 'allySignup',
       '': 'home'
     }
@@ -32,36 +54,28 @@ var VisionLouisville = VisionLouisville || {};
       // TODO: Move to the config settings
       document.title = "#VizLou | Explore visions" + (listCategory ? ' \u2014 ' + listCategory : '');
 
-      var render = function() {
-        var model, collection;
+      var getVisionListView = function(collection, options) {
+        var model;
 
-        if (listCategory) {
-          model = new Backbone.Model({category: listCategory});
+        if (options.listCategory) {
+          model = new Backbone.Model({category: options.listCategory});
           collection = new Backbone.Collection(
-            NS.app.visionCollection.filter(function(model) {
+            collection.filter(function(model) {
               var category = model.get('category');
-              return (!!category ? category : '').toLowerCase() === listCategory;
+              return (!!category ? category : '').toLowerCase() === options.listCategory;
             }));
         } else {
           model = new Backbone.Model();
-          collection = NS.app.inputStreamCollection;
         }
 
-        NS.app.mainRegion.show(new NS.VisionListView({
+        return new NS.VisionListView({
           model: model,
           collection: collection
-        }));
+        });
       };
 
-      // Nothing in the collection? It's not done fetching. Let's wait for it.
-      if (NS.app.inputStreamCollection.size() === 0) {
-        // Render when the collection resets
-        NS.app.inputStreamCollection.once('reset', function() {
-          render();
-        });
-      } else {
-        render();
-      }
+       NS.showViewInRegion(NS.app.inputStreamCollection, NS.app.mainRegion,
+        getVisionListView, {listCategory: listCategory});
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
@@ -86,9 +100,12 @@ var VisionLouisville = VisionLouisville || {};
     newVisionWithInspiration: function(momentId) {
       this.newVision(undefined, momentId);
     },
-    showVision: function(id) {
-      function render() {
-        var model = NS.app.visionCollection.get(id),
+    showVision: function(visionId) {
+      // Set to an int
+      visionId = parseInt(visionId, 10);
+
+      var getVisionDetailView = function(collection, options) {
+        var model = collection.get(options.visionId),
             layout = new NS.VisionDetailLayout({
               model: model
             });
@@ -96,30 +113,24 @@ var VisionLouisville = VisionLouisville || {};
         // TODO: Move to the config settings
         document.title = '#VizLou | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
 
-        NS.app.mainRegion.show(layout);
+        // TODO: why is this necessary?
+        layout.on('show', function() {
+          layout.replies.show(new NS.ReplyListView({
+            model: model,
+            collection: model.get('replies')
+          }));
 
-        layout.replies.show(new NS.ReplyListView({
-          model: model,
-          collection: model.get('replies')
-        }));
-
-        layout.support.show(new NS.SupportListView({
-          model: model,
-          collection: model.get('supporters')
-        }));
-      }
-
-      id = parseInt(id, 10);
-
-      // Nothing in the collection? It's not done fetching. Let's wait for it.
-      if (NS.app.visionCollection.size() === 0) {
-        // Render when the collection resets
-        NS.app.visionCollection.once('reset', function() {
-          render();
+          layout.support.show(new NS.SupportListView({
+            model: model,
+            collection: model.get('supporters')
+          }));
         });
-      } else {
-        render();
-      }
+
+        return layout;
+      };
+
+      NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
+        getVisionDetailView, {visionId: visionId});
     },
     home: function() {
       // TODO: Move to the config settings
@@ -128,54 +139,53 @@ var VisionLouisville = VisionLouisville || {};
       var homeView = new NS.HomeView({
             collection: NS.app.visionCollection
           }),
-          visionaryCollection = new NS.UserCollection(),
-          allyCollection = new NS.UserCollection();
 
-      function renderVisionCarousel() {
-        var visionCarouselView = new NS.VisionCarouselView({
-          collection: new NS.VisionCollection(
-            NS.app.visionCollection.getFeatured()
-          )
-        });
+          getVisionCarouselView = function(collection) {
+            var visionCarouselView = new NS.VisionCarouselView({
+              collection: new NS.VisionCollection(
+                collection.getFeatured()
+              )
+            });
 
-        homeView.visionCarousel.on('show', function() {
-          // Init the carousel after we're in the DOM
-          visionCarouselView.initCarousel();
-        });
-        homeView.visionCarousel.show(visionCarouselView);
-      }
+            homeView.visionCarousel.on('show', function() {
+              // Init the carousel after we're in the DOM
+              visionCarouselView.initCarousel();
+            });
 
+            return visionCarouselView;
+          },
+
+          getVisionariesListView = function(collection) {
+            return new NS.UserAvatarListView({
+              collection: new NS.UserCollection(collection.slice(0, 20)),
+              template: '#home-visionaries-tpl'
+            });
+          },
+
+          getAlliesListView = function(collection) {
+            return new NS.UserAvatarListView({
+              collection: new NS.UserCollection(collection.slice(0, 20)),
+              template: '#home-allies-tpl'
+            });
+          };
+
+      // Render the main view
       NS.app.mainRegion.show(homeView);
+      // Render the carousel
+      NS.showViewInRegion(NS.app.visionCollection, homeView.visionCarousel, getVisionCarouselView);
+      // // Render visionaries
+      NS.showViewInRegion(NS.app.visionaryCollection, homeView.visionaries, getVisionariesListView);
+      // // Render allies
+      NS.showViewInRegion(NS.app.allyCollection, homeView.allies, getAlliesListView);
+    },
+    listUsers: function(id) {
+      var userListLayout = new NS.UserListLayout(),
+          userListView = new NS.UserListView({
+            collection: id === 'allies' ? NS.app.allyCollection : NS.app.visionaryCollection
+          });
 
-      visionaryCollection.fetch({
-        data: {notgroup: 'allies', visible_on_home: true},
-        success: function(collection, response, options) {
-          homeView.visionaries.show(new NS.UserAvatarListView({
-            collection: new NS.UserCollection(collection.slice(0, 20)),
-            template: '#home-visionaries-tpl'
-          }));
-        }
-      });
-
-      allyCollection.fetch({
-        data: {group: 'allies', visible_on_home: true},
-        success: function(collection, response, options) {
-          homeView.allies.show(new NS.UserAvatarListView({
-            collection: new NS.UserCollection(collection.slice(0, 20)),
-            template: '#home-allies-tpl'
-          }));
-        }
-      });
-
-      // Nothing in the collection? It's not done fetching. Let's wait for it.
-      if (NS.app.visionCollection.size() === 0) {
-        // Render when the collection resets
-        NS.app.visionCollection.once('reset', function() {
-          renderVisionCarousel();
-        });
-      } else {
-        renderVisionCarousel();
-      }
+      NS.app.mainRegion.show(userListLayout);
+      userListLayout.userList.show(userListView);
     }
   };
 
@@ -246,7 +256,8 @@ var VisionLouisville = VisionLouisville || {};
 
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
-           href.indexOf('/visions') === 0) &&
+           href.indexOf('/visions') === 0 ||
+           href.indexOf('/users') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
@@ -281,6 +292,20 @@ var VisionLouisville = VisionLouisville || {};
     NS.app.inputStreamCollection.fetch({
       reset: true,
       cache: false
+    });
+
+    NS.app.visionaryCollection = new NS.UserCollection();
+    NS.app.visionaryCollection.fetch({
+      reset: true,
+      cache: false,
+      data: { notgroup: 'allies', visible_on_home: true }
+    });
+
+    NS.app.allyCollection = new NS.UserCollection();
+    NS.app.allyCollection.fetch({
+      reset: true,
+      cache: false,
+      data: { group: 'allies', visible_on_home: true }
     });
 
     NS.app.visionCollection.on('add', function(model, collection, options) {
