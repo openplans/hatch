@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
     UserChangeForm as BaseUserChangeForm,
 )
 from .models import Vision, Reply, Share, Moment, User
+from .views import VisionViewSet
 
 
 class ShareInline (admin.TabularInline):
@@ -24,7 +25,17 @@ class VisionAdmin (admin.ModelAdmin):
     list_display = ('__unicode__', 'author', 'category', 'featured', 'created_at', 'updated_at')
     list_editable = ('featured',)
     list_filter = ('category', 'created_at', 'updated_at')
+    readonly_fields = ('tweet_text',)
     search_fields = ('text', 'category')
+
+    def change_view(self, request, *args, **kwargs):
+        # Save the request so that we can use it when
+        # constructing the tweet text.
+        self.request = request
+        return super(VisionAdmin, self).change_view(request, *args, **kwargs)
+
+    def tweet_text(self, vision):
+        return VisionViewSet.get_app_tweet_text(self.request, vision)
 
 
 class UserCreationForm (BaseUserCreationForm):

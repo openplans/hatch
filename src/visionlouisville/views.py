@@ -29,6 +29,7 @@ from .services import default_twitter_service
 class AppMixin (object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    @classmethod
     def get_twitter_service(self):
         return default_twitter_service
 
@@ -44,7 +45,8 @@ class AppMixin (object):
         context['requesting_user'] = self.get_requesting_user()
         return context
 
-    def get_vision_url(self, request, vision):
+    @classmethod
+    def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
             '/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
@@ -155,9 +157,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
         return queryset
 
     # TODO: Move this into the settings/config
-    def get_app_tweet_text(self, request, vision):
-        vision_url = self.get_vision_url(request, vision)
-        service = self.get_twitter_service()
+    @classmethod
+    def get_app_tweet_text(cls, request, vision):
+        vision_url = cls.get_vision_url(request, vision)
+        service = cls.get_twitter_service()
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
@@ -169,9 +172,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
             vision_url
         ])
 
-    def get_user_tweet_text(self, request, vision):
-        vision_url = self.get_vision_url(request, vision)
-        service = self.get_twitter_service()
+    @classmethod
+    def get_user_tweet_text(cls, request, vision):
+        vision_url = cls.get_vision_url(request, vision)
+        service = cls.get_twitter_service()
         url_length = service.get_url_length(vision_url)
 
         vision_length = 140 - url_length - 1
