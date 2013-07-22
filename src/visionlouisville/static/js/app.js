@@ -207,9 +207,7 @@ var VisionLouisville = VisionLouisville || {};
 
     // Gobal-level events
     this.router.bind('route', function(route, router) {
-      if (window.ga) {
-        window.ga('send', 'pageview', NS.getCurrentPath());
-      }
+      NS.Utils.log('send', 'pageview', NS.getCurrentPath());
       $('.authentication-link-login').attr('href', NS.getLoginUrl());
     });
 
@@ -289,7 +287,19 @@ var VisionLouisville = VisionLouisville || {};
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
                                           {url: '/api/users/current/'});
-    NS.app.currentUser.fetch();
+
+    // Set the appropriate authentication info for analytics
+    var currentUserStatus;
+    if (NS.app.currentUser.isAuthenticated()) {
+      if (NS.app.currentUser.isInGroup('allies')) {
+        currentUserStatus = 'ally';
+      } else {
+        currentUserStatus = 'visionary';
+      }
+    } else {
+      currentUserStatus = 'anonymous';
+    }
+    NS.Utils.log('set', 'dimension1', currentUserStatus);
 
     NS.app.start({
       visionCollection: NS.app.visionCollection

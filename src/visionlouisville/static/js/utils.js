@@ -50,6 +50,17 @@ var VisionLouisville = VisionLouisville || {};
     },
 
     // ====================================================
+    // Analytics
+
+    log: function() {
+      if (window.ga) {
+        window.ga.apply(window, arguments);
+      } else {
+        console.log.call(console, 'Logging:', arguments);
+      }
+    },
+
+    // ====================================================
     // String utils
 
     // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
