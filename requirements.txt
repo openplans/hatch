@@ -21,6 +21,8 @@ django-celery
 psycopg2
 south
 django-redis
+django-storages
+boto
 
 
 

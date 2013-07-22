@@ -166,6 +166,7 @@ COMMUNITY_APPS = (
     'debug_toolbar',
     'social_auth',
     'shorturls',
+    'storages',
     'rest_framework',
     'jstemplate',
     'djcelery',
