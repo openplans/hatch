@@ -94,7 +94,7 @@ class TweetedObjectManager (models.Manager):
     """
     Using this manager requires the associated model to:
       * Have a tweet_id attribute, and
-      * Have a load_from_tweet method that takes either a tweet id or a 
+      * Have a load_from_tweet method that takes either a tweet id or a
         dictionary that represents tweet
     """
     def __init__(self, model):
