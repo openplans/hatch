@@ -137,7 +137,11 @@ var VisionLouisville = VisionLouisville || {};
       return !this.isNew();
     },
     isInGroup: function(group) {
-      return (this.get('groups').indexOf(group) !== -1);
+      if (_.isUndefined(this.get('groups'))) {
+        return false;
+      } else {
+        return (this.get('groups').indexOf(group) !== -1);
+      }
     }
   });
 

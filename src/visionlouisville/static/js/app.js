@@ -346,9 +346,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.app.inputStreamCollection.add(model, {at: 0});
     });
 
-    NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},
-                                          {url: '/api/users/current/'});
-    NS.app.currentUser.fetch();
+    NS.app.currentUser = new NS.UserModel(NS.currentUserData || {});
 
     NS.app.start({
       visionCollection: NS.app.visionCollection
