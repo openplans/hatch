@@ -28,7 +28,7 @@ var VisionLouisville = VisionLouisville || {};
       relatedModel: 'UserModel'
     }],
     sync: function(method, model, options) {
-      if (method == 'create' && model.get('media')) {
+      if (method === 'create' && model.get('media')) {
         var attr, val;
 
         // If we are saving media, submit the model as a form

@@ -366,6 +366,8 @@ var VisionLouisville = VisionLouisville || {};
       'change .vision-media input': 'handleMediaFileChange'
     },
     ui: {
+      file: 'input[type=file]',
+      imagePreview: '.image-preview',
       submit: 'input[type=submit]'
     },
     onRender: function() {
@@ -446,13 +448,21 @@ var VisionLouisville = VisionLouisville || {};
       if(evt.target.files && evt.target.files.length) {
         file = evt.target.files[0];
 
+        // Is it an image?
+        if (file.type.indexOf('image') !== 0) {
+          window.alert('Sorry, we only support images.');
+          this.ui.file.val('');
+          return;
+        }
+
         NS.Utils.fileToCanvas(file, function(canvas) {
           canvas.toBlob(function(blob) {
 
             NS.Utils.log('send', 'event', 'vision-add-image');
 
             self.model.set('media', blob);
-            // previewUrl = canvas.toDataURL('image/jpeg');
+            var previewUrl = canvas.toDataURL('image/jpeg');
+            self.ui.imagePreview.attr('src', previewUrl);
           }, 'image/jpeg');
         }, {
           // TODO: make configurable
