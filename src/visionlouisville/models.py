@@ -103,7 +103,7 @@ class TweetedModelMixin (object):
         return tweet
 
     def set_media_from_tweet(self, tweet):
-        for media in tweet['entities']['media']:
+        for media in tweet['entities'].get('media', []):
             if media['type'] == 'photo':
                 self.media_url = media['media_url']
                 break
@@ -207,7 +207,7 @@ class Vision (TweetedModelMixin, models.Model):
 
     def save(self, *args, **kwargs):
         # import pdb; pdb.set_trace()
-        if self.tweet_id and not any([self.author, self.text]):
+        if self.tweet_id and not any([self.text, self.media_url]):
             self.load_from_tweet(self.tweet_id, commit=False)
         return super(Vision, self).save(*args, **kwargs)
 
