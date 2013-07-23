@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.timezone import now, timedelta
-from visionlouisville.tasks import listen_for_moments
+from visionlouisville.tasks import listen_for_tweets
 
 from twitter import TwitterHTTPError
 from ssl import SSLError
@@ -13,14 +13,14 @@ log = getLogger(__name__)
 
 class Command(BaseCommand):
     args = ''
-    help = 'Import new tweets that mention the moment keywords'
+    help = 'Import new tweets that mention the streaming keywords'
 
     def handle(self, *args, **options):
         while True:
             try:
                 last_connect_attempt_time = now()
                 reconnect_delay = 0
-                listen_for_moments()
+                listen_for_tweets()
 
             except SSLError as e:
                 log.error('\n*** Received an SSL error while streaming from '

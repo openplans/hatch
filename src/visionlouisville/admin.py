@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (
     UserCreationForm as BaseUserCreationForm,
     UserChangeForm as BaseUserChangeForm,
 )
-from .models import Vision, Reply, Share, Moment, User
+from .models import Vision, Reply, Share, User
 from .views import VisionViewSet
 
 
@@ -71,6 +71,5 @@ class UserAdmin (BaseUserAdmin):
     list_editable = BaseUserAdmin.list_editable + ('visible_on_home',)
 
 
-admin.site.register(Moment)
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)

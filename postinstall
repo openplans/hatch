@@ -102,8 +102,8 @@ TWITTER_ACCESS_TOKEN = env['TWITTER_ACCESS_TOKEN']
 TWITTER_ACCESS_SECRET = env['TWITTER_ACCESS_SECRET']
 
 # For monitoring the Twitter streaming API
-MOMENT_KEYWORDS = \
-    env['MOMENT_KEYWORDS'].split(',') if 'MOMENT_KEYWORDS' in env \
+STREAMING_KEYWORDS = \
+    env['STREAMING_KEYWORDS'].split(',') if 'STREAMING_KEYWORDS' in env \
     else ['#' + env['TWITTER_USERNAME']]
 
 ALLOWED_HOSTS = ['*']

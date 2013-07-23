@@ -18,11 +18,10 @@ from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
-from .models import Moment, Reply, User, Vision
+from .models import Reply, User, Vision
 from .forms import SecretAllySignupForm
 from .serializers import (
-    ReplySerializer, UserSerializer, VisionSerializer,
-    MomentSerializerWithType, VisionSerializerWithType)
+    ReplySerializer, UserSerializer, VisionSerializer)
 from .services import default_twitter_service
 
 
@@ -70,9 +69,6 @@ class AppMixin (object):
             .filter(social_count__gt=0)\
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
-
-    def get_moment_queryset(self):
-        return Moment.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
@@ -311,39 +307,6 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
 
         self.request.user.share(vision, tweet_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class InputSteamAPIView (AppMixin, GenericAPIView):
-    def get(self, request):
-        visions = self.get_vision_queryset()
-        moments = self.get_moment_queryset()
-
-        vision_serializer = VisionSerializerWithType(visions, many=True)
-        vision_serializer.context = self.get_serializer_context()
-
-        moment_serializer = MomentSerializerWithType(moments, many=True)
-        vision_serializer.context = self.get_serializer_context()
-
-        serialized_visions = vision_serializer.data
-        serialized_moments = moment_serializer.data
-
-        integrated_list = []
-        while serialized_visions and serialized_moments:
-            try:
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_moments.pop(0))
-            except IndexError:
-                pass
-
-        if serialized_visions:
-            integrated_list += serialized_visions
-
-        if serialized_moments:
-            integrated_list += serialized_moments
-
-        return Response(integrated_list)
 
 
 # App views

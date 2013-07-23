@@ -1,7 +1,7 @@
 from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
     SerializerMethodField, RelatedField, ValidationError)
-from .models import User, Vision, Reply, Moment
+from .models import User, Vision, Reply
 from .services import SocialMediaException
 
 
@@ -136,16 +136,6 @@ class ReplySerializer (ModelSerializer):
         model = Reply
 
 
-class MomentSerializer (ModelSerializer):
-    id = SerializerMethodField('get_id')
-
-    class Meta:
-        model = Moment
-
-    def get_id(self, obj):
-        return 'moment-%s' % (obj.id,)
-
-
 class VisionSerializer (ModelSerializer):
     author_details = UserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
@@ -174,17 +164,3 @@ class VisionSerializer (ModelSerializer):
             data['media_url'] = Vision.upload_photo(media)
 
         return super(VisionSerializer, self).from_native(data, {})
-
-
-class MomentSerializerWithType (MomentSerializer):
-    type = SerializerMethodField('get_input_type')
-
-    def get_input_type(self, obj):
-        return 'moment'
-
-
-class VisionSerializerWithType (VisionSerializer):
-    type = SerializerMethodField('get_input_type')
-
-    def get_input_type(self, obj):
-        return 'vision'

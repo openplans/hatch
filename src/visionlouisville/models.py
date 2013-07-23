@@ -63,7 +63,7 @@ class TweetedObjectManager (models.Manager):
     def create_or_update_from_tweet(self, tweet):
         tweet_id = self.get_tweet_id(tweet)
 
-        qs = self.get_queryset()
+        qs = self.get_query_set()
         ModelClass = self.model
 
         try:
@@ -78,10 +78,10 @@ class TweetedObjectManager (models.Manager):
             with transaction.commit_on_success():
                 obj.load_from_tweet(tweet)
         except IntegrityError:
-            # Since we've already checked for moments with this tweet_id, we would
+            # Since we've already checked for objects with this tweet_id, we would
             # only have an integrity error at this point if some other thread or
-            # process created a moment with the same tweet ID right before the
-            # moment.save(). Since that's the case, just assume that we're ok with
+            # process created a object with the same tweet ID right before the
+            # obj.save(). Since that's the case, just assume that we're ok with
             # that.
             pass
 
@@ -110,9 +110,6 @@ class TweetedModelMixin (object):
 
     def set_text_from_tweet(self, tweet):
         self.text = tweet['text']
-
-    def set_username_from_tweet(self, tweet):
-        self.username = tweet['user']['screen_name']
 
     def set_user_from_tweet(self, tweet):
         user_id = tweet['user']['id']
@@ -164,7 +161,6 @@ class Vision (TweetedModelMixin, models.Model):
 
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
     sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
-    inspiration = models.ForeignKey('Moment', null=True, blank=True)
 
     objects = TweetedObjectManager()
 
@@ -219,45 +215,6 @@ class Share (models.Model):
 
     def __unicode__(self):
         return '%s shared "%s"' % (self.user, self.vision)
-
-
-class Moment (TweetedModelMixin, models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    tweet_id = models.CharField(
-        max_length=64, null=True,
-        help_text=(_(
-            "You can fill in the tweet id and leave the other fields "
-            "blank. For example, if the tweet URL is http://www.twitter.com/"
-            "myuser/status/1234567890, then the tweet id is 1234567890.")))
-    username = models.CharField(max_length=20, blank=True)
-    text = models.TextField(blank=True)
-    media_url = models.URLField(blank=True)
-
-    objects = TweetedObjectManager()
-
-    class Meta:
-        ordering = ('-created_at',)
-
-    def __unicode__(self):
-        return '%s (%s)' % (self.text, self.media_url)
-
-    def load_from_tweet(self, tweet_id, commit=True):
-        tweet = self.get_tweet(tweet_id)
-        self.tweet_id = tweet['id']
-
-        self.set_text_from_tweet(tweet)
-        self.set_media_from_tweet(tweet)
-        self.set_username_from_tweet(tweet)
-
-        if commit:
-            self.save()
-
-    def save(self, *args, **kwargs):
-        if self.tweet_id and not self.username and not self.text and not self.media_url:
-            self.load_from_tweet(self.tweet_id, commit=False)
-        return super(Moment, self).save(*args, **kwargs)
 
 
 class Reply (TweetedModelMixin, models.Model):
