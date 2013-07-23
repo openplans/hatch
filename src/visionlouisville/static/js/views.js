@@ -165,6 +165,9 @@ var VisionLouisville = VisionLouisville || {};
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
+
+      NS.Utils.log('send', 'event', 'vision-reply-new', this.model.id);
+
       var $form = this.$('.reply-form').show(),
           $field = $form.find(':input[type!=hidden]:first'),
           val = $field.val();
@@ -172,7 +175,9 @@ var VisionLouisville = VisionLouisville || {};
       $field.focus().val('').val(val);
     },
     handleFormSubmission: function(evt) {
-      NS.Utils.log('event', 'vision-reply', this.model.id);
+
+      NS.Utils.log('event', 'vision-reply-save', this.model.id);
+
       evt.preventDefault();
       var form = evt.target,
           data = NS.Utils.serializeObject(form),
@@ -256,6 +261,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
+
       if (NS.app.currentUser.isAuthenticated()) {
         this.regionManager.get('replies').currentView.showReplyForm(evt);
       } else {
@@ -272,21 +278,33 @@ var VisionLouisville = VisionLouisville || {};
             user = NS.app.currentUser;
 
         if (supporters.contains(user)) {
+
+          NS.Utils.log('send', 'event', 'vision-unsupport', this.model.id);
+
           user.unsupport(vision);
           this.$('.support').removeClass('supported');
         } else {
+
+          NS.Utils.log('send', 'event', 'vision-support', this.model.id);
+
           user.support(vision);
           this.$('.support').addClass('supported');
         }
 
         this.$('.total-support-count').html(this.totalSupportString());
       } else {
+
+        // It's nice to know when unauthenticated users click support too
+        NS.Utils.log('send', 'event', 'vision-support', this.model.id);
+
         this.$('.retweet-login-prompt').addClass('is-hidden');
         this.$('.support-login-prompt').toggleClass('is-hidden');
       }
     },
     handleRetweet: function(evt) {
       evt.preventDefault();
+
+      NS.Utils.log('send', 'event', 'vision-retweet-start', this.model.id);
 
       if (NS.app.currentUser.isAuthenticated()) {
         this.$('.confirm-retweet-prompt').removeClass('is-hidden');
@@ -302,6 +320,9 @@ var VisionLouisville = VisionLouisville || {};
           user = NS.app.currentUser;
 
       if (!sharers.contains(user)) {
+
+        NS.Utils.log('send', 'event', 'vision-retweet-confirm', this.model.id);
+
         user.share(vision);
         this.$('.retweet').addClass('retweeted');
       }
@@ -310,6 +331,9 @@ var VisionLouisville = VisionLouisville || {};
     },
     handleCancelRetweet: function(evt) {
       evt.preventDefault();
+
+      NS.Utils.log('send', 'event', 'vision-retweet-cancel', this.model.id);
+
       this.$('.confirm-retweet-prompt').addClass('is-hidden');
     },
     totalSupportString: function() {
@@ -367,6 +391,9 @@ var VisionLouisville = VisionLouisville || {};
           invalidEl = this.getFirstInvalidElement(form);
 
       if (invalidEl) {
+
+        NS.Utils.log('send', 'event', 'vision-save', 'invalid');
+
         $(invalidEl).focus();
         invalidEl.select();
       } else {
@@ -386,10 +413,16 @@ var VisionLouisville = VisionLouisville || {};
         wait: true,
         headers: data.headers,
         error: function() {
+
+          NS.Utils.log('send', 'event', 'vision-save', 'fail');
+
           self.ui.submit.prop('disabled', false);
           window.alert('Unable to save your vision. Please try again.');
         },
         success: function(model) {
+
+          NS.Utils.log('send', 'event', 'vision-save', 'success');
+
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
       });
@@ -397,6 +430,11 @@ var VisionLouisville = VisionLouisville || {};
     },
     handleCategoryChange: function() {
       var category = this.$('.vision-category-list input:checked').val();
+
+      if (category) {
+        NS.Utils.log('send', 'event', 'vision-change-category', category);
+      }
+
       this.$('.category-prompt').addClass('is-hidden')
         .filter('.' + category + '-prompt').removeClass('is-hidden');
     },
@@ -410,6 +448,9 @@ var VisionLouisville = VisionLouisville || {};
 
         NS.Utils.fileToCanvas(file, function(canvas) {
           canvas.toBlob(function(blob) {
+
+            NS.Utils.log('send', 'event', 'vision-add-image');
+
             self.model.set('media', blob);
             // previewUrl = canvas.toDataURL('image/jpeg');
           }, 'image/jpeg');
