@@ -922,8 +922,7 @@ ul.user-list {
 .user-list li {
   display: inline;
 }
-.user-list li a,
-.user-list li .pretend-a {
+.user-list li a {
   float: left;
   width: 10%;
 }
@@ -979,7 +978,7 @@ ul.user-list {
   box-shadow: none;
 }
 .tabs-2 tab {
-  
+
 }
 
 

@@ -6,9 +6,7 @@
   <article class="vision clearfix">
 
     <header class="vision-header">
-
-      <!-- FIXME: link to list of user's visions -->
-      <a href="/visions/{{ id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+      <a href="/users/{{ author }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
 
       <a href="/visions/{{ id }}" class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></a>
 
