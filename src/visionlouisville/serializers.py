@@ -167,7 +167,7 @@ class UserSerializer (ManyToNativeMixin, BaseTwitterInfoSerializer):
 
 
 class ReplySerializer (ModelSerializer):
-    author_details = MinimalUserSerializer(source='author', read_only=True)
+    author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     tweet_id = IntegerField(read_only=True)
 
     class Meta:
