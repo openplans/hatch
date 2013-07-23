@@ -221,9 +221,9 @@ a.user-link {
 /* Hide visually and from screenreaders, but maintain layout */
 .is-invisible { visibility: hidden; }
 
-.nobreak {
-  white-space: nowrap;
-}
+.nobreak { white-space: nowrap; }
+.uppercase { text-transform: uppercase; }
+
 
 
 /* =Layout
@@ -960,7 +960,6 @@ ul.user-list {
 }
 .tab {
   float: left;
-  width: 50%;
 }
 .tab a {
   display: block;
@@ -969,7 +968,6 @@ ul.user-list {
   text-decoration: none;
   font-size: medium;
   font-weight: 800;
-  text-transform: uppercase;
   background-color: #d5d5c6;
   box-shadow: inset 0 0 8px #808073;
 }
@@ -977,8 +975,44 @@ ul.user-list {
   background-color: #e7e7d7;
   box-shadow: none;
 }
-.tabs-2 tab {
+.tabs-2 .tab {
+  width: 50%;
+}
+.tabs-3 .tab {
+  width: 34%;
+  box-shadow: 1px 0 0 #808073;
+}
+.tabs-3 .tab:first-child {
+  width: 32%;
+}
 
+
+/* =User Bio
+-------------------------------------------------------------- */
+
+.bio {
+  background: #fff;
+  margin: -20px -10px 0;
+  padding: 20px 10px;
+}
+.bio-avatar {
+  float: left;
+  margin: 0 10px 10px 0;
+  width: 73px;
+  height: 73px;
+}
+.bio-name {
+  margin: 0;
+  padding: 5px 0 0 0;
+  font-size: x-large;
+}
+.bio-twitter-handle {
+  font-size: medium;
+}
+.bio-text {
+  clear: both;
+  font-size: medium;
+  font-weight: 600;
 }
 
 
