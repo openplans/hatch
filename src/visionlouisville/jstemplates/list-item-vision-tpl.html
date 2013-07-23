@@ -12,6 +12,11 @@
     </span>
 
     <span class="vision-title">{{ formattruncated text 140 }}</span>
+    {{# if media_url }}
+    <div class="container-fullwidth container-vision-media">
+      <span class="vision-media"><img src="{{ media_url }}"></span>
+    </div>
+    {{/ if }}
 
     {{# if category }}
     <span class="vision-list-category-icon"><strong class="capitalize">{{ category }}</strong><img src="/static/images/category-icon-d5d5c6-{{ category }}.png" class="icon-inline"></span>
