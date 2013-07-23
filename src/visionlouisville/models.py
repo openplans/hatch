@@ -5,8 +5,9 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import Group, AbstractUser
 from random import randint
+from social_auth.models import UserSocialAuth
 from os.path import join as path_join
-from uuid import uuid4
+from uuid import uuid1, uuid4
 
 import logging
 logger = logging.getLogger(__name__)
@@ -39,57 +40,6 @@ class User (AbstractUser):
         self.groups.remove(group)
 
 
-class Vision (models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, related_name='visions')
-    category = models.CharField(max_length=20, null=True, blank=True)
-    text = models.TextField()
-    media_url = models.URLField(default='', blank=True)
-    featured = models.BooleanField(default=False)
-
-    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
-    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
-    inspiration = models.ForeignKey('Moment', null=True, blank=True)
-
-    tweet_id = models.CharField(max_length=64, null=True)
-
-    class Meta:
-        ordering = ('-created_at',)
-
-    def __unicode__(self):
-        return self.text[:140]
-
-    @classmethod
-    def get_photo_path(cls, filename):
-        if '.' in filename:
-            ext = filename.split('.')[-1]
-            filename = "%s.%s" % (uuid4(), ext)
-        else:
-            filename = str(uuid4())
-        return path_join('photos', now().strftime('%Y/%m/%d'), filename)
-
-    @classmethod
-    def upload_photo(cls, photo, storage=default_storage):
-        path = cls.get_photo_path(photo.name)
-        with storage.open(path, 'wb+') as destination:
-            for chunk in photo.chunks():
-                destination.write(chunk)
-        return storage.url(path)
-
-    def attach_photo(self, photo, storage=default_storage):
-        self.media_url = self.upload_photo(photo, storage)
-
-
-class Share (models.Model):
-    vision = models.ForeignKey(Vision)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shares')
-    tweet_id = models.CharField(max_length=64, null=True)
-
-    def __unicode__(self):
-        return '%s shared "%s"' % (self.user, self.vision)
-
-
 class TweetedObjectManager (models.Manager):
     """
     Using this manager requires the associated model to:
@@ -97,9 +47,6 @@ class TweetedObjectManager (models.Manager):
       * Have a load_from_tweet method that takes either a tweet id or a
         dictionary that represents tweet
     """
-    def __init__(self, model):
-        self.model = model
-
     def get_tweet_id(self, tweet):
         try:
             if isinstance(tweet, (int, str, unicode)):
@@ -142,7 +89,7 @@ class TweetedObjectManager (models.Manager):
 
 
 class TweetedModelMixin (object):
-    def get_tweet(tweet_id):
+    def get_tweet(self, tweet_id):
         """
         Take either a tweet id or a tweet dictionary and normalize into a
         tweet dictionary.
@@ -154,6 +101,124 @@ class TweetedModelMixin (object):
         else:
             tweet = tweet_id
         return tweet
+
+    def set_media_from_tweet(self, tweet):
+        for media in tweet['entities']['media']:
+            if media['type'] == 'photo':
+                self.media_url = media['media_url']
+                break
+
+    def set_text_from_tweet(self, tweet):
+        self.text = tweet['text']
+
+    def set_username_from_tweet(self, tweet):
+        self.username = tweet['user']['screen_name']
+
+    def set_user_from_tweet(self, tweet):
+        user_id = tweet['user']['id']
+        username = tweet['user']['screen_name']
+        try:
+            user_social_auth = UserSocialAuth.objects.get(uid=user_id, provider='twitter')
+            user = user_social_auth.user
+        except UserSocialAuth.DoesNotExist:
+            suffix = ''
+            while True:
+                user, created = User.objects.get_or_create(username=username + suffix)
+                if created:
+                    user_full_name = tweet['user']['name'].split(' ', 1)
+                    user.first_name = user_full_name[0]
+                    if len(user_full_name) > 1:
+                        user.last_name = user_full_name[1]
+                    user.save()
+
+                    user_social_auth = UserSocialAuth.objects.create(
+                        user=user,
+                        uid=user_id,
+                        provider='twitter',
+                        extra_data='{"access_token": "oauth_token_secret=123&oauth_token=abc", "id": %s}' % (user_id,),
+                    )
+
+                    break
+                else:
+                    suffix = str(uuid1())
+        self.author = user
+
+
+class Vision (TweetedModelMixin, models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    tweet_id = models.CharField(
+        max_length=64, null=True,
+        help_text=(_(
+            "You can fill in the tweet id and leave the text and media_url "
+            "fields blank (you must select an author, though it will be "
+            "updated to be the tweet creator). For example, if the tweet URL "
+            "is http://www.twitter.com/myuser/status/1234567890, then the "
+            "tweet id is 1234567890.")))
+    author = models.ForeignKey(User, related_name='visions')
+    category = models.CharField(max_length=20, null=True, blank=True)
+    text = models.TextField(blank=True)
+    media_url = models.URLField(default='', blank=True)
+    featured = models.BooleanField(default=False)
+
+    supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
+    sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
+    inspiration = models.ForeignKey('Moment', null=True, blank=True)
+
+    objects = TweetedObjectManager()
+
+    class Meta:
+        ordering = ('-created_at',)
+
+    def __unicode__(self):
+        return self.text[:140]
+
+    @classmethod
+    def get_photo_path(cls, filename):
+        if '.' in filename:
+            ext = filename.split('.')[-1]
+            filename = "%s.%s" % (uuid4(), ext)
+        else:
+            filename = str(uuid4())
+        return path_join('photos', now().strftime('%Y/%m/%d'), filename)
+
+    @classmethod
+    def upload_photo(cls, photo, storage=default_storage):
+        path = cls.get_photo_path(photo.name)
+        with storage.open(path, 'wb+') as destination:
+            for chunk in photo.chunks():
+                destination.write(chunk)
+        return storage.url(path)
+
+    def attach_photo(self, photo, storage=default_storage):
+        self.media_url = self.upload_photo(photo, storage)
+
+    def load_from_tweet(self, tweet_id, commit=True):
+        tweet = self.get_tweet(tweet_id)
+        self.tweet_id = tweet['id']
+
+        self.set_text_from_tweet(tweet)
+        self.set_user_from_tweet(tweet)
+        self.set_media_from_tweet(tweet)
+
+        if commit:
+            self.save()
+
+    def save(self, *args, **kwargs):
+        # import pdb; pdb.set_trace()
+        if self.tweet_id and not any([self.author, self.text]):
+            self.load_from_tweet(self.tweet_id, commit=False)
+        return super(Vision, self).save(*args, **kwargs)
+
+
+class Share (models.Model):
+    vision = models.ForeignKey(Vision)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shares')
+    tweet_id = models.CharField(max_length=64, null=True)
+
+    def __unicode__(self):
+        return '%s shared "%s"' % (self.user, self.vision)
 
 
 class Moment (TweetedModelMixin, models.Model):
@@ -180,14 +245,11 @@ class Moment (TweetedModelMixin, models.Model):
 
     def load_from_tweet(self, tweet_id, commit=True):
         tweet = self.get_tweet(tweet_id)
-
-        self.text = tweet['text']
         self.tweet_id = tweet['id']
-        self.username = tweet['user']['screen_name']
-        for media in tweet['entities']['media']:
-            if media['type'] == 'photo':
-                self.media_url = media['media_url']
-                break
+
+        self.set_text_from_tweet(tweet)
+        self.set_media_from_tweet(tweet)
+        self.set_username_from_tweet(tweet)
 
         if commit:
             self.save()
@@ -198,14 +260,20 @@ class Moment (TweetedModelMixin, models.Model):
         return super(Moment, self).save(*args, **kwargs)
 
 
-class Reply (models.Model):
+class Reply (TweetedModelMixin, models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    tweet_id = models.CharField(
+        max_length=64, null=True,
+        help_text=(_(
+            "You can fill in the tweet id and leave the text field blank (you "
+            "must select an author, though it will be updated to be the tweet "
+            "creator). For example, if the tweet URL is http://www.twitter.com"
+            "/myuser/status/1234567890, then the tweet id is 1234567890.")))
     vision = models.ForeignKey(Vision, related_name='replies')
     author = models.ForeignKey(User, related_name='replies')
-    text = models.CharField(max_length=140)
-
-    tweet_id = models.CharField(max_length=64, null=True)
+    text = models.CharField(max_length=140, blank=True)
 
     objects = TweetedObjectManager()
 
@@ -218,47 +286,15 @@ class Reply (models.Model):
 
     def load_from_tweet(self, tweet_id, commit=True):
         tweet = self.get_tweet(tweet_id)
-
-        self.text = tweet['text']
         self.tweet_id = tweet['id']
 
-        user_id = tweet['user']['id']
-        username = tweet['user']['screen_name']
-        try:
-            user_social_auth = UserSocialAuth(uid=user_id, provider='twitter')
-            user = user_social_auth.user
-        except UserSocialAuth.DoesNotExist:
-            suffix = ''
-            while True:
-                user, created = User.objects.get_or_create(username=username + suffix)
-                if created:
-                    user_full_name = tweet['user']['name'].split(' ', 1)
-                    user.first_name = user_full_name[0]
-                    if len(user_full_name) > 1:
-                        user.last_name = user_full_name[1]
-                    user.save()
-
-                    user_social_auth = UserSocialAuth.objects.create(
-                        user=user,
-                        uid=user_id,
-                        provider='twitter',
-                        extra_data='{"access_token": "oauth_token_secret=123&oauth_token=abc", "id": %s}' % (user_id,),
-                    )
-
-                    break
-                else:
-                    suffix = str(randint(0, 999999))
-
-        self.username = tweet['user']['screen_name']
-        for media in tweet['entities']['media']:
-            if media['type'] == 'photo':
-                self.media_url = media['media_url']
-                break
+        self.set_text_from_tweet(tweet)
+        self.set_user_from_tweet(tweet)
 
         if commit:
             self.save()
 
     def save(self, *args, **kwargs):
-        if self.tweet_id and not self.username and not self.text and not self.media_url:
+        if self.tweet_id and not any([self.text]):
             self.load_from_tweet(self.tweet_id, commit=False)
-        return super(Moment, self).save(*args, **kwargs)
+        return super(Reply, self).save(*args, **kwargs)

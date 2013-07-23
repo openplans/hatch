@@ -15,7 +15,7 @@ class ShareInline (admin.TabularInline):
 
 class ReplyInline (admin.TabularInline):
     model = Reply
-    extra = 1
+    extra = 3
 
 
 class VisionAdmin (admin.ModelAdmin):
