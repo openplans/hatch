@@ -172,6 +172,7 @@ var VisionLouisville = VisionLouisville || {};
       $field.focus().val('').val(val);
     },
     handleFormSubmission: function(evt) {
+      NS.Utils.log('event', 'vision-reply', this.model.id);
       evt.preventDefault();
       var form = evt.target,
           data = NS.Utils.serializeObject(form),
@@ -337,7 +338,8 @@ var VisionLouisville = VisionLouisville || {};
     template: '#form-tpl',
     events: {
       'submit form': 'handleFormSubmission',
-      'change .vision-category-list input': 'handleCategoryChange'
+      'change .vision-category-list input': 'handleCategoryChange',
+      'change .vision-media input': 'handleMediaFileChange'
     },
     ui: {
       submit: 'input[type=submit]'
@@ -397,6 +399,27 @@ var VisionLouisville = VisionLouisville || {};
       var category = this.$('.vision-category-list input:checked').val();
       this.$('.category-prompt').addClass('is-hidden')
         .filter('.' + category + '-prompt').removeClass('is-hidden');
+    },
+    handleMediaFileChange: function(evt) {
+      var self = this,
+          file,
+          attachment;
+
+      if(evt.target.files && evt.target.files.length) {
+        file = evt.target.files[0];
+
+        NS.Utils.fileToCanvas(file, function(canvas) {
+          canvas.toBlob(function(blob) {
+            self.model.set('media', blob);
+            // previewUrl = canvas.toDataURL('image/jpeg');
+          }, 'image/jpeg');
+        }, {
+          // TODO: make configurable
+          maxWidth: 800,
+          maxHeight: 800,
+          canvas: true
+        });
+      }
     }
   });
 

@@ -26,7 +26,33 @@ var VisionLouisville = VisionLouisville || {};
       type: Backbone.HasMany,
       key: 'sharers',
       relatedModel: 'UserModel'
-    }]
+    }],
+    sync: function(method, model, options) {
+      if (method == 'create' && model.get('media')) {
+        var attr, val;
+
+        // If we are saving media, submit the model as a form
+        options = options || {};
+        options.data = new FormData();
+
+        // Add all the model attributes to the form
+        for (attr in model.attributes) {
+          val = model.get(attr);
+          if (!_.isUndefined(val)) {
+            options.data.append(attr, val);
+          }
+        }
+
+        // Send multipart form data (see http://stackoverflow.com/a/5976031/123776 for details)
+        options.contentType = false;
+        options.processData = false;
+
+        // Request to get JSON back
+        options.dataType = 'json';
+      }
+
+      return Backbone.sync(method, model, options);
+    }
   });
 
   NS.VisionCollection = Backbone.Collection.extend({

@@ -85,6 +85,111 @@ var VisionLouisville = VisionLouisville || {};
       } else {
         return text;
       }
+    },
+
+    // ====================================================
+    // File and Image Handling
+
+    // Convert from array buffer to string
+    ab2str: function(buf) {
+      return String.fromCharCode.apply(null, new Uint16Array(buf));
+    },
+
+    // Convert from string to array buffer
+    str2ab: function(str) {
+      var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+      var bufView = new Uint16Array(buf);
+      for (var i=0, strLen=str.length; i<strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+      }
+      return buf;
+    },
+
+    fileToCanvas: function(file, callback, options) {
+      var fr = new FileReader();
+
+      fr.onloadend = function() {
+          // get EXIF data
+          var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result)),
+              orientation = exif.Orientation;
+
+          loadImage(file, function(canvas) {
+            // rotate the image, if needed
+            var rotated = NS.Utils.fixImageOrientation(canvas, orientation);
+            callback(rotated);
+          }, options);
+      };
+
+      fr.readAsBinaryString(file); // read the file
+    },
+
+    fixImageOrientation: function(canvas, orientation) {
+      var rotated = document.createElement('canvas'),
+          ctx = rotated.getContext('2d'),
+          width = canvas.width,
+          height = canvas.height;
+
+      switch (orientation) {
+          case 5:
+          case 6:
+          case 7:
+          case 8:
+              rotated.width = canvas.height;
+              rotated.height = canvas.width;
+              break;
+          default:
+              rotated.width = canvas.width;
+              rotated.height = canvas.height;
+      }
+
+
+      switch (orientation) {
+          case 1:
+              // nothing
+              break;
+          case 2:
+              // horizontal flip
+              ctx.translate(width, 0);
+              ctx.scale(-1, 1);
+              break;
+          case 3:
+              // 180 rotate left
+              ctx.translate(width, height);
+              ctx.rotate(Math.PI);
+              break;
+          case 4:
+              // vertical flip
+              ctx.translate(0, height);
+              ctx.scale(1, -1);
+              break;
+          case 5:
+              // vertical flip + 90 rotate right
+              ctx.rotate(0.5 * Math.PI);
+              ctx.scale(1, -1);
+              break;
+          case 6:
+              // 90 rotate right
+              ctx.rotate(0.5 * Math.PI);
+              ctx.translate(0, -height);
+              break;
+          case 7:
+              // horizontal flip + 90 rotate right
+              ctx.rotate(0.5 * Math.PI);
+              ctx.translate(width, -height);
+              ctx.scale(-1, 1);
+              break;
+          case 8:
+              // 90 rotate left
+              ctx.rotate(-0.5 * Math.PI);
+              ctx.translate(-width, 0);
+              break;
+          default:
+              break;
+      }
+
+      ctx.drawImage(canvas, 0, 0);
+
+      return rotated;
     }
   };
 
