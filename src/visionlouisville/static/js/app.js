@@ -44,7 +44,7 @@ var VisionLouisville = VisionLouisville || {};
             }));
         } else {
           model = new Backbone.Model();
-          collection = NS.app.inputStreamCollection;
+          collection = NS.app.visionCollection;
         }
 
         NS.app.mainRegion.show(new NS.VisionListView({
@@ -54,9 +54,9 @@ var VisionLouisville = VisionLouisville || {};
       };
 
       // Nothing in the collection? It's not done fetching. Let's wait for it.
-      if (NS.app.inputStreamCollection.size() === 0) {
+      if (NS.app.visionCollection.size() === 0) {
         // Render when the collection resets
-        NS.app.inputStreamCollection.once('reset', function() {
+        NS.app.visionCollection.once('reset', function() {
           render();
         });
       } else {
@@ -275,16 +275,6 @@ var VisionLouisville = VisionLouisville || {};
     NS.app.visionCollection.fetch({
       reset: true,
       cache: false
-    });
-
-    NS.app.inputStreamCollection = new NS.InputStreamCollection();
-    NS.app.inputStreamCollection.fetch({
-      reset: true,
-      cache: false
-    });
-
-    NS.app.visionCollection.on('add', function(model, collection, options) {
-      NS.app.inputStreamCollection.add(model, {at: 0});
     });
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {},

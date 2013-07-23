@@ -358,7 +358,6 @@ support_api_view = VisionActionViewSet.as_view({'post': 'support',
                                                 'delete': 'unsupport'})
 unsupport_api_view = VisionActionViewSet.as_view({'post': 'unsupport'})
 share_api_view = VisionActionViewSet.as_view({'post': 'share'})
-input_stream_api_view = InputSteamAPIView.as_view()
 
 # Setup the API routes
 api_router = DefaultRouter()
