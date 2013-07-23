@@ -120,7 +120,7 @@ var VisionLouisville = VisionLouisville || {};
           }, options);
       };
 
-      fr.readAsBinaryString(file); // read the file
+      fr.readAsArrayBuffer(file); // read the file
     },
 
     fixImageOrientation: function(canvas, orientation) {
