@@ -199,6 +199,20 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  NS.ReplyToVisionItemView = Backbone.Marionette.ItemView.extend({
+    template: '#reply-to-vision-tpl',
+    tagName: 'li'
+  });
+
+  NS.ReplyToVisionListView = Backbone.Marionette.CollectionView.extend({
+    template: '#reply-to-vision-tpl',
+    tagName: 'ul',
+    className: 'unstyled-list vision-list',
+    itemView: NS.ReplyToVisionItemView
+
+  });
+
+
   // Avatars ==================================================================
   NS.UserAvatarView = Backbone.Marionette.ItemView.extend({
     template: '#user-avatar-tpl',
@@ -429,9 +443,9 @@ var VisionLouisville = VisionLouisville || {};
   NS.UserDetailView = Backbone.Marionette.Layout.extend({
     template: '#user-detail-tpl',
     regions: {
-      visions: '.visions-region',
-      supported: '.supported-region',
-      replies: '.replies-region'
+      visions: '.user-visions-region',
+      supported: '.user-supported-region',
+      replies: '.user-replies-region'
     }
 
   });

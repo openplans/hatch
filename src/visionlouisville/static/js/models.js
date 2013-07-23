@@ -80,18 +80,22 @@ var VisionLouisville = VisionLouisville || {};
 
   // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
+    // Replies not added because the Vision model specifies (rightly) that
+    // a reply should be rendered as an ID (to support saving a reply with a
+    // vision ID). This does not allow us to render a reply on the user profile
+    // page with the vision as context since we only have the ID. Instead,
+    // we'll ignore the relationship and deal with an array of raw attributes
+    // until we get smarter and think of a more elegant solution.
     relations: [{
       type: Backbone.HasMany,
       key: 'visions',
-      relatedModel: 'VisionModel'
+      relatedModel: 'VisionModel',
+      collectionType: 'VisionCollection'
     },{
       type: Backbone.HasMany,
       key: 'supported',
-      relatedModel: 'VisionModel'
-    },{
-      type: Backbone.HasMany,
-      key: 'replies',
-      relatedModel: 'ReplyModel'
+      relatedModel: 'VisionModel',
+      collectionType: 'VisionCollection'
     }],
 
     support: function(vision) {

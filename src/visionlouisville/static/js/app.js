@@ -222,6 +222,12 @@ var VisionLouisville = VisionLouisville || {};
           view.supported.show(new NS.UserListView({
             collection: model.get('supported')
           }));
+
+          view.replies.show(new NS.ReplyToVisionListView({
+            // NOTE: see comments in the UserModel for an explanation as to why
+            // this is differnt than visions and supported regions.
+            collection: new Backbone.Collection(model.get('replies'))
+          }));
         });
 
         return view;
