@@ -1015,6 +1015,16 @@ ul.user-list {
   font-weight: 600;
 }
 
+.bio-reply {
+  margin-bottom: 30px;
+}
+.bio-reply-text {
+  font-size: large;
+}
+.bio-reply-author {
+  font-weight: 700;
+}
+
 
 /* =Media Queries for Responsive Layout
 -------------------------------------------------------------- */

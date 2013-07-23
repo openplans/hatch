@@ -1,3 +1,5 @@
-<p><strong>"{{text}}"</strong> in reply to...</p>
-
-{{> list-item-vision-tpl vision}}
+<article class="bio-reply">
+  <strong class="bio-reply-text">"{{text}}"</strong>
+  <span class="nobreak">in reply to</span>
+  {{> reply-to-vision-item-tpl vision}}
+</article>
