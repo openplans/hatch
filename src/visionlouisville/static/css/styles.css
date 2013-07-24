@@ -436,7 +436,25 @@ ul.user-menu:after {
   position: relative;
   padding-left: 40px;
 }
-
+.vision-media-container {
+  display: block;
+  background-color: #b2b2a6;
+  margin: 0 -10px 0;
+  position: relative;
+  top: -20px;
+  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.25);
+  background-position: center center;
+  background-size: 100% auto;
+}
+.vision-media-container.is-collapsed {
+  height: 50px;
+}
+.vision-media-container.is-collapsed img {
+  display: none;
+}
+.vision-media {
+  display: block;
+}
 .vision-header {
   margin-top: -10px;
 }
