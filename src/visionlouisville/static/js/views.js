@@ -423,7 +423,8 @@ var VisionLouisville = VisionLouisville || {};
         },
         success: function(model) {
 
-          NS.Utils.log('send', 'event', 'vision-save', 'success');
+          var tweetFlag = (this.$('.vision-tweet input').is(':checked') ? 1 : 0);
+          NS.Utils.log('send', 'event', 'vision-save', 'success', tweetFlag);
 
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
