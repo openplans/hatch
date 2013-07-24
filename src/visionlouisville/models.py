@@ -89,7 +89,8 @@ class TweetedObjectManager (models.Manager):
 
 
 class TweetedModelMixin (object):
-    def get_tweet(self, tweet_id):
+    @classmethod
+    def get_tweet(cls, tweet_id):
         """
         Take either a tweet id or a tweet dictionary and normalize into a
         tweet dictionary.
@@ -102,18 +103,10 @@ class TweetedModelMixin (object):
             tweet = tweet_id
         return tweet
 
-    def set_media_from_tweet(self, tweet):
-        for media in tweet['entities'].get('media', []):
-            if media['type'] == 'photo':
-                self.media_url = media['media_url']
-                break
-
-    def set_text_from_tweet(self, tweet):
-        self.text = tweet['text']
-
-    def set_user_from_tweet(self, tweet):
-        user_id = tweet['user']['id']
-        username = tweet['user']['screen_name']
+    @classmethod
+    def get_or_create_tweeter(cls, user_info):
+        user_id = user_info['id']
+        username = user_info['screen_name']
         try:
             user_social_auth = UserSocialAuth.objects.get(uid=user_id, provider='twitter')
             user = user_social_auth.user
@@ -122,7 +115,7 @@ class TweetedModelMixin (object):
             while True:
                 user, created = User.objects.get_or_create(username=username + suffix)
                 if created:
-                    user_full_name = tweet['user']['name'].split(' ', 1)
+                    user_full_name = user_info['name'].split(' ', 1)
                     user.first_name = user_full_name[0]
                     if len(user_full_name) > 1:
                         user.last_name = user_full_name[1]
@@ -138,6 +131,19 @@ class TweetedModelMixin (object):
                     break
                 else:
                     suffix = str(uuid1())
+        return user
+
+    def set_media_from_tweet(self, tweet):
+        for media in tweet['entities'].get('media', []):
+            if media['type'] == 'photo':
+                self.media_url = media['media_url']
+                break
+
+    def set_text_from_tweet(self, tweet):
+        self.text = tweet['text']
+
+    def set_user_from_tweet(self, tweet):
+        user = self.get_or_create_tweeter(tweet['user'])
         self.author = user
 
 
