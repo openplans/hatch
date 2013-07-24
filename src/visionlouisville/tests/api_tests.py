@@ -56,7 +56,7 @@ class VisionsTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
+        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -93,7 +93,7 @@ class VisionsTest (TestCase):
             def get_users_info(self, users, actor=None):
                 return []
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
+        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             vision_data = {
                 'author': user.pk,
@@ -125,7 +125,7 @@ class VisionsTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', lambda self: StubTwitterService()):
+        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -167,7 +167,7 @@ class ReplyTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', lambda self: StubTwitterService()):
+        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = ReplyViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -195,7 +195,7 @@ class ReplyTest (TestCase):
         class StubTwitterService (object):
             tweet = Mock(return_value=(False, 'Something happened!'))
 
-        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', lambda self: StubTwitterService()):
+        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = ReplyViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
