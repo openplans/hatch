@@ -741,10 +741,15 @@ h6.category-prompt {
   color: #268099;
 }
 
-.on-off-switch-label {
+/* Stylized Form Buttons */
+.on-off-switch-label,
+.media-btn-label {
   line-height: 34px;
+  position: relative;
+  font-weight: 600;
 }
-.on-off-switch-icon {
+.on-off-switch-icon,
+.media-btn {
   float: left;
   display: block;
   width: 60px;
@@ -753,7 +758,8 @@ h6.category-prompt {
   cursor: pointer;
   margin-right: 5px;
 }
-.on-off-switch-icon img {
+.on-off-switch-icon img,
+.media-btn img {
   width: 100%;
   position: relative;
   top: -34px;
@@ -767,6 +773,25 @@ h6.category-prompt {
 .on-off-switch-icon,
 .on-off-switch-icon img {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.media-input {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.image-preview-container {
+  display: block;
+  margin-bottom: -24px;
+}
+.image-preview-container img {
+  position: relative;
+  margin-top: -34px;
+  margin-bottom: 1.2em;
 }
 
 /* Reply Form */
@@ -947,10 +972,6 @@ ul.user-list {
     box-shadow: 0 0 50px rgba(0,0,0,0.75);
     background-color: #e7e7d7;
     border-radius: 0 0 5px 5px;
-  }
-  .container-moment-media {
-    margin-right: -15px;
-    margin-left: -15px;
   }
 }
 

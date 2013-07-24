@@ -44,13 +44,16 @@
       <textarea name="text" placeholder="My vision for Louisville is..." required></textarea>
     </p>
 
-    <p class="vision-media">
-      <input type="file" name="media" accept="image/*">
-      <img class="image-preview">
+    <p class="vision-media clearfix">
+      <label for="my-media-upload" class="media-btn-label">
+        <span class="media-btn"><img src="/static/images/media-button.png"></span> Add an Image
+        <input id="my-media-upload" class="media-input" type="file" name="media" accept="image/*">
+      </label>
+      <span class="image-preview-container"><img class="image-preview"></span>
     </p>
 
     <p class="vision-tweet">
-      <label class="on-off-switch-label"><input type="checkbox" data-placement="header" name="x-send-to-twitter" class="on-off-switch is-visuallyhidden"><span class="on-off-switch-icon"><img src="/static/images/on-off-switch.png"></span> Tweet This Vision</label>
+      <label class="on-off-switch-label" for="x-send-to-twitter"><input id="x-send-to-twitter" type="checkbox" data-placement="header" name="x-send-to-twitter" class="on-off-switch is-visuallyhidden"><span class="on-off-switch-icon"><img src="/static/images/on-off-switch.png"></span> Tweet This Vision</label>
     </p>
 
     <p class="vision-save-action">
