@@ -7,6 +7,14 @@ var VisionLouisville = VisionLouisville || {};
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('if_imagemanip_feature', function(options) {
+    var canManipulateImages = (
+      !!window.FileReader &&
+      !!(new window.FileReader()).readAsArrayBuffer
+    );
+    return canManipulateImages ? options.fn(this) : options.inverse(this);
+  });
+
   Handlebars.registerHelper('if_in_group', function(groupName, options) {
     var user = NS.app.currentUser;
     return (user.isAuthenticated() && user.isInGroup(groupName) ? options.fn(this) : options.inverse(this));
