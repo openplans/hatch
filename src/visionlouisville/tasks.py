@@ -1,7 +1,7 @@
 from django.conf import settings
 from celery import task
 from time import sleep
-from .models import User, Moment
+from .models import User, Vision
 from .utils import chunk
 from .services import default_twitter_service as twitter_service
 
@@ -30,12 +30,12 @@ def refresh_users():
 
 
 @task
-def listen_for_moments():
+def listen_for_tweets():
 
-    log.info('\n*** Listening for moments...\n')
+    log.info('\n*** Listening for tweets...\n')
 
-    moment_keywords = ','.join(settings.MOMENT_KEYWORDS)
-    tweets = twitter_service.itertweets(track=moment_keywords)
+    streaming_keywords = ','.join(settings.STREAMING_KEYWORDS)
+    tweets = twitter_service.itertweets(track=streaming_keywords)
     for tweet in tweets:
         if 'disconnect' in tweet:
             msg = tweet['disconnect']
@@ -53,10 +53,10 @@ def listen_for_moments():
         tweet_media = tweet.get('entities', {}).get('media', [])
         if any(m['type'] == 'photo' for m in tweet_media):
             # Now we're interested. Check if we already have it.
-            moment, created = Moment.objects.create_or_update_from_tweet(tweet)
+            vision, created = Vision.objects.create_or_update_from_tweet(tweet)
             if created:
-                log.info('\n  - Created a new moment "%s", yay!\n' % (moment,))
+                log.info('\n  - Created a new vision "%s", yay!\n' % (vision,))
             else:
-                log.info('\n  - Modified a moment "%s", yay!\n' % (moment,))
+                log.info('\n  - Modified a vision "%s", yay!\n' % (vision,))
         else:
             log.info('\n  - Eh, there\'s no photos in it. Not interested.\n')

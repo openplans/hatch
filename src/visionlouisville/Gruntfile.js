@@ -20,7 +20,11 @@ module.exports = function(grunt) {
               'static/components/backbone.marionette/lib/backbone.marionette.js',
               'static/components/moment/moment.js',
               'static/components/swiper/dist/idangerous.swiper-2.0.js',
-              'static/components/Countable/Countable.js'
+              'static/components/Countable/Countable.js',
+              'static/components/exif-js/binaryajax.js',
+              'static/components/exif-js/exif.js',
+              'static/components/blueimp-load-image/js/load-image.js',
+              'static/components/blueimp-canvas-to-blob/js/canvas-to-blob.js'
             ]
           },
           {

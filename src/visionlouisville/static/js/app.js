@@ -67,6 +67,7 @@ var VisionLouisville = VisionLouisville || {};
             }));
         } else {
           model = new Backbone.Model();
+          collection = NS.app.visionCollection;
         }
 
         return new NS.VisionListView({
@@ -75,12 +76,13 @@ var VisionLouisville = VisionLouisville || {};
         });
       };
 
-       NS.showViewInRegion(NS.app.inputStreamCollection, NS.app.mainRegion,
+      NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
         getVisionListView, {listCategory: listCategory});
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
       document.title = "#VizLou | Add your vision";
+      NS.Utils.log('send', 'event', 'vision-new');
 
       // Protect against unauthenticated users.
       if (!NS.app.currentUser.isAuthenticated()) {
@@ -113,6 +115,7 @@ var VisionLouisville = VisionLouisville || {};
 
         // TODO: Move to the config settings
         document.title = '#VizLou | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
+        NS.Utils.log('send', 'event', 'vision-show', visionId);
 
         // TODO: why is this necessary?
         layout.on('show', function() {
@@ -264,9 +267,7 @@ var VisionLouisville = VisionLouisville || {};
 
     // Gobal-level events
     this.router.bind('route', function(route, router) {
-      if (window.ga) {
-        window.ga('send', 'pageview', NS.getCurrentPath());
-      }
+      NS.Utils.log('send', 'pageview', NS.getCurrentPath());
       $('.authentication-link-login').attr('href', NS.getLoginUrl());
       $('.user-menu').removeClass('is-open');
     });
@@ -336,12 +337,6 @@ var VisionLouisville = VisionLouisville || {};
       cache: false
     });
 
-    NS.app.inputStreamCollection = new NS.InputStreamCollection();
-    NS.app.inputStreamCollection.fetch({
-      reset: true,
-      cache: false
-    });
-
     NS.app.userCollection = new NS.UserCollection();
     NS.app.userCollection.fetch({
       reset: true,
@@ -349,11 +344,20 @@ var VisionLouisville = VisionLouisville || {};
       data: { visible_on_home: true }
     });
 
-    NS.app.visionCollection.on('add', function(model, collection, options) {
-      NS.app.inputStreamCollection.add(model, {at: 0});
-    });
-
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {});
+
+    // Set the appropriate authentication info for analytics
+    var currentUserStatus;
+    if (NS.app.currentUser.isAuthenticated()) {
+      if (NS.app.currentUser.isInGroup('allies')) {
+        currentUserStatus = 'ally';
+      } else {
+        currentUserStatus = 'visionary';
+      }
+    } else {
+      currentUserStatus = 'anonymous';
+    }
+    NS.Utils.log('set', 'dimension1', currentUserStatus);
 
     NS.app.start({
       visionCollection: NS.app.visionCollection

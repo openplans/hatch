@@ -29,6 +29,7 @@
   <meta name="twitter:site" content="@vizlou">
   <meta name="twitter:creator" content="@{{ vision.author.username }}">
   <meta name="twitter:title" content="#VizLou | My vision for Louisville">
+  <meta name="twitter:image:src" content="{{ vision.media_url }}">
   <meta name="twitter:description" content="{{ vision.text }}">
 
   <!-- Facebook -->
@@ -118,7 +119,15 @@
   <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
   <script src="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper-2.0.js"></script>
   <script src="{{ STATIC_URL }}components/Countable/Countable.js"></script>
+
+  <!-- Image processing tools -->
+  <script src="{{ STATIC_URL }}components/exif-js/binaryajax.js"></script>
+  <script src="{{ STATIC_URL }}components/exif-js/exif.js"></script>
+  <script src="{{ STATIC_URL }}components/blueimp-load-image/js/load-image.js"></script>
+  <script src="{{ STATIC_URL }}components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+
   {% handlebarsjs '(.*)' precompile register_partials %}
+
   <script src="{{ STATIC_URL }}js/django-csrf.js"></script>
   <script src="{{ STATIC_URL }}js/config.js"></script>
   <script src="{{ STATIC_URL }}js/utils.js"></script>
@@ -136,7 +145,9 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-42333855-1', 'vizlou.org');
+  ga('create', 'UA-42333855-1', {
+    name: 'vizlou.org'
+  });
   ga('send', 'event', 'browser', 'arrived');
   </script>
 

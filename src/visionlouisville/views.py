@@ -18,17 +18,17 @@ from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
-from .models import Moment, Reply, User, Vision
+from .models import Reply, User, Vision
 from .forms import SecretAllySignupForm
 from .serializers import (
-    ReplySerializer, UserSerializer, VisionSerializer,
-    MomentSerializerWithType, VisionSerializerWithType)
+    ReplySerializer, UserSerializer, VisionSerializer)
 from .services import default_twitter_service
 
 
 class AppMixin (object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    @classmethod
     def get_twitter_service(self):
         return default_twitter_service
 
@@ -44,7 +44,8 @@ class AppMixin (object):
         context['requesting_user'] = self.get_requesting_user()
         return context
 
-    def get_vision_url(self, request, vision):
+    @classmethod
+    def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
             '/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
@@ -68,9 +69,6 @@ class AppMixin (object):
             .filter(social_count__gt=0)\
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
-
-    def get_moment_queryset(self):
-        return Moment.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
@@ -155,9 +153,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
         return queryset
 
     # TODO: Move this into the settings/config
-    def get_app_tweet_text(self, request, vision):
-        vision_url = self.get_vision_url(request, vision)
-        service = self.get_twitter_service()
+    @classmethod
+    def get_app_tweet_text(cls, request, vision):
+        vision_url = cls.get_vision_url(request, vision)
+        service = cls.get_twitter_service()
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
@@ -169,9 +168,10 @@ class VisionViewSet (AppMixin, ModelViewSet):
             vision_url
         ])
 
-    def get_user_tweet_text(self, request, vision):
-        vision_url = self.get_vision_url(request, vision)
-        service = self.get_twitter_service()
+    @classmethod
+    def get_user_tweet_text(cls, request, vision):
+        vision_url = cls.get_vision_url(request, vision)
+        service = cls.get_twitter_service()
         url_length = service.get_url_length(vision_url)
 
         vision_length = 140 - url_length - 1
@@ -309,39 +309,6 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class InputSteamAPIView (AppMixin, GenericAPIView):
-    def get(self, request):
-        visions = self.get_vision_queryset()
-        moments = self.get_moment_queryset()
-
-        vision_serializer = VisionSerializerWithType(visions, many=True)
-        vision_serializer.context = self.get_serializer_context()
-
-        moment_serializer = MomentSerializerWithType(moments, many=True)
-        vision_serializer.context = self.get_serializer_context()
-
-        serialized_visions = vision_serializer.data
-        serialized_moments = moment_serializer.data
-
-        integrated_list = []
-        while serialized_visions and serialized_moments:
-            try:
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_visions.pop(0))
-                integrated_list.append(serialized_moments.pop(0))
-            except IndexError:
-                pass
-
-        if serialized_visions:
-            integrated_list += serialized_visions
-
-        if serialized_moments:
-            integrated_list += serialized_moments
-
-        return Response(integrated_list)
-
-
 # App views
 home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
@@ -354,7 +321,6 @@ support_api_view = VisionActionViewSet.as_view({'post': 'support',
                                                 'delete': 'unsupport'})
 unsupport_api_view = VisionActionViewSet.as_view({'post': 'unsupport'})
 share_api_view = VisionActionViewSet.as_view({'post': 'share'})
-input_stream_api_view = InputSteamAPIView.as_view()
 
 # Setup the API routes
 api_router = DefaultRouter()

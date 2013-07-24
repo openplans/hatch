@@ -1,7 +1,7 @@
 from rest_framework.serializers import (
-    CharField, IntegerField, ModelSerializer,
-    SerializerMethodField, RelatedField)
-from .models import User, Vision, Reply, Moment
+    CharField, ImageField, IntegerField, ModelSerializer,
+    SerializerMethodField, RelatedField, ValidationError)
+from .models import User, Vision, Reply
 from .services import SocialMediaException
 
 
@@ -174,16 +174,6 @@ class ReplySerializer (ModelSerializer):
         model = Reply
 
 
-class MomentSerializer (ModelSerializer):
-    id = SerializerMethodField('get_id')
-
-    class Meta:
-        model = Moment
-
-    def get_id(self, obj):
-        return 'moment-%s' % (obj.id,)
-
-
 class VisionSerializer (ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
@@ -195,16 +185,20 @@ class VisionSerializer (ModelSerializer):
     class Meta:
         model = Vision
 
+    def from_native(self, data, files):
+        # Validate any uploaded media
+        media_field = ImageField(required=False)
+        media_file = files.get('media', None)
+        try:
+            media = media_field.from_native(media_file)
+        except ValidationError as err:
+            if not hasattr(self, '_errors') or self._errors is None:
+                self._errors = {}
+            self._errors['media'] = list(err.messages)
+            return
 
-class MomentSerializerWithType (MomentSerializer):
-    type = SerializerMethodField('get_input_type')
+        # Attach uploaded media, if appropriate
+        if media and 'media_url' not in data:
+            data['media_url'] = Vision.upload_photo(media)
 
-    def get_input_type(self, obj):
-        return 'moment'
-
-
-class VisionSerializerWithType (VisionSerializer):
-    type = SerializerMethodField('get_input_type')
-
-    def get_input_type(self, obj):
-        return 'vision'
+        return super(VisionSerializer, self).from_native(data, {})

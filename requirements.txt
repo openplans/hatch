@@ -21,6 +21,8 @@ django-celery
 psycopg2
 south
 django-redis
+django-storages
+boto
 
 
 
@@ -37,6 +39,7 @@ django-social-auth
 # ==============================
 
 djangorestframework
+PIL  # For image verification
 
 
 

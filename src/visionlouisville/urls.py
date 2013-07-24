@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, include, url
 from .views import (
     home_app_view, secret_ally_signup_view, vision_detail_app_view, api_router,
-    current_user_api_view, input_stream_api_view, share_api_view,
-    support_api_view, unsupport_api_view)
+    current_user_api_view, share_api_view, support_api_view, unsupport_api_view)
 
 # Admin
 from django.contrib import admin
@@ -21,7 +20,6 @@ urlpatterns = patterns(
     url(r'^api/visions/(?P<pk>\d+)/support$',   support_api_view,      name='support-vision-action'),
     url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,    name='unsupport-vision-action'),
     url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,        name='share-vision-action'),
-    url(r'^api/stream/$',                       input_stream_api_view, name='input-stream'),
     url(r'^api/', include(api_router.urls)),
 
     # Admin
