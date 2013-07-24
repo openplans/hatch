@@ -18,12 +18,13 @@ var VisionLouisville = VisionLouisville || {};
       var childrenContainer = collectionView.itemViewContainer ? collectionView.$(collectionView.itemViewContainer) : collectionView.$el,
           children = childrenContainer.children(),
           indices = childrenContainer.data('indices') || [],
+          sortNumber = function(a,b) { return a - b; },
           goHereIndex;
       // console.log(index, $(itemView.el).find('.feed-item-title').text());
 
       // console.log('before', indices);
       indices.push(index);
-      indices.sort();
+      indices.sort(sortNumber);
       // console.log('after', indices);
       goHereIndex = indices.indexOf(index);
       // console.log('at', goHereIndex);
