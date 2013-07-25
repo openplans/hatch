@@ -164,49 +164,66 @@ class TwitterService (object):
     # against Twitter on behalf of a specific user
     # ==================================================================
     def get_user_id(self, user):
-        try:
-            # Assume the first one is the one we want
-            social_auth = user.social_auth.all()[0]
-        except IndexError:
-            # If we don't have any, just return empty
-            raise SocialMediaException(
-                'User %s is not authenticated with a social media account'
-                % (user,))
+        cache_key = self.get_user_cache_key(user, 'social-id')
+        social_id = cache.get(cache_key)
 
-        if social_auth.provider == 'twitter':
-            return social_auth.uid
-        else:
-            raise SocialMediaException(
-                ('Can\'t get info for user %s authenticated with a %r '
-                 'provider') % (user, social_auth.provider)
-            )
+        if social_id is None:
+            try:
+                # Assume the first one is the one we want
+                social_auth = user.social_auth.all()[0]
+            except IndexError:
+                # If we don't have any, just return empty
+                raise SocialMediaException(
+                    'User %s is not authenticated with a social media account'
+                    % (user,))
 
-        return extra_data['id']
+            if social_auth.provider == 'twitter':
+                social_id = social_auth.uid
+            else:
+                raise SocialMediaException(
+                    ('Can\'t get info for user %s authenticated with a %r '
+                     'provider') % (user, social_auth.provider)
+                )
+
+            # Cache for just long enough to complete the current batch of
+            # lookups without having to hit the DB again.
+            cache.set(cache_key, social_id, 60)
+
+        return social_id
 
     def get_user_oauth(self, user):
-        try:
-            # Assume the first one is the one we want
-            social_auth = user.social_auth.all()[0]
-        except IndexError:
-            # If we don't have any, just return empty
-            raise SocialMediaException(
-                'User is not authenticated with a social media account')
+        cache_key = self.get_user_cache_key(user, 'oauth-args')
+        oauth_args = cache.get(cache_key)
 
-        if social_auth.provider == 'twitter':
-            extra_data = social_auth.extra_data
-            access_token = parse_qs(extra_data['access_token'])
-        else:
-            raise SocialMediaException(
-                ('Can\'t get info for a user authenticated with a %r '
-                 'provider') % social_auth.provider
+        if oauth_args is None:
+            try:
+                # Assume the first one is the one we want
+                social_auth = list(user.social_auth.all())[0]
+            except IndexError:
+                # If we don't have any, just return empty
+                raise SocialMediaException(
+                    'User is not authenticated with a social media account')
+
+            if social_auth.provider == 'twitter':
+                extra_data = social_auth.extra_data
+                access_token = parse_qs(extra_data['access_token'])
+            else:
+                raise SocialMediaException(
+                    ('Can\'t get info for a user authenticated with a %r '
+                     'provider') % social_auth.provider
+                )
+
+            oauth_args = (
+                access_token['oauth_token'][0],
+                access_token['oauth_token_secret'][0],
+                settings.TWITTER_CONSUMER_KEY,
+                settings.TWITTER_CONSUMER_SECRET
             )
+            # Cache for just long enough to complete the current batch of
+            # lookups without having to hit the DB again.
+            cache.set(cache_key, oauth_args, 60)
 
-        return OAuth(
-            access_token['oauth_token'][0],
-            access_token['oauth_token_secret'][0],
-            settings.TWITTER_CONSUMER_KEY,
-            settings.TWITTER_CONSUMER_SECRET
-        )
+        return OAuth(*oauth_args)
 
     # ==================================================================
     # App-specific info, from the database, used for authenticating
