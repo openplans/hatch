@@ -212,7 +212,10 @@ var VisionLouisville = VisionLouisville || {};
         var model = collection.get(options.id),
             view = new NS.UserDetailView({
               model: model
-            });
+            }),
+            isPersonal = (NS.app.currentUser.isAuthenticated() && id == NS.app.currentUser.id),
+            logPrefix = isPersonal ? 'my-' : '',
+            logInfix = tab ? tab + '-' : '';
 
         view.on('show', function() {
           if (tab === 'supported') {
@@ -222,6 +225,7 @@ var VisionLouisville = VisionLouisville || {};
           } else {
             view.showVisions();
           }
+          NS.Utils.log('send', 'event', logPrefix + 'profile-' + logInfix + 'show', id);
         });
 
         return view;
