@@ -50,8 +50,8 @@ class AppMixin (object):
             '/visions/%s' % vision.pk)
             # reverse('vision-detail', kwargs={'pk': self.pk}))
 
-    def get_vision_queryset(self):
-        return Vision.objects.all()\
+    def get_vision_queryset(self, base_queryset=None):
+        return (base_queryset or Vision.objects.all())\
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('author__groups')\
@@ -63,10 +63,18 @@ class AppMixin (object):
             .prefetch_related('supporters__groups')\
             .prefetch_related('sharers')
 
-    def get_user_queryset(self):
-        return User.objects.all()\
+    def get_user_queryset(self, base_queryset=None):
+        return (base_queryset or User.objects.all())\
             .annotate(social_count=Count('social_auth'))\
             .filter(social_count__gt=0)\
+            .prefetch_related('visions')\
+            .prefetch_related('visions__supporters')\
+            .prefetch_related('replies')\
+            .prefetch_related('replies__vision__author__social_auth')\
+            .prefetch_related('replies__vision__supporters')\
+            .prefetch_related('supported')\
+            .prefetch_related('supported__author__social_auth')\
+            .prefetch_related('supported__supporters')\
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
 
@@ -75,7 +83,8 @@ class AppMixin (object):
         service = self.get_twitter_service()
 
         if self.request.user.is_authenticated():
-            user = self.request.user
+            user = self.get_user_queryset(
+                User.objects.filter(pk=self.request.user.pk)).get()
         else:
             user = None
 
