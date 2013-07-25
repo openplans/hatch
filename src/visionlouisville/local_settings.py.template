@@ -18,13 +18,13 @@ SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 
 # For authenticating users with Twitter
-TWITTER_CONSUMER_KEY = ''
-TWITTER_CONSUMER_SECRET = ''
+TWITTER_CONSUMER_KEY = environ.get('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET = environ.get('TWITTER_CONSUMER_SECRET')
 
 # For accessing the app's Twitter account
-TWITTER_USERNAME = ''
-TWITTER_ACCESS_TOKEN = ''
-TWITTER_ACCESS_SECRET = ''
+TWITTER_USERNAME = environ.get('TWITTER_USERNAME')
+TWITTER_ACCESS_TOKEN = environ.get('TWITTER_ACCESS_TOKEN')
+TWITTER_ACCESS_SECRET = environ.get('TWITTER_ACCESS_SECRET')
 
 # For testing
 from os import environ
