@@ -72,7 +72,10 @@ class Migration(DataMigration):
             orm.Vision.objects.create(
                 text=moment.text,
                 media_url=moment.media_url,
-                author=get_or_create_tweeter(orm, user_info)
+                author=get_or_create_tweeter(orm, user_info),
+                created_at=moment.created_at,
+                updated_at=moment.updated_at,
+                tweet_id=moment.tweet_id
             )
 
     def backwards(self, orm):
@@ -82,7 +85,10 @@ class Migration(DataMigration):
             orm.Moment.objects.create(
                 text=vision.text,
                 media_url=vision.media_url,
-                username=vision.author.username
+                username=vision.author.username,
+                created_at=vision.created_at,
+                updated_at=vision.updated_at,
+                tweet_id=vision.tweet_id
             )
 
     models = {
