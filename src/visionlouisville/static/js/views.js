@@ -307,7 +307,7 @@ var VisionLouisville = VisionLouisville || {};
           this.$('.support').addClass('supported');
         }
 
-        this.$('.total-support-count').html(this.totalSupportString());
+        this.updateSupportCount();
       } else {
 
         // It's nice to know when unauthenticated users click support too
@@ -317,12 +317,21 @@ var VisionLouisville = VisionLouisville || {};
         this.$('.support-login-prompt').toggleClass('is-hidden');
       }
     },
+    updateSupportCount: function() {
+      this.$('.total-support-count').html(this.totalSupportString());
+    },
     handleRetweet: function(evt) {
       evt.preventDefault();
+      var vision = this.model,
+          sharers = vision.get('sharers'),
+          user = NS.app.currentUser,
+          alreadyShared = user.isAuthenticated() && _.contains(sharers, user.id);
 
-      NS.Utils.log('send', 'event', 'vision-retweet-start', this.model.id);
+      if (!user.isAuthenticated() || !alreadyShared) {
+        NS.Utils.log('send', 'event', 'vision-retweet-start', this.model.id);
+      }
 
-      if (NS.app.currentUser.isAuthenticated()) {
+      if (user.isAuthenticated() && !alreadyShared) {
         this.$('.confirm-retweet-prompt').removeClass('is-hidden');
       } else {
         this.$('.support-login-prompt').addClass('is-hidden');
@@ -335,12 +344,14 @@ var VisionLouisville = VisionLouisville || {};
           sharers = vision.get('sharers'),
           user = NS.app.currentUser;
 
-      if (!sharers.contains(user)) {
+      if (!_.contains(sharers, user.id)) {
 
         NS.Utils.log('send', 'event', 'vision-retweet-confirm', this.model.id);
 
         user.share(vision);
-        this.$('.retweet').addClass('retweeted');
+        this.$('.retweet-link').addClass('retweeted');
+        this.$('.support').addClass('supported');
+        this.updateSupportCount();
       }
 
       this.$('.confirm-retweet-prompt').addClass('is-hidden');

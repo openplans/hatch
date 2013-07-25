@@ -22,10 +22,6 @@ var VisionLouisville = VisionLouisville || {};
       type: Backbone.HasMany,
       key: 'supporters',
       relatedModel: 'UserModel'
-    },{
-      type: Backbone.HasMany,
-      key: 'sharers',
-      relatedModel: 'UserModel'
     }],
     sync: function(method, model, options) {
       if (method === 'create' && model.get('media')) {
@@ -147,15 +143,23 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
     share: function(vision) {
-      var sharers = vision.get('sharers');
+      var sharers = vision.get('sharers'),
+          supporters = vision.get('supporters'),
+          alreadySupported = supporters.contains(this);
 
-      if (!sharers.contains(this)) {
-        sharers.add(this);
+      if (!_.contains(sharers, this.id)) {
+        supporters.add(this);
+        vision.set('sharers', _.union(sharers, [this.id]));
 
         $.ajax({
           type: 'POST',
           url: vision.url() + '/share',
-          error: function() { sharers.remove(this); }
+          error: function() {
+            vision.set('sharers', sharers);
+            if (!alreadySupported) {
+              supporters.remove(this);
+            }
+          }
         });
       }
     },

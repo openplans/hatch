@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
-    SerializerMethodField, RelatedField, ValidationError)
+    PrimaryKeyRelatedField, SerializerMethodField, 
+    RelatedField, ValidationError)
 from .models import User, Vision, Reply
 from .services import SocialMediaException
 
@@ -178,7 +179,7 @@ class VisionSerializer (ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
     supporters = MinimalUserSerializer(many=True, read_only=True)
-    sharers = MinimalUserSerializer(many=True, read_only=True)
+    sharers = PrimaryKeyRelatedField(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
     category = CharField(required=False)
 

@@ -40,7 +40,7 @@ var VisionLouisville = VisionLouisville || {};
     }
 
     userId = NS.currentUserData.id;
-    sharingIds = _.pluck(this.sharers, 'id');
+    sharingIds = this.sharers;
     return _.contains(sharingIds, userId) ? options.fn(this) : options.inverse(this);
   });
 

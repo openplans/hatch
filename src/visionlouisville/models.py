@@ -23,11 +23,13 @@ class User (AbstractUser):
         vision.supporters.remove(self)
 
     def share(self, vision, share_id=None):
+        self.support(vision)
         share = Share(vision=vision, user=self, tweet_id=share_id)
         share.save()
         return share
 
     def unshare(self, vision):
+        self.unsupport(vision)
         share = Share.objects.get(user=self, vision=vision)
         share.delete()
 
