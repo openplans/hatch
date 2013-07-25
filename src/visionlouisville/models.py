@@ -158,9 +158,6 @@ class TweetedModelMixin (object):
 
 
 class Vision (TweetedModelMixin, models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     tweet_id = models.CharField(
         max_length=64, null=True,
         help_text=(_(
@@ -174,6 +171,9 @@ class Vision (TweetedModelMixin, models.Model):
     text = models.TextField(blank=True)
     media_url = models.URLField(default='', blank=True)
     featured = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(blank=True)
+    updated_at = models.DateTimeField(blank=True)
 
     supporters = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='supported', blank=True)
     sharers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='sharers', blank=True, through='Share')
@@ -218,7 +218,11 @@ class Vision (TweetedModelMixin, models.Model):
             self.save()
 
     def save(self, *args, **kwargs):
-        # import pdb; pdb.set_trace()
+        # Manually set the created/updated at
+        if not self.id:
+            self.created_at = now()
+        self.updated_at = now()
+
         if self.tweet_id and not any([self.text, self.media_url]):
             self.load_from_tweet(self.tweet_id, commit=False)
         return super(Vision, self).save(*args, **kwargs)
