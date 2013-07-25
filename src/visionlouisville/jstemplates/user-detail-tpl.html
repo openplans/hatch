@@ -11,21 +11,12 @@
 
     <nav class="tabs-container">
       <ul class="tabs tabs-3 unstyled-list">
-        <li class="tab is-current"><a href="#">{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</a></li>
-        <li class="tab"><a href="#">{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</a></li>
-        <li class="tab"><a href="#">{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</a></li>
+        <li class="tab"><a href="/users/{{id}}/visions">{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</a></li>
+        <li class="tab"><a href="/users/{{id}}/supported">{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</a></li>
+        <li class="tab"><a href="/users/{{id}}/replies">{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</a></li>
       </ul>
     </nav>
 
-    <h5>{{ first_name }}'s Visions</h5>
-    <div class="user-visions-region"></div>
-
-    <h5>Visions {{ first_name }} Supports</h5>
-    <div class="user-supported-region"></div>
-
-    <h5>{{ first_name }}'s Replies</h5>
-    <div class="user-replies-region"></div>
-
+    <div class="content-region"></div>
   </div>
-
 </div>

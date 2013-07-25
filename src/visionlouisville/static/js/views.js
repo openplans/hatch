@@ -518,11 +518,31 @@ var VisionLouisville = VisionLouisville || {};
   NS.UserDetailView = Backbone.Marionette.Layout.extend({
     template: '#user-detail-tpl',
     regions: {
-      visions: '.user-visions-region',
-      supported: '.user-supported-region',
-      replies: '.user-replies-region'
+      content: '.content-region'
+    },
+    showVisions: function() {
+      this.$('.tab').removeClass('is-current');
+      this.$('a[href*="visions"]').parent('.tab').addClass('is-current');
+      this.content.show(new NS.UserListView({
+        collection: this.model.get('visions')
+      }));
+    },
+    showSupported: function() {
+      this.$('.tab').removeClass('is-current');
+      this.$('a[href*="supported"]').parent('.tab').addClass('is-current');
+      this.content.show(new NS.UserListView({
+        collection: this.model.get('supported')
+      }));
+    },
+    showReplies: function() {
+      this.$('.tab').removeClass('is-current');
+      this.$('a[href*="replies"]').parent('.tab').addClass('is-current');
+      this.content.show(new NS.ReplyToVisionListView({
+        // NOTE: see comments in the UserModel for an explanation as to why
+        // this is differnt than visions and supported regions.
+        collection: new Backbone.Collection(this.model.get('replies'))
+      }));
     }
-
   });
 
 }(VisionLouisville));

@@ -36,6 +36,7 @@ var VisionLouisville = VisionLouisville || {};
       'visions/:id': 'showVision',
       'users/list': 'listUsers',
       'users/list/:id': 'listUsers',
+      'users/:id/:tab': 'showUser',
       'users/:id': 'showUser',
       'ally-signup': 'allySignup',
       '': 'home'
@@ -210,7 +211,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.app.mainRegion.show(userListLayout);
       NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id});
     },
-    showUser: function(id) {
+    showUser: function(id, tab) {
       var getUserDetailView = function(collection, options) {
         var model = collection.get(options.id),
             view = new NS.UserDetailView({
@@ -218,19 +219,13 @@ var VisionLouisville = VisionLouisville || {};
             });
 
         view.on('show', function() {
-          view.visions.show(new NS.UserListView({
-            collection: model.get('visions')
-          }));
-
-          view.supported.show(new NS.UserListView({
-            collection: model.get('supported')
-          }));
-
-          view.replies.show(new NS.ReplyToVisionListView({
-            // NOTE: see comments in the UserModel for an explanation as to why
-            // this is differnt than visions and supported regions.
-            collection: new Backbone.Collection(model.get('replies'))
-          }));
+          if (tab === 'supported') {
+            view.showSupported();
+          } else if (tab === 'replies') {
+            view.showReplies();
+          } else {
+            view.showVisions();
+          }
         });
 
         return view;
