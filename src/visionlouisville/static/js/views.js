@@ -494,7 +494,7 @@ var VisionLouisville = VisionLouisville || {};
 
             self.model.set('media', blob);
             var previewUrl = canvas.toDataURL('image/jpeg');
-            self.ui.imagePreview.attr('src', previewUrl);
+            self.ui.imagePreview.attr('src', previewUrl).removeClass('is-hidden');
           }, 'image/jpeg');
         }, {
           // TODO: make configurable
