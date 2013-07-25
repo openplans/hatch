@@ -84,6 +84,9 @@ img {
   max-width: 100%;
   height: auto;
 }
+a img {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 .icon-inline {
   height: 1.5em;
   width: auto;
