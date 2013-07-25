@@ -8,6 +8,7 @@ from random import randint
 from social_auth.models import UserSocialAuth
 from os.path import join as path_join
 from uuid import uuid1, uuid4
+import re
 
 import logging
 logger = logging.getLogger(__name__)
@@ -97,6 +98,13 @@ class TweetedModelMixin (object):
         Take either a tweet id or a tweet dictionary and normalize into a
         tweet dictionary.
         """
+        tweet_url_pattern = r'https?://(?:www\.)?twitter.com/[A-Za-z0-9-_]+/status/(?P<tweet_id>\d+)'
+
+        if isinstance(tweet_id, (str, unicode)):
+            match = re.match(tweet_url_pattern, tweet_id)
+            if match:
+                tweet_id = match.group('tweet_id')
+
         if isinstance(tweet_id, (int, str, unicode)):
             from services import default_twitter_service as twitter_service
             t = twitter_service.get_api()
@@ -160,7 +168,7 @@ class Vision (TweetedModelMixin, models.Model):
             "fields blank (you must select an author, though it will be "
             "updated to be the tweet creator). For example, if the tweet URL "
             "is http://www.twitter.com/myuser/status/1234567890, then the "
-            "tweet id is 1234567890.")))
+            "tweet id is 1234567890. Or you can just use the whole URL.")))
     author = models.ForeignKey(User, related_name='visions')
     category = models.CharField(max_length=20, null=True, blank=True)
     text = models.TextField(blank=True)
