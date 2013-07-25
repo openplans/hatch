@@ -104,17 +104,24 @@ var VisionLouisville = VisionLouisville || {};
     // page with the vision as context since we only have the ID. Instead,
     // we'll ignore the relationship and deal with an array of raw attributes
     // until we get smarter and think of a more elegant solution.
-    relations: [{
-      type: Backbone.HasMany,
-      key: 'visions',
-      relatedModel: 'VisionModel',
-      collectionType: 'VisionCollection'
-    },{
-      type: Backbone.HasMany,
-      key: 'supported',
-      relatedModel: 'VisionModel',
-      collectionType: 'VisionCollection'
-    }],
+
+    // NOTE: This was causing a some sort of infinite loop.
+    // TODO: Know enough about backbone-relational to know when and why an
+    //       infinite loop would be caused by this. When you figure that out
+    //       (and fix it), also change the user list view instantiations in 
+    //       the UserDetailView.
+    // 
+    // relations: [{
+    //   type: Backbone.HasMany,
+    //   key: 'visions',
+    //   relatedModel: 'VisionModel',
+    //   collectionType: 'VisionCollection'
+    // },{
+    //   type: Backbone.HasMany,
+    //   key: 'supported',
+    //   relatedModel: 'VisionModel',
+    //   collectionType: 'VisionCollection'
+    // }],
 
     support: function(vision) {
       var supporters = vision.get('supporters');

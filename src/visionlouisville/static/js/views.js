@@ -541,14 +541,14 @@ var VisionLouisville = VisionLouisville || {};
       this.$('.tab').removeClass('is-current');
       this.$('a[href*="visions"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
-        collection: this.model.get('visions')
+        collection: new Backbone.Collection(this.model.get('visions'))
       }));
     },
     showSupported: function() {
       this.$('.tab').removeClass('is-current');
       this.$('a[href*="supported"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
-        collection: this.model.get('supported')
+        collection: new Backbone.Collection(this.model.get('supported'))
       }));
     },
     showReplies: function() {
