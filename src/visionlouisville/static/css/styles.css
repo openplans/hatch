@@ -630,29 +630,6 @@ ul.user-menu:after {
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
-.vision-list .moment {
-  margin: 15px 0;
-}
-.container-moment-media {
-  box-shadow: 0 3px 5px rgba(0,0,0,0.5), 0 -1px 0 #fff;
-  background-color: #fff;
-}
-.moment-media {
-  display: block;
-  margin: 10px 0;
-  width: 100%;
-}
-.moment-text {
-  font-size: x-large;
-  font-weight: 600;
-  display: block;
-  overflow: hidden;
-}
-.moment-author {
-  font-weight: 400;
-  line-height: 1;
-  font-size: large;
-}
 .vision-list .user-link {
   margin-top: 5px;
   margin-bottom: 0;
