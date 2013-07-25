@@ -18,12 +18,13 @@ var VisionLouisville = VisionLouisville || {};
       var childrenContainer = collectionView.itemViewContainer ? collectionView.$(collectionView.itemViewContainer) : collectionView.$el,
           children = childrenContainer.children(),
           indices = childrenContainer.data('indices') || [],
+          sortNumber = function(a,b) { return a - b; },
           goHereIndex;
       // console.log(index, $(itemView.el).find('.feed-item-title').text());
 
       // console.log('before', indices);
       indices.push(index);
-      indices.sort();
+      indices.sort(sortNumber);
       // console.log('after', indices);
       goHereIndex = indices.indexOf(index);
       // console.log('at', goHereIndex);
@@ -271,7 +272,8 @@ var VisionLouisville = VisionLouisville || {};
       'click .support-link': 'handleSupport',
       'click .retweet-link': 'handleRetweet',
       'click .confirm-retweet-action': 'handleConfirmRetweet',
-      'click .cancel-retweet-action': 'handleCancelRetweet'
+      'click .cancel-retweet-action': 'handleCancelRetweet',
+      'click .vision-media-container': 'handleVisionMediaClick'
     },
     showReplyForm: function(evt) {
       evt.preventDefault();
@@ -349,6 +351,10 @@ var VisionLouisville = VisionLouisville || {};
       NS.Utils.log('send', 'event', 'vision-retweet-cancel', this.model.id);
 
       this.$('.confirm-retweet-prompt').addClass('is-hidden');
+    },
+    handleVisionMediaClick: function(evt) {
+      evt.preventDefault();
+      this.$('.vision-media-container').toggleClass('is-collapsed');
     },
     totalSupportString: function() {
       var count = this.model.get('supporters').length,

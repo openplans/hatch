@@ -3,6 +3,10 @@
     {{> welcome-tpl }}
   {{/if_authenticated}}
 
+  {{# if media_url }}
+  <a href="#" class="vision-media-container is-collapsed" style="background-image:url({{ media_url }});"><img class="vision-media" src="{{ media_url }}"></a>
+  {{/ if }}
+
   <article class="vision clearfix">
 
     <header class="vision-header">
@@ -24,9 +28,6 @@
     </header>
 
     <p class="vision-description">{{ formattext text }}</p>
-    {{# if media_url }}
-    <span class="vision-media"><img src="{{ media_url }}"></span>
-    {{/ if }}
 
     <footer class="vision-footer clearfix">
       <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}"><span class="tweet-icon"><img class="tweet-icon-retweet" src="/static/images/retweet-icon.png"></span> Retweet</a>

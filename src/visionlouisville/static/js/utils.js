@@ -55,8 +55,8 @@ var VisionLouisville = VisionLouisville || {};
     log: function() {
       if (window.ga) {
         window.ga.apply(window, arguments);
-      } else {
-        console.log.call(console, 'Logging:', arguments);
+      } else if (window.console.log) {
+        window.console.log(Array.prototype.slice.call(arguments, 0));
       }
     },
 
