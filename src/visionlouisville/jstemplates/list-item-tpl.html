@@ -12,10 +12,9 @@
     </span>
 
     <span class="vision-title">{{ formattruncated text 140 }}</span>
+
     {{# if media_url }}
-    <div class="container-fullwidth container-vision-media">
-      <span class="vision-media"><img src="{{ media_url }}"></span>
-    </div>
+    <a href="/visions/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
     {{/ if }}
 
     {{# if category }}
