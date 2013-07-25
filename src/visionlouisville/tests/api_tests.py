@@ -50,6 +50,9 @@ class VisionsTest (TestCase):
             def get_full_name(self, user, actor=None):
                 return ''
 
+            def get_bio(self, user, actor=None):
+                return ''
+
             def get_users_info(self, users, actor=None):
                 return []
 
@@ -85,6 +88,9 @@ class VisionsTest (TestCase):
                 return ''
 
             def get_full_name(self, user, actor=None):
+                return ''
+
+            def get_bio(self, user, actor=None):
                 return ''
 
             def get_url_length(self, url, actor=None):
@@ -164,6 +170,9 @@ class ReplyTest (TestCase):
             def get_full_name(self, user, actor=None):
                 return ''
 
+            def get_bio(self, user, actor=None):
+                return ''
+
             def get_url_length(self, url, actor=None):
                 return 20
 
@@ -238,7 +247,8 @@ class UserSerializerTest (TestCase):
                     def show(user_id):
                         return {
                             'name': 'Mjumbe Poe', 
-                            'profile_image_url': 'http://www.google.com/happy_ducks.png'
+                            'profile_image_url': 'http://www.google.com/happy_ducks.png',
+                            'description': 'A stand-up guy'
                         }
             return StubTwitter()
 
