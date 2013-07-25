@@ -1,27 +1,24 @@
 <article class="vision clearfix">
 
-  <a href="/users/{{ author_details.id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
-
-  <a href="/visions/{{ id }}" class="vision-link">
-
-    <span class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></span>
-
+  <header class="vision-header">
+    <a href="/users/{{ author }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+    <a href="/visions/{{ id }}" class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></a>
     <span class="author">
-      <strong class="author-name">{{ author_details.full_name }}</strong>
+      <strong class="author-name"><a href="/users/{{ author }}" class="undecorated">{{ author_details.full_name }}</a></strong>
       <em class="twitter-handle">@{{ author_details.username }}</em>
     </span>
+  </header>
 
-    <span class="vision-title">{{ formattruncated text 140 }}</span>
+  <h4 class="vision-description"><a href="/visions/{{ id }}" class="undecorated">{{ formattruncated text 140 }}</a></h4>
 
-    {{# if media_url }}
-    <a href="/visions/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
-    {{/ if }}
+  {{# if media_url }}
+  <a href="/visions/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
+  {{/ if }}
 
-    {{# if category }}
-    <span class="vision-list-category-icon"><strong class="capitalize">{{ category }}</strong><img src="/static/images/category-icon-d5d5c6-{{ category }}.png" class="icon-inline"></span>
-    {{/ if }}
+  {{# if category }}
+  <span class="vision-list-category-icon"><strong class="capitalize">{{ category }}</strong><img src="/static/images/category-icon-d5d5c6-{{ category }}.png" class="icon-inline"></span>
+  {{/ if }}
 
-    <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></span>
-  </a>
+  <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></span>
 
 </article><!-- end .vision -->

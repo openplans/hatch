@@ -223,6 +223,7 @@ a.user-link {
 
 .nobreak { white-space: nowrap; }
 .uppercase { text-transform: uppercase; }
+.undecorated { text-decoration: none; }
 
 
 
@@ -454,7 +455,7 @@ ul.user-menu:after {
   -webkit-background-size: 100% auto;
 }
 .vision .vision-media-container {
-  margin: 10px -5px 10px -45px;
+  margin: 10px -15px 10px -45px;
   top: 0;
   background-color: transparent;
   box-shadow: none;
@@ -504,16 +505,11 @@ ul.user-menu:after {
   height: 40px;
   border-radius: 0 18px 18px 0;
 }
-.vision-title {
+.vision-description {
   display: block;
   font-size: medium;
   font-weight: 700;
 }
-.vision-description {}
-.vision-category-string {
-  display: none;
-}
-
 
 /* Vision Footer */
 .vision-footer {
@@ -629,19 +625,12 @@ ul.user-menu:after {
 .vision-list .vision {
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  padding-right: 10px;
 }
 .vision-list .user-link {
   margin-top: 5px;
   margin-bottom: 0;
-}
-.vision-list .vision-title {
-  font-weight: 400;
-}
-.vision-link {
-  display: block;
-  padding: 0 10px 0 40px;
-  margin-left: -40px;
-  text-decoration: none;
 }
 .vision-list-category-icon {
   float: right;
@@ -835,7 +824,6 @@ h6.category-prompt {
 }
 .swiper-slide {
   width: 100%;
-/*  height: 100%;*/
   height: auto !important;
   opacity: 0;
   -webkit-transition: opacity 1.2s;
@@ -847,18 +835,21 @@ h6.category-prompt {
 .swiper-active-switch {}
 .swiper-visible-switch {}
 
+.swiper-vision-container {
+  position: relative;
+  padding: 0 10px 20px;
+}
 .swiper-slide .vision {
-  padding: 0 0 0 40px;
-  margin: 5px 10px;
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  padding-right: 10px;
+  top: 15px;
 }
 .swiper-slide .user-link {
   margin-top: 5px;
+  margin-bottom: 0;
 }
-.swiper-slide .vision p {
-  margin: 0;
-}
+
 .pagination {
   position: absolute;
   left: 0;
