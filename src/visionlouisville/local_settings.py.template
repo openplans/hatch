@@ -1,3 +1,5 @@
+from os import environ
+
 DEBUG = 'True'
 
 DATABASES = {
