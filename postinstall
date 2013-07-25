@@ -16,9 +16,9 @@ command = python src/manage.py celeryd --loglevel=info --concurrency=3 --beat
 stderr_logfile = /var/log/supervisor/%(program_name)s_error.log
 stdout_logfile = /var/log/supervisor/%(program_name)s.log
 
-[program:moment_listener]
+[program:tweet_listener]
 directory = /home/dotcloud/current/
-command = python src/manage.py listenformoments
+command = python src/manage.py listenfortweets
 stderr_logfile = /var/log/supervisor/%(program_name)s_error.log
 stdout_logfile = /var/log/supervisor/%(program_name)s.log
 
