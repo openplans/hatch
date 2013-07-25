@@ -5,14 +5,15 @@
     </p>
     <a href="/" class="btn btn-block btn-primary">Return to VizLou</a>
   {{^}}
-    <p>#VizLou is a website for young adults to share their visions for the future of Louisville.</p>
+    <h5>#VizLou is a website for young adults to share their visions for the future of Louisville.</h5>
      
-    <p>Your participation is vital: promote the tool and use it to engage with youth. Allies like you can can engage and empower young adults by engaging, sharing and supporting their visions. Your comments and suggestions help develop visions and encourage the visionaries. Thanks for your time!
+    <h1>Your participation is vital!</h1>
+    <p>Promote the tool and use it to engage with youth. Allies like you can can engage and empower young adults by engaging, sharing and supporting their visions. Your comments and suggestions help develop visions and encourage the visionaries. Thanks for your time!
     </p>
 
-    <p>Enter your email address to finish becoming an ally.</p>
-
     {{# if_authenticated }}
+    <h4>Enter your email address to finish becoming an ally.</h4>
+
       <form method="POST" action="/ally-signup">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ CSRF_TOKEN }}">
 
