@@ -24,7 +24,7 @@ class SimpleTest (SeleniumTestCase):
         the home page.
         """
         driver.get(self.base_url + "/")
-        sleep(2)
+        sleep(10)
         self.assertEqual(4, len(driver.find_elements_by_css_selector(".visionaries-list > li > span > img")))
     test_only_show_visible_visionaries_on_home_ie10      = selenium_test(only_show_visible_visionaries_on_home, browser='IE', version='10.0')
     test_only_show_visible_visionaries_on_home_chrome27  = selenium_test(only_show_visible_visionaries_on_home, browser='Chrome', version='27')
