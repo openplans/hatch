@@ -1059,6 +1059,11 @@ ul.user-list {
   font-weight: 700;
 }
 
+/* Ally Stuff */
+.ally-invite {
+  text-align: center;
+}
+
 
 /* =Media Queries for Responsive Layout
 -------------------------------------------------------------- */

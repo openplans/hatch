@@ -37,7 +37,7 @@ var VisionLouisville = VisionLouisville || {};
       'users/list/:id': 'listUsers',
       'users/:id/:tab': 'showUser',
       'users/:id': 'showUser',
-      'ally-signup': 'allySignup',
+      'ally': 'allySignup',
       '': 'home'
     }
   });

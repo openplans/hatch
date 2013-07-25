@@ -13,7 +13,7 @@ urlpatterns = patterns(
     # Social Auth
     url(r'^', include('social_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
-    url(r'^ally-signup$', secret_ally_signup_view, name='secret-ally-login'),
+    url(r'^ally$', secret_ally_signup_view, name='secret-ally-login'),
 
     # API
     url(r'^api/users/(?P<pk>current)/$',        current_user_api_view, name='current-user-detail'),
