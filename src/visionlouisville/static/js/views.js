@@ -167,7 +167,7 @@ var VisionLouisville = VisionLouisville || {};
     showReplyForm: function(evt) {
       evt.preventDefault();
 
-      NS.Utils.log('send', 'event', 'vision-reply-new', this.model.id);
+      NS.Utils.log('send', 'event', 'vision-reply', 'new', this.model.id);
 
       var $form = this.$('.reply-form').show(),
           $field = $form.find(':input[type!=hidden]:first'),
@@ -177,7 +177,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     handleFormSubmission: function(evt) {
 
-      NS.Utils.log('event', 'vision-reply-save', this.model.id);
+      NS.Utils.log('event', 'vision-reply', 'save', this.model.id);
 
       evt.preventDefault();
       var form = evt.target,
@@ -295,13 +295,13 @@ var VisionLouisville = VisionLouisville || {};
 
         if (supporters.contains(user)) {
 
-          NS.Utils.log('send', 'event', 'vision-unsupport', this.model.id);
+          NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
           user.unsupport(vision);
           this.$('.support').removeClass('supported');
         } else {
 
-          NS.Utils.log('send', 'event', 'vision-support', this.model.id);
+          NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
           user.support(vision);
           this.$('.support').addClass('supported');
@@ -311,7 +311,7 @@ var VisionLouisville = VisionLouisville || {};
       } else {
 
         // It's nice to know when unauthenticated users click support too
-        NS.Utils.log('send', 'event', 'vision-support', this.model.id);
+        NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
         this.$('.retweet-login-prompt').addClass('is-hidden');
         this.$('.support-login-prompt').toggleClass('is-hidden');
@@ -328,7 +328,7 @@ var VisionLouisville = VisionLouisville || {};
           alreadyShared = user.isAuthenticated() && _.contains(sharers, user.id);
 
       if (!user.isAuthenticated() || !alreadyShared) {
-        NS.Utils.log('send', 'event', 'vision-retweet-start', this.model.id);
+        NS.Utils.log('send', 'event', 'vision-retweet', 'start', this.model.id);
       }
 
       if (user.isAuthenticated() && !alreadyShared) {
@@ -346,7 +346,7 @@ var VisionLouisville = VisionLouisville || {};
 
       if (!_.contains(sharers, user.id)) {
 
-        NS.Utils.log('send', 'event', 'vision-retweet-confirm', this.model.id);
+        NS.Utils.log('send', 'event', 'vision-retweet', 'confirm', this.model.id);
 
         user.share(vision);
         this.$('.retweet-link').addClass('retweeted');
@@ -359,7 +359,7 @@ var VisionLouisville = VisionLouisville || {};
     handleCancelRetweet: function(evt) {
       evt.preventDefault();
 
-      NS.Utils.log('send', 'event', 'vision-retweet-cancel', this.model.id);
+      NS.Utils.log('send', 'event', 'vision-retweet', 'cancel', this.model.id);
 
       this.$('.confirm-retweet-prompt').addClass('is-hidden');
     },
@@ -425,7 +425,7 @@ var VisionLouisville = VisionLouisville || {};
 
       if (invalidEl) {
 
-        NS.Utils.log('send', 'event', 'vision-save', 'invalid');
+        NS.Utils.log('send', 'event', 'vision', 'save', 'invalid');
 
         $(invalidEl).focus();
         invalidEl.select();
@@ -447,7 +447,7 @@ var VisionLouisville = VisionLouisville || {};
         headers: data.headers,
         error: function() {
 
-          NS.Utils.log('send', 'event', 'vision-save', 'fail');
+          NS.Utils.log('send', 'event', 'vision', 'save', 'fail');
 
           self.ui.submit.prop('disabled', false);
           window.alert('Unable to save your vision. Please try again.');
@@ -455,7 +455,7 @@ var VisionLouisville = VisionLouisville || {};
         success: function(model) {
 
           var tweetFlag = (this.$('.vision-tweet input').is(':checked') ? 1 : 0);
-          NS.Utils.log('send', 'event', 'vision-save', 'success', tweetFlag);
+          NS.Utils.log('send', 'event', 'vision', 'save', 'success', tweetFlag);
 
           NS.app.router.navigate('/visions/' + model.id, {trigger: true});
         }
@@ -466,7 +466,7 @@ var VisionLouisville = VisionLouisville || {};
       var category = this.$('.vision-category-list input:checked').val();
 
       if (category) {
-        NS.Utils.log('send', 'event', 'vision-change-category', category);
+        NS.Utils.log('send', 'event', 'vision', 'change-category', category);
       }
 
       this.$('.category-prompt').addClass('is-hidden')
@@ -490,7 +490,7 @@ var VisionLouisville = VisionLouisville || {};
         NS.Utils.fileToCanvas(file, function(canvas) {
           canvas.toBlob(function(blob) {
 
-            NS.Utils.log('send', 'event', 'vision-add-image');
+            NS.Utils.log('send', 'event', 'vision', 'add-image');
 
             self.model.set('media', blob);
             var previewUrl = canvas.toDataURL('image/jpeg');

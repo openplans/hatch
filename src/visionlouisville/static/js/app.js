@@ -92,7 +92,7 @@ var VisionLouisville = VisionLouisville || {};
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
       document.title = "#VizLou | Add your vision";
-      NS.Utils.log('send', 'event', 'vision-new');
+      NS.Utils.log('send', 'event', 'vision', 'new');
 
       // Protect against unauthenticated users.
       if (!NS.app.currentUser.isAuthenticated()) {
@@ -122,7 +122,7 @@ var VisionLouisville = VisionLouisville || {};
 
         // TODO: Move to the config settings
         document.title = '#VizLou | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
-        NS.Utils.log('send', 'event', 'vision-show', visionId);
+        NS.Utils.log('send', 'event', 'vision', 'show', visionId);
 
         // TODO: why is this necessary?
         layout.on('show', function() {
@@ -225,7 +225,7 @@ var VisionLouisville = VisionLouisville || {};
             }),
             isPersonal = (NS.app.currentUser.isAuthenticated() && id == NS.app.currentUser.id),
             logPrefix = isPersonal ? 'my-' : '',
-            logInfix = tab ? tab + '-' : '';
+            logSuffix = tab ? tab + '-' : '';
 
         view.on('show', function() {
           if (tab === 'supported') {
@@ -235,7 +235,7 @@ var VisionLouisville = VisionLouisville || {};
           } else {
             view.showVisions();
           }
-          NS.Utils.log('send', 'event', logPrefix + 'profile-' + logInfix + 'show', id);
+          NS.Utils.log('send', 'event', logPrefix + 'profile-' + logSuffix, 'show', id);
         });
 
         return view;
