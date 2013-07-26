@@ -9,8 +9,58 @@ var VisionLouisville = VisionLouisville || {};
    * for output. Derived from https://gist.github.com/arbales/1654670
    * ============================================================
    */
-  var LINK_DETECTION_REGEX = /((?:[a-z]+:\/\/)?(?:localhost|(?:(?:[a-z0-9\-]+\.)+(?:[a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(?::[0-9]{1,5})?(?:\/[a-z0-9_\-\.~]+)*(?:\/(?:[a-z0-9_\-\.]*)(?:\?[a-z0-9+_\-\.%=&]*)?)?(?:#[a-zA-Z0-9!$&'\(\)*+.=-_~:@\/?]*[A-Za-z0-9_])?)([^a-z0-9_\-\.]*(?:\s+|$))/gi;
-  var TWITTER_USER_REGEX = /([^\w]|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
+  var LINK_DETECTION_REGEX = new RegExp(
+      "(" +
+        // The URL scheme (e.g. 'http://' or 'ftp://')
+        "(?:[a-z]+:\\/\\/)?" +
+
+        // The domain
+        "(?:" +
+          "localhost|" +
+          "(?:" +
+            "(?:[a-z0-9\\-]+\\.)+" +
+            "(?:[a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)" +
+          ")" +
+        ")" +
+
+        // The port (optional)
+        "(?::[0-9]{1,5})?" +
+
+        // The path and querystring
+        "(?:\\/[a-z0-9_\\-\\.~]+)*" +
+        "(?:" +
+          "\\/" +
+          "(?:[a-z0-9_\\-\\.]*)" +
+          "(?:\\?[a-z0-9+_\\-\\.%=&]*)?" +
+        ")?" +
+
+        // The hash
+        "(?:#[a-zA-Z0-9!$&'\\(\\)*+.=-_~:@\\/?]*)?" +
+      ")" +
+
+      // Must be followed by non-URL characters, and white space or
+      // the end of the string.
+      "(" +
+        "[^a-z0-9_\\-\\.]*" +
+        "(?:\\s+|$)" +
+      ")",
+
+      'gi'
+    );
+
+  var TWITTER_USER_REGEX = new RegExp(
+    // Preceded by any non-word character or the beginning of a string. We do
+    // non-word because we don't want this to match an email address.
+    "([^\\w]|^)" +
+
+    // No more than 15 characters
+    "@([a-z0-9_]{1,15})" +
+
+    // Followed by non-valid Twitter username characters
+    "([^a-z0-9_]|$)",
+
+    'gi'
+  );
 
   NS.Utils = {
     serializeObject: function(form) {
