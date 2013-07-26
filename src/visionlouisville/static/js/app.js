@@ -25,6 +25,7 @@ var VisionLouisville = VisionLouisville || {};
     }
   };
 
+  NS.scrollTops = {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
@@ -39,6 +40,15 @@ var VisionLouisville = VisionLouisville || {};
       'users/:id': 'showUser',
       'ally': 'allySignup',
       '': 'home'
+    },
+    navigate: function(fragment, options) {
+      var __super__ = Backbone.Marionette.AppRouter.prototype,
+          path = NS.getCurrentPath();
+      options = options || {};
+
+      NS.scrollTops[path] = document.body.scrollTop || document.documentElement.scrollTop || 0;
+      this.noscroll = options.noscroll;
+      return __super__.navigate.call(this, fragment, options);
     }
   });
 
@@ -262,7 +272,13 @@ var VisionLouisville = VisionLouisville || {};
 
     // Gobal-level events
     this.router.bind('route', function(route, router) {
+      var path = NS.getCurrentPath(),
+          scrollTop = NS.scrollTops[path] || 0;
+
       NS.Utils.log('send', 'pageview', NS.getCurrentPath());
+      if (!this.noscroll) {
+        document.body.scrollTop = document.documentElement.scrollTop = scrollTop;
+      }
       $('.authentication-link-login').attr('href', NS.getLoginUrl());
       $('.user-menu').removeClass('is-open');
     });
@@ -296,6 +312,7 @@ var VisionLouisville = VisionLouisville || {};
     // through list, route them through Backbone's navigate method.
     $(document).on("click", "a[href^='/']", function(evt) {
       var href = $(evt.currentTarget).attr('href'),
+          noscroll = !_.isUndefined($(evt.currentTarget).attr('data-noscroll')),
           url;
 
       // Allow shift+click for new tabs, etc.
@@ -316,7 +333,7 @@ var VisionLouisville = VisionLouisville || {};
         url = href.replace(/^\//, '').replace('#!/', '');
 
         // # Instruct Backbone to trigger routing events
-        NS.app.router.navigate(url, { trigger: true });
+        NS.app.router.navigate(url, { trigger: true, noscroll: noscroll });
 
         return false;
       }
