@@ -477,6 +477,11 @@ ul.user-menu:after {
 .vision-media {
   display: block;
 }
+
+.vision-form .vision-media {
+  min-height: 20px;
+}
+
 .vision-header {
   margin-top: -10px;
 }
