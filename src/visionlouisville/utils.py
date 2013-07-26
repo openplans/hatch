@@ -1,3 +1,4 @@
+from django.conf import settings
 from itertools import combinations, islice
 from random import randint
 
@@ -21,3 +22,7 @@ def chunk(iterable, n):
         item = list(islice(it, n))
         if item: yield item
         else: break
+
+
+def settings_context(request):
+    return {'settings': settings}

@@ -35,10 +35,12 @@ import json
 with open('/home/dotcloud/environment.json') as f:
     env = json.load(f)
 
-ADMINS = zip(
-    env.get('ADMINS', '').split(','),
-    env.get('ADMINS', '').split(',')
-)
+ADMINS = [
+    (admin.split('@')[0], admin)
+    for admin in env.get('ADMINS', '').split(',')
+]
+
+EMAIL_SUBJECT_PREFIX = '[' + env.get('DOTCLOUD_PROJECT', 'vizlou') + '] '
 
 DATABASES = {
     'default': {
@@ -71,6 +73,9 @@ AWS_STORAGE_BUCKET_NAME = env['AWS_STORAGE_BUCKET_NAME']
 AWS_QUERYSTRING_AUTH = False
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+GOOGLE_ANALYTICS_ID = env.get('GOOGLE_ANALYTICS_ID', "', ''); alert('Set your Google Analytics ID and domain!'); (function(){})('")
+GOOGLE_ANALYTICS_DOMAIN = env.get('GOOGLE_ANALYTICS_DOMAIN', 'dotcloud.com')
 
 from datetime import timedelta
 CELERYBEAT_SCHEDULE = {
