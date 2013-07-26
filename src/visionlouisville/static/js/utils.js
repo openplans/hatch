@@ -9,7 +9,7 @@ var VisionLouisville = VisionLouisville || {};
    * for output. Derived from https://gist.github.com/arbales/1654670
    * ============================================================
    */
-  var LINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(localhost|(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?).?(\s+|$)/gi;
+  var LINK_DETECTION_REGEX = /((?:[a-z]+:\/\/)?(?:localhost|(?:(?:[a-z0-9\-]+\.)+(?:[a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal)))(?::[0-9]{1,5})?(?:\/[a-z0-9_\-\.~]+)*(?:\/(?:[a-z0-9_\-\.]*)(?:\?[a-z0-9+_\-\.%=&]*)?)?(?:#[a-zA-Z0-9!$&'\(\)*+.=-_~:@\/?]*[A-Za-z0-9_])?)([^a-z0-9_\-\.]*(?:\s+|$))/gi;
   var TWITTER_USER_REGEX = /([^\w]|^)@([A-Za-z0-9_]{1,15})([^A-Za-z0-9_]|$)/;
 
   NS.Utils = {
@@ -65,11 +65,18 @@ var VisionLouisville = VisionLouisville || {};
 
     // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
     linkify: function(safeContent) {
-      return safeContent.replace(LINK_DETECTION_REGEX, function(match, url) {
+      return safeContent.replace(LINK_DETECTION_REGEX, function(match, url, suffix) {
         var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
-        url = match.replace(/^https?:\/\//, '');
+
+        if (address[address.length-1] === '.') {
+          address = address.slice(0, address.length-1);
+          url = url.slice(0, url.length-1);
+          suffix = '.' + suffix;
+        }
+
+        url = url.replace(/^https?:\/\//, '');
         url = NS.Utils.truncateChars(url, 40);
-        return "<a href='" + address + "' target='_blank'>" + url + "</a>";
+        return "<a href='" + address + "' target='_blank'>" + url + "</a>" + suffix;
       });
     },
 
