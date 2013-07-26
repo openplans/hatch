@@ -200,7 +200,7 @@ var VisionLouisville = VisionLouisville || {};
             }
 
             return new NS.UserListWithFilterView({
-              collection: new NS.UserCollection(collection.filter(filterUsers)),
+              collection: new NS.UserCollection(collection.filter(filterUsers))
             });
           };
 
