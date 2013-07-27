@@ -189,6 +189,18 @@ class VisionViewSet (AppMixin, ModelViewSet):
             ' ', vision_url
         ])
 
+    @classmethod
+    def tweet_vision_from_app(cls, request, vision):
+        tweet_text = cls.get_app_tweet_text(request, vision)
+        service = cls.get_twitter_service()
+        success, response = service.tweet(tweet_text)
+
+        if success:
+            vision.tweet_id = response['id']
+            vision.save()
+        else:
+            raise TweetException('App tweet not sent: ' + response)
+
     def post_save(self, vision, created):
         """
         This is called in the create handler, after the serializer saves the
@@ -197,16 +209,11 @@ class VisionViewSet (AppMixin, ModelViewSet):
         """
         if created:
             # Always tweet with the app's account
-            tweet_text = self.get_app_tweet_text(self.request, vision)
-            service = self.get_twitter_service()
-            success, response = service.tweet(tweet_text)
-
-            if success:
-                vision.tweet_id = response['id']
-                vision.save()
-            else:
+            try:
+                self.tweet_vision_from_app(self.request, vision)
+            except TweetException:
                 vision.delete()
-                raise TweetException('App tweet not sent: ' + response)
+                raise
 
             # Also tweet from user's account if requested
             if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):

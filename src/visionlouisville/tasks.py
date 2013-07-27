@@ -4,6 +4,7 @@ from time import sleep
 from .models import User, Vision
 from .utils import chunk
 from .services import default_twitter_service as twitter_service
+from .views import VisionViewSet, TweetException
 
 import logging
 log = logging.getLogger(__name__)
@@ -56,6 +57,20 @@ def listen_for_tweets():
             vision, created = Vision.objects.create_or_update_from_tweet(tweet)
             if created:
                 log.info('\n  - Created a new vision "%s", yay!\n' % (vision,))
+
+                try:
+
+                    # TODO: This needs a better solution.
+                    class MockRequest (object):
+                        def build_absolute_uri(path):
+                            return 'http://vizlou.org' + path
+
+                    VisionViewSet.tweet_vision_from_app(MockRequest(), vision)
+                    log.info('\n  - Sent a tweet for the vision!\n' % (vision,))
+
+                except TweetException as e:
+                    log.error("\n  - Failed to send a tweet for imported vision %s: %s\n" % (vision, e,))
+
             else:
                 log.info('\n  - Modified a vision "%s", yay!\n' % (vision,))
         else:
