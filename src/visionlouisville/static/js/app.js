@@ -225,7 +225,7 @@ var VisionLouisville = VisionLouisville || {};
             }),
             isPersonal = (NS.app.currentUser.isAuthenticated() && id == NS.app.currentUser.id),
             logPrefix = isPersonal ? 'my-' : '',
-            logSuffix = tab ? tab + '-' : '';
+            logSuffix = tab ? '-' + tab : '';
 
         view.on('show', function() {
           if (tab === 'supported') {
@@ -235,7 +235,7 @@ var VisionLouisville = VisionLouisville || {};
           } else {
             view.showVisions();
           }
-          NS.Utils.log('send', 'event', logPrefix + 'profile-' + logSuffix, 'show', id);
+          NS.Utils.log('send', 'event', logPrefix + 'profile' + logSuffix, 'show', id);
         });
 
         return view;
@@ -311,8 +311,10 @@ var VisionLouisville = VisionLouisville || {};
     // Globally capture clicks. If they are internal and not in the pass
     // through list, route them through Backbone's navigate method.
     $(document).on("click", "a[href^='/']", function(evt) {
-      var href = $(evt.currentTarget).attr('href'),
-          noscroll = !_.isUndefined($(evt.currentTarget).attr('data-noscroll')),
+      var $link = $(evt.currentTarget),
+          href = $link.attr('href'),
+          noscroll = !_.isUndefined($link.attr('data-noscroll')),
+          replace = !_.isUndefined($link.attr('data-replace')),
           url;
 
       // Allow shift+click for new tabs, etc.
@@ -333,7 +335,11 @@ var VisionLouisville = VisionLouisville || {};
         url = href.replace(/^\//, '').replace('#!/', '');
 
         // # Instruct Backbone to trigger routing events
-        NS.app.router.navigate(url, { trigger: true, noscroll: noscroll });
+        NS.app.router.navigate(url, {
+          trigger: true,
+          noscroll: noscroll,
+          replace: replace
+        });
 
         return false;
       }
