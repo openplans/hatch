@@ -4,27 +4,11 @@
   {{/if_authenticated}}
 
   <ul class="vision-category-list unstyled-list is-current-{{ category }}">
-      <li class="vision-category-economy">
-        <a href="/visions/economy/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-economy.png"><span class="is-visuallyhidden">Economy</span></a>
+    {{# each_category }}
+      <li class="vision-category-{{ name }}">
+        <a href="/visions/{{ name }}/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-{{ name }}.png"><span class="is-visuallyhidden">{{ title }}</span></a>
       </li>
-      <li class="vision-category-health">
-        <a href="/visions/health/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-health.png"><span class="is-visuallyhidden">Health</span></a>
-      </li>
-      <li class="vision-category-energy">
-        <a href="/visions/energy/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-energy.png"><span class="is-visuallyhidden">Energy</span></a>
-      </li>
-      <li class="vision-category-living">
-        <a href="/visions/living/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-living.png"><span class="is-visuallyhidden">Living</span></a>
-      </li>
-      <li class="vision-category-connectivity">
-        <a href="/visions/connectivity/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-connectivity.png"><span class="is-visuallyhidden">Connectivity</span></a>
-      </li>
-      <li class="vision-category-identity">
-        <a href="/visions/identity/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-identity.png"><span class="is-visuallyhidden">Identity</span></a>
-      </li>
-      <li class="vision-category-creativity">
-        <a href="/visions/creativity/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-creativity.png"><span class="is-visuallyhidden">Creativity</span></a>
-      </li>
+    {{/ each_category }}
   </ul>
 
   {{# if category }}

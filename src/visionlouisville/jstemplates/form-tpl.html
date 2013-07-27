@@ -8,37 +8,18 @@
     <h6>Select a Category:</h6>
     <ul class="vision-category-list unstyled-list">
       {{#select category}}
-        <li class="vision-category-economy">
-          <label><input type="radio" name="category" value="economy" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-economy.png"><span class="is-visuallyhidden">Economy</span></label>
-        </li>
-        <li class="vision-category-health">
-          <label><input type="radio" name="category" value="health" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-health.png"><span class="is-visuallyhidden">Health</span></label>
-        </li>
-        <li class="vision-category-energy">
-          <label><input type="radio" name="category" value="energy" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-energy.png"><span class="is-visuallyhidden">Energy</span></label>
-        </li>
-        <li class="vision-category-living">
-          <label><input type="radio" name="category" value="living" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-living.png"><span class="is-visuallyhidden">Living</span></label>
-        </li>
-        <li class="vision-category-connectivity">
-          <label><input type="radio" name="category" value="connectivity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-connectivity.png"><span class="is-visuallyhidden">Connectivity</span></label>
-        </li>
-        <li class="vision-category-identity">
-          <label><input type="radio" name="category" value="identity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-identity.png"><span class="is-visuallyhidden">Identity</span></label>
-        </li>
-        <li class="vision-category-creativity">
-          <label><input type="radio" name="category" value="creativity" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-creativity.png"><span class="is-visuallyhidden">Creativity</span></label>
-        </li>
+        {{#each_category}}
+          <li class="vision-category-{{ name }}">
+            <label><input type="radio" name="category" value="{{ name }}" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-{{ name }}.png"><span class="is-visuallyhidden">{{ title }}</span></label>
+          </li>
+        {{/each_category}}
       {{/select}}
     </ul>
+
     <p class="category-prompt is-hidden default-prompt">Please select a category from the list above.</p>
-    <p class="category-prompt economy-prompt"><strong class="category-title">Economy</strong> &raquo; {{ category_prompt 'economy' }}</p>
-    <p class="category-prompt is-hidden health-prompt"><strong class="category-title">Health</strong> &raquo; {{ category_prompt 'health' }}</p>
-    <p class="category-prompt is-hidden energy-prompt"><strong class="category-title">Energy</strong> &raquo; {{ category_prompt 'energy' }}</p>
-    <p class="category-prompt is-hidden living-prompt"><strong class="category-title">Living</strong> &raquo; {{ category_prompt 'living' }}</p>
-    <p class="category-prompt is-hidden connectivity-prompt"><strong class="category-title">Connectivity</strong> &raquo; {{ category_prompt 'connectivity' }}</p>
-    <p class="category-prompt is-hidden identity-prompt"><strong class="category-title">Identity</strong> &raquo; {{ category_prompt 'identity' }}</p>
-    <p class="category-prompt is-hidden creativity-prompt"><strong class="category-title">Creativity</strong> &raquo; {{ category_prompt 'creativity' }}</p>
+    {{#each_category}}
+      <p class="category-prompt {{ name }}-prompt"><strong class="category-title">{{ title }}</strong> &raquo; {{ prompt }}</p>
+    {{/each_category}}
 
     <p class="vision-description">
       <textarea name="text" placeholder="My vision for Louisville is..." required></textarea>
