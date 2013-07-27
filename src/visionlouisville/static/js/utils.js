@@ -155,6 +155,10 @@ var VisionLouisville = VisionLouisville || {};
       }
     },
 
+    capitalize: function(text) {
+      return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+    },
+
     // ====================================================
     // File and Image Handling
 

@@ -197,6 +197,8 @@ var VisionLouisville = VisionLouisville || {};
       NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
+      document.title = "#VizLou | See the " + NS.Utils.capitalize(id || 'visionaries');
+
       var userListLayout = new NS.UserListLayout({
             model: new Backbone.Model({show_allies: id === 'allies'})
           }),
@@ -227,6 +229,8 @@ var VisionLouisville = VisionLouisville || {};
             logPrefix = isPersonal ? 'my-' : '',
             logSuffix = tab ? '-' + tab : '';
 
+        document.title = "#VizLou | " + model.get('full_name') + "'s profile";
+
         view.on('show', function() {
           if (tab === 'supported') {
             view.showSupported();
@@ -235,7 +239,7 @@ var VisionLouisville = VisionLouisville || {};
           } else {
             view.showVisions();
           }
-          NS.Utils.log('send', 'event', logPrefix + 'profile' + logSuffix, 'show', id);
+          NS.Utils.log('send', 'event', logPrefix + 'profile' + logSuffix, 'show', id + ' (' + model.get('username') + '/' + model.get('full_name') + ')');
         });
 
         return view;
