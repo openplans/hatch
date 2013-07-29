@@ -478,10 +478,6 @@ ul.user-menu:after {
   display: block;
 }
 
-.vision-form .vision-media {
-  min-height: 20px;
-}
-
 .vision-header {
   margin-top: -10px;
 }
@@ -789,6 +785,7 @@ h6.category-prompt {
   position: absolute;
   right: 0;
   bottom: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -798,6 +795,7 @@ h6.category-prompt {
 .image-preview-container {
   display: block;
   margin-bottom: -24px;
+  min-height: 24px;
 }
 .image-preview-container img {
   position: relative;
