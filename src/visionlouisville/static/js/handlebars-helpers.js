@@ -3,6 +3,20 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
+  Handlebars.registerHelper('get_tab_count', function(visions, supported, replies, options) {
+    var tabs = 0;
+    if (visions) {
+      tabs++;
+    }
+    if (supported) {
+      tabs++;
+    }
+    if (replies) {
+      tabs++;
+    }
+    return tabs;
+  });
+
   Handlebars.registerHelper('if_authenticated', function(options) {
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
   });
@@ -48,7 +62,7 @@ var VisionLouisville = VisionLouisville || {};
     var result = '';
 
     _.each(NS.Config.categories, function(category, name) {
-      category['name'] = name;
+      category.name = name;
       result += options.fn(_.extend(this, category));
     });
 

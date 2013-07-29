@@ -10,13 +10,22 @@
   <div class="activity clearfix">
 
     <nav class="tabs-container">
-      <ul class="tabs tabs-3 unstyled-list">
+      <ul class="tabs tabs-{{get_tab_count visions.length supported.length replies.length}} unstyled-list">
+
+        {{#if visions.length}}
         <li class="tab"><a href="/users/{{id}}/visions" data-noscroll data-replace>{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</a></li>
+        {{/if}}
+
+        {{#if supported.length}}
         <li class="tab"><a href="/users/{{id}}/supported" data-noscroll data-replace>{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</a></li>
+        {{/if}}
+
+        {{#if replies.length}}
         <li class="tab"><a href="/users/{{id}}/replies" data-noscroll data-replace>{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</a></li>
+        {{/if}}
       </ul>
     </nav>
 
-    <div class="content-region"></div>
+    <div class="content-region content-count-{{get_tab_count visions.length supported.length replies.length}}"></div>
   </div>
 </div>

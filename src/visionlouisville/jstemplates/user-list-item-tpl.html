@@ -7,12 +7,17 @@
       <span class="twitter-handle">@{{ username }}</span>
     </span>
     <span class="user-meta">
-      <span class="user-vision-count nobreak">{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</span>
-      <span class="meta-sep">|</span>
-      <span class="user-support-count nobreak">{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</span>
-      <span class="meta-sep">|</span>
-      <span class="user-reply-count nobreak">{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</span>
+      {{#if visions.length}}
+      <span class="user-count user-vision-count nobreak">{{ visions.length }} {{pluralize visions.length 'Vision' 'Visions'}}</span>
+      {{/if}}
+
+      {{#if supported.length}}
+      <span class="user-count user-support-count nobreak">{{ supported.length}} {{pluralize supported.length 'Support' 'Supports'}}</span>
+      {{/if}}
+
+      {{#if replies.length}}
+      <span class="user-count user-reply-count nobreak">{{ replies.length }} {{pluralize replies.length 'Reply' 'Replies'}}</span>
+      {{/if}}
     </span>
   </a>
-
 </article>

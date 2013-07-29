@@ -988,6 +988,13 @@ ul.user-list {
   padding: 10px;
 }
 
+.user-meta .user-count:not(:first-child):before {
+  content: '| ';
+  opacity: 0.25;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+}
+
 /* Tabs */
 .tabs-container {
   margin: 0 -10px 10px -10px;
@@ -1015,6 +1022,12 @@ ul.user-list {
   background-color: #e7e7d7;
   box-shadow: none;
 }
+.tabs-0 {
+  display: none;
+}
+.tabs-1 .tab {
+  width: 100%;
+}
 .tabs-2 .tab {
   width: 50%;
 }
@@ -1024,6 +1037,11 @@ ul.user-list {
 }
 .tabs-3 .tab:first-child {
   width: 32%;
+}
+
+/* Content */
+.content-region.content-count-0 {
+  display: none;
 }
 
 

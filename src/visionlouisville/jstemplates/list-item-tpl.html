@@ -1,10 +1,10 @@
 <article class="vision clearfix">
 
   <header class="vision-header">
-    <a href="/users/{{ author }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
+    <a href="/users/{{ author_details.id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>
     <a href="/visions/{{ id }}" class="datetime"><time datetime="{{ formatdatetime created_at "YYYY-MM-DD HH:MM-SSSS" }}">{{ formatdatetime created_at "MMMM Do YYYY" }}</time></a>
     <span class="author">
-      <strong class="author-name"><a href="/users/{{ author }}" class="undecorated">{{ author_details.full_name }}</a></strong>
+      <strong class="author-name"><a href="/users/{{ author_details.id }}" class="undecorated">{{ author_details.full_name }}</a></strong>
       <em class="twitter-handle">@{{ author_details.username }}</em>
     </span>
   </header>
