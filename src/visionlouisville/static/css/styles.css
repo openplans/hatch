@@ -514,7 +514,8 @@ ul.user-menu:after {
   height: 40px;
   border-radius: 0 18px 18px 0;
 }
-.vision .vision-description {
+.vision .vision-description,
+.bio-text {
   display: block;
   font-size: medium;
   font-weight: 700;
