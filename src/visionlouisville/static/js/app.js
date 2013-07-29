@@ -346,6 +346,12 @@ var VisionLouisville = VisionLouisville || {};
         });
 
         return false;
+
+      } else if (href.indexOf('/login') === 0) {
+        NS.Utils.log('send', 'event', 'authentication', 'login');
+
+      } else if (href.indexOf('/logout') === 0) {
+        NS.Utils.log('send', 'event', 'authentication', 'logout');
       }
 
     });
