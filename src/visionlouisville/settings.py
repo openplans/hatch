@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Time Zones
 #
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'US/Eastern'
 USE_TZ = True
 
 ###############################################################################
