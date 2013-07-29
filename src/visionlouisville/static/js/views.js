@@ -206,6 +206,11 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  NS.NoReplyToVisionItemView = Backbone.Marionette.ItemView.extend({
+    template: '#no-reply-to-vision-items-tpl',
+    tagName: 'li'
+  });
+
   NS.ReplyToVisionItemView = Backbone.Marionette.ItemView.extend({
     template: '#reply-to-vision-tpl',
     tagName: 'li'
@@ -215,8 +220,8 @@ var VisionLouisville = VisionLouisville || {};
     template: '#reply-to-vision-tpl',
     tagName: 'ul',
     className: 'unstyled-list vision-list',
-    itemView: NS.ReplyToVisionItemView
-
+    itemView: NS.ReplyToVisionItemView,
+    emptyView: NS.NoReplyToVisionItemView
   });
 
 
