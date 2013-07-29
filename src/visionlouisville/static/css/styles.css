@@ -228,7 +228,7 @@ a.user-link {
 .nobreak { white-space: nowrap; }
 .uppercase { text-transform: uppercase; }
 .undecorated { text-decoration: none; }
-
+.block-link { display: block; }
 
 
 /* =Layout
@@ -982,6 +982,10 @@ ul.user-list {
 }
 .user-meta {
   font-weight: 600;
+}
+.user-card .block-link {
+  margin: -10px;
+  padding: 10px;
 }
 
 /* Tabs */
