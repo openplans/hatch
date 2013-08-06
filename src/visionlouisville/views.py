@@ -218,6 +218,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
             # Also tweet from user's account if requested
             if self.request.META.get('HTTP_X_SEND_TO_TWITTER', False):
                 tweet_text = self.get_user_tweet_text(self.request, vision)
+                service = self.get_twitter_service()
                 success, response = service.tweet(tweet_text,
                                                   self.request.user)
                 if not success:
