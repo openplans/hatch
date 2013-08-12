@@ -24,7 +24,8 @@ module.exports = function(grunt) {
               'static/components/exif-js/binaryajax.js',
               'static/components/exif-js/exif.js',
               'static/components/blueimp-load-image/js/load-image.js',
-              'static/components/blueimp-canvas-to-blob/js/canvas-to-blob.js'
+              'static/components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
+              'static/components/spin.js/spin.js'
             ]
           },
           {

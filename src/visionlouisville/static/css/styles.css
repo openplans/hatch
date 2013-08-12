@@ -259,6 +259,10 @@ body {
   font-size: small;
   line-height: 1.5;
 }
+.main .spinner-target {
+  /* Accomodate the spinner when there's no content yet */
+  min-height: 200px;
+}
 .welcome.site-footer {
   margin-top: 30px;
   margin-bottom: -20px;
