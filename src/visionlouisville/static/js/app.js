@@ -9,13 +9,24 @@ var VisionLouisville = VisionLouisville || {};
   // Create a view and show it in a region only AFTER you get results back from
   // a collection.
   NS.showViewInRegion = function(collection, region, getView, options) {
-    var render = function() {
+    var $regionEl = $(region.el),
+        origMinHeight = $regionEl.css('min-height'),
+
+    render = function() {
+      $regionEl.css({minHeight: origMinHeight});
       var view = getView(collection, options);
       region.show(view);
     };
 
     // Nothing in the collection? It's not done fetching. Let's wait for it.
     if (collection.size() === 0) {
+
+      // Show a spinner until we load the content.
+      if (options.spinner) {
+        $regionEl.css({minHeight: (options.spinner.radius*2 + (options.spinner.length + options.spinner.width)*2) * 1.5});
+        new Spinner(options.spinner).spin($regionEl[0]);
+      }
+
       // Render when the collection resets
       collection.once('reset', function() {
         render();
@@ -87,7 +98,7 @@ var VisionLouisville = VisionLouisville || {};
       };
 
       NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
-        getVisionListView, {listCategory: listCategory});
+        getVisionListView, {listCategory: listCategory, spinner: NS.app.bigSpinnerOptions});
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
@@ -141,7 +152,7 @@ var VisionLouisville = VisionLouisville || {};
       };
 
       NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
-        getVisionDetailView, {visionId: visionId});
+        getVisionDetailView, {visionId: visionId, spinner: NS.app.bigSpinnerOptions});
     },
     home: function() {
       // TODO: Move to the config settings
@@ -189,12 +200,13 @@ var VisionLouisville = VisionLouisville || {};
 
       // Render the main view
       NS.app.mainRegion.show(homeView);
+
       // Render the carousel
-      NS.showViewInRegion(NS.app.visionCollection, homeView.visionCarousel, getVisionCarouselView);
+      NS.showViewInRegion(NS.app.visionCollection, homeView.visionCarousel, getVisionCarouselView, {spinner: NS.app.smallSpinnerOptions});
       // Render visionaries
-      NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView);
+      NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
       // Render allies
-      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
+      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView, {spinner: NS.app.smallSpinnerOptions});
     },
     listUsers: function(id) {
       document.title = "#VizLou | See the " + NS.Utils.capitalize(id || 'visionaries');
@@ -217,7 +229,7 @@ var VisionLouisville = VisionLouisville || {};
           };
 
       NS.app.mainRegion.show(userListLayout);
-      NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id});
+      NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     showUser: function(id, tab) {
       var getUserDetailView = function(collection, options) {
@@ -244,7 +256,7 @@ var VisionLouisville = VisionLouisville || {};
 
         return view;
       };
-      NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id});
+      NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
     }
   };
 
@@ -264,31 +276,25 @@ var VisionLouisville = VisionLouisville || {};
   // App ======================================================================
   NS.app = new Backbone.Marionette.Application();
 
-  // Show a spinner until we load.
-  var opts = {
-    lines: 13, // The number of lines to draw
-    length: 0, // The length of each line
-    width: 15, // The line thickness
-    radius: 54, // The radius of the inner circle
-    corners: 1, // Corner roundness (0..1)
-    rotate: 0, // The rotation offset
-    direction: 1, // 1: clockwise, -1: counterclockwise
-    color: '#000', // #rgb or #rrggbb
-    speed: 1, // Rounds per second
-    trail: 60, // Afterglow percentage
-    shadow: false, // Whether to render a shadow
-    hwaccel: false, // Whether to use hardware acceleration
-    className: 'spinner', // The CSS class to assign to the spinner
-    zIndex: 2e9, // The z-index (defaults to 2000000000)
-    top: 'auto', // Top position relative to parent in px
-    left: 'auto' // Left position relative to parent in px
+  // Show a spinner until we load the main region content.
+  NS.app.bigSpinnerOptions = {
+    lines: 13, length: 0, width: 10, radius: 30, corners: 1, rotate: 0,
+    direction: 1, color: '#000', speed: 1, trail: 60, shadow: false,
+    hwaccel: false, className: 'spinner', zIndex: 2e9, top: 'auto',
+    left: 'auto'
   };
-  var target = $('.main .spinner-target');
-  var spinner = new Spinner(opts).spin(target[0]);
 
+  NS.app.smallSpinnerOptions = {
+    lines: 13, length: 0, width: 3, radius: 10, corners: 1, rotate: 0,
+    direction: 1, color: '#000', speed: 1, trail: 60, shadow: false,
+    hwaccel: false, className: 'spinner', zIndex: 2e9, top: 'auto',
+    left: 'auto'
+  };
+  
   NS.app.addRegions({
     mainRegion: '.main'
   });
+
 
   NS.app.addInitializer(function(options){
     // Construct a new app router
