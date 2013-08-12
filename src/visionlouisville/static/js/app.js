@@ -22,7 +22,7 @@ var VisionLouisville = VisionLouisville || {};
     if (collection.size() === 0) {
 
       // Show a spinner until we load the content.
-      if (options.spinner) {
+      if (options && options.spinner) {
         $regionEl.css({minHeight: (options.spinner.radius*2 + (options.spinner.length + options.spinner.width)*2) * 1.5});
         new Spinner(options.spinner).spin($regionEl[0]);
       }
@@ -206,7 +206,7 @@ var VisionLouisville = VisionLouisville || {};
       // Render visionaries
       NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
       // Render allies
-      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView, {spinner: NS.app.smallSpinnerOptions});
+      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
       document.title = "#VizLou | See the " + NS.Utils.capitalize(id || 'visionaries');
@@ -290,7 +290,7 @@ var VisionLouisville = VisionLouisville || {};
     hwaccel: false, className: 'spinner', zIndex: 2e9, top: 'auto',
     left: 'auto'
   };
-  
+
   NS.app.addRegions({
     mainRegion: '.main'
   });
