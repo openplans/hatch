@@ -303,11 +303,11 @@ body {
 }
 .site-title a {
   padding: 0 10px;
-}
-.site-title a {
   text-decoration: none;
 }
-
+.site-title a:hover {
+  color: #2c7488;
+}
 /* Navigation Menus */
 .main-menu {
   float: right;
