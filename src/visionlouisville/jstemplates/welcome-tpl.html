@@ -1,15 +1,12 @@
 <div class="container-fullwidth welcome">
-  <!-- <a href="#" class="welcome-close-btn">&times;</a> -->
   <div class="welcome-header">
-    <img src="https://si0.twimg.com/profile_images/2577247503/5x0gwbixfjv435lujqh3.jpeg" class="welcome-avatar">
-    <span class="welcome-prequestion"><span class="nobreak">Mayor Greg Fischer</span> <span class="nobreak">wants to know,</span></span>
-    <h1 class="welcome-question">&#8220;What's your vision for the future of Louisville?&#8221;</h1>
-    <a href="#site-footer" class="welcome-more-link">Read more&hellip;</a>
+    <h2 class="welcome-prompt">Let's hear your ideas for improving Newark!</h2>
   </div>
 
-  {{#if_authenticated}}
-  <a href="/visions/new" class="btn btn-block btn-primary">Add My Vision</a>
-  {{^}}
-  <a href="{{ LOGIN_URL '' }}" class="btn btn-block btn-primary">Sign in to become a Visionary <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
-  {{/if_authenticated}}
+  <ul class="unstyled-list question-list">
+    <li class="clearfix"><span class="question">How can Newark have a better nightlife?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
+    <li class="clearfix"><span class="question">How can we connect with people who don't have health insurance?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
+    <li class="clearfix"><span class="question">How do we improve the quality of Newark's schools?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
+    <li class="clearfix"><span class="question">How can we make Newark's housing safer and healthier?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
+  </ul>
 </div>

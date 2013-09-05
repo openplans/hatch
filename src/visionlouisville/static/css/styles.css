@@ -137,6 +137,13 @@ img {
   border-color: #7ec4d8;
   color: #e7e7d7;
 }
+.btn-tertiary,
+.btn-tertiary:visited,
+.btn-tertiary:link {
+  background-color: #ef037d;
+  border-color: #ff5db1;
+  color: #fff;
+}
 .btn-cancel,
 .btn-cancel:visited,
 .btn-cancel:link {
@@ -875,8 +882,8 @@ h6.category-prompt {
   margin-top: -20px;
   margin-bottom: 15px;
   padding: 15px 10px 1px 10px;
-  background: #808073;
-  color: #e7e7d7;
+  background: #444;
+  color: #fff;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
   box-shadow: 0 1px 0 rgba(255,255,255,0.75), inset 0 -3px 3px rgba(0,0,0,0.1);
 }
@@ -902,33 +909,34 @@ a.welcome-close-btn {
   margin: 5px 10px 20px -55px;
 }
 .welcome-header {
-  padding-left: 55px;
   margin-bottom: 1em;
 }
-.welcome h1, .welcome h2, .welcome h3, .welcome h4, .welcome h5, .welcome h6 {
+.welcome-prompt {
   color: #fff;
+  font-size: 1em;
+  font-weight: 600;
   text-shadow: 0 1px 1px rgba(0,0,0,0.5);
 }
-.welcome-prequestion {
-  display: block;
+ul.question-list {
+  margin: 0 -10px;
 }
-.welcome-question {
-  display: inline;
-  font-size: 1.25em;
-  font-weight: 700;
-  line-height: 1.2;
-}
-.welcome-more-link {
-  display: none;
-  text-transform: uppercase;
-  text-decoration: none;
+ul.question-list li {
+  background: #268099;
   font-weight: 600;
-  white-space: nowrap;
-  font-size: 0.8em;
+  padding: 10px;
+  box-shadow: inset 0 1px 0 rgba(231,231,215,0.2), inset 0 -1px 0 rgba(0,0,0,0.2);
 }
-
-.home .welcome-more-link {
-  display: inline;
+.question {
+  float: left;
+  width: 73%;
+  font-size: 1.25em;
+}
+.question-btn {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+  width: 25%;
+  float: right;
 }
 
 
