@@ -286,35 +286,19 @@ body {
   margin: 0;
 }
 .site-title {
+  font-size: 1.5em;
+  line-height: 40px;
   height: 40px;
   margin: 0;
   float: left;
   overflow: hidden;
+  text-shadow: 0 1px 1px rgba(231,231,215,0.5);
 }
 .site-title a {
-  float: left;
-  height: 40px;
-  padding: 0 9px;
-}
-.site-title .logo {
-  display: block;
-  width: 44px;
-  height: 21px;
-  margin: 9px 0 0 0;
+  padding: 0 10px;
 }
 .site-title a {
   text-decoration: none;
-}
-.site-title a span {
-}
-.site-title .beta {
-  font-size: x-small;
-  font-weight: 600;
-  color: #268099;
-  font-style: italic;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.25);
-  float: left;
-  margin-top: 10px;
 }
 
 /* Navigation Menus */
