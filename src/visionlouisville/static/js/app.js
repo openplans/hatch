@@ -42,15 +42,13 @@ var VisionLouisville = VisionLouisville || {};
     appRoutes: {
       'visions/:category/new': 'newVision',
       'visions/:category/list': 'listVisions',
-      'visions/new': 'newVision',
-      'visions/list': 'listVisions',
       'visions/:id': 'showVision',
       'users/list': 'listUsers',
       'users/list/:id': 'listUsers',
       'users/:id/:tab': 'showUser',
       'users/:id': 'showUser',
       'ally': 'allySignup',
-      '': 'home'
+      '*anything': 'home'
     },
     navigate: function(fragment, options) {
       var __super__ = Backbone.Marionette.AppRouter.prototype,
@@ -125,6 +123,11 @@ var VisionLouisville = VisionLouisville || {};
       // Set to an int
       visionId = parseInt(visionId, 10);
 
+      if (_.isNaN(visionId)) {
+        this.home();
+        return;
+      }
+
       var getVisionDetailView = function(collection, options) {
         var model = collection.get(options.visionId),
             layout = new NS.VisionDetailLayout({
@@ -157,6 +160,7 @@ var VisionLouisville = VisionLouisville || {};
     home: function() {
       // TODO: Move to the config settings
       document.title = '#VizLou | What\'s your vision for the future of Louisville?';
+      NS.app.router.navigate('', {replace: true});
 
       var homeView = new NS.HomeView({
             collection: NS.app.visionCollection
