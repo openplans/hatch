@@ -32,6 +32,9 @@ TWITTER_ACCESS_SECRET = environ.get('TWITTER_ACCESS_SECRET')
 from os import environ
 SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME') + ':' + environ.get('SAUCE_ACCESS_KEY') + '@ondemand.saucelabs.com:80/wd/hub'
 
+# For sitemaps and caching
+LAST_DEPLOY_DATE = '2013-09-01T12:00:00'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,

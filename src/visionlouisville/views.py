@@ -21,7 +21,8 @@ from rest_framework.utils.encoders import JSONEncoder
 from .models import Reply, User, Vision, Category
 from .forms import SecretAllySignupForm
 from .serializers import (
-    ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer)
+    ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer,
+    MinimalVisionSerializer)
 from .services import default_twitter_service
 
 
@@ -78,6 +79,9 @@ class AppMixin (object):
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
 
+    def get_category_queryset(self, base_queryset=None):
+        return (base_queryset or Category.objects.all())
+
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
         service = self.get_twitter_service()
@@ -91,7 +95,7 @@ class AppMixin (object):
         context['NS'] = 'VisionLouisville'
         context['twitter_config'] = json.dumps(service.get_config(user))
 
-        category_query = Category.objects.all()
+        category_query = self.get_category_queryset()
         context['categories'] = json.dumps(CategorySerializer(category_query).data)
 
         if user:
@@ -269,6 +273,31 @@ class ReplyViewSet (AppMixin, ModelViewSet):
                 raise TweetException('User reply not tweeted: ' + response)
 
 
+class SiteMapView (AppMixin, TemplateView):
+    template_name = 'visionlouisville/sitemap.xml'
+
+    def get_visions_data(self):
+        visions = self.get_vision_queryset()
+        serializer = MinimalVisionSerializer(visions)
+        serializer.context = {
+            'twitter_service': self.get_twitter_service(),
+            'requesting_user': self.get_requesting_user(),
+        }
+
+        return serializer.data
+
+    def get_category_data(self):
+        categories = self.get_category_queryset()
+        serializer = CategorySerializer(categories)
+        return serializer.data
+
+    def get_context_data(self, **kwargs):
+        context = super(SiteMapView, self).get_context_data(**kwargs)
+        context['categories'] = self.get_category_data()
+        context['visions'] = self.get_visions_data()
+        return context
+
+
 class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
@@ -340,6 +369,9 @@ home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
 category_app_view = CategoryInstanceView.as_view()
 secret_ally_signup_view = SecretAllySignupView.as_view()
+robots_view = TemplateView.as_view(template_name='visionlouisville/robots.txt')
+sitemap_view = SiteMapView.as_view()
+
 
 # API views
 current_user_api_view = CurrentUserAPIView.as_view()
