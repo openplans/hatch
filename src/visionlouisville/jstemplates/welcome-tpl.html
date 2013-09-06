@@ -5,7 +5,7 @@
 
   <ul class="unstyled-list question-list">
   {{#each_category}}
-    <li class="clearfix"><span class="question">{{ prompt }}</span>
+    <li class="clearfix"><a href="/visions/{{name}}/list" class="question">{{ prompt }}</a>
       {{#if_authenticated}}
       <a class="btn btn-tertiary question-btn" href="/visions/{{name}}/new">+ My Idea</a>
       {{^}}
