@@ -929,6 +929,8 @@ ul.question-list li {
   float: left;
   width: 73%;
   font-size: 1.25em;
+  text-decoration: none;
+  color: #fff !important;
 }
 .question-btn {
 	-webkit-box-sizing: border-box;
@@ -936,6 +938,12 @@ ul.question-list li {
 	        box-sizing: border-box;
   width: 25%;
   float: right;
+}
+.plus {
+  font-family: Arial;
+  font-family: serif;
+  font-size: 1.25em;
+  line-height: 1;
 }
 
 

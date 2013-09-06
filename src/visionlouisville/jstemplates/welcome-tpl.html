@@ -7,9 +7,9 @@
   {{#each_category}}
     <li class="clearfix"><a href="/visions/{{name}}/list" class="question">{{ prompt }}</a>
       {{#if_authenticated}}
-      <a class="btn btn-tertiary question-btn" href="/visions/{{name}}/new">+ My Idea</a>
+      <a class="btn btn-tertiary question-btn" href="/visions/{{name}}/new"><span class="plus">+</span> My Idea</a>
       {{^}}
-      <a class="btn btn-tertiary question-btn" href="/login/twitter/">+ My Idea</a>
+      <a class="btn btn-tertiary question-btn" href="/login/twitter/"><span class="plus">+</span> My Idea</a>
       {{/if_authenticated}}
     </li>
   {{/each_category}}
