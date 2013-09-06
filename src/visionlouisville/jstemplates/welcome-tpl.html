@@ -4,9 +4,14 @@
   </div>
 
   <ul class="unstyled-list question-list">
-    <li class="clearfix"><span class="question">How can Newark have a better nightlife?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
-    <li class="clearfix"><span class="question">How can we connect with people who don't have health insurance?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
-    <li class="clearfix"><span class="question">How do we improve the quality of Newark's schools?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
-    <li class="clearfix"><span class="question">How can we make Newark's housing safer and healthier?</span><a class="btn btn-tertiary question-btn" href="{{#if_authenticated}}#{{^}}#{{/if_authenticated}}">+ My Idea</a></li>
+  {{#each_category}}
+    <li class="clearfix"><span class="question">{{ prompt }}</span>
+      {{#if_authenticated}}
+      <a class="btn btn-tertiary question-btn" href="/visions/{{name}}/new">+ My Idea</a>
+      {{^}}
+      <a class="btn btn-tertiary question-btn" href="/login/twitter/">+ My Idea</a>
+      {{/if_authenticated}}
+    </li>
+  {{/each_category}}
   </ul>
 </div>
