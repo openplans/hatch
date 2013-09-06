@@ -10,12 +10,14 @@
 <head>
   {% if vision %}
   <title>#VizLou | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
+  {% elif category %}
+  <title>#VizLou | {{ category.prompt|safe }}</title>
   {% else %}
   <title>#VizLou | What's your vision for the future of Louisville?</title>
   {% endif %}
 
   <meta charset="utf-8">
-  <meta name="description" content="Share your vision. Come together. Change Louisville.">
+  <meta name="description" content="#VizLou \u2014 Share your vision. Come together. Change Louisville.">
   <meta name="author" content="OpenPlans">
 
   <!--  Mobile Viewport Fix -->

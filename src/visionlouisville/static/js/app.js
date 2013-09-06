@@ -66,7 +66,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     allySignup: function() {
       // TODO: Move to the config settings
-      document.title = "#VizLou | Become an ally!";
+      document.title = '#VizLou | Become an ally!';
 
       NS.app.mainRegion.show(new NS.AllySignupView({
         model: NS.app.currentUser
@@ -74,7 +74,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     listVisions: function(listCategory) {
       // TODO: Move to the config settings
-      document.title = "#VizLou | Explore visions" + (listCategory ? ' \u2014 ' + listCategory : '');
+      document.title = '#VizLou | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
 
       var getVisionListView = function(collection, options) {
         var model;
@@ -102,7 +102,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
-      document.title = "#VizLou | Add your vision";
+      document.title = '#VizLou | What\'s your vision for the future of Louisville?';
       NS.Utils.log('send', 'event', 'vision', 'new');
 
       // Protect against unauthenticated users.
@@ -156,7 +156,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     home: function() {
       // TODO: Move to the config settings
-      document.title = "#VizLou | What's your vision for the future of Louisville?";
+      document.title = '#VizLou | What\'s your vision for the future of Louisville?';
 
       var homeView = new NS.HomeView({
             collection: NS.app.visionCollection
@@ -209,7 +209,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
-      document.title = "#VizLou | See the " + NS.Utils.capitalize(id || 'visionaries');
+      document.title = '#VizLou | See the ' + NS.Utils.capitalize(id || 'visionaries');
 
       var userListLayout = new NS.UserListLayout({
             model: new Backbone.Model({show_allies: id === 'allies'})
@@ -241,7 +241,7 @@ var VisionLouisville = VisionLouisville || {};
             logPrefix = isPersonal ? 'my-' : '',
             logSuffix = tab ? '-' + tab : '';
 
-        document.title = "#VizLou | " + model.get('full_name') + "'s profile";
+        document.title = '#VizLou | ' + model.get('full_name') + '\'s profile';
 
         view.on('show', function() {
           if (tab === 'supported') {
@@ -342,7 +342,7 @@ var VisionLouisville = VisionLouisville || {};
 
     // Globally capture clicks. If they are internal and not in the pass
     // through list, route them through Backbone's navigate method.
-    $(document).on("click", "a[href^='/']", function(evt) {
+    $(document).on('click', 'a[href^="/"]', function(evt) {
       var $link = $(evt.currentTarget),
           href = $link.attr('href'),
           noscroll = !_.isUndefined($link.attr('data-noscroll')),

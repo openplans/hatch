@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, include, url
 from .views import (
     home_app_view, secret_ally_signup_view, vision_detail_app_view, api_router,
-    current_user_api_view, share_api_view, support_api_view, unsupport_api_view)
+    current_user_api_view, share_api_view, support_api_view, unsupport_api_view,
+    category_app_view)
 
 # Admin
 from django.contrib import admin
@@ -26,6 +27,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     # App
-    url(r'^visions/(?P<pk>\d+)$', vision_detail_app_view,     name='app-vision-detail'),
-    url(r'^',                     home_app_view,              name='app-home'),
+    url(r'^visions/(?P<pk>\d+)$',      vision_detail_app_view,   name='app-vision-detail'),
+    url(r'^visions/(?P<pk>\w+)/list$', category_app_view,        name='app-vision-list'),
+    url(r'^',                          home_app_view,            name='app-home'),
 )

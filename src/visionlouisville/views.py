@@ -127,6 +127,12 @@ class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
     context_object_name = 'vision'
 
 
+class CategoryInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
+    template_name = 'visionlouisville/index.html'
+    model = Category
+    context_object_name = 'category'
+
+
 class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, FormView):
     template_name = 'visionlouisville/index.html'
     form_class = SecretAllySignupForm
@@ -332,6 +338,7 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
 # App views
 home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
+category_app_view = CategoryInstanceView.as_view()
 secret_ally_signup_view = SecretAllySignupView.as_view()
 
 # API views
