@@ -157,6 +157,15 @@ class TweetedModelMixin (object):
         self.author = user
 
 
+class Category (models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
+    title = models.CharField(max_length=100)
+    prompt = models.TextField()
+
+    def __unicode__(self):
+        return unicode(self.name)
+
+
 class Vision (TweetedModelMixin, models.Model):
     tweet_id = models.CharField(
         max_length=64, null=True,
@@ -167,7 +176,7 @@ class Vision (TweetedModelMixin, models.Model):
             "is http://www.twitter.com/myuser/status/1234567890, then the "
             "tweet id is 1234567890. Or you can just use the whole URL.")))
     author = models.ForeignKey(User, related_name='visions')
-    category = models.CharField(max_length=20, null=True, blank=True)
+    category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
     text = models.TextField(blank=True)
     media_url = models.URLField(default='', blank=True)
     featured = models.BooleanField(default=False)

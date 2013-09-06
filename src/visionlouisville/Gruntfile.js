@@ -32,7 +32,6 @@ module.exports = function(grunt) {
             dest: 'static/js/app.min.js',
             src: [
               'static/js/django-csrf.js',
-              'static/js/config.js',
               'static/js/utils.js',
               'static/js/handlebars-helpers.js',
               'static/js/models.js',

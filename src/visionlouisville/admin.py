@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (
     UserCreationForm as BaseUserCreationForm,
     UserChangeForm as BaseUserChangeForm,
 )
-from .models import Vision, Reply, Share, User
+from .models import Vision, Reply, Share, User, Category
 from .views import VisionViewSet
 
 
@@ -73,3 +73,4 @@ class UserAdmin (BaseUserAdmin):
 
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Category)

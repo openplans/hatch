@@ -18,10 +18,10 @@ from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
-from .models import Reply, User, Vision
+from .models import Reply, User, Vision, Category
 from .forms import SecretAllySignupForm
 from .serializers import (
-    ReplySerializer, UserSerializer, VisionSerializer)
+    ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer)
 from .services import default_twitter_service
 
 
@@ -90,6 +90,9 @@ class AppMixin (object):
 
         context['NS'] = 'VisionLouisville'
         context['twitter_config'] = json.dumps(service.get_config(user))
+
+        category_query = Category.objects.all()
+        context['categories'] = json.dumps(CategorySerializer(category_query).data)
 
         if user:
             serializer = UserSerializer(user)

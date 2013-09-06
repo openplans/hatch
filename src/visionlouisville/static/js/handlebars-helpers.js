@@ -61,8 +61,7 @@ var VisionLouisville = VisionLouisville || {};
   Handlebars.registerHelper('each_category', function(options) {
     var result = '';
 
-    _.each(NS.Config.categories, function(category, name) {
-      category.name = name;
+    _.each(NS.categories, function(category) {
       result += options.fn(_.extend(this, category));
     });
 
@@ -105,7 +104,7 @@ var VisionLouisville = VisionLouisville || {};
   }
 
   Handlebars.registerHelper('category_prompt', function(category) {
-    return NS.Config.categories[category].prompt;
+    return _.findWhere(NS.categories, {name: category}).prompt;
   });
 
   Handlebars.registerHelper('window_location', function() {

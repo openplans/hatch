@@ -2,7 +2,7 @@ from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
     PrimaryKeyRelatedField, SerializerMethodField, DateTimeField,
     RelatedField, ValidationError)
-from .models import User, Vision, Reply
+from .models import User, Vision, Reply, Category
 from .services import SocialMediaException
 
 
@@ -175,13 +175,18 @@ class ReplySerializer (ModelSerializer):
         model = Reply
 
 
+class CategorySerializer (ModelSerializer):
+    class Meta:
+        model = Category
+
+
 class VisionSerializer (ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
     supporters = MinimalUserSerializer(many=True, read_only=True)
     sharers = PrimaryKeyRelatedField(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
-    category = CharField(required=False)
+    category = PrimaryKeyRelatedField(required=False)
     created_at = DateTimeField(required=False)
     updated_at = DateTimeField(required=False)
 
