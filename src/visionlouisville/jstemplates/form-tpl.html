@@ -1,28 +1,25 @@
 <div class="container">
-  <h5>What's your vision for Louisville?</h5>
   <form class="vision-form">
 
     <input type="hidden" name="author" value="{{ author }}">
     <input type="hidden" name="inspiration" value="{{ inspiration }}">
 
-    <h6>Select a Category:</h6>
-    <ul class="vision-category-list unstyled-list">
+    <ul class="vision-category-list unstyled-list is-visuallyhidden">
       {{#select category}}
         {{#each_category}}
           <li class="vision-category-{{ name }}">
-            <label><input type="radio" name="category" value="{{ name }}" class="category-icon is-visuallyhidden"><img src="/static/images/mask-e7e7d7-{{ name }}.png"><span class="is-visuallyhidden">{{ title }}</span></label>
+            <label><input type="radio" name="category" value="{{ name }}" class="category-icon is-visuallyhidden">{{ title }}</label>
           </li>
         {{/each_category}}
       {{/select}}
     </ul>
 
-    <p class="category-prompt is-hidden default-prompt">Please select a category from the list above.</p>
     {{#each_category}}
-      <p class="category-prompt {{ name }}-prompt"><strong class="category-title">{{ title }}</strong> &raquo; {{ prompt }}</p>
+    <h3 class="category-prompt {{ name }}-prompt"><small class="category-title"><em>{{ title }}</em></small> <br>{{ prompt }}</h3>
     {{/each_category}}
 
     <p class="vision-description">
-      <textarea name="text" placeholder="My vision for Louisville is..." required></textarea>
+      <textarea name="text" placeholder="My Idea..." required></textarea>
     </p>
 
     {{# if_imagemanip_feature }}
@@ -36,11 +33,11 @@
     {{/ if_imagemanip_feature }}
 
     <p class="vision-tweet">
-      <label class="on-off-switch-label" for="x-send-to-twitter"><input id="x-send-to-twitter" type="checkbox" data-placement="header" name="x-send-to-twitter" class="on-off-switch is-visuallyhidden"><span class="on-off-switch-icon"><img src="/static/images/on-off-switch.png"></span> Tweet This Vision</label>
+      <label class="on-off-switch-label" for="x-send-to-twitter"><input id="x-send-to-twitter" type="checkbox" data-placement="header" name="x-send-to-twitter" class="on-off-switch is-visuallyhidden"><span class="on-off-switch-icon"><img src="/static/images/on-off-switch.png"></span> Tweet This Idea</label>
     </p>
 
     <p class="vision-save-action">
-	    <input type="submit" class="btn btn-block btn-primary" value="Share My Vision" />
+	    <input type="submit" class="btn btn-block btn-primary" value="Share My Idea" />
     </p>
 
   </form>
