@@ -15,7 +15,7 @@
       {{#if_authenticated}}
       <strong>Add it here!</strong>
       {{^}}
-      <a href="{{ LOGIN_URL '/visions/new' }}"><strong>Sign in with your Twitter account</strong></a>
+      <a href="{{ LOGIN_URL '/{{visions_url_name}}/new' }}"><strong>Sign in with your Twitter account</strong></a>
       to add it!
       {{/if_authenticated}}
       Explore ideas of others, add comments and hearts to show your support.

@@ -13,7 +13,7 @@
       <ul class="tabs tabs-{{get_tab_count visions.length supported.length replies.length}} unstyled-list">
 
         {{#if visions.length}}
-        <li class="tab"><a href="/users/{{id}}/visions" data-noscroll data-replace>{{ visions.length }} {{pluralize visions.length 'Idea' 'Ideas'}}</a></li>
+        <li class="tab"><a href="/users/{{id}}/{{visions_url_name}}" data-noscroll data-replace>{{ visions.length }} {{pluralize visions.length 'Idea' 'Ideas'}}</a></li>
         {{/if}}
 
         {{#if supported.length}}

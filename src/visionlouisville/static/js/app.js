@@ -40,9 +40,9 @@ var VisionLouisville = VisionLouisville || {};
   // Router ===================================================================
   NS.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      'visions/:category/new': 'newVision',
-      'visions/:category/list': 'listVisions',
-      'visions/:id': 'showVision',
+      'ideas/:category/new': 'newVision',
+      'ideas/:category/list': 'listVisions',
+      'ideas/:id': 'showVision',
       'users/list': 'listUsers',
       'users/list/:id': 'listUsers',
       'users/:id/:tab': 'showUser',
@@ -355,7 +355,7 @@ var VisionLouisville = VisionLouisville || {};
 
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
-           href.indexOf('/visions') === 0 ||
+           href.indexOf('/' + NS.Config.VisionsUrlName) === 0 ||
            href.indexOf('/users') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
