@@ -9,15 +9,15 @@
 
 <head>
   {% if vision %}
-  <title>#VizLou | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
+  <title>#NewarkNext | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
   {% elif category %}
-  <title>#VizLou | {{ category.prompt|safe }}</title>
+  <title>#NewarkNext | {{ category.prompt|safe }}</title>
   {% else %}
-  <title>#VizLou | What's your vision for the future of Louisville?</title>
+  <title>#NewarkNext | What's your vision for the future of Newark?</title>
   {% endif %}
 
   <meta charset="utf-8">
-  <meta name="description" content="#VizLou \u2014 Share your vision. Come together. Change Louisville.">
+  <meta name="description" content="#NewarkNext \u2014 Share your vision. Come together. Change Newark.">
   <meta name="author" content="OpenPlans">
 
   <!--  Mobile Viewport Fix -->
@@ -30,13 +30,13 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@vizlou">
   <meta name="twitter:creator" content="@{{ vision.author.username }}">
-  <meta name="twitter:title" content="#VizLou | My vision for Louisville">
+  <meta name="twitter:title" content="#NewarkNext | My vision for Newark">
   <meta name="twitter:image:src" content="{{ vision.media_url }}">
   <meta name="twitter:description" content="{{ vision.text }}">
 
   <!-- Facebook -->
   <meta property="og:site_name" content="VizLou"/>
-  <meta property="og:title" content="#VizLou | My vision for Louisville"/>
+  <meta property="og:title" content="#NewarkNext | My vision for Newark"/>
   <meta property="og:description" content="{{ vision.text }}"/>
 
   {% endif %}
