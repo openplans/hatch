@@ -6,15 +6,13 @@
   <ul class="vision-category-list unstyled-list is-current-{{ category }}">
     {{# each_category }}
       <li class="vision-category-{{ name }}">
-        <a href="/visions/{{ name }}/list" class="category-list-link" data-noscroll data-replace><img src="/static/images/mask-e7e7d7-{{ name }}.png"><span class="is-visuallyhidden">{{ title }}</span></a>
+        <a href="/visions/{{ name }}/list" class="btn btn-block btn-small" data-noscroll data-replace><span class="">{{ title }}</span></a>
       </li>
     {{/ each_category }}
   </ul>
 
   {{# if category }}
-  <a href="/visions/list" class="btn btn-small" style="float:right;margin-top:0.5em;">See All Visions</a>
-  <h2><span style="text-transform:capitalize;">{{ category }}</span></h2>
-  <h6 class="category-prompt">{{ category_prompt category }}</h6>
+  <h3 class="category-prompt">{{ category_prompt category }}</h3>
 
   {{#if_authenticated}}
   <a href="/visions/{{ category }}/new" class="btn btn-block btn-primary">Add My Vision</a>

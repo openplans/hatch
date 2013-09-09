@@ -709,9 +709,10 @@ a.support {
 }
 .vision-category-list li {
   float: left;
-  width: 14%;
+  width: 24%;
   padding: 0;
-  margin: 0;
+  margin: 0 1% 0 0;
+  font-size: 0.85em;
 }
 .vision-category-list img {
   width: 100%;
@@ -724,6 +725,7 @@ a.category-list-link {
   display: block;
   margin-bottom: 10px;
 }
+
 .is-current-economy .vision-category-economy a.category-list-link,
 .is-current-health .vision-category-health a.category-list-link,
 .is-current-energy .vision-category-energy a.category-list-link,
