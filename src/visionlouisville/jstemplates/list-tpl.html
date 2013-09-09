@@ -2,7 +2,7 @@
   <ul class="vision-category-list unstyled-list is-current-{{ category }}">
     {{# each_category }}
       <li class="vision-category-{{ name }}">
-        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small" data-noscroll data-replace><span class="">{{ title }}</span></a>
+        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small{{#eq ../category name}} btn-tertiary{{/eq}}" data-noscroll data-replace><span class="">{{ title }}</span></a>
       </li>
     {{/ each_category }}
   </ul>
