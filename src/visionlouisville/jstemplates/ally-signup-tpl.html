@@ -2,20 +2,20 @@
   {{# if_in_group 'allies' }}
     <h2>You're an Ally!</h2>
 
-    <p><strong>Thank you!</strong> Promote the tool and use it to engage with youth. Allies like you can empower young adults by engaging, sharing and supporting their visions. Your comments and suggestions help develop visions and encourage the visionaries. Thanks for your time!
+    <p><strong>Thank you!</strong> Promote the tool and use it to engage with youth. Allies like you can empower citizens by engaging, sharing and supporting their ideas. Your comments and suggestions help develop and encourage ideas. Thanks for your time!
     </p>
 
-    <a href="/" class="btn btn-block btn-primary">Return to VizLou</a>
+    <a href="/" class="btn btn-block btn-primary">Return to NewarkNext</a>
   {{^}}
     <h2>Become an Ally!</h2>
 
-    <h5>#VizLou is a website for young adults to share their visions for the future of Louisville.</h5>
+    <h5>#NewarkNext is a website for people to share their ideas for the future of Newark, NJ.</h5>
 
-    <p><strong>Your participation is vital!</strong> Promote the tool and use it to engage with youth. Allies like you can empower young adults by engaging, sharing and supporting their visions. Your comments and suggestions help develop visions and encourage the visionaries. Thanks for your time!
+    <p><strong>Your participation is vital!</strong> Allies like you can empower citizens by engaging, sharing and supporting ideas, and promoting the tool. Your comments and suggestions help develop and encourage ideas. Thanks for your time!
     </p>
 
     {{# if_authenticated }}
-    <h5>Enter your email address to become an ally.</h5>
+    <h5>Enter your email address to become an Ally.</h5>
 
       <form method="POST" action="/ally">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ CSRF_TOKEN }}">
@@ -35,24 +35,23 @@
   {{/ if_in_group }}
 
   <h5>Two ways to engage</h5>
-  <p>Allies help get the conversation started by sharing inspirations, and they comment, heart and share visions. #VizLou is live until August 15th, check in frequently to see the latest.</p>
+  <p>Allies help get the conversation started by sharing inspirations, and they comment, heart and share ideas. Check NewarkNext frequently to see the latest.</p>
 
   <h6>Share inspirations</h6>
 
-  <p>What can you inspire? Tweet a positive story about the West End:<br/>
-  <em>Grilling and chilling on my block. That’s why I love the ‘Ville. #vizlou</em><br/>
-  <em>#vizlou watching high schoolers graduate! So proud</em></p>
-  <p>Include a pic! Use the #vizlou hashtag. It will show up on VizLou.org, where visionaries can respond to it.</p>
+  <p>What can you inspire? Tweet a positive story about Newark:<br/>
+  <em>Grilling and chilling on my block. That's why I love Newark! #NewarkNext</em></p>
+  <p>Include a pic! Use the #NewarkNext hashtag. It will show up here, where others can respond to it.</p>
 
-  <h6>Explore visions at VizLou.org</h6>
-  <p>Engage with visionary youth:</p>
+  <h6>Explore ideas at NewarkNext.org</h6>
+  <p>Engage with citizens:</p>
   <ul>
-  <li>Read visions.</li>
-  <li>Click the heart to show support for visions.</li>
-  <li>Share visions using your Twitter account, to demonstrate your interest and to draw in others.</li>
-  <li>Comment to help visions become better defined.</li>
+  <li>Read ideas.</li>
+  <li>Click the heart to show support for ideas.</li>
+  <li>Share ideas using your Twitter account, to demonstrate your interest and to draw in others.</li>
+  <li>Comment to help ideas become better defined.</li>
   </ul>
 
   <h5>Questions?</h5>
-  <p>Contact <a href="mailto:hello@vizlou.org">hello@vizlou.org</a> if you have questions</p>
+  <p>Contact <a href="mailto:hello@vizlou.org">hello@newarknext.org</a> if you have questions</p>
 </div>
