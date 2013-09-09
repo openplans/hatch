@@ -648,6 +648,9 @@ a.support {
   padding: 5px 0 10px;
   float: left;
 }
+.support-region .support {
+  margin-bottom: 0;
+}
 .heart {
   display: block;
   background-color: #d5d5c6;
