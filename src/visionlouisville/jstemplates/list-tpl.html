@@ -12,14 +12,14 @@
   </ul>
 
   {{# if category }}
-  <a href="/visions/list" class="btn btn-small" style="float:right;margin-top:0.5em;">See All Visions</a>
+  <a href="/visions/list" class="btn btn-small" style="float:right;margin-top:0.5em;">See All Ideas</a>
   <h2><span style="text-transform:capitalize;">{{ category }}</span></h2>
   <h6 class="category-prompt">{{ category_prompt category }}</h6>
 
   {{#if_authenticated}}
-  <a href="/visions/{{ category }}/new" class="btn btn-block btn-primary">Add My Vision</a>
+  <a href="/visions/{{ category }}/new" class="btn btn-block btn-primary">Add My Idea</a>
   {{^}}
-  <a href="{{ LOGIN_URL '/' }}visions/{{ category }}/new" class="btn btn-block btn-primary">Sign In and Add My Vision <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
+  <a href="{{ LOGIN_URL '/' }}visions/{{ category }}/new" class="btn btn-block btn-primary">Sign In and Add My Idea <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
   {{/if_authenticated}}
 
   {{/ if }}
