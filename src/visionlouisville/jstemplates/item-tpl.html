@@ -1,8 +1,4 @@
 <div class="container container-primary">
-  {{^if_authenticated}}
-    {{> welcome-tpl }}
-  {{/if_authenticated}}
-
   {{# if media_url }}
   <a href="#" class="vision-media-container is-collapsed" style="background-image:url({{ media_url }});"><img class="vision-media" src="{{ media_url }}"></a>
   {{/ if }}
