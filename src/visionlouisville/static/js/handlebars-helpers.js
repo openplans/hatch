@@ -4,7 +4,7 @@ var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
   Handlebars.registerHelper('visions_url_name', function(category) {
-    return NS.Config.VisionsUrlName;
+    return NS.Config.visionsUrlName;
   });
 
   Handlebars.registerHelper('get_tab_count', function(visions, supported, replies, options) {

@@ -38,18 +38,24 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.scrollTops = {};
   // Router ===================================================================
+
+  var appRoutes = {};
+
+  appRoutes[NS.Config.visionsUrlName + '/:category/new'] =  'newVision';
+  appRoutes[NS.Config.visionsUrlName + '/:category/list'] =  'listVisions';
+  appRoutes[NS.Config.visionsUrlName + '/:id'] =  'showVision';
+
+  _.extend(appRoutes, {
+    'users/list': 'listUsers',
+    'users/list/:id': 'listUsers',
+    'users/:id/:tab': 'showUser',
+    'users/:id': 'showUser',
+    'ally': 'allySignup',
+    '*anything': 'home'
+  });
+
   NS.Router = Backbone.Marionette.AppRouter.extend({
-    appRoutes: {
-      'ideas/:category/new': 'newVision',
-      'ideas/:category/list': 'listVisions',
-      'ideas/:id': 'showVision',
-      'users/list': 'listUsers',
-      'users/list/:id': 'listUsers',
-      'users/:id/:tab': 'showUser',
-      'users/:id': 'showUser',
-      'ally': 'allySignup',
-      '*anything': 'home'
-    },
+    appRoutes: appRoutes,
     navigate: function(fragment, options) {
       var __super__ = Backbone.Marionette.AppRouter.prototype,
           path = NS.getCurrentPath();
@@ -355,7 +361,7 @@ var VisionLouisville = VisionLouisville || {};
 
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
-           href.indexOf('/' + NS.Config.VisionsUrlName) === 0 ||
+           href.indexOf('/' + NS.Config.visionsUrlName) === 0 ||
            href.indexOf('/users') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
