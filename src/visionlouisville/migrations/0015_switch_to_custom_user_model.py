@@ -11,6 +11,10 @@ class Migration(SchemaMigration):
     http://stackoverflow.com/a/15059338/123776
     """
 
+    needed_by = (
+        ("social_auth", "0002_auto__add_unique_nonce_timestamp_salt_server_url__add_unique_associati"),
+    )
+
     def forwards(self, orm):
         db.rename_table('auth_user', 'visionlouisville_user')
         db.rename_table('auth_user_groups', 'visionlouisville_user_groups')
