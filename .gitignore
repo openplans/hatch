@@ -39,6 +39,7 @@ env/
 *.sublime-project
 *.sublime-workspace
 local_settings.py
+.dotcloud
 
 # App
 src/visionlouisville/node_modules/
