@@ -47,7 +47,7 @@ def listen_for_tweets():
 
         log.info('\n  - I see a tweet!: %s; Checking it out.\n' % (tweet.get('id', str(tweet)),))
 
-        if 'retweeted_status' in tweet or tweet.get('text', '').startswith('RT'):
+        if 'retweeted_status' in tweet:
             log.info('\n  - Oh, nevermind, it\'s a retweet.\n')
             continue
 
