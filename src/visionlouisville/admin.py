@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (
     UserCreationForm as BaseUserCreationForm,
     UserChangeForm as BaseUserChangeForm,
 )
-from .models import Vision, Reply, Share, User, Category
+from .models import Vision, Reply, Share, User, Category, Tweet
 from .views import VisionViewSet
 
 
@@ -16,6 +16,10 @@ class ShareInline (admin.TabularInline):
 class ReplyInline (admin.TabularInline):
     model = Reply
     extra = 3
+
+
+class TweetAdmin (admin.ModelAdmin):
+    model = Tweet
 
 
 class VisionAdmin (admin.ModelAdmin):
@@ -74,3 +78,4 @@ class UserAdmin (BaseUserAdmin):
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Category)
+admin.site.register(Tweet)

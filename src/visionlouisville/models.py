@@ -8,6 +8,7 @@ from random import randint
 from social_auth.models import UserSocialAuth
 from os.path import join as path_join
 from uuid import uuid1, uuid4
+import json
 import re
 
 import logging
@@ -131,11 +132,14 @@ class TweetedModelMixin (object):
                         user.last_name = user_full_name[1]
                     user.save()
 
+                    extra_data = user_info.copy()
+                    extra_data['access_token'] = 'oauth_token_secret=123&oauth_token=abc'
+
                     user_social_auth = UserSocialAuth.objects.create(
                         user=user,
                         uid=user_id,
                         provider='twitter',
-                        extra_data='{"access_token": "oauth_token_secret=123&oauth_token=abc", "id": %s}' % (user_id,),
+                        extra_data=json.dumps(extra_data),
                     )
 
                     break
@@ -155,6 +159,38 @@ class TweetedModelMixin (object):
     def set_user_from_tweet(self, tweet):
         user = self.get_or_create_tweeter(tweet['user'])
         self.author = user
+
+
+class Tweet (TweetedModelMixin, models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    id = models.CharField(
+        max_length=64, primary_key=True,
+        help_text=(_(
+            "You can fill in the tweet id and leave the text field blank (you "
+            "must select an author, though it will be updated to be the tweet "
+            "creator). For example, if the tweet URL is http://www.twitter.com"
+            "/myuser/status/1234567890, then the tweet id is 1234567890.")))
+    data = models.TextField(blank=True)
+
+    objects = TweetedObjectManager()
+
+    def __unicode__(self):
+        return self.id
+
+    def load_from_tweet(self, tweet_id, commit=True):
+        tweet = self.get_tweet(tweet_id)
+        self.id = tweet['id']
+        self.data = json.dumps(tweet)
+
+        if commit:
+            self.save()
+
+    def save(self, *args, **kwargs):
+        if self.id and not any([self.data]):
+            self.load_from_tweet(self.id, commit=False)
+        return super(Tweet, self).save(*args, **kwargs)
 
 
 class Category (models.Model):
