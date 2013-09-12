@@ -511,6 +511,22 @@ ul.user-menu:after {
   text-overflow: ellipsis;
 }
 
+.in-response-to {
+  color: #808073;
+}
+.in-response-to span {
+  font-size: x-small;
+  text-transform: uppercase;
+  display: block;
+}
+.in-response-to a {
+  color: #48a5bf;
+  text-decoration: none;
+}
+.in-response-to a:hover {
+  text-decoration: underline;
+}
+
 /* Vision Footer */
 .vision-footer {
   clear: both;
