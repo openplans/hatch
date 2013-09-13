@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     UserCreationForm as BaseUserCreationForm,
     UserChangeForm as BaseUserChangeForm,
 )
+import json
 from .models import Vision, Reply, Share, User, Category, Tweet
 from .views import VisionViewSet
 
@@ -20,6 +21,14 @@ class ReplyInline (admin.TabularInline):
 
 class TweetAdmin (admin.ModelAdmin):
     model = Tweet
+    list_display = ('__unicode__', 'text')
+    readonly_fields = ('text',)
+
+    def make_visions(self, request, tweet_qs):
+        tweet_qs.make_visions()
+
+    def text(self, tweet):
+        return json.loads(tweet.data).get('text')
 
 
 class VisionAdmin (admin.ModelAdmin):
@@ -78,4 +87,4 @@ class UserAdmin (BaseUserAdmin):
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Category)
-admin.site.register(Tweet)
+admin.site.register(Tweet, TweetAdmin)

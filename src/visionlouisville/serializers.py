@@ -173,6 +173,7 @@ class ReplySerializer (ModelSerializer):
 
     class Meta:
         model = Reply
+        exclude = ('tweet',)
 
 
 class CategorySerializer (ModelSerializer):
@@ -192,6 +193,7 @@ class VisionSerializer (ModelSerializer):
 
     class Meta:
         model = Vision
+        exclude = ('tweet',)
 
     def from_native(self, data, files):
         # Validate any uploaded media

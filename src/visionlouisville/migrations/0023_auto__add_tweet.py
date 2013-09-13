@@ -12,8 +12,8 @@ class Migration(SchemaMigration):
         db.create_table(u'visionlouisville_tweet', (
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('id', self.gf('django.db.models.fields.CharField')(max_length=64, primary_key=True)),
-            ('data', self.gf('django.db.models.fields.TextField')()),
+            ('tweet_id', self.gf('django.db.models.fields.CharField')(max_length=64, primary_key=True)),
+            ('tweet_data', self.gf('jsonfield.fields.JSONField')(default={}, blank=True)),
         ))
         db.send_create_signal(u'visionlouisville', ['Tweet'])
 
@@ -70,8 +70,8 @@ class Migration(SchemaMigration):
         u'visionlouisville.tweet': {
             'Meta': {'object_name': 'Tweet'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'data': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.CharField', [], {'max_length': '64', 'primary_key': 'True'}),
+            'tweet_data': ('jsonfield.fields.JSONField', [], {'default': '{}', 'blank': 'True'}),
+            'tweet_id': ('django.db.models.fields.CharField', [], {'primary_key': 'True', 'max_length': '64'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'visionlouisville.user': {

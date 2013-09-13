@@ -5,7 +5,7 @@ from django.core.cache import cache
 from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
 from ..views import VisionViewSet, UserViewSet, ReplyViewSet
-from ..models import Vision, User, Reply
+from ..models import Vision, User, Reply, Category, Tweet
 from social_auth.models import UserSocialAuth
 from mock import patch, Mock
 import json
@@ -38,6 +38,7 @@ class VisionsTest (TestCase):
 
     def test_vision_app_tweeting(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        category = Category.objects.create(name='economy', title='', prompt='')
         factory = RequestFactory()
         url = reverse('vision-list')
 
@@ -72,12 +73,13 @@ class VisionsTest (TestCase):
             response = view(request)
             response.render()
 
-            self.assertEqual(StubTwitterService.tweet.call_count, 1)
+            self.assertEqual(StubTwitterService.tweet.call_count, 1, response.content)
             self.assertIn('@mjumbe', StubTwitterService.tweet.call_args[0][0])
             self.assertEqual(len(StubTwitterService.tweet.call_args[0]), 1)
 
     def test_vision_user_tweeting(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        category = Category.objects.create(name='economy', title='', prompt='')
         factory = RequestFactory()
         url = reverse('vision-list')
 
@@ -157,6 +159,7 @@ class ReplyTest (TestCase):
 
     def test_reply_tweeting(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        tweet = Tweet.objects.create(tweet_id='c', tweet_data={'text': 'abc'})
         vision = Vision.objects.create(author=user, text='abc', tweet_id='c')
         factory = RequestFactory()
         url = reverse('reply-list')
@@ -189,7 +192,7 @@ class ReplyTest (TestCase):
             response = view(request)
             response.render()
 
-            self.assertEqual(StubTwitterService.tweet.call_count, 1)
+            self.assertEqual(StubTwitterService.tweet.call_count, 1, response.content)
             self.assertIn('in_reply_to_status_id', StubTwitterService.tweet.call_args[1])
             self.assertEqual(len(StubTwitterService.tweet.call_args[0]), 2)
             self.assertEqual(StubTwitterService.tweet.call_args[0][1], user)
@@ -197,7 +200,8 @@ class ReplyTest (TestCase):
 
     def test_handle_reply_tweeting_failure(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        vision = Vision.objects.create(author=user, text='abc', tweet_id='c')
+        tweet = Tweet.objects.create(tweet_id='c', tweet_data={'text': 'abc'})
+        vision = Vision.objects.create(author=user, text='abc', tweet=tweet)
         factory = RequestFactory()
         url = reverse('reply-list')
 

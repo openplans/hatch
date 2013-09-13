@@ -18,7 +18,7 @@ from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
-from .models import Reply, User, Vision, Category
+from .models import Reply, User, Vision, Category, Tweet
 from .forms import SecretAllySignupForm
 from .serializers import (
     ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer,
@@ -209,7 +209,8 @@ class VisionViewSet (AppMixin, ModelViewSet):
         success, response = service.tweet(tweet_text)
 
         if success:
-            vision.tweet_id = response['id']
+            tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
+            vision.tweet = tweet
             vision.save()
         else:
             raise TweetException('App tweet not sent: ' + response)
@@ -268,7 +269,8 @@ class ReplyViewSet (AppMixin, ModelViewSet):
                 in_reply_to_status_id=reply.vision.tweet_id)
 
             if success:
-                reply.tweet_id = response['id']
+                tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
+                reply.tweet = tweet
             else:
                 raise TweetException('User reply not tweeted: ' + response)
 

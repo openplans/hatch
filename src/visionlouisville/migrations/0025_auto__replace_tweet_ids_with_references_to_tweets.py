@@ -1,30 +1,39 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        seen_ids = set()
+        # Adding field 'Reply.tweet'
+        db.alter_column(u'visionlouisville_reply', 'tweet_id',
+                      self.gf('django.db.models.fields.related.OneToOneField')(default='duplicates?', related_name='reply', unique=True, null=True, to=orm['visionlouisville.Tweet']))
 
-        for vision in orm.Vision.objects.all():
-            tweet_id = str(vision.tweet_id)
-            while (tweet_id in seen_ids):
-                tweet_id += '0'
+        # Adding field 'Vision.tweet'
+        db.alter_column(u'visionlouisville_vision', 'tweet_id',
+                      self.gf('django.db.models.fields.related.OneToOneField')(default='duplicates?', related_name='vision', unique=True, null=True, to=orm['visionlouisville.Tweet']))
 
-            tweet = orm.Tweet(
-                tweet_id=tweet_id,
-                tweet_data={}
-            )
-            tweet.save()
+        # Adding field 'Share.tweet'
+        db.alter_column(u'visionlouisville_share', 'tweet_id',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default='duplicates?', related_name='shares', to=orm['visionlouisville.Tweet']))
 
-            seen_ids.add(tweet_id)
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Adding field 'Reply.tweet_id'
+        db.alter_column(u'visionlouisville_reply', 'tweet_id',
+                      self.gf('django.db.models.fields.CharField')(max_length=64, null=True))
+
+        # Adding field 'Vision.tweet_id'
+        db.alter_column(u'visionlouisville_vision', 'tweet_id',
+                      self.gf('django.db.models.fields.CharField')(max_length=64, null=True))
+
+        # Adding field 'Share.tweet_id'
+        db.alter_column(u'visionlouisville_share', 'tweet_id',
+                      self.gf('django.db.models.fields.CharField')(max_length=64, null=True))
+
 
     models = {
         u'auth.group': {
@@ -59,14 +68,14 @@ class Migration(DataMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'text': ('django.db.models.fields.CharField', [], {'max_length': '140', 'blank': 'True'}),
-            'tweet_id': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'}),
+            'tweet': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'reply'", 'unique': 'True', 'null': 'True', 'to': u"orm['visionlouisville.Tweet']"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'vision': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'replies'", 'to': u"orm['visionlouisville.Vision']"})
         },
         u'visionlouisville.share': {
             'Meta': {'object_name': 'Share'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'tweet_id': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'}),
+            'tweet': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'shares'", 'to': u"orm['visionlouisville.Tweet']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'shares'", 'to': u"orm['visionlouisville.User']"}),
             'vision': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['visionlouisville.Vision']"})
         },
@@ -105,10 +114,9 @@ class Migration(DataMigration):
             'sharers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'sharers'", 'blank': 'True', 'through': u"orm['visionlouisville.Share']", 'to': u"orm['visionlouisville.User']"}),
             'supporters': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'supported'", 'blank': 'True', 'to': u"orm['visionlouisville.User']"}),
             'text': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'tweet_id': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'}),
+            'tweet': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'vision'", 'null': 'True', 'unique': 'True', 'to': u"orm['visionlouisville.Tweet']"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'})
         }
     }
 
     complete_apps = ['visionlouisville']
-    symmetrical = True
