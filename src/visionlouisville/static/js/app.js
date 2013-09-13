@@ -247,19 +247,30 @@ var VisionLouisville = VisionLouisville || {};
             view = new NS.UserDetailView({
               model: model
             }),
-            isPersonal = (NS.app.currentUser.isAuthenticated() && id == NS.app.currentUser.id),
+            isPersonal = (NS.app.currentUser.isAuthenticated() && id === NS.app.currentUser.id),
             logPrefix = isPersonal ? 'my-' : '',
             logSuffix = tab ? '-' + tab : '';
 
         document.title = '#NewarkNext | ' + model.get('full_name') + '\'s profile';
 
         view.on('show', function() {
-          if (tab === 'supported') {
-            view.showSupported();
-          } else if (tab === 'replies') {
-            view.showReplies();
+          if (tab) {
+            if (tab === 'supported') {
+              view.showSupported();
+            } else if (tab === 'replies') {
+              view.showReplies();
+            } else if (tab === NS.Config.visionsUrlName) {
+              view.showVisions();
+            }
           } else {
-            view.showVisions();
+            // NOTE: this order matters
+            if (model.get('visions').length) {
+              view.showVisions();
+            } else if(model.get('supported').length) {
+              view.showSupported();
+            } else if (model.get('replies').length) {
+              view.showReplies();
+            }
           }
           NS.Utils.log('send', 'event', logPrefix + 'profile' + logSuffix, 'show', id + ' (' + model.get('username') + '/' + model.get('full_name') + ')');
         });
