@@ -43,10 +43,11 @@ class TweetAssignmentFilter(admin.SimpleListFilter):
 
 class TweetAdmin (admin.ModelAdmin):
     model = Tweet
-    list_display = ('__unicode__', 'text', 'assignment')
-    readonly_fields = ('text',)
+    list_display = ('__unicode__', 'tweeter', 'text', 'assignment')
+    readonly_fields = ('tweeter', 'text', 'assignment')
     actions = ('make_visions',)
     list_filter = (TweetAssignmentFilter,)
+    search_fields = ('tweet_data',)
 
     def queryset(self, request):
         queryset = super(TweetAdmin, self).queryset(request)
@@ -57,13 +58,17 @@ class TweetAdmin (admin.ModelAdmin):
         self.message_user(request, 'Successfully converted %s tweets to visions.' % (tweet_qs.count(),))
     make_visions.short_description = "Make visions from the selected tweets"
 
+    def tweeter(self, tweet):
+        user_data = tweet.tweet_data.get('user', {})
+        return '%s (%s)' % (user_data.get('screen_name'), user_data.get('name'))
+
     def text(self, tweet):
         return tweet.tweet_data.get('text')
 
     def assignment(self, tweet):
         try:
             tweet.vision
-            return ('<a href="%s">Vision</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]),))
+            return ('<a href="%s">Vision %s</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]), tweet.vision.id))
         except Vision.DoesNotExist:
             pass
 
@@ -79,8 +84,8 @@ class VisionAdmin (admin.ModelAdmin):
     inlines = [ReplyInline, ShareInline]
     # date_hierarchy = 'created_at'
     filter_horizontal = ('supporters',)
-    list_display = ('__unicode__', 'author', 'category', 'featured', 'created_at', 'updated_at')
-    list_editable = ('featured',)
+    list_display = ('__unicode__', 'author', 'text', 'category', 'featured')
+    list_editable = ('category', 'featured',)
     list_filter = ('category', 'created_at', 'updated_at')
     readonly_fields = ('tweet_text',)
     search_fields = ('text', 'category')
