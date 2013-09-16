@@ -19,6 +19,7 @@ django-celery
 # ==============================
 
 psycopg2
+jsonfield
 south
 django-redis
 django-storages
