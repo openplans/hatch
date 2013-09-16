@@ -52,4 +52,4 @@ def listen_for_tweets():
 
         # Now we're interested. Check if we already have it.
         tweet, created = Tweet.objects.create_or_update_from_tweet_data(tweet_data)
-        log.info('\n  - Imported a tweet!\n' % (tweet,))
+        log.info('\n  - Imported a tweet: %s!\n' % (tweet,))
