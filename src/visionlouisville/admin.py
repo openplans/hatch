@@ -11,16 +11,6 @@ from .models import Vision, Reply, Share, User, Category, Tweet
 from .views import VisionViewSet
 
 
-class ShareInline (admin.TabularInline):
-    model = Share
-    extra = 1
-
-
-class ReplyInline (admin.TabularInline):
-    model = Reply
-    extra = 3
-
-
 class TweetAssignmentFilter(admin.SimpleListFilter):
     title = 'Assignment'
     parameter_name = 'assignment'
@@ -43,17 +33,45 @@ class TweetAssignmentFilter(admin.SimpleListFilter):
 
 
 class TweetAdmin (admin.ModelAdmin):
-    model = Tweet
-    list_display = ('__unicode__', 'tweeter', 'text', 'assignment', 'is_a_reply')
-    readonly_fields = ('tweeter', 'text', 'assignment')
     actions = ('make_visions', 'make_replies',)
+    date_hierarchy = 'created_at'
+    list_display = ('__unicode__', 'tweeter', 'text', 'assignment', 'is_a_reply')
     list_filter = (TweetAssignmentFilter,)
-    search_fields = ('tweet_data',)
     raw_id_fields = ('in_reply_to',)
+    readonly_fields = ('tweeter', 'text', 'assignment')
+    search_fields = ('tweet_data',)
 
+    # Queryset
     def queryset(self, request):
         queryset = super(TweetAdmin, self).queryset(request)
         return queryset.select_related('vision', 'reply')
+
+    # Read-only Fields
+    def tweeter(self, tweet):
+        user_data = tweet.tweet_data.get('user', {})
+        return '%s (%s)' % (user_data.get('screen_name'), user_data.get('name'))
+
+    def text(self, tweet):
+        return tweet.tweet_data.get('text')
+
+    def assignment(self, tweet):
+        try:
+            tweet.vision
+            return ('<a href="%s">Vision %s</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]), tweet.vision.id))
+        except Vision.DoesNotExist:
+            pass
+
+        try:
+            tweet.reply
+            return ('<a href="%s">Reply %s</a>' % (reverse('admin:visionlouisville_reply_change', args=[tweet.reply.id]), tweet.reply.id))
+        except Reply.DoesNotExist:
+            pass
+    assignment.allow_tags = True  # Do not HTML-escape the value
+
+    # Actions
+    def is_a_reply(self, tweet):
+        return tweet.in_reply_to_id is not None
+    is_a_reply.boolean = True  # Display a "pretty" on/off icon
 
     def make_visions(self, request, tweet_qs):
         tweet_qs.make_visions()
@@ -81,41 +99,32 @@ class TweetAdmin (admin.ModelAdmin):
             self.message_user(request, 'Successfully converted %s tweet(s) to replies. %s tweet(s) are not yet replies to visions. Assign tweets to be replies before proceeding.' % (successes, failures), level=messages.WARNING)
     make_replies.short_description = "Make replies from the selected tweets"
 
-    def tweeter(self, tweet):
-        user_data = tweet.tweet_data.get('user', {})
-        return '%s (%s)' % (user_data.get('screen_name'), user_data.get('name'))
 
-    def text(self, tweet):
-        return tweet.tweet_data.get('text')
+class ShareInline (admin.TabularInline):
+    model = Share
+    extra = 1
+    raw_id_fields = ('tweet', 'user',)
 
-    def assignment(self, tweet):
-        try:
-            tweet.vision
-            return ('<a href="%s">Vision %s</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]), tweet.vision.id))
-        except Vision.DoesNotExist:
-            pass
 
-        try:
-            tweet.reply
-            return ('<a href="%s">Reply %s</a>' % (reverse('admin:visionlouisville_reply_change', args=[tweet.reply.id]), tweet.reply.id))
-        except Reply.DoesNotExist:
-            pass
-    assignment.allow_tags = True  # Do not HTML-escape the value
-
-    def is_a_reply(self, tweet):
-        return tweet.in_reply_to_id is not None
-    is_a_reply.boolean = True  # Display a "pretty" on/off icon
+class ReplyInline (admin.TabularInline):
+    model = Reply
+    extra = 3
+    raw_id_fields = ('tweet', 'author',)
 
 
 class VisionAdmin (admin.ModelAdmin):
-    inlines = [ReplyInline, ShareInline]
-    # date_hierarchy = 'created_at'
     filter_horizontal = ('supporters',)
+    inlines = [ReplyInline, ShareInline]
     list_display = ('__unicode__', 'author', 'text', 'category', 'featured')
     list_editable = ('category', 'featured',)
     list_filter = ('category', 'created_at', 'updated_at')
+    raw_id_fields = ('tweet', 'author',)
     readonly_fields = ('tweet_text',)
     search_fields = ('text', 'category')
+
+    def queryset(self, request):
+        queryset = super(VisionAdmin, self).queryset(request)
+        return queryset.select_related('category', 'author')
 
     def change_view(self, request, *args, **kwargs):
         # Save the request so that we can use it when
@@ -125,6 +134,10 @@ class VisionAdmin (admin.ModelAdmin):
 
     def tweet_text(self, vision):
         return VisionViewSet.get_app_tweet_text(self.request, vision)
+
+
+class ReplyAdmin (admin.ModelAdmin):
+    raw_id_fields = ('tweet', 'vision', 'author')
 
 
 class UserCreationForm (BaseUserCreationForm):
@@ -162,6 +175,6 @@ class UserAdmin (BaseUserAdmin):
 
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
-admin.site.register(Reply)
+admin.site.register(Reply, ReplyAdmin)
 admin.site.register(Category)
 admin.site.register(Tweet, TweetAdmin)
