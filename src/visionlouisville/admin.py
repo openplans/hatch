@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     UserChangeForm as BaseUserChangeForm,
 )
 from django.contrib import messages
+from django.utils.html import format_html
 import json
 from .models import Vision, Reply, Share, User, Category, Tweet
 from .views import VisionViewSet
@@ -32,13 +33,31 @@ class TweetAssignmentFilter(admin.SimpleListFilter):
             return queryset.filter(vision__isnull=True, reply__isnull=True)
 
 
+class KnownReplyFilter(admin.SimpleListFilter):
+    title = 'Is a Reply Tweet'
+    parameter_name = 'is_a_reply'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Yes'),
+            ('no', 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        val = self.value()
+        if val == 'yes':
+            return queryset.filter(in_reply_to__isnull=False)
+        if val == 'no':
+            return queryset.filter(in_reply_to__isnull=True)
+
+
 class TweetAdmin (admin.ModelAdmin):
     actions = ('make_visions', 'make_replies',)
     date_hierarchy = 'created_at'
     list_display = ('__unicode__', 'tweeter', 'text', 'assignment', 'is_a_reply')
-    list_filter = (TweetAssignmentFilter,)
+    list_filter = (TweetAssignmentFilter, KnownReplyFilter)
     raw_id_fields = ('in_reply_to',)
-    readonly_fields = ('tweeter', 'text', 'assignment')
+    readonly_fields = ('tweeter', 'text', 'original_tweet', 'tweet_in_reply_to', 'assignment')
     search_fields = ('tweet_data',)
 
     # Queryset
@@ -53,6 +72,17 @@ class TweetAdmin (admin.ModelAdmin):
 
     def text(self, tweet):
         return tweet.tweet_data.get('text')
+    text.allow_tags = True
+
+    def original_tweet(self, tweet):
+        if 'id' in tweet.tweet_data and 'user' in tweet.tweet_data:
+            return ('on twitter... <a href="http://twitter.com/%(username)s/status/%(tweet_id)s">%(tweet_id)s</a>' % {'tweet_id': tweet.tweet_data['id'], 'username': tweet.tweet_data['user']['screen_name']})
+    original_tweet.allow_tags = True  # Do not HTML-escape the value
+
+    def tweet_in_reply_to(self, tweet):
+        if tweet.tweet_data.get('in_reply_to_status_id'):
+            return ('on twitter... <a href="http://twitter.com/%(username)s/status/%(tweet_id)s">%(tweet_id)s</a>' % {'tweet_id': tweet.tweet_data['in_reply_to_status_id'], 'username': tweet.tweet_data['user']['screen_name']})
+    tweet_in_reply_to.allow_tags = True  # Do not HTML-escape the value
 
     def assignment(self, tweet):
         try:

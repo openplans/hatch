@@ -164,7 +164,7 @@ class Tweet (models.Model):
     objects = TweetManager()
 
     def __unicode__(self):
-        return '%s' % (self.tweet_id,)
+        return u'%s' % (self.tweet_id,)
 
     @classmethod
     def get_tweet_data(cls, tweet_id):
@@ -289,9 +289,9 @@ class Category (models.Model):
 
 class Vision (TweetedModelMixin, models.Model):
     tweet = models.OneToOneField('Tweet', related_name='vision', null=True)
-    author = models.ForeignKey(User, related_name='visions')
+    author = models.ForeignKey(User, related_name='visions', help_text="This field will be overwritten with syncing with the source tweet, but you must set it to a value in the mean time (selecting any user will do).")
     category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
-    text = models.TextField(blank=True)
+    text = models.TextField(blank=True, help_text="Leave this field blank if you want to re-sync with the source tweet.")
     media_url = models.URLField(default='', blank=True)
     featured = models.BooleanField(default=False)
 
@@ -343,7 +343,7 @@ class Vision (TweetedModelMixin, models.Model):
             self.created_at = now()
         self.updated_at = now()
 
-        if self.tweet and not any([self.text, self.media_url]):
+        if self.tweet and not self.text:
             self.sync_with_tweet(self.tweet, commit=False)
         return super(Vision, self).save(*args, **kwargs)
 
