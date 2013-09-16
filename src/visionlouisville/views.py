@@ -87,8 +87,13 @@ class AppMixin (object):
         service = self.get_twitter_service()
 
         if self.request.user.is_authenticated():
-            user = self.get_user_queryset(
-                User.objects.filter(pk=self.request.user.pk)).get()
+            user_qs = self.get_user_queryset(
+                User.objects.filter(pk=self.request.user.pk))
+            
+            try:
+                user = user_qs.get()
+            except User.DoesNotExist:
+                user = None
         else:
             user = None
 

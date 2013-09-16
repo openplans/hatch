@@ -46,15 +46,6 @@ class User (AbstractUser):
         self.groups.remove(group)
 
 
-class TweetQuerySet (query.QuerySet):
-    def make_visions(self):
-        visions = []
-        for tweet in self.all():
-            visions.append(tweet.make_vision(commit=False))
-        Vision.objects.bulk_create(visions)
-        return visions
-
-
 def get_tweet_id(tweet_data):
     try:
         if isinstance(tweet_data, (int, str, unicode)):
@@ -69,7 +60,23 @@ def get_tweet_id(tweet_data):
             % tweet_data)
 
 
+class TweetQuerySet (query.QuerySet):
+    def make_visions(self):
+        visions = []
+        right_now = now()
+        for tweet in self.all():
+            vision = tweet.make_vision(commit=False)
+            vision.created_at = right_now
+            vision.updated_at = right_now
+            visions.append(vision)
+        Vision.objects.bulk_create(visions)
+        return visions
+
+
 class TweetManager (models.Manager):
+    def get_query_set(self):
+        return TweetQuerySet(self.model, using=self._db)
+
     def create_or_update_from_tweet_data(self, tweet_data):
         tweet_id = get_tweet_id(tweet_data)
 
@@ -202,7 +209,7 @@ class TweetedModelMixin (object):
         except UserSocialAuth.DoesNotExist:
             suffix = ''
             while True:
-                user, created = User.objects.get_or_create(username=username + suffix)
+                user, created = User.objects.get_or_create(username=(username + suffix)[:30])
                 if created:
                     user_full_name = user_info['name'].split(' ', 1)
                     user.first_name = user_full_name[0]

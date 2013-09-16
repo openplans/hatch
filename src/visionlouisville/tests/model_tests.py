@@ -104,3 +104,27 @@ class TweetTest (TestCase):
 
         assert_equal(vision.pk, None)
         assert_equal(save.call_count, 0)
+
+    def test_converting_many_to_visions(self):
+        Tweet.objects.create(tweet_id='abc123', tweet_data={
+            'user': {
+                'id': '123456',
+                'screen_name': 'tweeter',
+                'name': 'A. User',
+            },
+            'text': 'this is a tweet',
+            'entities': {},
+        })
+        Tweet.objects.create(tweet_id='abc124', tweet_data={
+            'user': {
+                'id': '123456',
+                'screen_name': 'tweeter',
+                'name': 'A. User',
+            },
+            'text': 'this is a tweet',
+            'entities': {},
+        })
+
+        visions = Tweet.objects.all().make_visions()
+        assert_equal(len(visions), 2)
+        assert_equal(visions[0].author.id, visions[1].author.id)

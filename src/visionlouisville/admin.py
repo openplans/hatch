@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import (
@@ -19,16 +20,59 @@ class ReplyInline (admin.TabularInline):
     extra = 3
 
 
+class TweetAssignmentFilter(admin.SimpleListFilter):
+    title = 'Assignment'
+    parameter_name = 'assignment'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('visions', 'Visions'),
+            ('replies', 'Replies'),
+            ('null', 'Unassigned'),
+        )
+
+    def queryset(self, request, queryset):
+        val = self.value()
+        if val == 'visions':
+            return queryset.filter(vision__isnull=False)
+        if val == 'replies':
+            return queryset.filter(reply__isnull=False)
+        if val == 'null':
+            return queryset.filter(vision__isnull=True, reply__isnull=True)
+
+
 class TweetAdmin (admin.ModelAdmin):
     model = Tweet
-    list_display = ('__unicode__', 'text')
+    list_display = ('__unicode__', 'text', 'assignment')
     readonly_fields = ('text',)
+    actions = ('make_visions',)
+    list_filter = (TweetAssignmentFilter,)
+
+    def queryset(self, request):
+        queryset = super(TweetAdmin, self).queryset(request)
+        return queryset.select_related('vision', 'reply')
 
     def make_visions(self, request, tweet_qs):
         tweet_qs.make_visions()
+        self.message_user(request, 'Successfully converted %s tweets to visions.' % (tweet_qs.count(),))
+    make_visions.short_description = "Make visions from the selected tweets"
 
     def text(self, tweet):
-        return json.loads(tweet.data).get('text')
+        return tweet.tweet_data.get('text')
+
+    def assignment(self, tweet):
+        try:
+            tweet.vision
+            return ('<a href="%s">Vision</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]),))
+        except Vision.DoesNotExist:
+            pass
+
+        try:
+            tweet.reply
+            return 'Reply'
+        except Reply.DoesNotExist:
+            pass
+    assignment.allow_tags = True  # Do not HTML-escape the value
 
 
 class VisionAdmin (admin.ModelAdmin):
@@ -86,5 +130,6 @@ class UserAdmin (BaseUserAdmin):
 
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Reply)
 admin.site.register(Category)
 admin.site.register(Tweet, TweetAdmin)
