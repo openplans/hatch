@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
     UserCreationForm as BaseUserCreationForm,
     UserChangeForm as BaseUserChangeForm,
 )
+from django.contrib import messages
 import json
 from .models import Vision, Reply, Share, User, Category, Tweet
 from .views import VisionViewSet
@@ -43,11 +44,12 @@ class TweetAssignmentFilter(admin.SimpleListFilter):
 
 class TweetAdmin (admin.ModelAdmin):
     model = Tweet
-    list_display = ('__unicode__', 'tweeter', 'text', 'assignment')
+    list_display = ('__unicode__', 'tweeter', 'text', 'assignment', 'is_a_reply')
     readonly_fields = ('tweeter', 'text', 'assignment')
-    actions = ('make_visions',)
+    actions = ('make_visions', 'make_replies',)
     list_filter = (TweetAssignmentFilter,)
     search_fields = ('tweet_data',)
+    raw_id_fields = ('in_reply_to',)
 
     def queryset(self, request):
         queryset = super(TweetAdmin, self).queryset(request)
@@ -57,6 +59,27 @@ class TweetAdmin (admin.ModelAdmin):
         tweet_qs.make_visions()
         self.message_user(request, 'Successfully converted %s tweets to visions.' % (tweet_qs.count(),))
     make_visions.short_description = "Make visions from the selected tweets"
+
+    def make_replies(self, request, tweet_qs):
+        try:
+            tweet_qs.make_replies()
+            self.message_user(request, 'Successfully converted %s tweets to replies.' % (tweet_qs.count(),))
+        except ValueError:
+
+            # If we fail to make them all replies (which is fastest), go one
+            # by one and count the failures.
+            successes = 0
+            failures = 0
+
+            for tweet in tweet_qs.all():
+                try:
+                    tweet.make_reply()
+                    successes += 1
+                except ValueError:
+                    failures += 1
+
+            self.message_user(request, 'Successfully converted %s tweet(s) to replies. %s tweet(s) are not yet replies to visions. Assign tweets to be replies before proceeding.' % (successes, failures), level=messages.WARNING)
+    make_replies.short_description = "Make replies from the selected tweets"
 
     def tweeter(self, tweet):
         user_data = tweet.tweet_data.get('user', {})
@@ -74,10 +97,14 @@ class TweetAdmin (admin.ModelAdmin):
 
         try:
             tweet.reply
-            return 'Reply'
+            return ('<a href="%s">Reply %s</a>' % (reverse('admin:visionlouisville_reply_change', args=[tweet.reply.id]), tweet.reply.id))
         except Reply.DoesNotExist:
             pass
     assignment.allow_tags = True  # Do not HTML-escape the value
+
+    def is_a_reply(self, tweet):
+        return tweet.in_reply_to_id is not None
+    is_a_reply.boolean = True  # Display a "pretty" on/off icon
 
 
 class VisionAdmin (admin.ModelAdmin):

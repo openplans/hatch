@@ -62,15 +62,22 @@ def get_tweet_id(tweet_data):
 
 class TweetQuerySet (query.QuerySet):
     def make_visions(self):
-        visions = []
+        return self.make_tweeted_objects('make_vision', Vision)
+
+    def make_replies(self):
+        return self.make_tweeted_objects('make_reply', Reply)
+
+    def make_tweeted_objects(self, f_name, ObjType):
+        objs = []
         right_now = now()
+
         for tweet in self.all():
-            vision = tweet.make_vision(commit=False)
-            vision.created_at = right_now
-            vision.updated_at = right_now
-            visions.append(vision)
-        Vision.objects.bulk_create(visions)
-        return visions
+            maker = getattr(tweet, f_name)
+            obj = maker(commit=False)
+            obj.created_at = obj.updated_at = right_now
+            objs.append(obj)
+        ObjType.objects.bulk_create(objs)
+        return objs
 
 
 class TweetManager (models.Manager):
@@ -152,11 +159,12 @@ class Tweet (models.Model):
             "creator). For example, if the tweet URL is http://www.twitter.com"
             "/myuser/status/1234567890, then the tweet id is 1234567890.")))
     tweet_data = JSONField(blank=True, default={})
+    in_reply_to = models.ForeignKey('Tweet', null=True, blank=True, related_name='tweet_replies')
 
     objects = TweetManager()
 
     def __unicode__(self):
-        return self.tweet_id
+        return '%s' % (self.tweet_id,)
 
     @classmethod
     def get_tweet_data(cls, tweet_id):
@@ -179,6 +187,23 @@ class Tweet (models.Model):
             tweet_data = tweet_id
         return tweet_data
 
+    def make_reply(self, to_vision=None, commit=True):
+        if to_vision is None:
+            # Climb up the reply chain until we find a vision
+            reply_to = self.in_reply_to
+            while reply_to and reply_to.vision is None:
+                reply_to = reply_to.in_reply_to
+
+            if reply_to is None:
+                raise ValueError('A vision must be explicitly supplied when '
+                                 'it cannot be inferred from the reply chain.')
+            else:
+                to_vision = reply_to.vision
+
+        reply = Reply(tweet=self, vision=to_vision)
+        reply.sync_with_tweet(self, commit=commit)
+        return reply
+
     def make_vision(self, commit=True):
         vision = Vision(tweet=self)
         vision.sync_with_tweet(self, commit=commit)
@@ -188,6 +213,13 @@ class Tweet (models.Model):
         tweet_data = self.get_tweet_data(tweet_id)
         self.tweet_id = tweet_data['id']
         self.tweet_data = tweet_data
+
+        if 'in_reply_to_status_id_str' in self.tweet_data:
+            try:
+                in_reply_to_id = self.tweet_data['in_reply_to_status_id_str']
+                self.in_reply_to = Tweet.objects.get(tweet_id=in_reply_to_id)
+            except Tweet.DoesNotExist:
+                pass
 
         if commit:
             self.save()
