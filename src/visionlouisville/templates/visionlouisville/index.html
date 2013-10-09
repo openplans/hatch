@@ -9,15 +9,15 @@
 
 <head>
   {% if vision %}
-  <title>#NewarkNext | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
+  <title>#ConnectNewark | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
   {% elif category %}
-  <title>#NewarkNext | {{ category.prompt|safe }}</title>
+  <title>#ConnectNewark | {{ category.prompt|safe }}</title>
   {% else %}
-  <title>#NewarkNext | What's your vision for the future of Newark?</title>
+  <title>#ConnectNewark | What's your vision for the future of Newark?</title>
   {% endif %}
 
   <meta charset="utf-8">
-  <meta name="description" content="#NewarkNext \u2014 Share your vision. Come together. Change Newark.">
+  <meta name="description" content="#ConnectNewark \u2014 Share your vision. Come together. Change Newark.">
   <meta name="author" content="OpenPlans">
 
   <!--  Mobile Viewport Fix -->
@@ -30,13 +30,13 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@vizlou">
   <meta name="twitter:creator" content="@{{ vision.author.username }}">
-  <meta name="twitter:title" content="#NewarkNext | My vision for Newark">
+  <meta name="twitter:title" content="#ConnectNewark | My vision for Newark">
   <meta name="twitter:image:src" content="{{ vision.media_url }}">
   <meta name="twitter:description" content="{{ vision.text }}">
 
   <!-- Facebook -->
   <meta property="og:site_name" content="VizLou"/>
-  <meta property="og:title" content="#NewarkNext | My vision for Newark"/>
+  <meta property="og:title" content="#ConnectNewark | My vision for Newark"/>
   <meta property="og:description" content="{{ vision.text }}"/>
 
   {% endif %}
@@ -74,7 +74,7 @@
 
   <div class="site-header">
     <div class="container clearfix">
-      <h1 class="site-title"><a href="/" title="NewarkNext.org" rel="home" class="nobreak">#NewarkNext</a></h1>
+      <h1 class="site-title"><a href="/" title="ConnectNewark" rel="home" class="nobreak">#ConnectNewark</a></h1>
       <nav class="main-menu">
         <ul class="unstyled-list">
 

@@ -70,7 +70,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     allySignup: function() {
       // TODO: Move to the config settings
-      document.title = '#NewarkNext | Become an ally!';
+      document.title = '#ConnectNewark | Become an ally!';
 
       NS.app.mainRegion.show(new NS.AllySignupView({
         model: NS.app.currentUser
@@ -78,7 +78,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     listVisions: function(listCategory) {
       // TODO: Move to the config settings
-      document.title = '#NewarkNext | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
+      document.title = '#ConnectNewark | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
 
       var getVisionListView = function(collection, options) {
         var model;
@@ -106,7 +106,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
-      document.title = '#NewarkNext | What\'s your vision for the future of Newark?';
+      document.title = '#ConnectNewark | What\'s your vision for the future of Newark?';
       NS.Utils.log('send', 'event', 'vision', 'new');
 
       // Protect against unauthenticated users.
@@ -141,7 +141,7 @@ var VisionLouisville = VisionLouisville || {};
             });
 
         // TODO: Move to the config settings
-        document.title = '#NewarkNext | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
+        document.title = '#ConnectNewark | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
         NS.Utils.log('send', 'event', 'vision', 'show', visionId);
 
         // TODO: why is this necessary?
@@ -165,7 +165,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     home: function() {
       // TODO: Move to the config settings
-      document.title = '#NewarkNext | What\'s your vision for the future of Newark?';
+      document.title = '#ConnectNewark | What\'s your vision for the future of Newark?';
       NS.app.router.navigate('', {replace: true});
 
       var homeView = new NS.HomeView({
@@ -219,7 +219,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
-      document.title = '#NewarkNext | See the ' + NS.Utils.capitalize(id || 'visionaries');
+      document.title = '#ConnectNewark | See the ' + NS.Utils.capitalize(id || 'visionaries');
 
       var userListLayout = new NS.UserListLayout({
             model: new Backbone.Model({show_allies: id === 'allies'})
@@ -251,7 +251,7 @@ var VisionLouisville = VisionLouisville || {};
             logPrefix = isPersonal ? 'my-' : '',
             logSuffix = tab ? '-' + tab : '';
 
-        document.title = '#NewarkNext | ' + model.get('full_name') + '\'s profile';
+        document.title = '#ConnectNewark | ' + model.get('full_name') + '\'s profile';
 
         view.on('show', function() {
           if (tab) {
