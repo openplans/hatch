@@ -1,15 +1,15 @@
 <div class="container-fullwidth welcome">
   <div class="welcome-header">
-    <h2 class="welcome-prompt">Let's hear your ideas for improving Newark!</h2>
+    <h2 class="welcome-prompt">{{app_config 'welcome_prompt'}}</h2>
   </div>
 
   <ul class="unstyled-list question-list">
   {{#each_category}}
     <li class="clearfix"><a href="/{{visions_url_name}}/{{name}}/list" class="question">{{ prompt }}</a>
       {{#if_authenticated}}
-      <a class="btn btn-tertiary question-btn" href="/{{visions_url_name}}/{{name}}/new"><span class="plus">+</span> My Idea</a>
+      <a class="btn btn-tertiary question-btn" href="/{{visions_url_name}}/{{name}}/new"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
       {{^}}
-      <a class="btn btn-tertiary question-btn" href="/login/twitter/"><span class="plus">+</span> My Idea</a>
+      <a class="btn btn-tertiary question-btn" href="/login/twitter/"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
       {{/if_authenticated}}
     </li>
   {{/each_category}}

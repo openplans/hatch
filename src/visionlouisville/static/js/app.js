@@ -41,9 +41,9 @@ var VisionLouisville = VisionLouisville || {};
 
   var appRoutes = {};
 
-  appRoutes[NS.Config.visionsUrlName + '/:category/new'] =  'newVision';
-  appRoutes[NS.Config.visionsUrlName + '/:category/list'] =  'listVisions';
-  appRoutes[NS.Config.visionsUrlName + '/:id'] =  'showVision';
+  appRoutes[NS.appConfig.vision_plural + '/:category/new'] =  'newVision';
+  appRoutes[NS.appConfig.vision_plural + '/:category/list'] =  'listVisions';
+  appRoutes[NS.appConfig.vision_plural + '/:id'] =  'showVision';
 
   _.extend(appRoutes, {
     'users/list': 'listUsers',
@@ -70,7 +70,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.controller = {
     allySignup: function() {
       // TODO: Move to the config settings
-      document.title = '#ConnectNewark | Become an ally!';
+      document.title = NS.appConfig.title + ' | Become an '+NS.appConfig.ally+'!';
 
       NS.app.mainRegion.show(new NS.AllySignupView({
         model: NS.app.currentUser
@@ -78,7 +78,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     listVisions: function(listCategory) {
       // TODO: Move to the config settings
-      document.title = '#ConnectNewark | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
+      document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
 
       var getVisionListView = function(collection, options) {
         var model;
@@ -106,7 +106,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     newVision: function(category, momentId) {
       // TODO: Move to the config settings
-      document.title = '#ConnectNewark | What\'s your vision for the future of Newark?';
+      document.title = NS.appConfig.title + ' | What\'s your ' + NS.appConfig.vision +'?';
       NS.Utils.log('send', 'event', 'vision', 'new');
 
       // Protect against unauthenticated users.
@@ -141,7 +141,7 @@ var VisionLouisville = VisionLouisville || {};
             });
 
         // TODO: Move to the config settings
-        document.title = '#ConnectNewark | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
+        document.title = NS.appConfig.title + ' | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
         NS.Utils.log('send', 'event', 'vision', 'show', visionId);
 
         // TODO: why is this necessary?
@@ -165,7 +165,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     home: function() {
       // TODO: Move to the config settings
-      document.title = '#ConnectNewark | What\'s your vision for the future of Newark?';
+      document.title = NS.appConfig.title + ' | What\'s your '+ NS.appConfig.vision +'?';
       NS.app.router.navigate('', {replace: true});
 
       var homeView = new NS.HomeView({
@@ -219,7 +219,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
     },
     listUsers: function(id) {
-      document.title = '#ConnectNewark | See the ' + NS.Utils.capitalize(id || 'visionaries');
+      document.title = NS.appConfig.title + ' | See the ' + NS.Utils.capitalize(id || 'visionaries');
 
       var userListLayout = new NS.UserListLayout({
             model: new Backbone.Model({show_allies: id === 'allies'})
@@ -251,7 +251,7 @@ var VisionLouisville = VisionLouisville || {};
             logPrefix = isPersonal ? 'my-' : '',
             logSuffix = tab ? '-' + tab : '';
 
-        document.title = '#ConnectNewark | ' + model.get('full_name') + '\'s profile';
+        document.title = NS.appConfig.title + ' | ' + model.get('full_name') + '\'s profile';
 
         view.on('show', function() {
           if (tab) {
@@ -259,7 +259,7 @@ var VisionLouisville = VisionLouisville || {};
               view.showSupported();
             } else if (tab === 'replies') {
               view.showReplies();
-            } else if (tab === NS.Config.visionsUrlName) {
+            } else if (tab === NS.appConfig.vision_plural) {
               view.showVisions();
             }
           } else {
@@ -372,14 +372,14 @@ var VisionLouisville = VisionLouisville || {};
 
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
-           href.indexOf('/' + NS.Config.visionsUrlName) === 0 ||
+           href.indexOf('/' + NS.appConfig.vision_plural) === 0 ||
            href.indexOf('/users') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
         if (href.indexOf('new') !== -1) {
           if (!NS.app.currentUser.isAuthenticated()) {
-            window.alert('Sign in to create a new vision!');
+            window.alert('Sign in to share your story!');
             return;
           }
         }

@@ -1,21 +1,21 @@
 <div class="container">
   {{# if_in_group 'allies' }}
-    <h2>You're an Ally!</h2>
+    <h2>You're an {{app_config 'ally'}}!</h2>
 
     <p><strong>Thank you!</strong> Promote the tool and use it to engage with youth. Allies like you can empower citizens by engaging, sharing and supporting their ideas. Your comments and suggestions help develop and encourage ideas. Thanks for your time!
     </p>
 
-    <a href="/" class="btn btn-block btn-primary">Return to #ConnectNewark</a>
+    <a href="/" class="btn btn-block btn-primary">Return to {{app_config 'title'}}</a>
   {{^}}
-    <h2>Become an Ally!</h2>
+    <h2>Become an {{app_config 'ally'}}!</h2>
 
-    <h5>#ConnectNewark is a website for people to share their ideas for the future of Newark, NJ.</h5>
+    <h5>{{app_config 'title'}} is a website for people to share their ideas for the future of {{app_config 'city'}}.</h5>
 
-    <p><strong>Your participation is vital!</strong> Allies like you can empower citizens by engaging, sharing and supporting ideas, and promoting the tool. Your comments and suggestions help develop and encourage ideas. Thanks for your time!
+    <p><strong>Your participation is vital!</strong> {{app_config 'ally_plural'}} like you can empower citizens by engaging, sharing and supporting ideas, and promoting the tool. Your comments and suggestions help develop and encourage ideas. Thanks for your time!
     </p>
 
     {{# if_authenticated }}
-    <h5>Enter your email address to become an Ally.</h5>
+    <h5>Enter your email address to become an {{app_config 'ally'}}.</h5>
 
       <form method="POST" action="/ally">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ CSRF_TOKEN }}">
@@ -25,7 +25,7 @@
           <input name="email" type="email" class="input-block" required>
         </p>
 
-        <button type="submit" class="btn btn-block btn-primary">Become an Ally today!</button>
+        <button type="submit" class="btn btn-block btn-primary">Become an {{app_config 'ally'}} today!</button>
       </form>
     {{^}}
       <h5>To get started sign in with your Twitter account.</h5>
@@ -35,15 +35,15 @@
   {{/ if_in_group }}
 
   <h5>Two ways to engage</h5>
-  <p>Allies help get the conversation started by sharing inspirations, and they comment, heart and share ideas. Check #ConnectNewark frequently to see the latest.</p>
+  <p>Allies help get the conversation started by sharing inspirations, and they comment, heart and share ideas. Check {{app_config 'title'}} frequently to see the latest.</p>
 
   <h6>Share inspirations</h6>
 
-  <p>What can you inspire? Tweet a positive story about Newark:<br/>
-  <em>Grilling and chilling on my block. That's why I love Newark! #ConnectNewark</em></p>
-  <p>Include a pic! Use the #ConnectNewark hashtag. It will show up here, where others can respond to it.</p>
+  <p>What can you inspire? Tweet a positive story about {{app_config 'city'}}:<br/>
+  <em>Grilling and chilling on my block. That's why I love {{app_config 'city'}}! {{app_config 'title'}}</em></p>
+  <p>Include a pic! Use the {{app_config 'title'}} hashtag. It will show up here, where others can respond to it.</p>
 
-  <h6>Explore ideas at connect.ci.newark.nj.us</h6>
+  <h6>Explore ideas at {{app_config 'url'}}</h6>
   <p>Engage with citizens:</p>
   <ul>
   <li>Read ideas.</li>

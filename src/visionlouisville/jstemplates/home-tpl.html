@@ -6,28 +6,27 @@
 
   <div class="container-fullwidth welcome site-footer" id="site-footer">
 
-    <h5>What is #ConnectNewark?</h5>
-    <p><strong>#ConnectNewark</strong> is a place to share your ideas for making Newark, NJ better. All idea shared here will shared with the City of Newark.</p>
+    <h5>What is {{app_config 'title'}}?</h5>
+    <p><strong>{{app_config 'title'}}</strong> is a place to share your {{app_config 'vision_plural'}} for making {{app_config 'city'}} better.  All idea shared here will shared with the City of {{app_config 'city'}}.</p>
 
-    <h5>Share your ideas.</h5>
-    <p>Have a great idea for the future of Newark?
+    <h5>Share your {{app_config 'vision_plural'}}.</h5>
+    <p>Have a great idea for the future of {{app_config 'city'}}?
 
       {{#if_authenticated}}
       <strong>Add it here!</strong>
       {{^}}
-      <a href="{{ LOGIN_URL '/{{visions_url_name}}/new' }}"><strong>Sign in with your Twitter account</strong></a>
+      <a href="{{ LOGIN_URL }}"><strong>Sign in with your Twitter account</strong></a>
       to add it!
       {{/if_authenticated}}
-      Explore ideas of others, add comments and hearts to show your support.
+      Explore {{app_config 'vision_plural'}} of others, add comments and hearts to show your support.
     </p>
-    <p>Want to share something you love about Newark? Tweet with the hashtag <strong>#ConnectNewark</strong> and see what ideas you inspire from others.</p>
+    <p>Want to share something you love about {{app_config 'city'}}? Tweet with the hashtag <strong>{{app_config 'title'}}</strong> and see what {{app_config 'vision_plural'}} you inspire from others.</p>
 
-    <h5>Allies are listening.</h5>
-    <p><strong>Allies</strong> are community leaders using #ConnectNewark to hear ideas for the future of Newark. They're engaging with visionary citizens by reading and sharing ideas, clicking to show support, and adding comments to help ideas become better defined.</p>
-    <p>Are you a community leader? City official? Educator? Pastor? Mentor? <a href="/ally"><strong>Sign up to become a #ConnectNewark Ally!</strong></a></p>
+    <h5>{{app_config 'ally_plural' true}} are listening.</h5>
+    <p><strong>{{app_config 'ally_plural' true}}</strong> are community leaders using {{app_config 'title'}} to hear {{app_config 'vision_plural'}} for the future of {{app_config 'city'}}. They're engaging with visionary citizens by reading and sharing {{app_config 'vision_plural'}}, clicking to show support, and adding comments to help {{app_config 'vision_plural'}} become better defined.</p>
+    <p>Are you a community leader? City official? Educator? Pastor? Mentor? <a href="/ally"><strong>Sign up to become a {{app_config 'title'}} Ally!</strong></a></p>
 
     <h5>Give us your feedback.</h5>
-    <p>Tweet your comments and suggestions to <a href="http://twitter.com/ConnectNewark">@ConnectNewark</a>.</p>
-
+    <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.
   </div>
 </div>
