@@ -380,8 +380,8 @@ home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
 category_app_view = CategoryInstanceView.as_view()
 secret_ally_signup_view = SecretAllySignupView.as_view()
-robots_view = TemplateView.as_view(template_name='visionlouisville/robots.txt')
-sitemap_view = SiteMapView.as_view()
+robots_view = TemplateView.as_view(template_name='visionlouisville/robots.txt', content_type='text/plain')
+sitemap_view = SiteMapView.as_view(content_type='text/xml')
 
 
 # API views
