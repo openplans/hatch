@@ -386,3 +386,27 @@ class Reply (TweetedModelMixin, models.Model):
         if self.tweet and not any([self.text]):
             self.sync_with_tweet(self.tweet, commit=False)
         return super(Reply, self).save(*args, **kwargs)
+
+
+class AppConfig (models.Model):
+    title = models.CharField(max_length=50)
+    subtitle = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    twitter_handle = models.CharField(max_length=50)
+    share_title = models.CharField(max_length=100)
+    url = models.CharField(max_length=1024)
+
+    vision = models.CharField(max_length=50)
+    vision_plural = models.CharField(max_length=50)
+    visionary = models.CharField(max_length=50)
+    visionary_plural = models.CharField(max_length=50)
+    ally = models.CharField(max_length=50)
+    ally_plural = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+
+    welcome_prompt = models.CharField(max_length=1024)
+
+
+    def __unicode__(self):
+        return '%s | "%s"' % (self.title, self.subtitle)

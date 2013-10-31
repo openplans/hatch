@@ -2,7 +2,7 @@
   <nav class="tabs-container">
     <ul class="tabs tabs-2 unstyled-list">
       <li class="tab {{^if show_allies}}is-current{{/if}}"><a href="/users/list/visionaries" class="uppercase" data-noscroll data-replace>Everyone</a></li>
-      <li class="tab {{#if show_allies}}is-current{{/if}}"><a href="/users/list/allies" class="uppercase" data-noscroll data-replace>Allies</a></li>
+      <li class="tab {{#if show_allies}}is-current{{/if}}"><a href="/users/list/allies" class="uppercase" data-noscroll data-replace>{{app_config 'ally_plural'}}</a></li>
     </ul>
   </nav>
 

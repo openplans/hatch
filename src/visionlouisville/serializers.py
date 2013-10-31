@@ -2,7 +2,7 @@ from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
     PrimaryKeyRelatedField, SerializerMethodField, DateTimeField,
     RelatedField, ValidationError)
-from .models import User, Vision, Reply, Category
+from .models import User, Vision, Reply, Category, AppConfig
 from .services import SocialMediaException
 
 
@@ -179,6 +179,11 @@ class ReplySerializer (ModelSerializer):
 class CategorySerializer (ModelSerializer):
     class Meta:
         model = Category
+
+
+class AppConfigSerializer (ModelSerializer):
+    class Meta:
+        model = AppConfig
 
 
 class VisionSerializer (ModelSerializer):

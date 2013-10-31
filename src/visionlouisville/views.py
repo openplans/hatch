@@ -18,11 +18,11 @@ from rest_framework.generics import RetrieveAPIView, GenericAPIView
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
-from .models import Reply, User, Vision, Category, Tweet
+from .models import Reply, User, Vision, Category, Tweet, AppConfig
 from .forms import SecretAllySignupForm
 from .serializers import (
     ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer,
-    MinimalVisionSerializer)
+    MinimalVisionSerializer, AppConfigSerializer)
 from .services import default_twitter_service
 
 
@@ -89,7 +89,7 @@ class AppMixin (object):
         if self.request.user.is_authenticated():
             user_qs = self.get_user_queryset(
                 User.objects.filter(pk=self.request.user.pk))
-            
+
             try:
                 user = user_qs.get()
             except User.DoesNotExist:
@@ -102,6 +102,10 @@ class AppMixin (object):
 
         category_query = self.get_category_queryset()
         context['categories'] = json.dumps(CategorySerializer(category_query).data)
+
+        app_config_query = AppConfig.objects.all()[:1]
+        context['app'] = app_config_query[0]
+        context['app_json'] = json.dumps(AppConfigSerializer(app_config_query[0]).data)
 
         if user:
             serializer = UserSerializer(user)

@@ -9,15 +9,15 @@
 
 <head>
   {% if vision %}
-  <title>#ConnectNewark | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
+  <title>{{ app.title }} | "{{ vision.text|truncatechars:70 }}" by @{{ vision.author.username }}</title>
   {% elif category %}
-  <title>#ConnectNewark | {{ category.prompt|safe }}</title>
+  <title>{{ app.title }} | {{ category.prompt|safe }}</title>
   {% else %}
-  <title>#ConnectNewark | What's your vision for the future of Newark?</title>
+  <title>{{ app.title }} | {{ app.subtitle }}</title>
   {% endif %}
 
   <meta charset="utf-8">
-  <meta name="description" content="#ConnectNewark \u2014 Share your vision. Come together. Change Newark.">
+  <meta name="description" content="{{ app.description }}">
   <meta name="author" content="OpenPlans">
 
   <!--  Mobile Viewport Fix -->
@@ -28,15 +28,15 @@
   {% if vision %}
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@vizlou">
+  <meta name="twitter:site" content="@{{ app.twitter_handle }}">
   <meta name="twitter:creator" content="@{{ vision.author.username }}">
-  <meta name="twitter:title" content="#ConnectNewark | My vision for Newark">
+  <meta name="twitter:title" content="{{ app.share_title }}">
   <meta name="twitter:image:src" content="{{ vision.media_url }}">
   <meta name="twitter:description" content="{{ vision.text }}">
 
   <!-- Facebook -->
-  <meta property="og:site_name" content="VizLou"/>
-  <meta property="og:title" content="#ConnectNewark | My vision for Newark"/>
+  <meta property="og:site_name" content="{{ app.title }}"/>
+  <meta property="og:title" content="{{ app.share_title }}"/>
   <meta property="og:description" content="{{ vision.text }}"/>
 
   {% endif %}
@@ -49,7 +49,7 @@
   <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}images/apple-touch-icon-precomposed.png">
 
   <!-- Windows Start Screen Tiles -->
-  <meta name="application-name" content="VizLou.org"/>
+  <meta name="application-name" content="{{ app.title }}"/>
   <meta name="msapplication-TileColor" content="#ffffff"/>
   <meta name="msapplication-TileImage" content="{{ STATIC_URL }}images/splashlogo.png"/>
 
@@ -74,7 +74,7 @@
 
   <div class="site-header">
     <div class="container clearfix">
-      <h1 class="site-title"><a href="/" title="ConnectNewark" rel="home" class="nobreak">#ConnectNewark</a></h1>
+      <h1 class="site-title"><a href="/" title="{{ app.url }}" rel="home" class="nobreak">{{ app.title }}</a></h1>
       <nav class="main-menu">
         <ul class="unstyled-list">
 
@@ -107,6 +107,7 @@
     {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}';
     {{NS}}.twitterConf = {{ twitter_config|safe }};
     {{NS}}.categories = {{ categories|safe }};
+    {{NS}}.appConfig = {{ app_json|safe }};
   </script>
 
   {% if debug %}

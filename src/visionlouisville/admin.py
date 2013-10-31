@@ -8,7 +8,7 @@ from django.contrib.auth.forms import (
 from django.contrib import messages
 from django.utils.html import format_html
 import json
-from .models import Vision, Reply, Share, User, Category, Tweet
+from .models import Vision, Reply, Share, User, Category, Tweet, AppConfig
 from .views import VisionViewSet
 
 
@@ -203,6 +203,7 @@ class UserAdmin (BaseUserAdmin):
     list_editable = BaseUserAdmin.list_editable + ('visible_on_home',)
 
 
+admin.site.register(AppConfig)
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Reply, ReplyAdmin)
