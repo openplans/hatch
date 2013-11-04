@@ -1,17 +1,39 @@
 <div class="container-fullwidth welcome">
-  <div class="welcome-header">
+  <!-- <div class="welcome-header">
     <h2 class="welcome-prompt">{{app_config 'welcome_prompt'}}</h2>
+  </div> -->
+
+  <div class="container-fullwidth">
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+
+        {{#each_category}}
+
+        <div class="swiper-vision-container">
+
+          <img class="slide-image" src="http://distilleryimage3.ak.instagram.com/fe944c563f6911e3894e22000aaa05f3_8.jpg" width="640" height="640"><!-- FIXME TODO :: config these images -->
+
+          <div class="slide-header">
+            <h1 class="slide-question"><a href="/{{visions_url_name}}/{{name}}/list">{{ prompt }}</a></h1>
+            <div class="slide-meta">
+              <span class="slide-stat"><strong class="ideas-count">427</strong> Ideas</span>
+              <span class="slide-stat"><strong class="favorites-count">1,960</strong> Favorites</span>
+              <span class="slide-stat"><strong class="comments-count">847</strong> Comments</span>
+            </div>
+            {{#if_authenticated}}
+            <a class="btn btn-tertiary" href="/{{visions_url_name}}/{{name}}/new"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
+            {{^}}
+            <a class="btn btn-tertiary" href="/login/twitter/"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
+            {{/if_authenticated}}
+          </div>
+
+        </div>
+
+        {{/each_category}}
+
+      </div>
+    </div>
+    <div class="pagination"></div>
   </div>
 
-  <ul class="unstyled-list question-list">
-  {{#each_category}}
-    <li class="clearfix"><a href="/{{visions_url_name}}/{{name}}/list" class="question">{{ prompt }}</a>
-      {{#if_authenticated}}
-      <a class="btn btn-tertiary question-btn" href="/{{visions_url_name}}/{{name}}/new"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
-      {{^}}
-      <a class="btn btn-tertiary question-btn" href="/login/twitter/"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
-      {{/if_authenticated}}
-    </li>
-  {{/each_category}}
-  </ul>
 </div>

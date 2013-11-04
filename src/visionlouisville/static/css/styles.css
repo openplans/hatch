@@ -862,7 +862,6 @@ h6.category-prompt {
 
 .swiper-vision-container {
   position: relative;
-  padding: 0 10px 20px;
 }
 .swiper-slide .vision {
   background: #fff;
@@ -897,66 +896,65 @@ h6.category-prompt {
 }
 
 
-/* =Welcome Message
--------------------------------------------------------------- */
-
 .welcome {
   margin-top: -20px;
   margin-bottom: 15px;
-  padding: 15px 10px 0 10px;
+  padding: 0 10px;
   background: #444;
   color: #fff;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
 }
-.welcome h1, .welcome h2, .welcome h3, .welcome h4, .welcome h5, .welcome h6 {
-  text-shadow: 0 1px 1px rgba(0,0,0,.5);
+
+.slide-image {
+  display: block;
 }
-.welcome a {
-  color: #7ec4d8;
+.slide-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  padding: 15px 10px 50px;
+  background: #444;
+  background: rgba(0,0,0,0.6);
+  background: -moz-linear-gradient(top,  rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
+  background: -o-linear-gradient(top,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
 }
-a.welcome-close-btn {
-  float: right;
-  width: 1.25em;
-  height: 1.25em;
-  color: #444;
-  text-shadow: none;
-  font-size: xx-large;
+.slide-question {
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 0.325em;
+  text-shadow: 0 1px 0.25em rgba(0,0,0,0.75);
+}
+.slide-question a, 
+.slide-question a:visited {
+  color: #bff1ff;
   text-decoration: none;
-  line-height: 1.25em;
-  text-align: center;
-  margin: -15px -10px 0 0;
 }
-.welcome-avatar {
-  float: left;
-  width: 50px;
-  height: 50px;
-  margin: 5px 10px 20px -55px;
-}
-.welcome-header {
+.slide-meta {
+  text-shadow: 0 1px 0.25em rgba(0,0,0,0.75);
   margin-bottom: 1em;
 }
-.welcome-prompt {
-  color: #fff;
-  font-size: 1em;
-  font-weight: 600;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+.slide-stat {
+  margin-right: 0.75em;
+  white-space: nowrap;
 }
-ul.question-list {
-  margin: 0 -10px;
+.slide-stat strong {
+  font-size: 1.5em;
 }
-ul.question-list li {
-  background: #268099;
-  font-weight: 600;
-  padding: 10px;
-  box-shadow: inset 0 1px 0 rgba(231,231,215,0.2), inset 0 -1px 0 rgba(0,0,0,0.2);
+.slide-btn {
+  position: absolute;
+  top: auto;
+  right: auto;
+  bottom: 4em;
+  left: 10px;
 }
-.question {
-  float: left;
-  width: 73%;
-  font-size: 1.25em;
-  text-decoration: none;
-  color: #fff !important;
-}
+
 .question-btn {
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
