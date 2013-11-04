@@ -2,6 +2,7 @@
 
 import json
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import truncatechars
 from django.views.generic import TemplateView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -48,8 +49,8 @@ class AppMixin (object):
     @classmethod
     def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
-            '/visions/%s' % vision.pk)
-            # reverse('vision-detail', kwargs={'pk': self.pk}))
+            # '/visions/%s' % vision.pk)
+            reverse('app-vision-detail', kwargs={'pk': vision.pk}))
 
     def get_vision_queryset(self, base_queryset=None):
         return (base_queryset or Vision.objects.all())\
@@ -104,8 +105,9 @@ class AppMixin (object):
         context['categories'] = json.dumps(CategorySerializer(category_query).data)
 
         app_config_query = AppConfig.objects.all()[:1]
-        context['app'] = app_config_query[0]
-        context['app_json'] = json.dumps(AppConfigSerializer(app_config_query[0]).data)
+        app_config = app_config_query[0]
+        context['app'] = app_config
+        context['app_json'] = json.dumps(AppConfigSerializer(app_config).data)
 
         if user:
             serializer = UserSerializer(user)
