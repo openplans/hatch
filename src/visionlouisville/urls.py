@@ -10,43 +10,50 @@ from django.contrib import admin
 admin.autodiscover()
 
 
-def get_vision_name():
+def vision_patterns():
     app_config_query = AppConfig.objects.all()[:1]
 
     try:
         app_config = app_config_query[0]
     except IndexError:
-        raise Exception('''This app has not been configured. Please add a
-            record to the AppConfig model to set your app-specific
-            settings.''')
-
-    return app_config.vision_plural
-
-
-urlpatterns = patterns(
-    '',
-
-    # Social Auth
-    url(r'^', include('social_auth.urls')),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
-    url(r'^ally$', secret_ally_signup_view, name='secret-ally-login'),
-
-    # Meta
-    url(r'^robots.txt$', robots_view, name='robots'),
-    url(r'^sitemap.xml$', sitemap_view, name='sitemap'),
-
-    # Admin
-    url(r'^admin/', include(admin.site.urls)),
-
-    # API
-    url(r'^api/users/(?P<pk>current)/$',        current_user_api_view, name='current-user-detail'),
-    url(r'^api/visions/(?P<pk>\d+)/support$',   support_api_view,      name='support-vision-action'),
-    url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,    name='unsupport-vision-action'),
-    url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,        name='share-vision-action'),
-    url(r'^api/', include(api_router.urls)),
+        # This app has not been configured. Please add a
+        # record to the AppConfig model to set your app-specific
+        # settings.
+        return patterns('')
 
     # App
-    url(r'^' + get_vision_name() + '/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
-    url(r'^' + get_vision_name() + '/(?P<pk>\w+)/list$', category_app_view,      name='app-vision-list'),
-    url(r'^',                                            home_app_view,          name='app-home'),
+    return patterns(
+        '',
+        url(r'^' + app_config.vision_plural + '/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
+        url(r'^' + app_config.vision_plural + '/(?P<pk>\w+)/list$', category_app_view,      name='app-vision-list'),
+    )
+
+urlpatterns = (
+    patterns(
+        '',
+
+        # Social Auth
+        url(r'^', include('social_auth.urls')),
+        url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout', kwargs={'next_page': '/'}),
+        url(r'^ally$', secret_ally_signup_view, name='secret-ally-login'),
+
+        # Meta
+        url(r'^robots.txt$', robots_view, name='robots'),
+        url(r'^sitemap.xml$', sitemap_view, name='sitemap'),
+
+        # Admin
+        url(r'^admin/', include(admin.site.urls)),
+
+        # API
+        url(r'^api/users/(?P<pk>current)/$',        current_user_api_view, name='current-user-detail'),
+        url(r'^api/visions/(?P<pk>\d+)/support$',   support_api_view,      name='support-vision-action'),
+        url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,    name='unsupport-vision-action'),
+        url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,        name='share-vision-action'),
+        url(r'^api/', include(api_router.urls)),
+    ) +
+    vision_patterns() +
+    patterns(
+        '',
+        url(r'^',                                   home_app_view,         name='app-home'),
+    )
 )
