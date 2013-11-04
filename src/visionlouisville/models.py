@@ -76,7 +76,16 @@ class TweetQuerySet (query.QuerySet):
             obj = maker(commit=False)
             obj.created_at = obj.updated_at = right_now
             objs.append(obj)
-        ObjType.objects.bulk_create(objs)
+
+        # ObjType.objects.bulk_create(objs)
+
+        for obj in objs:
+            # NOTE: I would love to create the objects in bulk with one query,
+            #       but I need the primary keys to be set on the objects, so I
+            #       save them each individually here..
+            obj.save()
+            obj.make_all_replies()
+
         return objs
 
 
@@ -84,7 +93,7 @@ class TweetManager (models.Manager):
     def get_query_set(self):
         return TweetQuerySet(self.model, using=self._db)
 
-    def create_or_update_from_tweet_data(self, tweet_data):
+    def create_or_update_from_tweet_data(self, tweet_data, commit=True):
         tweet_id = get_tweet_id(tweet_data)
 
         qs = self.get_query_set()
@@ -100,7 +109,7 @@ class TweetManager (models.Manager):
         try:
             # TODO: Change to transaction.atomic when upgrading to Django 1.6
             with transaction.commit_on_success():
-                obj.load_from_tweet_data(tweet_data)
+                obj.load_from_tweet_data(tweet_data, commit=commit)
         except IntegrityError:
             # Since we've already checked for objects with this tweet_id, we would
             # only have an integrity error at this point if some other thread or
@@ -191,7 +200,7 @@ class Tweet (models.Model):
         if to_vision is None:
             # Climb up the reply chain until we find a vision
             reply_to = self.in_reply_to
-            while reply_to and reply_to.vision is None:
+            while reply_to and not reply_to.is_vision():
                 reply_to = reply_to.in_reply_to
 
             if reply_to is None:
@@ -207,7 +216,20 @@ class Tweet (models.Model):
     def make_vision(self, commit=True):
         vision = Vision(tweet=self)
         vision.sync_with_tweet(self, commit=commit)
+
         return vision
+
+    def is_reply(self):
+        try:
+            return self.reply is not None
+        except Reply.DoesNotExist:
+            return False
+
+    def is_vision(self):
+        try:
+            return self.vision is not None
+        except Vision.DoesNotExist:
+            return False
 
     def load_from_tweet_data(self, tweet_id, commit=True):
         tweet_data = self.get_tweet_data(tweet_id)
@@ -276,6 +298,12 @@ class TweetedModelMixin (object):
     def set_user_from_tweet(self, tweet):
         user = self.get_or_create_tweeter(tweet.tweet_data['user'])
         self.author = user
+
+    def make_all_replies(self):
+        for tweet in self.tweet.tweet_replies.all():
+            if not tweet.is_vision() and not tweet.is_reply():
+                reply = tweet.make_reply()
+                reply.make_all_replies()
 
 
 class Category (models.Model):
