@@ -105,7 +105,14 @@ class AppMixin (object):
         context['categories'] = json.dumps(CategorySerializer(category_query).data)
 
         app_config_query = AppConfig.objects.all()[:1]
-        app_config = app_config_query[0]
+
+        try:
+            app_config = app_config_query[0]
+        except IndexError:
+            raise Exception('This app has not been configured. Please add a ' \
+                'record to the AppConfig model to set your app-specific ' \
+                'settings.')
+
         context['app'] = app_config
         context['app_json'] = json.dumps(AppConfigSerializer(app_config).data)
 
