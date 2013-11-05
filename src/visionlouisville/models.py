@@ -282,6 +282,7 @@ class Category (models.Model):
     name = models.CharField(max_length=100, primary_key=True)
     title = models.CharField(max_length=100)
     prompt = models.TextField()
+    image = models.ImageField(null=True, upload_to='category_images')
 
     def __unicode__(self):
         return unicode(self.name)

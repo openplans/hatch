@@ -177,6 +177,14 @@ class ReplySerializer (ModelSerializer):
 
 
 class CategorySerializer (ModelSerializer):
+    image = SerializerMethodField('image_url')
+
+    def image_url(self, obj):
+        try:
+            return obj.image.storage.url(obj.image.file.name)
+        except ValueError:
+            return None
+
     class Meta:
         model = Category
 
