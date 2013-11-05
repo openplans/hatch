@@ -342,6 +342,7 @@ a.authentication-link-login {
   color: #e7e7d7;
   font-weight: bold;
   text-shadow: 0 -1px 0 #268099;
+  white-space: nowrap;
 }
 .twitter-icon {
   height: 22px;
