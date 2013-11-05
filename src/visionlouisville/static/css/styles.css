@@ -917,8 +917,8 @@ h6.category-prompt {
 }
 
 .welcome {
-  margin-top: -20px;
-  margin-bottom: 15px;
+  position: relative;
+  top: -20px;
   padding: 0 10px;
   background: #444;
   color: #fff;
