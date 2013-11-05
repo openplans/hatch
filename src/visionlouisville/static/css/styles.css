@@ -512,15 +512,14 @@ ul.user-menu:after {
 }
 
 .in-response-to {
-  color: #808073;
+  background: #444;
+  margin: 0;
+  padding: 8px 10px;
 }
-.in-response-to span {
-  font-size: x-small;
-  text-transform: uppercase;
-  display: block;
-}
-.in-response-to a {
-  color: #48a5bf;
+.in-response-to a, 
+.in-response-to a:active, 
+.in-response-to a:visited {
+  color: #7ec4d8;
   text-decoration: none;
 }
 .in-response-to a:hover {
