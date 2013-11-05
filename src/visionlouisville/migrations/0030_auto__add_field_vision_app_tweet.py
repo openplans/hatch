@@ -61,6 +61,7 @@ class Migration(SchemaMigration):
         },
         u'visionlouisville.category': {
             'Meta': {'object_name': 'Category'},
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'primary_key': 'True'}),
             'prompt': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
