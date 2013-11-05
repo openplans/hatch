@@ -110,7 +110,13 @@ var VisionLouisville = VisionLouisville || {};
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
     itemViewContainer: 'ul.vision-list',
-    emptyView: NS.NoItemsView
+    emptyView: NS.NoItemsView,
+    events: {
+      'click .vision-category-list-toggle-btn': 'toggleCategoryList'
+    },
+    toggleCategoryList: function() {
+      this.$('.vision-category-list').toggleClass('is-toggled-open');
+    }
   });
 
   // Replies ==================================================================
