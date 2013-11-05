@@ -178,6 +178,12 @@ class ReplySerializer (ModelSerializer):
 
 class CategorySerializer (ModelSerializer):
     image = SerializerMethodField('image_url')
+    vision_count = SerializerMethodField('get_vision_count')
+    reply_count = SerializerMethodField('get_reply_count')
+    support_count = SerializerMethodField('get_support_count')
+
+    class Meta:
+        model = Category
 
     def image_url(self, obj):
         try:
@@ -185,8 +191,14 @@ class CategorySerializer (ModelSerializer):
         except ValueError:
             return None
 
-    class Meta:
-        model = Category
+    def get_vision_count(self, obj):
+        return obj.visions.count()
+
+    def get_reply_count(self, obj):
+        return Reply.objects.filter(vision__category=obj).count()
+
+    def get_support_count(self, obj):
+        return Vision.supporters.through.objects.filter(vision__category=obj).count()
 
 
 class AppConfigSerializer (ModelSerializer):
