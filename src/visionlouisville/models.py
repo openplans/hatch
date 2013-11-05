@@ -76,7 +76,16 @@ class TweetQuerySet (query.QuerySet):
             obj = maker(commit=False)
             obj.created_at = obj.updated_at = right_now
             objs.append(obj)
-        ObjType.objects.bulk_create(objs)
+
+        # ObjType.objects.bulk_create(objs)
+
+        for obj in objs:
+            # NOTE: I would love to create the objects in bulk with one query,
+            #       but I need the primary keys to be set on the objects, so I
+            #       save them each individually here..
+            obj.save()
+            obj.make_all_replies()
+
         return objs
 
 
@@ -84,7 +93,7 @@ class TweetManager (models.Manager):
     def get_query_set(self):
         return TweetQuerySet(self.model, using=self._db)
 
-    def create_or_update_from_tweet_data(self, tweet_data):
+    def create_or_update_from_tweet_data(self, tweet_data, commit=True):
         tweet_id = get_tweet_id(tweet_data)
 
         qs = self.get_query_set()
@@ -100,7 +109,7 @@ class TweetManager (models.Manager):
         try:
             # TODO: Change to transaction.atomic when upgrading to Django 1.6
             with transaction.commit_on_success():
-                obj.load_from_tweet_data(tweet_data)
+                obj.load_from_tweet_data(tweet_data, commit=commit)
         except IntegrityError:
             # Since we've already checked for objects with this tweet_id, we would
             # only have an integrity error at this point if some other thread or
@@ -161,6 +170,13 @@ class Tweet (models.Model):
     tweet_data = JSONField(blank=True, default={})
     in_reply_to = models.ForeignKey('Tweet', null=True, blank=True, related_name='tweet_replies')
 
+    @property
+    def vision(self):
+        try:
+            return self.user_tweeted_vision
+        except Vision.DoesNotExist:
+            return self.app_tweeted_vision
+
     objects = TweetManager()
 
     def __unicode__(self):
@@ -191,7 +207,7 @@ class Tweet (models.Model):
         if to_vision is None:
             # Climb up the reply chain until we find a vision
             reply_to = self.in_reply_to
-            while reply_to and reply_to.vision is None:
+            while reply_to and not reply_to.is_vision():
                 reply_to = reply_to.in_reply_to
 
             if reply_to is None:
@@ -207,7 +223,20 @@ class Tweet (models.Model):
     def make_vision(self, commit=True):
         vision = Vision(tweet=self)
         vision.sync_with_tweet(self, commit=commit)
+
         return vision
+
+    def is_reply(self):
+        try:
+            return self.reply is not None
+        except Reply.DoesNotExist:
+            return False
+
+    def is_vision(self):
+        try:
+            return self.vision is not None
+        except Vision.DoesNotExist:
+            return False
 
     def load_from_tweet_data(self, tweet_id, commit=True):
         tweet_data = self.get_tweet_data(tweet_id)
@@ -277,6 +306,12 @@ class TweetedModelMixin (object):
         user = self.get_or_create_tweeter(tweet.tweet_data['user'])
         self.author = user
 
+    def make_all_replies(self):
+        for tweet in self.tweet.tweet_replies.all():
+            if not tweet.is_vision() and not tweet.is_reply():
+                reply = tweet.make_reply()
+                reply.make_all_replies()
+
 
 class Category (models.Model):
     name = models.CharField(max_length=100, primary_key=True)
@@ -289,7 +324,8 @@ class Category (models.Model):
 
 
 class Vision (TweetedModelMixin, models.Model):
-    tweet = models.OneToOneField('Tweet', related_name='vision', null=True)
+    app_tweet = models.OneToOneField('Tweet', related_name='app_tweeted_vision', null=True, blank=True)
+    tweet = models.OneToOneField('Tweet', related_name='user_tweeted_vision', null=True)
     author = models.ForeignKey(User, related_name='visions', help_text="This field will be overwritten with syncing with the source tweet, but you must set it to a value in the mean time (selecting any user will do).")
     category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
     text = models.TextField(blank=True, help_text="Leave this field blank if you want to re-sync with the source tweet.")

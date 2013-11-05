@@ -228,7 +228,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
         if success:
             tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
-            vision.tweet = tweet
+            vision.app_tweet = tweet
             vision.save()
         else:
             raise TweetException('App tweet not sent: ' + response)
@@ -253,7 +253,12 @@ class VisionViewSet (AppMixin, ModelViewSet):
                 service = self.get_twitter_service()
                 success, response = service.tweet(tweet_text,
                                                   self.request.user)
-                if not success:
+                if success:
+                    # Set the user tweet as the primary tweet on the vision
+                    tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
+                    vision.tweet = tweet
+                    vision.save()
+                else:
                     raise TweetException('User tweet not sent: ' + response)
 
 
@@ -284,7 +289,7 @@ class ReplyViewSet (AppMixin, ModelViewSet):
             service = self.get_twitter_service()
             success, response = service.tweet(
                 tweet_text, self.request.user,
-                in_reply_to_status_id=reply.vision.tweet_id)
+                in_reply_to_status_id=reply.vision.tweet_id or reply.vision.app_tweet_id)
 
             if success:
                 tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
