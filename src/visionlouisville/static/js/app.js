@@ -172,21 +172,6 @@ var VisionLouisville = VisionLouisville || {};
             collection: NS.app.visionCollection
           }),
 
-          getVisionCarouselView = function(collection) {
-            var visionCarouselView = new NS.VisionCarouselView({
-              collection: new NS.VisionCollection(
-                collection.getFeatured()
-              )
-            });
-
-            homeView.visionCarousel.on('show', function() {
-              // Init the carousel after we're in the DOM
-              visionCarouselView.initCarousel();
-            });
-
-            return visionCarouselView;
-          },
-
           getVisionariesListView = function(collection) {
             var visionaries = collection.filter(function(model) {
                   return _.indexOf(model.get('groups'), 'allies') === -1;
@@ -211,8 +196,6 @@ var VisionLouisville = VisionLouisville || {};
       // Render the main view
       NS.app.mainRegion.show(homeView);
 
-      // Render the carousel
-      NS.showViewInRegion(NS.app.visionCollection, homeView.visionCarousel, getVisionCarouselView, {spinner: NS.app.smallSpinnerOptions});
       // Render visionaries
       NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
       // Render allies
