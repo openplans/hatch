@@ -849,12 +849,9 @@ h6.category-prompt {
 .swiper-slide {
   width: 100%;
   height: auto !important;
-  opacity: 0;
-  -webkit-transition: opacity 1.2s;
-          transition: opacity 1.2s;
 }
-.swiper-slide-active { }
-.swiper-slide-visible { opacity: 1; }
+.swiper-slide-active {}
+.swiper-slide-visible {}
 .swiper-pagination-switch {}
 .swiper-active-switch {}
 .swiper-visible-switch {}
@@ -922,6 +919,12 @@ h6.category-prompt {
   background: -ms-linear-gradient(top,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
   background: linear-gradient(to bottom,  rgba(0,0,0,0.6) 50%,rgba(0,0,0,0) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+  opacity: 0;
+  -webkit-transition: opacity 1.2s;
+          transition: opacity 1.2s;
+}
+.swiper-slide-visible .slide-header { 
+  opacity: 1; 
 }
 .slide-question {
   font-size: 2em;
