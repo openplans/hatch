@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     UserChangeForm as BaseUserChangeForm,
 )
 from django.contrib import messages
+from django.db.models import Q
 from django.utils.html import format_html
 import json
 from .models import Vision, Reply, Share, User, Category, Tweet, AppConfig
@@ -26,11 +27,11 @@ class TweetAssignmentFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         val = self.value()
         if val == 'visions':
-            return queryset.filter(vision__isnull=False)
+            return queryset.filter(Q(user_tweeted_vision__isnull=False) | Q(app_tweeted_vision__isnull=False))
         if val == 'replies':
             return queryset.filter(reply__isnull=False)
         if val == 'null':
-            return queryset.filter(vision__isnull=True, reply__isnull=True)
+            return queryset.filter(user_tweeted_vision__isnull=True, app_tweeted_vision__isnull=True, reply__isnull=True)
 
 
 class KnownReplyFilter(admin.SimpleListFilter):

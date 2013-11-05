@@ -170,6 +170,13 @@ class Tweet (models.Model):
     tweet_data = JSONField(blank=True, default={})
     in_reply_to = models.ForeignKey('Tweet', null=True, blank=True, related_name='tweet_replies')
 
+    @property
+    def vision(self):
+        try:
+            return self.user_tweeted_vision
+        except Vision.DoesNotExist:
+            return self.app_tweeted_vision
+
     objects = TweetManager()
 
     def __unicode__(self):
@@ -316,7 +323,8 @@ class Category (models.Model):
 
 
 class Vision (TweetedModelMixin, models.Model):
-    tweet = models.OneToOneField('Tweet', related_name='vision', null=True)
+    app_tweet = models.OneToOneField('Tweet', related_name='app_tweeted_vision', null=True, blank=True)
+    tweet = models.OneToOneField('Tweet', related_name='user_tweeted_vision', null=True)
     author = models.ForeignKey(User, related_name='visions', help_text="This field will be overwritten with syncing with the source tweet, but you must set it to a value in the mean time (selecting any user will do).")
     category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
     text = models.TextField(blank=True, help_text="Leave this field blank if you want to re-sync with the source tweet.")
