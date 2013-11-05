@@ -267,8 +267,10 @@ body {
   line-height: 1.5;
 }
 .welcome.site-footer {
+  top: 0;
   margin-top: 30px;
   margin-bottom: -20px;
+  padding-top: 20px;
   padding-bottom: 20px;
   box-shadow: none;
   border-radius: 0;
