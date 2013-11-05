@@ -717,44 +717,48 @@ a.support {
 }
 
 /* Vision Form */
-.category-icon + img {
-  background-color: #b2b2a6;
-  cursor: pointer;
-}
-.category-icon:checked + img {
-  background-color: #268099;
-}
 .vision-category-list {
   float: left;
   width: 100%;
+  position: relative;
 }
 .vision-category-list li {
-  float: left;
-  width: 24%;
+  display: none;
+  margin: 0;
   padding: 0;
-  margin: 0 1% 0 0;
-  font-size: 0.85em;
 }
-.vision-category-list img {
-  width: 100%;
-  height: auto;
+.vision-category-list li.current {
   display: block;
 }
-
-a.category-list-link {
-  background: #b2b2a6;
-  display: block;
-  margin-bottom: 10px;
+.vision-category-list .btn-block {
+  margin: 0 0 5px;
 }
-
-.is-current-economy .vision-category-economy a.category-list-link,
-.is-current-health .vision-category-health a.category-list-link,
-.is-current-energy .vision-category-energy a.category-list-link,
-.is-current-living .vision-category-living a.category-list-link,
-.is-current-connectivity .vision-category-connectivity a.category-list-link,
-.is-current-identity .vision-category-identity a.category-list-link,
-.is-current-creativity .vision-category-creativity a.category-list-link {
-  background-color: #268099;
+li.vision-category-list-toggle {
+  display: block;
+}
+li.vision-category-list-toggle a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.toggle-arrow {
+  border-color: #e7e7d7 transparent;
+  border-style: solid;
+  border-width: 0.625em 0.625em 0 0.625em;
+  width: 0;
+  height: 0;
+  top: 50%;
+  margin-top: -0.4em;
+  position: absolute;
+  right: 1.125em;
+}
+.is-toggled-open li {
+  display: block;
+}
+.is-toggled-open li.vision-category-list-toggle {
+  display: none;
 }
 
 h6.category-prompt {

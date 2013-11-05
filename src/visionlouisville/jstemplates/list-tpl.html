@@ -1,8 +1,11 @@
 <div class="container">
   <ul class="vision-category-list unstyled-list is-current-{{ category }}">
+    <li class="vision-category-list-toggle">
+      <a href="#" class="vision-category-list-toggle-btn"><span class="toggle-arrow"></span></a>
+    </li>
     {{# each_category }}
-      <li class="vision-category-{{ name }}">
-        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small{{#eq ../category name}} btn-tertiary{{/eq}}" data-noscroll data-replace><span class="">{{ title }}</span></a>
+      <li class="vision-category-{{ name }}{{#eq ../category name}} current{{/eq}}">
+        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small{{#eq ../category name}} btn-secondary{{/eq}}" data-noscroll data-replace><span class="">{{ title }}</span></a>
       </li>
     {{/ each_category }}
   </ul>
