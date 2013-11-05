@@ -289,7 +289,7 @@ class ReplyViewSet (AppMixin, ModelViewSet):
             service = self.get_twitter_service()
             success, response = service.tweet(
                 tweet_text, self.request.user,
-                in_reply_to_status_id=reply.vision.tweet_id)
+                in_reply_to_status_id=reply.vision.tweet_id or reply.vision.app_tweet_id)
 
             if success:
                 tweet, created = Tweet.objects.create_or_update_from_tweet_data(response)
