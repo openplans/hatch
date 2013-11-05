@@ -14,9 +14,9 @@
   <h3 class="category-prompt">{{ category_prompt category }}</h3>
 
   {{#if_authenticated}}
-  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-primary">Share my {{app_config 'vision_plural'}}</a>
+  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
   {{^}}
-  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-primary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
+  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
   {{/if_authenticated}}
 
   {{/ if }}

@@ -718,8 +718,6 @@ a.support {
 
 /* Vision Form */
 .vision-category-list {
-  float: left;
-  width: 100%;
   position: relative;
 }
 .vision-category-list li {
