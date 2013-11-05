@@ -844,7 +844,6 @@ h6.category-prompt {
 .swiper-container {
   width: 100%;
   height: auto;
-  margin-bottom: 10px;
 }
 .swiper-slide {
   width: 100%;
@@ -872,25 +871,47 @@ h6.category-prompt {
 
 .pagination {
   position: absolute;
+  top: auto;
+  right: 0;
+  bottom: 0;
   left: 0;
+  background: #444;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 0;
+  line-height: 2;
   text-align: center;
-  bottom: 5px;
-  width: 100%;
 }
 .swiper-pagination-switch {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  background: #b2b2a6;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-  margin: 0 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #48a5bf;
+  box-shadow: 0 0 0.325em rgba(0,0,0,0.5);
+  margin: 0 0.5em;
   cursor: pointer;
 }
 .swiper-active-switch {
-  background: #48a5bf;
+  background: #fff;
 }
 
+.pagination-btn {
+  float: left;
+  position: absolute;
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: auto;
+  font-size: 2.25em;
+  text-decoration: none;
+  line-height: 1.5;
+}
+.pagination-btn-prev {
+  left: 0;
+}
+.pagination-btn-next {
+  right: 0;
+}
 
 .welcome {
   margin-top: -20px;
@@ -902,6 +923,9 @@ h6.category-prompt {
 
 .slide-image {
   display: block;
+  opacity: 0.5;
+  -webkit-transition: opacity 1s;
+          transition: opacity 1s;
 }
 .slide-header {
   position: absolute;
@@ -923,11 +947,11 @@ h6.category-prompt {
   -webkit-transition: opacity 1.2s;
           transition: opacity 1.2s;
 }
-.swiper-slide-visible .slide-header { 
+.swiper-slide-visible .slide-header,
+.swiper-slide-visible .slide-image { 
   opacity: 1; 
 }
 .slide-question {
-  font-size: 2em;
   font-weight: 700;
   line-height: 1.25;
   margin-bottom: 0.325em;
@@ -941,13 +965,14 @@ h6.category-prompt {
 .slide-meta {
   text-shadow: 0 1px 0.25em rgba(0,0,0,0.75);
   margin-bottom: 1em;
+  font-size: 0.875em;
 }
 .slide-stat {
   margin-right: 0.75em;
   white-space: nowrap;
 }
 .slide-stat strong {
-  font-size: 1.5em;
+  font-size: 1.325em;
 }
 .slide-btn {
   position: absolute;
