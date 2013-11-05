@@ -9,10 +9,11 @@
 
         {{#each_category}}
 
-          <div class="swiper-slide">
+        <div class="swiper-slide">
 
-            <div class="swiper-vision-container">
-            <img class="slide-image" src="{{ image }}" width="640" height="640"><!-- FIXME TODO :: config these images -->
+          <div class="swiper-vision-container">
+            <img class="slide-square" src="/static/images/transparent-square.gif" width="640" height="640">
+            <img class="slide-image" src="{{ image }}" width="640" height="640">
 
             <div class="slide-header">
               <h1 class="slide-question"><a href="/{{visions_url_name}}/{{name}}/list">{{ prompt }}</a></h1>

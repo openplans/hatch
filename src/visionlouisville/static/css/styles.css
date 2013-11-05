@@ -876,10 +876,11 @@ h6.category-prompt {
   bottom: 0;
   left: 0;
   background: #444;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.4);
   padding: 10px 0;
   line-height: 2;
   text-align: center;
+  box-shadow: inset -3.625em 0 0 rgba(45,45,45,0.6), inset 3.625em 0 0 rgba(45,45,45,0.6);
 }
 .swiper-pagination-switch {
   display: inline-block;
@@ -908,9 +909,11 @@ h6.category-prompt {
 }
 .pagination-btn-prev {
   left: 0;
+  padding-right: 0.5em;
 }
 .pagination-btn-next {
   right: 0;
+  padding-left: 0.5em;
 }
 
 .welcome {
@@ -921,8 +924,22 @@ h6.category-prompt {
   color: #fff;
 }
 
+.slide-square {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .slide-image {
   display: block;
+  position: absolute;
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: 0;  
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
   opacity: 0.5;
   -webkit-transition: opacity 1s;
           transition: opacity 1s;
