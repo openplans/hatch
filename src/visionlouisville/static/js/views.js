@@ -53,6 +53,13 @@ var VisionLouisville = VisionLouisville || {};
           interval = 8000,
           intervalId;
 
+      function clearInterval() {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
       // It is important for this everything to be in the DOM for swiper to
       // be a happy little plugin.
       self.swiper = new Swiper(this.$('.swiper-container').get(0), {
@@ -61,15 +68,20 @@ var VisionLouisville = VisionLouisville || {};
         paginationClickable: true,
         calculateHeight: true,
         onTouchStart: function() {
-          if (intervalId) {
-            window.clearInterval(intervalId);
-          }
-        },
-        onTouchEnd: function(swiper) {
-          intervalId = window.setInterval(function() {
-            swiper.swipeNext();
-          }, interval);
+          clearInterval(intervalId);
         }
+      });
+
+      self.$('.pagination-btn-prev').click(function(evt) {
+        evt.preventDefault();
+        clearInterval(intervalId);
+        self.swiper.swipePrev();
+      });
+
+      self.$('.pagination-btn-next').click(function(evt) {
+        evt.preventDefault();
+        clearInterval(intervalId);
+        self.swiper.swipeNext();
       });
 
       intervalId = window.setInterval(function() {
