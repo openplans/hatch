@@ -233,6 +233,7 @@ class Tweet (models.Model):
             vision = Vision(tweet=self)
 
         vision.sync_with_tweet(self, commit=commit)
+
         return vision
 
     def is_reply(self):
