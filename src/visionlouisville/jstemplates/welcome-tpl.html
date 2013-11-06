@@ -19,8 +19,8 @@
               <h1 class="slide-question"><a href="/{{visions_url_name}}/{{name}}/list">{{ prompt }}</a></h1>
               <div class="slide-meta">
                 {{#if vision_count}}<span class="slide-stat"><strong class="ideas-count">{{ vision_count }}</strong> {{#if_plural vision_count}}{{app_config 'vision_plural' true}}{{^}}{{app_config 'vision' true}}{{/if_plural}}</span>{{/if}}
-                {{#if support_count}}<span class="slide-stat"><strong class="favorites-count">{{ support_count }}</strong>{{#if_plural vision_count}}Favorites{{^}}Favorite{{/if_plural}}</span>{{/if}}
-                {{#if reply_count}}<span class="slide-stat"><strong class="comments-count">{{ reply_count }}</strong> {{#if_plural vision_count}}Comments{{^}}Comment{{/if_plural}}</span>{{/if}}
+                {{#if support_count}}<span class="slide-stat"><strong class="favorites-count">{{ support_count }}</strong> {{#if_plural support_count}}Favorites{{^}}Favorite{{/if_plural}}</span>{{/if}}
+                {{#if reply_count}}<span class="slide-stat"><strong class="comments-count">{{ reply_count }}</strong> {{#if_plural reply_count}}Comments{{^}}Comment{{/if_plural}}</span>{{/if}}
               </div>
               {{#if_authenticated}}
               <a class="btn btn-tertiary" href="/{{visions_url_name}}/{{name}}/new"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
