@@ -128,6 +128,10 @@ var VisionLouisville = VisionLouisville || {};
     return (number === 1) ? single : plural;
   });
 
+  Handlebars.registerHelper('if_plural', function(number, options) {
+    return (number !== 1) ? options.fn(this) : options.inverse(this);
+  });
+
   Handlebars.registerHelper('fromnow', function(datetime) {
     if (datetime) {
       return moment(datetime).fromNow();

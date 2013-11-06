@@ -1,3 +1,7 @@
+{{# if category }}
+<p class="in-response-to"><a href="/{{visions_url_name}}/{{ category }}/list">{{ category_prompt category }}</a></p>
+{{/ if }}
+
 <div class="container container-primary">
   {{# if media_url }}
   <a href="#" class="vision-media-container is-collapsed" style="background-image:url({{ media_url }});"><img class="vision-media" src="{{ media_url }}"></a>
@@ -26,10 +30,6 @@
     </header>
 
     <p class="vision-description">{{ formattext text }}</p>
-
-    {{# if category }}
-    <p class="in-response-to"><span>In response to:</span> <a href="/{{visions_url_name}}/{{ category }}/list">{{ category_prompt category }}</a></p>
-    {{/ if }}
 
     <footer class="vision-footer clearfix">
       <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}"><span class="tweet-icon"><img class="tweet-icon-retweet" src="/static/images/retweet-icon.png"></span> Retweet</a>

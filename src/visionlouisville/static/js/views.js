@@ -46,8 +46,47 @@ var VisionLouisville = VisionLouisville || {};
     template: '#home-tpl',
     regions: {
       visionaries: '.visionaries-region',
-      allies: '.allies-region',
-      visionCarousel: '.vision-carousel-region'
+      allies: '.allies-region'
+    },
+    onShow: function() {
+      var self = this,
+          interval = 8000,
+          intervalId;
+
+      function clearInterval() {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      // It is important for this everything to be in the DOM for swiper to
+      // be a happy little plugin.
+      self.swiper = new Swiper(this.$('.swiper-container').get(0), {
+        loop: true,
+        pagination: this.$('.pagination').get(0),
+        paginationClickable: true,
+        calculateHeight: true,
+        onTouchStart: function() {
+          clearInterval(intervalId);
+        }
+      });
+
+      self.$('.pagination-btn-prev').click(function(evt) {
+        evt.preventDefault();
+        clearInterval(intervalId);
+        self.swiper.swipePrev();
+      });
+
+      self.$('.pagination-btn-next').click(function(evt) {
+        evt.preventDefault();
+        clearInterval(intervalId);
+        self.swiper.swipeNext();
+      });
+
+      intervalId = window.setInterval(function() {
+        self.swiper.swipeNext();
+      }, interval);
     }
   });
 
@@ -57,45 +96,6 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // Vision List ==============================================================
-  NS.VisionCarouselItemView = Backbone.Marionette.ItemView.extend({
-    template: '#vision-carousel-item-tpl',
-    className: 'swiper-slide'
-  });
-
-  NS.VisionCarouselView = Backbone.Marionette.CompositeView.extend({
-    template: '#vision-carousel-tpl',
-    itemView: NS.VisionCarouselItemView,
-    itemViewContainer: '.swiper-wrapper',
-    initCarousel: function() {
-      var self = this,
-          interval = 8000,
-          intervalId;
-
-      // It is important for this everything to be in the DOM for swiper to
-      // be a happy little plugin.
-      this.swiper = new Swiper(this.$('.swiper-container').get(0), {
-        loop: true,
-        pagination: this.$('.pagination').get(0),
-        paginationClickable: true,
-        calculateHeight: true,
-        onTouchStart: function() {
-          if (intervalId) {
-            window.clearInterval(intervalId);
-          }
-        },
-        onTouchEnd: function(swiper) {
-          intervalId = window.setInterval(function() {
-            swiper.swipeNext();
-          }, interval);
-        }
-      });
-
-      intervalId = window.setInterval(function() {
-        self.swiper.swipeNext();
-      }, interval);
-    }
-  });
-
   NS.NoItemsView = Backbone.Marionette.ItemView.extend({
     template: '#no-items-tpl',
     tagName: 'li'
@@ -110,7 +110,13 @@ var VisionLouisville = VisionLouisville || {};
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
     itemViewContainer: 'ul.vision-list',
-    emptyView: NS.NoItemsView
+    emptyView: NS.NoItemsView,
+    events: {
+      'click .vision-category-list-toggle-btn': 'toggleCategoryList'
+    },
+    toggleCategoryList: function() {
+      this.$('.vision-category-list').toggleClass('is-toggled-open');
+    }
   });
 
   // Replies ==================================================================

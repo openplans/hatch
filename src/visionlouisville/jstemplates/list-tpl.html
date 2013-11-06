@@ -1,8 +1,11 @@
 <div class="container">
   <ul class="vision-category-list unstyled-list is-current-{{ category }}">
+    <li class="vision-category-list-toggle">
+      <a href="#" class="vision-category-list-toggle-btn"><span class="toggle-arrow"></span></a>
+    </li>
     {{# each_category }}
-      <li class="vision-category-{{ name }}">
-        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small{{#eq ../category name}} btn-tertiary{{/eq}}" data-noscroll data-replace><span class="">{{ title }}</span></a>
+      <li class="vision-category-{{ name }}{{#eq ../category name}} current{{/eq}}">
+        <a href="/{{visions_url_name}}/{{ name }}/list" class="btn btn-block btn-small{{#eq ../category name}} btn-secondary{{/eq}}" data-noscroll data-replace><span class="">{{ title }}</span></a>
       </li>
     {{/ each_category }}
   </ul>
@@ -11,9 +14,9 @@
   <h3 class="category-prompt">{{ category_prompt category }}</h3>
 
   {{#if_authenticated}}
-  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-primary">Share my {{app_config 'vision_plural'}}</a>
+  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
   {{^}}
-  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-primary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
+  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
   {{/if_authenticated}}
 
   {{/ if }}
