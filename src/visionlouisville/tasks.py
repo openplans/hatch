@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from django.db.models import Max
 from celery import task
 from time import sleep
 from .models import User, Tweet
@@ -39,8 +40,12 @@ def listen_for_tweets():
     keywords_pattern = '|'.join(streaming_keywords)
 
     # User on most recent tweets
-    recent_tweets = Tweet.objects.all().order_by('-created_at')[:5000]
-    user_ids = [tweet.tweet_data['user']['id_str'] for tweet in recent_tweets]
+    recent_tweets = Tweet.objects.all()\
+        .values('tweet_user_id', 'tweet_user_screen_name')\
+        .annotate(most_recent=Max('created_at'))\
+        .order_by('-most_recent')[:5000]
+
+    user_ids = [tweet['tweet_user_id'] for tweet in recent_tweets if tweet['tweet_user_id']]
 
     stream_params = {}
     if streaming_keywords:
@@ -50,7 +55,7 @@ def listen_for_tweets():
 
     log.info('\nTracking "%s" and following "%s"\n' % (
         ','.join(streaming_keywords),
-        ','.join([tweet.tweet_data['user']['screen_name'] for tweet in recent_tweets])
+        ','.join([tweet['tweet_user_screen_name'] for tweet in recent_tweets if tweet['tweet_user_id']])
     ))
 
     tweets = twitter_service.itertweets(**stream_params)

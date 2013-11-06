@@ -168,6 +168,8 @@ class Tweet (models.Model):
             "creator). For example, if the tweet URL is http://www.twitter.com"
             "/myuser/status/1234567890, then the tweet id is 1234567890.")))
     tweet_data = JSONField(blank=True, default={})
+    tweet_user_id = models.CharField(max_length=64, blank=True)
+    tweet_user_screen_name = models.CharField(max_length=16, blank=True)
     in_reply_to = models.ForeignKey('Tweet', null=True, blank=True, related_name='tweet_replies')
 
     @property
@@ -216,14 +218,21 @@ class Tweet (models.Model):
             else:
                 to_vision = reply_to.vision
 
-        reply = Reply(tweet=self, vision=to_vision)
+        try:
+            reply = Reply.objects.get(tweet=self)
+        except Reply.DoesNotExist:
+            reply = Reply(tweet=self, vision=to_vision)
+
         reply.sync_with_tweet(self, commit=commit)
         return reply
 
     def make_vision(self, commit=True):
-        vision = Vision(tweet=self)
-        vision.sync_with_tweet(self, commit=commit)
+        try:
+            vision = Vision.objects.get(tweet=self)
+        except Vision.DoesNotExist:
+            vision = Vision(tweet=self)
 
+        vision.sync_with_tweet(self, commit=commit)
         return vision
 
     def is_reply(self):
@@ -242,6 +251,9 @@ class Tweet (models.Model):
         tweet_data = self.get_tweet_data(tweet_id)
         self.tweet_id = tweet_data['id']
         self.tweet_data = tweet_data
+
+        self.tweet_user_id = tweet_data['user']['id_str']
+        self.tweet_user_screen_name = tweet_data['user']['screen_name']
 
         if 'in_reply_to_status_id_str' in self.tweet_data:
             try:
@@ -324,8 +336,8 @@ class Category (models.Model):
 
 
 class Vision (TweetedModelMixin, models.Model):
-    app_tweet = models.OneToOneField('Tweet', related_name='app_tweeted_vision', null=True, blank=True)
-    tweet = models.OneToOneField('Tweet', related_name='user_tweeted_vision', null=True)
+    app_tweet = models.OneToOneField('Tweet', related_name='app_tweeted_vision', null=True, blank=True, unique=True)
+    tweet = models.OneToOneField('Tweet', related_name='user_tweeted_vision', null=True, unique=True)
     author = models.ForeignKey(User, related_name='visions', help_text="This field will be overwritten with syncing with the source tweet, but you must set it to a value in the mean time (selecting any user will do).")
     category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
     text = models.TextField(blank=True, help_text="Leave this field blank if you want to re-sync with the source tweet.")
@@ -398,7 +410,7 @@ class Reply (TweetedModelMixin, models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tweet = models.OneToOneField('Tweet', related_name='reply')
+    tweet = models.OneToOneField('Tweet', related_name='reply', unique=True)
     vision = models.ForeignKey(Vision, related_name='replies')
     author = models.ForeignKey(User, related_name='replies')
     text = models.CharField(max_length=140, blank=True)
