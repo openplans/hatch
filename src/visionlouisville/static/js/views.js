@@ -96,11 +96,6 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // Vision List ==============================================================
-  NS.NoItemsView = Backbone.Marionette.ItemView.extend({
-    template: '#no-items-tpl',
-    tagName: 'li'
-  });
-
   NS.VisionListItemView = Backbone.Marionette.ItemView.extend({
     template: '#list-item-tpl',
     tagName: 'li'
@@ -110,7 +105,6 @@ var VisionLouisville = VisionLouisville || {};
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
     itemViewContainer: 'ul.vision-list',
-    emptyView: NS.NoItemsView,
     events: {
       'click .vision-category-list-toggle-btn': 'toggleCategoryList'
     },
