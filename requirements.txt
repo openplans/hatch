@@ -2,7 +2,7 @@
 # Web server
 # ==============================
 
-Django
+Django<=1.5.5
 
 
 
@@ -20,7 +20,7 @@ django-celery
 
 psycopg2
 jsonfield
-south
+south<=0.8.2
 django-redis
 django-storages
 boto
