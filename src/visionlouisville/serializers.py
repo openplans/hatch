@@ -170,6 +170,7 @@ class UserSerializer (ManyToNativeMixin, BaseTwitterInfoSerializer):
 class ReplySerializer (ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     tweet_id = IntegerField(read_only=True)
+    tweeted_at = DateTimeField(required=False)
 
     class Meta:
         model = Reply
@@ -213,6 +214,7 @@ class VisionSerializer (ModelSerializer):
     sharers = PrimaryKeyRelatedField(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
     category = PrimaryKeyRelatedField(required=False)
+    tweeted_at = DateTimeField(required=False)
     created_at = DateTimeField(required=False)
     updated_at = DateTimeField(required=False)
 

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models, IntegrityError, transaction
 from django.db.models import query
-from django.utils.timezone import now
+from django.utils.timezone import now, datetime, utc
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import Group, AbstractUser
 from jsonfield import JSONField
@@ -315,6 +315,14 @@ class TweetedModelMixin (object):
     def set_text_from_tweet(self, tweet):
         self.text = tweet.tweet_data['text']
 
+    def set_time_from_tweet(self, tweet):
+        if 'created_at' in tweet:
+            try:
+                self.tweeted_at = datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
+                self.tweeted_at = self.tweeted_at.replace(tzinfo=utc)
+            except ValueError:
+                pass
+
     def set_user_from_tweet(self, tweet):
         user = self.get_or_create_tweeter(tweet.tweet_data['user'])
         self.author = user
@@ -339,6 +347,7 @@ class Category (models.Model):
 class Vision (TweetedModelMixin, models.Model):
     app_tweet = models.OneToOneField('Tweet', related_name='app_tweeted_vision', null=True, blank=True, unique=True)
     tweet = models.OneToOneField('Tweet', related_name='user_tweeted_vision', null=True, unique=True)
+    tweeted_at = models.DateTimeField(blank=True, default=now)
     author = models.ForeignKey(User, related_name='visions', help_text="This field will be overwritten with syncing with the source tweet, but you must set it to a value in the mean time (selecting any user will do).")
     category = models.ForeignKey(Category, related_name='visions', null=True, blank=True)
     text = models.TextField(blank=True, help_text="Leave this field blank if you want to re-sync with the source tweet.")
@@ -354,7 +363,7 @@ class Vision (TweetedModelMixin, models.Model):
     objects = TweetedObjectManager()
 
     class Meta:
-        ordering = ('-created_at',)
+        ordering = ('-tweeted_at',)
 
     def __unicode__(self):
         return self.text[:140]
@@ -383,6 +392,7 @@ class Vision (TweetedModelMixin, models.Model):
         self.set_text_from_tweet(tweet)
         self.set_user_from_tweet(tweet)
         self.set_media_from_tweet(tweet)
+        self.set_time_from_tweet(tweet)
 
         if commit:
             self.save()
@@ -412,6 +422,7 @@ class Reply (TweetedModelMixin, models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     tweet = models.OneToOneField('Tweet', related_name='reply', unique=True)
+    tweeted_at = models.DateTimeField(blank=True, default=now)
     vision = models.ForeignKey(Vision, related_name='replies')
     author = models.ForeignKey(User, related_name='replies')
     text = models.CharField(max_length=140, blank=True)
@@ -420,7 +431,7 @@ class Reply (TweetedModelMixin, models.Model):
 
     class Meta:
         verbose_name_plural = 'replies'
-        ordering = ('created_at',)
+        ordering = ('tweeted_at',)
 
     def __unicode__(self):
         return '%s replied to "%s"' % (self.author, self.vision)
@@ -428,6 +439,7 @@ class Reply (TweetedModelMixin, models.Model):
     def sync_with_tweet(self, tweet, commit=True):
         self.set_text_from_tweet(tweet)
         self.set_user_from_tweet(tweet)
+        self.set_time_from_tweet(tweet)
 
         if commit:
             self.save()

@@ -192,7 +192,10 @@ var VisionLouisville = VisionLouisville || {};
 
       reply.author = NS.app.currentUser.get('id');
       reply.author_details = NS.app.currentUser.toJSON();
-      reply.created_at = (new Date()).toISOString();
+
+      // Set the tweeted at time to right now, so that we can render the reply
+      // right away, without waiting on a response from Twitter.
+      reply.tweeted_at = (new Date()).toISOString();
 
       if (this.charsLeft >= 0 && this.chars > 0) {
         // Save the reply
