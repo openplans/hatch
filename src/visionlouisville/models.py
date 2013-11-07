@@ -363,7 +363,7 @@ class Vision (TweetedModelMixin, models.Model):
     objects = TweetedObjectManager()
 
     class Meta:
-        ordering = ('-created_at',)
+        ordering = ('-tweeted_at',)
 
     def __unicode__(self):
         return self.text[:140]
@@ -431,7 +431,7 @@ class Reply (TweetedModelMixin, models.Model):
 
     class Meta:
         verbose_name_plural = 'replies'
-        ordering = ('created_at',)
+        ordering = ('tweeted_at',)
 
     def __unicode__(self):
         return '%s replied to "%s"' % (self.author, self.vision)

@@ -54,7 +54,7 @@ var VisionLouisville = VisionLouisville || {};
   NS.VisionCollection = Backbone.Collection.extend({
     url: '/api/visions/',
     comparator: function(vision) {
-      var dateString = vision.get('created_at'),
+      var dateString = vision.get('tweeted_at'),
           date = new Date(_.isUndefined(dateString) ? null : dateString);
       return -(date.valueOf());
     },
@@ -92,7 +92,7 @@ var VisionLouisville = VisionLouisville || {};
 
   NS.ReplyCollection = Backbone.Collection.extend({
     url: '/api/replies/',
-    comparator: 'created_at',
+    comparator: 'tweeted_at',
     model: NS.ReplyModel
   });
 
