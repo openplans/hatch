@@ -316,9 +316,9 @@ class TweetedModelMixin (object):
         self.text = tweet.tweet_data['text']
 
     def set_time_from_tweet(self, tweet):
-        if 'created_at' in tweet:
+        if 'created_at' in tweet.tweet_data:
             try:
-                self.tweeted_at = datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
+                self.tweeted_at = datetime.strptime(tweet.tweet_data['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
                 self.tweeted_at = self.tweeted_at.replace(tzinfo=utc)
             except ValueError:
                 pass
