@@ -83,7 +83,7 @@ class TwitterService (object):
             cache.set(cache_key, info)
         return info
 
-    def get_users_info(self, users, on_behalf_of=None):
+    def get_users_info(self, users, on_behalf_of=None, force_refresh=False):
         # Build a mapping from cache_key => user_id
         data = {}
         for user in users:
@@ -101,8 +101,15 @@ class TwitterService (object):
             for cache_key, user_id in data.items()
         ])
 
-        # Get all the user info that is currently cached for the given users
-        all_info = cache.get_many(data.keys())
+        # Get all the user info that is currently cached for the given users.
+        # Assume all of the cache could be dirty with force_refresh.
+        # NOTE: With too many users, this could become a problem, as we'll hit
+        #       API limits with twitter. If there are more than 6000 users,
+        #       just ignore the force_refresh and only update uncached users.
+        if not force_refresh or len(data) > 6000:
+            all_info = cache.get_many(data.keys())
+        else:
+            all_info = {}
 
         # Build a list of keys that have no cached data
         uncached_keys = filter(lambda key: key not in all_info, data.keys())
