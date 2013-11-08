@@ -2,6 +2,7 @@ import re
 from django.conf import settings
 from django.db import IntegrityError
 from django.db.models import Max
+from django.db.transaction import commit_on_success
 from celery import task
 from time import sleep
 from .models import User, Tweet
@@ -106,7 +107,8 @@ def listen_for_tweets():
             # Assume it is still new, and just handle the exception if our
             # assumption is wrong.
             try:
-                tweet.save(force_insert=True)
+                with commit_on_success():
+                    tweet.save(force_insert=True)
             except IntegrityError:
                 log.info('\n  - Oh, nevermind. Someone got to it before us.\n')
                 continue
