@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from django.db import IntegrityError
 from django.db.models import Max
 from celery import task
 from time import sleep
@@ -88,11 +89,27 @@ def listen_for_tweets():
         tweet, created = Tweet.objects.create_or_update_from_tweet_data(tweet_data, commit=False)
         log.info('\n  - Imported a tweet: %s!\n' % (tweet,))
 
+        # Do we already have this tweet? This will be the case if someone has
+        # entered a vision or a reply through the app UI. In that case, we
+        # create a tweet immediately.
+        if not created:
+            log.info('\n  - Ah, we already have this one. It has been dealt with, I assume.\n')
+            continue
+
         # Is it a reply, and is the tweet it's replying to already assigned?
         # If so, attach this tweet.
-        if tweet.in_reply_to:
+        elif tweet.in_reply_to:
             log.info('\n  - It\'s a reply, and we have the original! Let\'s keep it.\n')
-            tweet.save()
+
+            # Since we did not commit the tweet immediately, we don't know
+            # whether another process or thread has created in the mean time.
+            # Assume it is still new, and just handle the exception if our
+            # assumption is wrong.
+            try:
+                tweet.save(force_insert=True)
+            except IntegrityError:
+                log.info('\n  - Oh, nevermind. Someone got to it before us.\n')
+                continue
 
             if tweet.in_reply_to.is_vision() or tweet.in_reply_to.is_reply():
                 log.info('\n  - Even better: we know what conversation it belongs to!\n')
