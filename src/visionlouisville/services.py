@@ -133,12 +133,37 @@ class TwitterService (object):
             t = self.get_api(on_behalf_of)
             user_ids = [data[key] for key in uncached_keys]
             new_info = {}
+            questionable_ids = []
+
             for id_group in chunk(user_ids, 100):
                 bulk_info = t.users.lookup(user_id=','.join([str(user_id) for user_id in id_group]))
 
                 for info in bulk_info:
                     cache_key = reverse_data[str(info['id'])]
                     new_info[cache_key] = info
+
+                seen_ids = set([info['id_str'] for info in bulk_info])
+                questionable_ids += [user_id for user_id in id_group if user_id not in seen_ids]
+
+            # If there were any IDs that we couldn't find, let someone know.
+            if questionable_ids:
+                user_strings = []
+                for user_id in questionable_ids:
+                    cache_key = reverse_data[str(user_id)]
+                    user_id = data[cache_key]
+                    user_strings.append(str(user_id))
+
+                log_string = (
+                    '\n'
+                    '============================================================\n'
+                    'The following user(s) are inaccessible from the Twitter API:\n'
+                    '(i.e., they are protected, suspended, or gone)\n'
+                    'IDs: %s\n'
+                    '============================================================\n'
+                ) % (
+                    ','.join(user_strings)
+                )
+                log.warning(log_string)
 
             # Store any new information gotten in the cache
             cache.set_many(new_info)
