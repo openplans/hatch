@@ -81,7 +81,7 @@ from datetime import timedelta
 CELERYBEAT_SCHEDULE = {
     'refresh-users-every-day': {
         'task': 'visionlouisville.tasks.refresh_users',
-        'schedule': timedelta(hours=6),
+        'schedule': timedelta(minutes=15),
     },
 }
 
