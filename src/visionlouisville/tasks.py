@@ -26,7 +26,7 @@ def refresh_users():
 
         log.info('\n  - Downloading info for group of %s user(s)\n' %
                  (len(user_group),))
-        twitter_service.get_users_info(user_group)
+        twitter_service.get_users_info(user_group, force_refresh=True)
         first_group_done = True
 
     log.info('\n*** Done refreshing the user cache. Run me again in a day!\n')
