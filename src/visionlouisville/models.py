@@ -425,7 +425,7 @@ class Reply (TweetedModelMixin, models.Model):
     tweeted_at = models.DateTimeField(blank=True, default=now)
     vision = models.ForeignKey(Vision, related_name='replies')
     author = models.ForeignKey(User, related_name='replies')
-    text = models.CharField(max_length=140, blank=True)
+    text = models.CharField(max_length=200, blank=True)
 
     objects = TweetedObjectManager()
 
