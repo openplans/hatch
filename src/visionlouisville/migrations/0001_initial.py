@@ -34,10 +34,12 @@ class Migration(SchemaMigration):
             ('username', self.gf('django.db.models.fields.CharField')(**{'unique': True, 'max_length': 30})),
         ))
         db.create_table(u'auth_user_groups', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(**{'primary_key': True})),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Group'])),
         ))
         db.create_table(u'auth_user_user_permissions', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(**{'primary_key': True})),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('permission', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.Permission'])),
         ))
