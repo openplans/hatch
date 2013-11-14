@@ -9,6 +9,55 @@ var VisionLouisville = VisionLouisville || {};
   };
 
   // Base mixins
+  NS.SupportHandlerMixin = {
+    handleSupport: function(evt) {
+      evt.preventDefault();
+
+      if (NS.app.currentUser.isAuthenticated()) {
+        var vision = this.model,
+            supporters = vision.get('supporters'),
+            user = NS.app.currentUser;
+
+        if (supporters.contains(user)) {
+
+          NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
+
+          user.unsupport(vision);
+          this.$('.support').removeClass('supported');
+        } else {
+
+          NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
+
+          user.support(vision);
+          this.$('.support').addClass('supported');
+        }
+
+        this.updateSupportCount();
+      }
+    },
+    updateSupportCount: function() {
+      this.$('.total-support-count').html(this.totalSupportString());
+    },
+    totalSupportString: function() {
+      var count = this.model.get('supporters').length,
+          countString;
+
+      if (count >= 1000000) {
+        countString = (Math.floor(count/100000))/10 + 'M';
+      }
+      else if (count >= 100000) {
+        countString = Math.floor(count/100000) + 'K';
+      }
+      else if (count >= 1000) {
+        countString = (Math.floor(count/100))/10 + 'K';
+      }
+      else {
+        countString = count.toString();
+      }
+
+      return countString;
+    }
+  };
 
   NS.OrderedCollectionMixin = {
     // https://github.com/marionettejs/backbone.marionette/wiki/Adding-support-for-sorted-collections
@@ -98,7 +147,13 @@ var VisionLouisville = VisionLouisville || {};
   // Vision List ==============================================================
   NS.VisionListItemView = Backbone.Marionette.ItemView.extend({
     template: '#list-item-tpl',
-    tagName: 'li'
+    tagName: 'li',
+    events: {
+      'click .support-link': 'handleSupport'
+    },
+    handleSupport: NS.SupportHandlerMixin.handleSupport,
+    updateSupportCount: NS.SupportHandlerMixin.updateSupportCount,
+    totalSupportString: NS.SupportHandlerMixin.totalSupportString
   });
 
   NS.VisionListView = Backbone.Marionette.CompositeView.extend({
@@ -283,6 +338,9 @@ var VisionLouisville = VisionLouisville || {};
       'click .cancel-retweet-action': 'handleCancelRetweet',
       'click .vision-media-container': 'handleVisionMediaClick'
     },
+    handleSupport: NS.SupportHandlerMixin.handleSupport,
+    updateSupportCount: NS.SupportHandlerMixin.updateSupportCount,
+    totalSupportString: NS.SupportHandlerMixin.totalSupportString,
     showReplyForm: function(evt) {
       evt.preventDefault();
 
@@ -290,43 +348,7 @@ var VisionLouisville = VisionLouisville || {};
         this.regionManager.get('replies').currentView.showReplyForm(evt);
       } else {
         this.$('.support-login-prompt').addClass('is-hidden');
-        this.$('.retweet-login-prompt').toggleClass('is-hidden');
       }
-    },
-    handleSupport: function(evt) {
-      evt.preventDefault();
-
-      if (NS.app.currentUser.isAuthenticated()) {
-        var vision = this.model,
-            supporters = vision.get('supporters'),
-            user = NS.app.currentUser;
-
-        if (supporters.contains(user)) {
-
-          NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
-
-          user.unsupport(vision);
-          this.$('.support').removeClass('supported');
-        } else {
-
-          NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
-
-          user.support(vision);
-          this.$('.support').addClass('supported');
-        }
-
-        this.updateSupportCount();
-      } else {
-
-        // It's nice to know when unauthenticated users click support too
-        NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
-
-        this.$('.retweet-login-prompt').addClass('is-hidden');
-        this.$('.support-login-prompt').toggleClass('is-hidden');
-      }
-    },
-    updateSupportCount: function() {
-      this.$('.total-support-count').html(this.totalSupportString());
     },
     handleRetweet: function(evt) {
       evt.preventDefault();
@@ -343,7 +365,6 @@ var VisionLouisville = VisionLouisville || {};
         this.$('.confirm-retweet-prompt').removeClass('is-hidden');
       } else {
         this.$('.support-login-prompt').addClass('is-hidden');
-        this.$('.retweet-login-prompt').toggleClass('is-hidden');
       }
     },
     handleConfirmRetweet: function(evt) {
@@ -374,25 +395,6 @@ var VisionLouisville = VisionLouisville || {};
     handleVisionMediaClick: function(evt) {
       evt.preventDefault();
       this.$('.vision-media-container').toggleClass('is-collapsed');
-    },
-    totalSupportString: function() {
-      var count = this.model.get('supporters').length,
-          countString;
-
-      if (count >= 1000000) {
-        countString = (Math.floor(count/100000))/10 + 'M';
-      }
-      else if (count >= 100000) {
-        countString = Math.floor(count/100000) + 'K';
-      }
-      else if (count >= 1000) {
-        countString = (Math.floor(count/100))/10 + 'K';
-      }
-      else {
-        countString = count.toString();
-      }
-
-      return countString;
     }
   });
 

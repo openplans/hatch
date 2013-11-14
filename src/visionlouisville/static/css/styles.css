@@ -519,8 +519,8 @@ ul.user-menu:after {
   margin: 0;
   padding: 8px 10px;
 }
-.in-response-to a, 
-.in-response-to a:active, 
+.in-response-to a,
+.in-response-to a:active,
 .in-response-to a:visited {
   color: #7ec4d8;
   text-decoration: none;
@@ -715,6 +715,9 @@ a.support {
   padding: 15px 15px 15px 50px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
   border-radius: 0 6px 6px 0;
+}
+.support-link {
+  text-decoration: none;
 }
 
 /* Vision Form */
@@ -940,7 +943,7 @@ h6.category-prompt {
   top: auto;
   right: auto;
   bottom: 0;
-  left: 0;  
+  left: 0;
   width: auto;
   height: auto;
   min-width: 100%;
@@ -970,8 +973,8 @@ h6.category-prompt {
           transition: opacity 1.2s;
 }
 .swiper-slide-visible .slide-header,
-.swiper-slide-visible .slide-image { 
-  opacity: 1; 
+.swiper-slide-visible .slide-image {
+  opacity: 1;
 }
 .slide-question {
   font-weight: 700;
@@ -979,7 +982,7 @@ h6.category-prompt {
   margin-bottom: 0.325em;
   text-shadow: 0 1px 0.25em rgba(0,0,0,0.75);
 }
-.slide-question a, 
+.slide-question a,
 .slide-question a:visited {
   color: #bff1ff;
   text-decoration: none;
