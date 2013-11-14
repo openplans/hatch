@@ -108,7 +108,8 @@ var VisionLouisville = VisionLouisville || {};
     events: {
       'click .vision-category-list-toggle-btn': 'toggleCategoryList'
     },
-    toggleCategoryList: function() {
+    toggleCategoryList: function(evt) {
+      evt.preventDefault();
       this.$('.vision-category-list').toggleClass('is-toggled-open');
     }
   });
