@@ -500,6 +500,9 @@ ul.user-menu:after {
   margin-left: -50px;
   margin-bottom: 75px;
 }
+.vision-list a.user-link {
+  margin-bottom: 0;
+}
 .vision .avatar {
   width: 40px;
   height: 40px;
