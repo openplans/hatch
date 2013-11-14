@@ -19,6 +19,9 @@
   <!-- <span class="vision-list-category-icon"><strong class="capitalize">{{ category }}</strong></span> -->
   {{/ if }}
 
-  <span class="support supported"><img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></span>
+  <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
+  {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
+
+  <img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
 
 </article><!-- end .vision -->

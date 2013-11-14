@@ -21,19 +21,24 @@
         <em class="twitter-handle">@{{ author_details.username }}</em>
       </span>
 
-      <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}}"><img class="heart" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
+      <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
+      {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
 
-      {{^ if_authenticated}}
-      <div class="support-login-prompt is-hidden"><a href="{{ LOGIN_URL }}" class="btn btn-secondary btn-small">Sign in to support this idea! <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a></div>
-      {{/if_authenticated}}
+      <img class="heart" src="{{ STATIC_URL }}images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
 
     </header>
 
     <p class="vision-description">{{ formattext text }}</p>
 
     <footer class="vision-footer clearfix">
-      <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}}"><span class="tweet-icon"><img class="tweet-icon-retweet" src="/static/images/retweet-icon.png"></span> Retweet</a>
-      <a href="#login-to-reply" class="reply-link show-reply"><span class="tweet-icon"><img class="tweet-icon-reply" src="/static/images/reply-icon.png"></span> Reply</a>
+      <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}} hint--right"
+      {{^ if_authenticated}}data-hint="Sign in to retweet this {{app_config "vision"}}!"{{/if_authenticated}}>
+      <span class="tweet-icon"><img class="tweet-icon-retweet" src="/static/images/retweet-icon.png"></span> Retweet</a>
+
+      <a href="#login-to-reply" class="reply-link show-reply hint--right"
+      {{^ if_authenticated}}data-hint="Sign in to reply to this {{app_config "vision"}}!"{{/if_authenticated}}>
+
+      <span class="tweet-icon"><img class="tweet-icon-reply" src="/static/images/reply-icon.png"></span> Reply</a>
 
       {{# if category }}
       <!-- <a href="/{{visions_url_name}}/{{ category }}/list" class="category-link"><strong class="capitalize">{{ category }}</strong></a> -->
@@ -50,9 +55,6 @@
 
         <a href="#" class="btn btn-cancel cancel-retweet-action">Cancel</a> &nbsp;
         <a href="#" class="btn btn-primary confirm-retweet-action">Retweet</a>
-      </div>
-      {{^}}
-      <div class="retweet-login-prompt retweet-prompt-box is-hidden"><a href="{{ LOGIN_URL }}" class="btn btn-secondary btn-small">Sign in to share or reply to this vision! <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a></div>
       </div>
       {{/if_authenticated}}
     </footer>
