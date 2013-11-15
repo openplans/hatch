@@ -370,10 +370,10 @@ a.authentication-link-login {
   background: url(../images/user-menu-shadow.png) 0 0 no-repeat scroll;
 }
 ul.user-menu {
-  display: none;
+/*  display: none;*/
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 9999px;
   background-color: #7ec4d8;
   padding: 2px 2px 0 2px;
   margin: -3px 0 0 0;
@@ -404,7 +404,8 @@ ul.user-menu:after {
   border-left-color: transparent;
 }
 .user-menu.is-open {
-  display: block;
+/*  display: block;*/
+  right: 0;
 }
 .sub-menu-item {
   background-color: #268099;
@@ -432,6 +433,23 @@ ul.user-menu:after {
   width: 40px;
   height: 40px;
   border-radius: 0 0 18px 18px;
+}
+.notifications-count {
+  color: #fff;
+  background-color: #ef037d;
+  padding: 0.125em 0.325em 0.25em;
+  border-radius: 0.5em;
+  font-size: 0.75em;
+  font-weight: bold;
+  position: absolute;
+  top: -0.75em;  
+  right: 0;
+  margin-right: -9999px;
+}
+.user-menu.is-open .notifications-count {
+  position: relative;
+  top: -0.25em;  
+  margin-right: 0;
 }
 
 
