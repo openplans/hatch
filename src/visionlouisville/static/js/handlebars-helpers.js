@@ -46,7 +46,13 @@ var VisionLouisville = VisionLouisville || {};
     }
 
     userId = NS.currentUserData.id;
-    supportingIds = _.pluck(this.supporters, 'id');
+    // If its an array of support ids
+    if (_.isArray(this.supporters)) {
+      supportingIds = this.supporters;
+    } else {
+      supportingIds = _.pluck(this.supporters, 'id');
+    }
+
     return _.contains(supportingIds, userId) ? options.fn(this) : options.inverse(this);
   });
 
