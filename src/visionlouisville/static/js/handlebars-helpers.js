@@ -47,10 +47,10 @@ var VisionLouisville = VisionLouisville || {};
 
     userId = NS.currentUserData.id;
     // If its an array of support ids
-    if (_.isArray(this.supporters)) {
-      supportingIds = this.supporters;
-    } else {
+    if (this.supporters.length > 0 && _.isObject(_.first(this.supporters))) {
       supportingIds = _.pluck(this.supporters, 'id');
+    } else {
+      supportingIds = this.supporters;
     }
 
     return _.contains(supportingIds, userId) ? options.fn(this) : options.inverse(this);
