@@ -143,7 +143,7 @@ class MinimalVisionSerializer (ModelSerializer):
 
     class Meta:
         model = Vision
-        fields = ('id', 'created_at', 'category', 'text', 'supporters', 'author_details')
+        fields = ('id', 'created_at', 'category', 'text', 'supporters', 'replies', 'author_details')
 
 
 class MinimalReplySerializer (ModelSerializer):
