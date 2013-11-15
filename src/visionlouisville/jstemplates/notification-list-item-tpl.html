@@ -1,1 +1,35 @@
-<li>A notification!</li>
+<li class="notification notification-reply">
+  <a href="#" class="notification-link clearfix">
+    <span class="action-taker"><img src="{{ author_details.avatar_url }}" class="avatar" />Andy Cochran</span> 
+    <span class="action">replied to</span> 
+    <span class="action-recipient">your</span> 
+    {{app_config 'vision'}}: 
+    <span class="action-reply">"This is a great idea! I really like it. Let's make it happen!!!"</span> 
+    <!-- <time datetime="{{ formatdatetime tweeted_at "YYYY-MM-DD HH:MM-SSSS" }}" class="action-time">{{ formatdatetime tweeted_at "MMMM Do YYYY" }}</time> -->
+    <time class="action-time">about 2 minutes ago</time><!-- replace this with the line above once it works pretty -->
+  </a>
+</li>
+
+<li class="notification notification-favorite">
+  <a href="#" class="notification-link clearfix">
+    <span class="action-taker"><img src="{{ author_details.avatar_url }}" class="avatar" />Frank Hebbert</span> 
+    <span class="action">supported</span> 
+    <span class="action-recipient">Andy Cochran's</span> 
+    {{app_config 'vision'}}: 
+    <span class="action-vision">"My idea to make our city more awesome is for people to behave more awesomely."</span> 
+    <!-- <time datetime="{{ formatdatetime tweeted_at "YYYY-MM-DD HH:MM-SSSS" }}" class="action-time">{{ formatdatetime tweeted_at "MMMM Do YYYY" }}</time> -->
+    <time class="action-time">2 days ago</time><!-- replace this with the line above once it works pretty -->
+  </a>
+</li>
+
+<li class="notification notification-retweet">
+  <a href="#" class="notification-link clearfix">
+    <span class="action-taker"><img src="{{ author_details.avatar_url }}" class="avatar" />Frank Hebbert</span> 
+    <span class="action">retweeted</span> 
+    <span class="action-recipient">your</span> 
+    {{app_config 'vision'}}: 
+    <span class="action-vision">"This city would be totally rad if only there was more artisanal pizza readily available."</span> 
+    <!-- <time datetime="{{ formatdatetime tweeted_at "YYYY-MM-DD HH:MM-SSSS" }}" class="action-time">{{ formatdatetime tweeted_at "MMMM Do YYYY" }}</time> -->
+    <time class="action-time">3 days ago</time><!-- replace this with the line above once it works pretty -->
+  </a>
+</li>

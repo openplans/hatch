@@ -1185,6 +1185,40 @@ ul.user-list {
 }
 
 
+/* =Notifications
+-------------------------------------------------------------- */
+
+ul.notifications-list {
+  margin: 0 -10px 20px;
+}
+.notification {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(255,255,255,0.5);
+}
+a.notification-link {
+  display: block;
+  padding: 1em 1em 1em 4.75em;
+  font-weight: 600;
+  text-decoration: none;
+}
+.action-taker {}
+.action-taker .avatar {
+  float: left;
+  width: 3em;
+  height: 3em;
+  margin-left: -3.75em;
+}
+.action {}
+.action-recipient {}
+.action-reply {}
+.action-vision {}
+.action-time {
+  color: #808073;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+
 /* =Media Queries for Responsive Layout
 -------------------------------------------------------------- */
 
