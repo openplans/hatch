@@ -50,6 +50,7 @@ var VisionLouisville = VisionLouisville || {};
     'users/list/:id': 'listUsers',
     'users/:id/:tab': 'showUser',
     'users/:id': 'showUser',
+    'notifications': 'userNotifications',
     'ally': 'allySignup',
     '*anything': 'home'
   });
@@ -261,6 +262,20 @@ var VisionLouisville = VisionLouisville || {};
         return view;
       };
       NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
+    },
+    userNotifications: function() {
+      if (NS.app.currentUser) {
+        // TODO: Move to the config settings
+        document.title = NS.appConfig.title + ' | Notifications';
+
+        NS.app.mainRegion.show(new NS.NotificationListView({
+          model: NS.app.currentUser,
+          // collection: new Backbone.Collection(NS.app.currentUser.notifications)
+          collection: new Backbone.Collection([{id: 1}])
+        }));
+      } else {
+        this.home();
+      }
     }
   };
 
