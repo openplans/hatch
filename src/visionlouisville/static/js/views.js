@@ -550,7 +550,7 @@ var VisionLouisville = VisionLouisville || {};
     },
     showVisions: function() {
       this.$('.tab').removeClass('is-current');
-      this.$('a[href*="visions"]').parent('.tab').addClass('is-current');
+      this.$('a[href*="'+ NS.appConfig.vision_plural +'"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
         collection: new Backbone.Collection(this.model.get('visions'))
       }));
