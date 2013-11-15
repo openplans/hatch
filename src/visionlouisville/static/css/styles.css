@@ -532,6 +532,19 @@ ul.user-menu:after {
   text-decoration: underline;
 }
 
+.vision-meta-list {}
+.vision-meta-item {
+  float: left;
+  margin-right: 20px;
+}
+
+.replies-count {
+  color: #808073;
+  font-weight: 600;
+  display: block;
+  padding: 5px 0 10px;
+}
+
 /* Vision Footer */
 .vision-footer {
   clear: both;
