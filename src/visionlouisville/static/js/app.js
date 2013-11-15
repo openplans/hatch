@@ -371,7 +371,8 @@ var VisionLouisville = VisionLouisville || {};
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
            href.indexOf('/' + NS.appConfig.vision_plural) === 0 ||
-           href.indexOf('/users') === 0) &&
+           href.indexOf('/users') === 0 ||
+           href.indexOf('/notifications') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
