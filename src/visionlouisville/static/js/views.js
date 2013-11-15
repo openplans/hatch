@@ -16,20 +16,43 @@ var VisionLouisville = VisionLouisville || {};
       if (NS.app.currentUser.isAuthenticated()) {
         var vision = this.model,
             supporters = vision.get('supporters'),
-            user = NS.app.currentUser;
+            user = NS.app.currentUser,
+            visionFromMainCollection, index;
 
-        if (supporters.contains(user)) {
+        // supporters is an array of ids in some cases, a collection (with
+        // contains) in others.
+        if (_.isArray(supporters)){
+          // if supported, unsupport
+          index = _.indexOf(supporters, user.id);
+          visionFromMainCollection = NS.app.visionCollection.get(this.model.id);
+          if(index > -1) {
+            NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
-          NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
+            user.unsupport(visionFromMainCollection);
 
-          user.unsupport(vision);
-          this.$('.support').removeClass('supported');
+            // Remove from the supporters array for rendering
+            supporters.splice(index, 1);
+
+            this.$('.support').removeClass('supported');
+          } else {
+            NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
+
+            user.support(visionFromMainCollection);
+            supporters.push(user.id);
+            this.$('.support').addClass('supported');
+          }
         } else {
+          if(supporters.contains && supporters.contains(user)) {
+            NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
-          NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
+            user.unsupport(vision);
+            this.$('.support').removeClass('supported');
+          } else {
+            NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
-          user.support(vision);
-          this.$('.support').addClass('supported');
+            user.support(vision);
+            this.$('.support').addClass('supported');
+          }
         }
 
         this.updateSupportCount();
@@ -535,12 +558,6 @@ var VisionLouisville = VisionLouisville || {};
     className: 'vision-list unstyled-list',
     itemView: NS.VisionListItemView,
     emptyView: NS.NoItemsView
-  });
-
-  NS.UserListWithFilterView = Backbone.Marionette.CollectionView.extend({
-    tagName: 'ul',
-    className: 'unstyled-list',
-    itemView: NS.UserListItemView
   });
 
   NS.UserDetailView = Backbone.Marionette.Layout.extend({
