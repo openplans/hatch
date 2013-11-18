@@ -123,6 +123,12 @@ var VisionLouisville = VisionLouisville || {};
     //   collectionType: 'VisionCollection'
     // }],
 
+    checkNotifications: function() {
+      $.ajax({
+        type: 'DELETE',
+        url: '/api/notifications'
+      });
+    },
     support: function(vision) {
       var supporters = vision.get('supporters');
 

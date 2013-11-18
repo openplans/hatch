@@ -270,8 +270,8 @@ var VisionLouisville = VisionLouisville || {};
 
         NS.app.mainRegion.show(new NS.NotificationListView({
           model: NS.app.currentUser,
-          // collection: new Backbone.Collection(NS.app.currentUser.notifications)
-          collection: new Backbone.Collection([{id: 1}])
+          collection: NS.app.currentUser.notifications
+          // collection: new Backbone.Collection([{id: 1}])
         }));
       } else {
         this.home();
@@ -405,6 +405,22 @@ var VisionLouisville = VisionLouisville || {};
     });
   });
 
+  NS.app.updateNotificationCount = function() {
+    if (NS.app.currentUser) {
+      var notifications = NS.app.currentUser.notifications,
+          count = notifications.where({'is_new': true}).length,
+          $notificationsCount = $('.notifications-count');
+
+      $notificationsCount.html(count);
+
+      if (count === 0) {
+        $notificationsCount.addClass('is-hidden');
+      } else {
+        $notificationsCount.removeClass('is-hidden');
+      }
+    }
+  };
+
   // Init =====================================================================
   $(function() {
     NS.app.visionCollection = new NS.VisionCollection();
@@ -421,6 +437,12 @@ var VisionLouisville = VisionLouisville || {};
     });
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {});
+    NS.app.currentUser.notifications = new Backbone.Collection(NS.notificationsData);
+    NS.app.updateNotificationCount();
+
+    NS.app.currentUser.notifications.on('change', function() {
+      NS.app.updateNotificationCount();
+    });
 
     // Set the appropriate authentication info for analytics
     var currentUserStatus;

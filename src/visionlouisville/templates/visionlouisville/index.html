@@ -89,7 +89,7 @@
             <a href="#" class="user-menu-avatar"><img src="{{ user_data.avatar_url }}"></a>
             <ul class="user-menu unstyled-list">
               <li class="sub-menu-item"><a href="/users/{{ user_data.id }}" class="">My Profile</a></li>
-              <li class="sub-menu-item"><a href="/notifications" class=""><span class="notifications-count">42</span> Notifications</a></li>
+              <li class="sub-menu-item"><a href="/notifications" class=""><span class="notifications-count{% if num_notifications == 0 %} is-hidden{% endif %}">{{ num_notifications }}</span> Notification{{ num_notifications|pluralize }}</a></li>
               <li class="sub-menu-item"><a href="{% url 'logout' %}" class="authentication-link authentication-link-logout">Sign out</a></li>
             </ul>
           </li>
@@ -118,11 +118,16 @@
   <script>
     var {{NS}} = {{NS}} || {};
     {{NS}}.currentUserData = {{ user_json|safe }};
+    {{NS}}.notificationsData = {{ notifications_json|safe }};
     {{NS}}.staticURL = '{{ STATIC_URL|safe }}';
     {{NS}}.loginURL = '{% url "socialauth_begin" backend="twitter" %}';
     {{NS}}.twitterConf = {{ twitter_config|safe }};
     {{NS}}.categories = {{ categories|safe }};
     {{NS}}.appConfig = {{ app_json|safe }};
+
+    for (var i = 0; i < {{ num_notifications }}; ++i) {
+      {{NS}}.notificationsData[i]['is_new'] = true;
+    }
   </script>
 
   {% if debug %}
