@@ -560,6 +560,12 @@ var VisionLouisville = VisionLouisville || {};
     emptyView: NS.NoItemsView
   });
 
+  NS.UserListWithFilterView = Backbone.Marionette.CollectionView.extend({
+    tagName: 'ul',
+    className: 'unstyled-list',
+    itemView: NS.UserListItemView
+  });
+
   NS.UserDetailView = Backbone.Marionette.Layout.extend({
     template: '#user-detail-tpl',
     regions: {
