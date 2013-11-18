@@ -40,7 +40,20 @@ def listen_for_tweets():
     log.info('\n*** Listening for tweets...\n')
 
     streaming_keywords = settings.STREAMING_KEYWORDS
-    keywords_pattern = '|'.join(streaming_keywords)
+
+    def contains_keywords(text):
+        """
+        Like twitter's criteria for matching tracking parameters, but a little
+        more lenient: https://dev.twitter.com/docs/streaming-apis/parameters#track
+        """
+        text = text.lower()
+
+        # If any of the terms match, return True. Otherwise False.
+        for term in streaming_keywords:
+            if all(keyword in text for keyword in term.lower().split()):
+                return True
+                
+        return False
 
     # User on most recent tweets
     recent_tweets = Tweet.objects.all()\
@@ -132,7 +145,7 @@ def listen_for_tweets():
                 tweet.make_reply()
 
         # Otherwise, does it mention any of our keywords?
-        elif re.search(keywords_pattern, tweet.tweet_data['text'], flags=re.I):
+        elif contains_keywords(tweet.tweet_data['text']):
             log.info('\n  - Mmm, I see those keywords I\'m lookin for. I\'ll keep it.\n')
             tweet.save()
 
