@@ -129,6 +129,26 @@ var VisionLouisville = VisionLouisville || {};
         url: '/api/notifications'
       });
     },
+    viewVision: function(vision) {
+      if (vision && vision.hasOwnProperty('id')) {
+        vision = vision.id;
+      }
+
+      if (this.notifications) {
+        var changed = false;
+        
+        this.notifications.each(function(notification) {
+          if (notification.get('is_new') && notification.get('properties')['vision'] === vision) {
+            notification.set({'is_new': false}, {silent: true});
+            changed = true;
+          }
+        });
+
+        if (changed) {
+          this.notifications.trigger('change');
+        }
+      }
+    },
     support: function(vision) {
       var supporters = vision.get('supporters');
 

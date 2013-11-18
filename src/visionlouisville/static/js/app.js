@@ -163,6 +163,10 @@ var VisionLouisville = VisionLouisville || {};
 
       NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
         getVisionDetailView, {visionId: visionId, spinner: NS.app.bigSpinnerOptions});
+
+      if (NS.app.currentUser) {
+        NS.app.currentUser.viewVision(visionId);
+      }
     },
     home: function() {
       // TODO: Move to the config settings
