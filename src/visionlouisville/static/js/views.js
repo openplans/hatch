@@ -578,10 +578,16 @@ var VisionLouisville = VisionLouisville || {};
     tagName: 'li'
   });
 
+  NS.NotificationEmptyView = Backbone.Marionette.ItemView.extend({
+    template: '#notification-list-empty-tpl',
+    tagName: 'li'
+  });
+
   NS.NotificationListView = Backbone.Marionette.CompositeView.extend({
     template: '#notification-list-tpl',
     itemViewContainer: 'ul',
-    itemView: NS.NotificationItemView
+    itemView: NS.NotificationItemView,
+    emptyView: NS.NotificationEmptyView
   });
 
 }(VisionLouisville));

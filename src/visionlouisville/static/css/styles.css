@@ -1198,6 +1198,9 @@ ul.notifications-list {
 .new-notification {
   background-color: white;
 }
+.empty-notifications {
+  padding: 1em;
+}
 a.notification-link {
   display: block;
   padding: 1em 1em 1em 4.75em;

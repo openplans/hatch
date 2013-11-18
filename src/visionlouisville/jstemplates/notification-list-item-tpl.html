@@ -1,4 +1,4 @@
-<li class="notification notification-{{ type }} {{# if is_new }}new-notification{{/ if }}">
+<div class="notification notification-{{ type }} {{# if is_new }}new-notification{{/ if }}">
   <a href="/{{app_config 'vision_plural'}}/{{ properties.vision }}" class="notification-link clearfix">
     <span class="action-taker"><img src="{{ properties.author_details.avatar_url }}" class="avatar" />{{ properties.author_details.full_name }}</span> 
     
@@ -11,4 +11,4 @@
 
     <time datetime="{{ properties.tweeted_at }}" class="action-time">{{ formatdatetime properties.tweeted_at "MMMM Do YYYY" }}</time>
   </a>
-</li>
+</div>
