@@ -8,9 +8,12 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        def a_year_ago():
+            return datetime.datetime.now() - datetime.timedelta(days=365)
+
         # Adding field 'User.checked_notifications_at'
         db.add_column(u'visionlouisville_user', 'checked_notifications_at',
-                      self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now),
+                      self.gf('django.db.models.fields.DateTimeField')(default=a_year_ago),
                       keep_default=False)
 
 
