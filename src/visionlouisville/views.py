@@ -433,6 +433,7 @@ class NotificationsViewSet (AppMixin, ListModelMixin, GenericAPIView, ViewSet):
         user = request.user
         if user.is_authenticated():
             user.clear_notifications()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # App views
