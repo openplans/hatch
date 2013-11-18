@@ -273,6 +273,8 @@ var VisionLouisville = VisionLouisville || {};
           collection: NS.app.currentUser.notifications
           // collection: new Backbone.Collection([{id: 1}])
         }));
+
+        NS.app.currentUser.checkNotifications();
       } else {
         this.home();
       }
