@@ -59,7 +59,7 @@ module.exports = function(grunt) {
             dest: 'static/css/components.min.css',
             src: [
               'static/components/normalize-css/normalize.css',
-              'static/components/normalize-css/hint.css'
+              'static/components/hint.css/hint.css'
             ]
           },
           {
