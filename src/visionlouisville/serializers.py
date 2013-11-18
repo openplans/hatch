@@ -1,7 +1,7 @@
 from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
     PrimaryKeyRelatedField, SerializerMethodField, DateTimeField,
-    RelatedField, ValidationError)
+    RelatedField, ValidationError, Serializer)
 from .models import User, Vision, Reply, Category, AppConfig
 from .services import SocialMediaException
 
@@ -152,6 +152,20 @@ class MinimalReplySerializer (ModelSerializer):
     class Meta:
         model = Reply
         fields = ('id', 'text', 'vision')
+
+
+class RecentEngagementSerializer (Serializer):
+    def to_native(self, obj):
+        if isinstance(obj, Reply):
+            serializer = ReplySerializer(obj, context=self.context)
+            properties = serializer.data
+            engagement_type = 'reply'
+
+        return {
+            'type': engagement_type,
+            'vision': MinimalVisionSerializer(obj.vision, context=self.context).data,
+            'properties': properties
+        }
 
 
 class UserSerializer (ManyToNativeMixin, BaseTwitterInfoSerializer):

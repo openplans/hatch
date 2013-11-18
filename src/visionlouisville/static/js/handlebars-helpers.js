@@ -3,6 +3,10 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
+  Handlebars.registerHelper('debug', function(obj) {
+    return JSON.stringify(obj);
+  });
+
   Handlebars.registerHelper('visions_url_name', function(category) {
     return NS.appConfig.vision_plural;
   });
@@ -23,6 +27,10 @@ var VisionLouisville = VisionLouisville || {};
 
   Handlebars.registerHelper('if_authenticated', function(options) {
     return !!NS.currentUserData ? options.fn(this) : options.inverse(this);
+  });
+
+  Handlebars.registerHelper('if_is_current_user', function(user_id, options) {
+    return !!NS.currentUserData && NS.currentUserData['id'] == user_id ? options.fn(this) : options.inverse(this);
   });
 
   Handlebars.registerHelper('if_imagemanip_feature', function(options) {

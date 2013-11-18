@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.routers import DefaultRouter
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.generics import RetrieveAPIView, GenericAPIView
+from rest_framework.mixins import ListModelMixin
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
@@ -23,7 +24,7 @@ from .models import Reply, User, Vision, Category, Tweet, AppConfig
 from .forms import SecretAllySignupForm
 from .serializers import (
     ReplySerializer, UserSerializer, VisionSerializer, CategorySerializer,
-    MinimalVisionSerializer, AppConfigSerializer)
+    MinimalVisionSerializer, AppConfigSerializer, RecentEngagementSerializer)
 from .services import default_twitter_service
 
 
@@ -83,9 +84,25 @@ class AppMixin (object):
     def get_category_queryset(self, base_queryset=None):
         return (base_queryset or Category.objects.all())
 
+    def get_recent_engagements(self):
+        user = self.request.user
+        if user.is_authenticated():
+            count, qs = user.get_recent_engagements()
+
+            self.num_notifications = count
+            self.recent_engagements = qs
+        else:
+            self.num_notifications = None
+            self.recent_engagements = None
+
+        return self.recent_engagements
+
     def get_context_data(self, **kwargs):
         context = super(AppMixin, self).get_context_data(**kwargs)
         service = self.get_twitter_service()
+
+        if not hasattr(self, 'num_notifications'):
+            self.get_recent_engagements()
 
         if self.request.user.is_authenticated():
             user_qs = self.get_user_queryset(
@@ -117,6 +134,7 @@ class AppMixin (object):
         context['app_json'] = json.dumps(AppConfigSerializer(app_config).data)
 
         if user:
+            # Bootstrap user information
             serializer = UserSerializer(user)
             serializer.context = {
                 'twitter_service': self.get_twitter_service(),
@@ -125,6 +143,22 @@ class AppMixin (object):
             user_data = serializer.data
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data, cls=JSONEncoder)
+            
+            # Bootstrap notifications
+            count, qs = user.get_recent_engagements()
+
+            MIN_NOTIFICATIONS = 20
+            context['num_notifications'] = count
+
+            serializer = RecentEngagementSerializer(qs[:max(count, MIN_NOTIFICATIONS)], many=True)
+            serializer.context = {
+                'twitter_service': self.get_twitter_service(),
+                'requesting_user': self.get_requesting_user(),
+            }
+            notifications_data = serializer.data
+            context['notifications_data'] = notifications_data
+            context['notifications_json'] = json.dumps(notifications_data, cls=JSONEncoder)
+
         else:
             context['user_json'] = 'null'
 
@@ -389,6 +423,19 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class NotificationsViewSet (AppMixin, ListModelMixin, GenericAPIView, ViewSet):
+    serializer_class = RecentEngagementSerializer
+
+    def get_queryset(self):
+        return self.get_recent_engagements()
+
+    def clear(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated():
+            user.clear_notifications()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 # App views
 home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
@@ -405,6 +452,8 @@ support_api_view = VisionActionViewSet.as_view({'post': 'support',
                                                 'delete': 'unsupport'})
 unsupport_api_view = VisionActionViewSet.as_view({'post': 'unsupport'})
 share_api_view = VisionActionViewSet.as_view({'post': 'share'})
+notifications_api_view = NotificationsViewSet.as_view({'get': 'list',
+                                                       'delete': 'clear'})
 
 # Setup the API routes
 api_router = DefaultRouter()

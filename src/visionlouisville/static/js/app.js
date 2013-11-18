@@ -50,6 +50,7 @@ var VisionLouisville = VisionLouisville || {};
     'users/list/:id': 'listUsers',
     'users/:id/:tab': 'showUser',
     'users/:id': 'showUser',
+    'notifications': 'userNotifications',
     'ally': 'allySignup',
     '*anything': 'home'
   });
@@ -162,6 +163,10 @@ var VisionLouisville = VisionLouisville || {};
 
       NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
         getVisionDetailView, {visionId: visionId, spinner: NS.app.bigSpinnerOptions});
+
+      if (NS.app.currentUser) {
+        NS.app.currentUser.viewVision(visionId);
+      }
     },
     home: function() {
       // TODO: Move to the config settings
@@ -261,6 +266,22 @@ var VisionLouisville = VisionLouisville || {};
         return view;
       };
       NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
+    },
+    userNotifications: function() {
+      if (NS.currentUserData) {
+        // TODO: Move to the config settings
+        document.title = NS.appConfig.title + ' | Notifications';
+
+        NS.app.mainRegion.show(new NS.NotificationListView({
+          model: NS.app.currentUser,
+          collection: NS.app.currentUser.notifications
+          // collection: new Backbone.Collection([{id: 1}])
+        }));
+
+        NS.app.currentUser.checkNotifications();
+      } else {
+        this.home();
+      }
     }
   };
 
@@ -356,7 +377,8 @@ var VisionLouisville = VisionLouisville || {};
       // Allow shift+click for new tabs, etc.
       if ((href === '/' ||
            href.indexOf('/' + NS.appConfig.vision_plural) === 0 ||
-           href.indexOf('/users') === 0) &&
+           href.indexOf('/users') === 0 ||
+           href.indexOf('/notifications') === 0) &&
            !evt.altKey && !evt.ctrlKey && !evt.metaKey && !evt.shiftKey) {
         evt.preventDefault();
 
@@ -389,6 +411,22 @@ var VisionLouisville = VisionLouisville || {};
     });
   });
 
+  NS.app.updateNotificationCount = function() {
+    if (NS.app.currentUser) {
+      var notifications = NS.app.currentUser.notifications,
+          count = notifications.where({'is_new': true}).length,
+          $notificationsCount = $('.notifications-count');
+
+      $notificationsCount.html(count);
+
+      if (count === 0) {
+        $notificationsCount.addClass('is-hidden');
+      } else {
+        $notificationsCount.removeClass('is-hidden');
+      }
+    }
+  };
+
   // Init =====================================================================
   $(function() {
     NS.app.visionCollection = new NS.VisionCollection();
@@ -405,6 +443,12 @@ var VisionLouisville = VisionLouisville || {};
     });
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {});
+    NS.app.currentUser.notifications = new Backbone.Collection(NS.notificationsData);
+    NS.app.updateNotificationCount();
+
+    NS.app.currentUser.notifications.on('change', function() {
+      NS.app.updateNotificationCount();
+    });
 
     // Set the appropriate authentication info for analytics
     var currentUserStatus;

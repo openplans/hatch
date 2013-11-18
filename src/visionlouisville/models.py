@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class User (AbstractUser):
     visible_on_home = models.BooleanField(default=True)
+    checked_notifications_at = models.DateTimeField(default=now)
 
     def support(self, vision):
         vision.supporters.add(self)
@@ -44,6 +45,37 @@ class User (AbstractUser):
     def remove_from_group(self, group_name):
         group = Group.objects.get(name=group_name)
         self.groups.remove(group)
+
+    def get_recent_engagements(self):
+        """
+        Get the number of new engegements with visions this user has engaged
+        with, and also a queryset with all those engagements.
+        """
+        # All the visions this user has engaged with
+        authored_visions = set([v['id'] for v in self.visions.all().values('id')])
+        replied_visions = set([r['vision_id'] for r in self.replies.all().values('vision_id')])
+        supported_visions = set([v['id'] for v in self.supported.all().values('id')])
+
+        # All engagements with those visions
+        all_engagements = Reply.objects\
+            .filter(vision_id__in=authored_visions|replied_visions|supported_visions)\
+            .exclude(author=self)\
+            .order_by('-created_at')
+
+        # New engagements since the last time this user checked their
+        # notifications
+        new_engagements = all_engagements.filter(created_at__gt=self.checked_notifications_at)
+
+        # We need to know the count of new engagements. If the new engagement
+        # count is less than the minimum notifications length, return the
+        # minimum amount of engagements. Otherwise give me all the new stuff,
+        # no matter how many.
+        return new_engagements.count(), all_engagements
+
+    def clear_notifications(self, commit=True):
+        self.checked_notifications_at = now()
+        if commit:
+            self.save()
 
 
 def get_tweet_id(tweet_data):
