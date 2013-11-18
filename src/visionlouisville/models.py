@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class User (AbstractUser):
     visible_on_home = models.BooleanField(default=True)
+    checked_notifications_at = models.DateTimeField(default=now)
 
     def support(self, vision):
         vision.supporters.add(self)
