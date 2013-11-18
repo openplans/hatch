@@ -3,6 +3,10 @@
 var VisionLouisville = VisionLouisville || {};
 
 (function(NS) {
+  Handlebars.registerHelper('debug', function(obj) {
+    return JSON.stringify(obj);
+  });
+
   Handlebars.registerHelper('visions_url_name', function(category) {
     return NS.appConfig.vision_plural;
   });
