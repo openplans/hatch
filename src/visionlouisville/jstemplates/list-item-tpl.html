@@ -26,7 +26,7 @@
       <img class="heart heart-inline" src="/static/images/heart.png"> <span class="support-count total-support-count">{{ supporters.length }}</span></a>
     </li>
     <li class="vision-meta-item">
-      <span class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</span>
+      <a href="/{{visions_url_name}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
     </li>
   </ul>
 

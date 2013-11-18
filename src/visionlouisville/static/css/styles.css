@@ -442,13 +442,13 @@ ul.user-menu:after {
   font-size: 0.75em;
   font-weight: bold;
   position: absolute;
-  top: -0.75em;  
+  top: -0.75em;
   right: 0;
   margin-right: -9999px;
 }
 .user-menu.is-open .notifications-count {
   position: relative;
-  top: -0.25em;  
+  top: -0.25em;
   margin-right: 0;
 }
 
@@ -557,10 +557,10 @@ ul.user-menu:after {
 }
 
 .replies-count {
-  color: #808073;
   font-weight: 600;
   display: block;
   padding: 5px 0 10px;
+  text-decoration: none;
 }
 
 /* Vision Footer */
