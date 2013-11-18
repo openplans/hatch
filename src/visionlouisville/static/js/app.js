@@ -268,7 +268,7 @@ var VisionLouisville = VisionLouisville || {};
       NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     userNotifications: function() {
-      if (NS.app.currentUser) {
+      if (NS.currentUserData) {
         // TODO: Move to the config settings
         document.title = NS.appConfig.title + ' | Notifications';
 
