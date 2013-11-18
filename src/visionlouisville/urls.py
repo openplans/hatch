@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from .views import (
     home_app_view, secret_ally_signup_view, vision_detail_app_view, api_router,
     current_user_api_view, share_api_view, support_api_view, unsupport_api_view,
-    category_app_view, robots_view, sitemap_view)
+    category_app_view, robots_view, sitemap_view, notifications_api_view)
 from .models import AppConfig
 
 # Admin
@@ -45,10 +45,11 @@ urlpatterns = (
         url(r'^admin/', include(admin.site.urls)),
 
         # API
-        url(r'^api/users/(?P<pk>current)/$',        current_user_api_view, name='current-user-detail'),
-        url(r'^api/visions/(?P<pk>\d+)/support$',   support_api_view,      name='support-vision-action'),
-        url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,    name='unsupport-vision-action'),
-        url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,        name='share-vision-action'),
+        url(r'^api/users/(?P<pk>current)/$',        current_user_api_view,  name='current-user-detail'),
+        url(r'^api/visions/(?P<pk>\d+)/support$',   support_api_view,       name='support-vision-action'),
+        url(r'^api/visions/(?P<pk>\d+)/unsupport$', unsupport_api_view,     name='unsupport-vision-action'),
+        url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,         name='share-vision-action'),
+        url(r'^api/notifications$',                 notifications_api_view, name='notifications-list'),
         url(r'^api/', include(api_router.urls)),
     ) +
     vision_patterns() +
