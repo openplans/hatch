@@ -279,7 +279,7 @@ class TwitterService (object):
 
         return Twitter(auth=oauth)
 
-    def get_stream(self, on_behalf_of=None):
+    def get_stream(self, on_behalf_of=None, **kwargs):
         # If user is None, tweet from the app's account
         if on_behalf_of is None:
             oauth = self.get_app_oauth()
@@ -287,7 +287,7 @@ class TwitterService (object):
         else:
             oauth = self.get_user_oauth(on_behalf_of)
 
-        return TwitterStream(auth=oauth)
+        return TwitterStream(auth=oauth, **kwargs)
 
     # ==================================================================
     # Twitter actions
@@ -295,9 +295,15 @@ class TwitterService (object):
     def tweet(self, text, on_behalf_of=None, **extra):
         t = self.get_api(on_behalf_of)
         try:
-            return True, t.statuses.update(status=text, **extra)
+            result = t.statuses.update(status=text, **extra)
         except TwitterHTTPError as e:
             return False, e.response_data
+        else:
+            if on_behalf_of is not None:
+                user_ids = cache.get('listening_user_ids', set())
+                if self.get_user_id(on_behalf_of) not in user_ids:
+                    cache.set('restart_listener', True)
+            return True, result
 
     def add_favorite(self, on_behalf_of, tweet_id, **extra):
         t = self.get_api(on_behalf_of)
@@ -324,7 +330,7 @@ class TwitterService (object):
     # Streaming
     #
     def itertweets(self, on_behalf_of=None, **extra):
-        s = self.get_stream(on_behalf_of)
+        s = self.get_stream(on_behalf_of, block=False)
         return s.statuses.filter(**extra)
 
 

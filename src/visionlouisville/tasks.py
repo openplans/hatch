@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from django.core.cache import cache
 from django.db import IntegrityError
 from django.db.models import Max
 from django.db.transaction import commit_on_success
@@ -48,6 +49,7 @@ def listen_for_tweets():
         .order_by('-most_recent')[:5000]
 
     user_ids = [tweet['tweet_user_id'] for tweet in recent_tweets if tweet['tweet_user_id']]
+    cache.set('listening_user_ids', set(user_ids))
 
     stream_params = {}
     if streaming_keywords:
@@ -62,6 +64,18 @@ def listen_for_tweets():
 
     tweets = twitter_service.itertweets(**stream_params)
     for tweet_data in tweets:
+        if tweet_data is None:
+            # Any time we're not handling a tweet, we should be checking
+            # whether we should restart.
+            if cache.get('restart_listener'):
+                log.info(
+                    "\n*** Someone has told the tweet listener to restart, so I will.\n")
+                cache.delete('restart_listener')
+                return
+            else:
+                sleep(0.03)
+                continue
+
         if 'disconnect' in tweet_data:
             msg = tweet_data['disconnect']
             log.info(
