@@ -320,16 +320,10 @@ var VisionLouisville = VisionLouisville || {};
   });
 
   // Support ==================================================================
-  NS.NoSupportView = Backbone.Marionette.ItemView.extend({
-    template: '#no-support-tpl',
-    tagName: 'li'
-  });
-
   NS.SupportListView = Backbone.Marionette.CompositeView.extend({
     template: '#support-list-tpl',
     itemView: NS.UserAvatarView,
     itemViewContainer: 'ul.user-list',
-    emptyView: NS.NoSupportView,
 
     collectionEvents: {
       "add": "collectionChanged",

@@ -1,4 +1,12 @@
 <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
 {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
-<img class="heart heart-inline" src="/static/images/heart-beige.png"> <span class="support-count visionary-support-count">{{ supporters.length }}</span>
-{{pluralize supporters.length 'Supporter' 'Supporters'}}</a>
+<img class="heart heart-inline" src="/static/images/heart-beige.png">
+
+{{#eq supporters.length 0}}
+<span class="support-count visionary-support-count">Support this!</span>
+{{^}}
+<span class="support-count visionary-support-count">{{ supporters.length }}</span>
+{{pluralize supporters.length 'Supporter' 'Supporters'}}
+{{/eq}}
+
+</a>
