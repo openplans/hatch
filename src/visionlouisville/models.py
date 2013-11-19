@@ -374,6 +374,7 @@ class Category (models.Model):
     title = models.CharField(max_length=100)
     prompt = models.TextField()
     image = models.ImageField(null=True, upload_to='category_images')
+    active = models.BooleanField(default=True, help_text='Uncheck this field to retire the category')
 
     def __unicode__(self):
         return unicode(self.name)

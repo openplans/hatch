@@ -167,6 +167,15 @@ class VisionAdmin (admin.ModelAdmin):
         return VisionViewSet.get_app_tweet_text(self.request, vision)
 
 
+class CategoryAdmin (admin.ModelAdmin):
+    list_display = ('full_name', 'active')
+    list_filter = ('active',)
+    search_fields = ('name', 'title', 'prompt')
+
+    def full_name(self, category):
+        return '%s -- %s' % (category.name, category.title)
+
+
 class ReplyAdmin (admin.ModelAdmin):
     raw_id_fields = ('tweet', 'vision', 'author')
 
@@ -212,5 +221,5 @@ admin.site.register(AppConfig)
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Reply, ReplyAdmin)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tweet, TweetAdmin)
