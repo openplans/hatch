@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 class User (AbstractUser):
     visible_on_home = models.BooleanField(default=True)
     checked_notifications_at = models.DateTimeField(default=now)
+    sm_not_found = models.BooleanField(default=False)
 
     def support(self, vision):
         vision.supporters.add(self)
@@ -59,7 +60,9 @@ class User (AbstractUser):
         # All engagements with those visions
         all_engagements = Reply.objects\
             .filter(vision_id__in=authored_visions|replied_visions|supported_visions)\
+            .exclude(vision__author__sm_not_found=True)\
             .exclude(author=self)\
+            .exclude(author__sm_not_found=True)\
             .order_by('-created_at')
 
         # New engagements since the last time this user checked their

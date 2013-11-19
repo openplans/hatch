@@ -200,8 +200,12 @@ class UserAdmin (BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = BaseUserAdmin.list_display + ('date_joined', 'last_login', 'visible_on_home',)
+    list_display = BaseUserAdmin.list_display + ('date_joined', 'last_login', 'visible_on_home', 'found_on_twitter')
     list_editable = BaseUserAdmin.list_editable + ('visible_on_home',)
+
+    def found_on_twitter(self, obj):
+        return not obj.sm_not_found
+    found_on_twitter.boolean = True
 
 
 admin.site.register(AppConfig)

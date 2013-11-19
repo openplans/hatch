@@ -78,7 +78,12 @@ class TwitterService (object):
             log.info(log_string)
 
             t = self.get_api(on_behalf_of)
-            info = t.users.show(user_id=user_id)
+            try:
+                info = t.users.show(user_id=user_id)
+            except TwitterHTTPError:
+                user.sm_not_found = True
+                user.save(update_fields=['sm_not_found'])
+                raise SocialMediaException('User %s (%s) not found on Twitter' % (user.username, user_id))
             info = dict(info.items())  # info is a WrappedTwitterResponse
             cache.set(cache_key, info)
         return info
@@ -136,7 +141,10 @@ class TwitterService (object):
             questionable_ids = []
 
             for id_group in chunk(user_ids, 100):
-                bulk_info = t.users.lookup(user_id=','.join([str(user_id) for user_id in id_group]))
+                try:
+                    bulk_info = t.users.lookup(user_id=','.join([str(user_id) for user_id in id_group]))
+                except TwitterHTTPError:
+                    bulk_info = []
 
                 for info in bulk_info:
                     cache_key = reverse_data[str(info['id'])]
@@ -170,6 +178,16 @@ class TwitterService (object):
 
             # Add the new info to the already cached info
             all_info.update(new_info)
+
+            # Update the social media found status for all the users.
+            from .models import User
+            
+            seen_users = User.objects.filter(social_auth__uid__in=seen_ids)
+            seen_users.update(sm_not_found=False)
+
+            questionable_users = User.objects.filter(social_auth__uid__in=questionable_ids)
+            questionable_users.update(sm_not_found=True)
+
         return all_info.values()
 
     def get_avatar_url(self, user, on_behalf_of):

@@ -81,7 +81,7 @@ class ManyToNativeMixin (object):
 # ============================================================
 # The serializers
 # ============================================================
-class BaseTwitterInfoSerializer (ModelSerializer):
+class BaseTwitterInfoSerializer (ManyToNativeMixin, ModelSerializer):
     avatar_url = SerializerMethodField('get_avatar_url')
     full_name = SerializerMethodField('get_full_name')
     bio = SerializerMethodField('get_bio')
@@ -93,6 +93,8 @@ class BaseTwitterInfoSerializer (ModelSerializer):
         return self.context['requesting_user']
 
     def get_avatar_url(self, obj):
+        if obj.sm_not_found: return None
+
         service = self.get_twitter_service()
         on_behalf_of = self.get_requesting_user()
         try:
@@ -101,6 +103,8 @@ class BaseTwitterInfoSerializer (ModelSerializer):
             return None
 
     def get_full_name(self, obj):
+        if obj.sm_not_found: return None
+
         service = self.get_twitter_service()
         on_behalf_of = self.get_requesting_user()
         try:
@@ -109,6 +113,8 @@ class BaseTwitterInfoSerializer (ModelSerializer):
             return None
 
     def get_bio(self, obj):
+        if obj.sm_not_found: return None
+
         service = self.get_twitter_service()
         on_behalf_of = self.get_requesting_user()
         try:
@@ -117,13 +123,14 @@ class BaseTwitterInfoSerializer (ModelSerializer):
             return None
 
     def many_to_native(self, many_obj):
-        service = self.get_twitter_service()
-        on_behalf_of = self.get_requesting_user()
+        if any(not user.sm_not_found for user in many_obj):
+            service = self.get_twitter_service()
+            on_behalf_of = self.get_requesting_user()
 
-        # Hit the service so that all the users' info is cached.
-        service.get_users_info(many_obj, on_behalf_of)
+            # Hit the service so that all the users' info is cached.
+            service.get_users_info(many_obj, on_behalf_of)
 
-        return super(UserSerializer, self).many_to_native(many_obj)
+        return super(BaseTwitterInfoSerializer, self).many_to_native(many_obj)
 
 
 class MinimalTwitterUserSerializer (BaseTwitterInfoSerializer):
@@ -168,7 +175,7 @@ class RecentEngagementSerializer (Serializer):
         }
 
 
-class UserSerializer (ManyToNativeMixin, BaseTwitterInfoSerializer):
+class UserSerializer (BaseTwitterInfoSerializer):
     replies = MinimalReplySerializer(many=True, read_only=True)
     visions = MinimalVisionSerializer(many=True, read_only=True)
     supported = MinimalVisionSerializer(many=True, read_only=True)
@@ -179,6 +186,9 @@ class UserSerializer (ManyToNativeMixin, BaseTwitterInfoSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'avatar_url',
                   'full_name', 'bio', 'groups', 'last_login', 'supported',
                   'replies', 'visions')
+
+    def many_to_native(self, obj):
+        return super(UserSerializer, self).many_to_native(obj)
 
 
 class ReplySerializer (ModelSerializer):
