@@ -370,7 +370,7 @@ class TweetedModelMixin (object):
 
 
 class Category (models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, primary_key=True, help_text='The category slug that shows up in the URL. This should not be changed once it is set.')
     title = models.CharField(max_length=100)
     prompt = models.TextField()
     image = models.ImageField(null=True, upload_to='category_images')
