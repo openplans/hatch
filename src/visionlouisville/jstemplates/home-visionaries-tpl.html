@@ -1,3 +1,9 @@
-  <h5>We're sharing our {{app_config 'vision_plural'}}!</h5>
+  <h5>
+    {{#app_config 'visionaries_label'}}
+      {{.}}
+    {{^}}
+      We're sharing our {{app_config 'vision_plural'}}!
+    {{/app_config}}
+  </h5>
   <ul class="user-list visionaries-list unstyled-list clearfix"></ul>
   <a href="/users/list/visionaries" class="btn btn-block">See Everyone</a>

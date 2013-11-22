@@ -499,8 +499,16 @@ class AppConfig (models.Model):
     vision_plural = models.CharField(max_length=50)
     visionary = models.CharField(max_length=50)
     visionary_plural = models.CharField(max_length=50)
+    visionaries_label = models.CharField(max_length=250, help_text="This is "
+        "the text that appears above the list of visionary icons on the home "
+        "page. The default is \"We're sharing our {{vision_plural}}!\".",
+        null=True, blank=True)
     ally = models.CharField(max_length=50)
     ally_plural = models.CharField(max_length=50)
+    allies_label = models.CharField(max_length=250, help_text="This is "
+        "the text that appears above the list of ally icons on the home page."
+        " The default is \"We are {{ally_plural}} in your effort to make "
+        "{{city}} a better place.\".", null=True, blank=True)
     city = models.CharField(max_length=50)
 
     welcome_prompt = models.CharField(max_length=1024)

@@ -212,7 +212,16 @@ var VisionLouisville = VisionLouisville || {};
     if (capitalize === true) {
       val = val.toLowerCase().replace( /(^| )(\w)/g, function(x){return x.toUpperCase();} );
     }
-    return val;
+
+    // If this is a block helper, treat it as such.
+    if (!!options && ('fn' in options || 'inverse' in options)) {
+      return (!!val) ? options.fn(val) : options.inverse(this);
+    }
+
+    // Otherwise, it's a normal helper; just insert the value.
+    else {
+      return val;
+    }
   });
 
 }(VisionLouisville));
