@@ -224,4 +224,18 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
+  Handlebars.registerHelper('current_user', function(key, options) {
+    var val = NS.currentUserData[key];
+
+    // If this is a block helper, treat it as such.
+    if (!!options && ('fn' in options || 'inverse' in options)) {
+      return (!!val) ? options.fn(val) : options.inverse(this);
+    }
+
+    // Otherwise, it's a normal helper; just insert the value.
+    else {
+      return val;
+    }
+  });
+
 }(VisionLouisville));
