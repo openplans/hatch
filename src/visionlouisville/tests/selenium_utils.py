@@ -19,10 +19,11 @@ def make_selenium_driver(options):
     """
     Create and return a selenium driver with the given capability options.
     """
-    return webdriver.Remote(
-        command_executor=settings.SELENIUM_COMMAND_EXECUTOR,
-        desired_capabilities=options
-    )
+    if hasattr(settings, 'SELENIUM_COMMAND_EXECUTOR'):
+        return webdriver.Remote(
+            command_executor=settings.SELENIUM_COMMAND_EXECUTOR,
+            desired_capabilities=options
+        )
 
 
 @nottest
@@ -32,6 +33,12 @@ def selenium_test(func, **options):
     The function is expected to be a class instance method that takes a driver
     argument.
     """
+
+    if not hasattr(settings, 'SELENIUM_COMMAND_EXECUTOR'):
+        test = lambda self, driver: None
+        test.__test__ = False
+        return test
+        
     # Set up defaults and process the options
     options.setdefault('name', func.__name__)
     options.setdefault('javascriptEnabled', True)
@@ -101,6 +108,7 @@ def selenium_test(func, **options):
     @wraps(func)
     def test(self):
         driver = make_selenium_driver(options)
+
         try:
             func(self, driver)
         finally:

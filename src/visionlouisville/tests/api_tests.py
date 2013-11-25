@@ -1,25 +1,51 @@
 from django.test import TestCase, RequestFactory
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, clear_url_caches
 from django.core.cache import cache
 from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
 from ..views import VisionViewSet, UserViewSet, ReplyViewSet
-from ..models import Vision, User, Reply, Category, Tweet
+from ..models import Vision, User, Reply, Category, Tweet, AppConfig
 from social_auth.models import UserSocialAuth
 from mock import patch, Mock
 import json
 
 
 class VisionsTest (TestCase):
+    def setUp(self):
+        AppConfig.objects.create(
+            title='',
+            subtitle='',
+            name='',
+            description='',
+            twitter_handle='',
+            share_title='',
+            url='',
+            vision='vision',
+            vision_plural='visions',
+            visionaries_label='',
+            ally='ally',
+            ally_plural='allies',
+            allies_label='',
+            city='',
+            welcome_prompt='',
+        )
+
+        # Reload the urls to reinitialize the vision routes
+        import visionlouisville.urls
+        reload(visionlouisville.urls)
+        clear_url_caches()
+
     def tearDown(self):
         User.objects.all().delete()
         Vision.objects.all().delete()
+        AppConfig.objects.all().delete()
         cache.clear()
 
     def test_vision_contents(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
-        vision = Vision.objects.create(author=user, text='my vision')
+        category = Category.objects.create(name='a', title='b', prompt='c')
+        vision = Vision.objects.create(author=user, text='my vision', category_id=category.pk)
         factory = RequestFactory()
         params = {'pk': vision.pk}
         url = reverse('vision-detail', kwargs=params)
@@ -43,7 +69,7 @@ class VisionsTest (TestCase):
         url = reverse('vision-list')
 
         class StubTwitterService (object):
-            tweet = Mock(return_value=(True, {'id': 12345}))
+            tweet = Mock(return_value=(True, {'id': 12345, 'user': {'id_str': '2468', 'screen_name': 'bobs_burgers'}}))
 
             def get_avatar_url(self, user, actor=None):
                 return ''
@@ -84,7 +110,7 @@ class VisionsTest (TestCase):
         url = reverse('vision-list')
 
         class StubTwitterService (object):
-            tweet = Mock(return_value=(True, {'id': 12345}))
+            tweet = Mock(return_value=(True, {'id': 12345, 'user': {'id_str': '2468', 'screen_name': 'bobs_burgers'}}))
 
             def get_avatar_url(self, user, actor=None):
                 return ''
@@ -165,7 +191,7 @@ class ReplyTest (TestCase):
         url = reverse('reply-list')
 
         class StubTwitterService (object):
-            tweet = Mock(return_value=(True, {'id': 12345}))
+            tweet = Mock(return_value=(True, {'id': 12345, 'user': {'id_str': '24680', 'screen_name': 'abc'}}))
 
             def get_avatar_url(self, user, actor=None):
                 return ''
