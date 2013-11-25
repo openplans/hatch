@@ -88,13 +88,13 @@ class TweetAdmin (admin.ModelAdmin):
     def assignment(self, tweet):
         try:
             tweet.vision
-            return ('<a href="%s">Vision %s</a>' % (reverse('admin:visionlouisville_vision_change', args=[tweet.vision.id]), tweet.vision.id))
+            return ('<a href="%s">Vision %s</a>' % (reverse('admin:hatch_vision_change', args=[tweet.vision.id]), tweet.vision.id))
         except Vision.DoesNotExist:
             pass
 
         try:
             tweet.reply
-            return ('<a href="%s">Reply %s</a>' % (reverse('admin:visionlouisville_reply_change', args=[tweet.reply.id]), tweet.reply.id))
+            return ('<a href="%s">Reply %s</a>' % (reverse('admin:hatch_reply_change', args=[tweet.reply.id]), tweet.reply.id))
         except Reply.DoesNotExist:
             pass
     assignment.allow_tags = True  # Do not HTML-escape the value

@@ -1,4 +1,4 @@
-var VisionLouisville = VisionLouisville || {};
+var Hatch = Hatch || {};
 
 (function(NS) {
 
@@ -6,4 +6,4 @@ var VisionLouisville = VisionLouisville || {};
     visionsUrlName: 'ideas'
   };
 
-}(VisionLouisville));
+}(Hatch));

@@ -13,6 +13,6 @@ def get_user(request):
         return base_user
 
 
-class VisionLouisvilleAuthMiddleware(object):
+class HatchAuthMiddleware(object):
     def process_request(self, request):
         request.user = SimpleLazyObject(lambda: get_user(request))

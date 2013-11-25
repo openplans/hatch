@@ -1,4 +1,4 @@
-# Django settings for visionlouisville project.
+# Django settings for hatch project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -85,8 +85,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # Server Configuration
 #
 
-WSGI_APPLICATION = 'visionlouisville.wsgi.application'
-ROOT_URLCONF = 'visionlouisville.urls'
+WSGI_APPLICATION = 'hatch.wsgi.application'
+ROOT_URLCONF = 'hatch.urls'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -99,7 +99,7 @@ MIDDLEWARE_CLASSES = (
 
     'social_auth.middleware.SocialAuthExceptionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'visionlouisville.middleware.VisionLouisvilleAuthMiddleware',
+    'hatch.middleware.HatchAuthMiddleware',
 )
 
 SECRET_KEY = 'Set me in local settings!!!'
@@ -111,7 +111,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # Authentication
 #
 
-AUTH_USER_MODEL = 'visionlouisville.User'
+AUTH_USER_MODEL = 'hatch.User'
 
 AUTHENTICATION_BACKENDS = (
     # See http://django-social-auth.readthedocs.org/en/latest/configuration.html
@@ -160,7 +160,7 @@ COMMUNITY_APPS = (
 )
 
 PROJECT_SPECIFIC_APPS = (
-    'visionlouisville',
+    'hatch',
     'utils',
 )
 

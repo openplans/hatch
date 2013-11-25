@@ -42,7 +42,7 @@ local_settings.py
 .dotcloud
 
 # App
-src/visionlouisville/node_modules/
-src/visionlouisville/static/components/
-src/visionlouisville/static/js/*.min.js
-src/visionlouisville/static/css/*.min.css
+src/hatch/node_modules/
+src/hatch/static/components/
+src/hatch/static/js/*.min.js
+src/hatch/static/css/*.min.css
