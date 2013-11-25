@@ -160,6 +160,7 @@ COMMUNITY_APPS = (
 )
 
 PROJECT_SPECIFIC_APPS = (
+    'visionlouisville',
     'hatch',
     'utils',
 )
@@ -191,7 +192,7 @@ djcelery.setup_loader()
 
 # Tests (nose)
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-SOUTH_TESTS_MIGRATE = False
+SOUTH_TESTS_MIGRATE = True
 
 # Debug toolbar
 def custom_show_toolbar(request):
