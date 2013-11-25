@@ -5,7 +5,7 @@ DEBUG = 'True'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'visionlouisville',
+        'NAME': 'hatch',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
@@ -20,16 +20,15 @@ SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 
 # For authenticating users with Twitter
-TWITTER_CONSUMER_KEY = environ.get('TWITTER_CONSUMER_KEY')
-TWITTER_CONSUMER_SECRET = environ.get('TWITTER_CONSUMER_SECRET')
+TWITTER_CONSUMER_KEY = environ.get('TWITTER_CONSUMER_KEY', '')
+TWITTER_CONSUMER_SECRET = environ.get('TWITTER_CONSUMER_SECRET', '')
 
 # For accessing the app's Twitter account
-TWITTER_USERNAME = environ.get('TWITTER_USERNAME')
-TWITTER_ACCESS_TOKEN = environ.get('TWITTER_ACCESS_TOKEN')
-TWITTER_ACCESS_SECRET = environ.get('TWITTER_ACCESS_SECRET')
+TWITTER_USERNAME = environ.get('TWITTER_USERNAME', '')
+TWITTER_ACCESS_TOKEN = environ.get('TWITTER_ACCESS_TOKEN', '')
+TWITTER_ACCESS_SECRET = environ.get('TWITTER_ACCESS_SECRET', '')
 
-# For testing
-from os import environ
+# For UI testing
 SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME') + ':' + environ.get('SAUCE_ACCESS_KEY') + '@ondemand.saucelabs.com:80/wd/hub'
 
 # For sitemaps and caching
@@ -55,7 +54,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
-        'visionlouisville': {
+        'hatch': {
             'handlers': ['console'],
             'level': 'DEBUG',
         },

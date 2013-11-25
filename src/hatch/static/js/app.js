@@ -1,6 +1,6 @@
 /*globals Backbone Handlebars $ _ Swiper Modernizr */
 
-var VisionLouisville = VisionLouisville || {};
+var Hatch = Hatch || {};
 
 (function(NS) {
   'use strict';
@@ -468,4 +468,4 @@ var VisionLouisville = VisionLouisville || {};
     });
   });
 
-}(VisionLouisville));
+}(Hatch));

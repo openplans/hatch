@@ -32,8 +32,8 @@ class VisionsTest (TestCase):
         )
 
         # Reload the urls to reinitialize the vision routes
-        import visionlouisville.urls
-        reload(visionlouisville.urls)
+        import hatch.urls
+        reload(hatch.urls)
         clear_url_caches()
 
     def tearDown(self):
@@ -86,7 +86,7 @@ class VisionsTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+        with patch('hatch.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -127,7 +127,7 @@ class VisionsTest (TestCase):
             def get_users_info(self, users, actor=None):
                 return []
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+        with patch('hatch.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             vision_data = {
                 'author': user.pk,
@@ -159,7 +159,7 @@ class VisionsTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+        with patch('hatch.views.VisionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = VisionViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -205,7 +205,7 @@ class ReplyTest (TestCase):
             def get_url_length(self, url, actor=None):
                 return 20
 
-        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+        with patch('hatch.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = ReplyViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -234,7 +234,7 @@ class ReplyTest (TestCase):
         class StubTwitterService (object):
             tweet = Mock(return_value=(False, 'Something happened!'))
 
-        with patch('visionlouisville.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+        with patch('hatch.views.ReplyViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
             view = ReplyViewSet.as_view({'post': 'create'})
             request = factory.post(url, data=json.dumps({
                     'author': user.pk,
@@ -282,7 +282,7 @@ class UserSerializerTest (TestCase):
                         }
             return StubTwitter()
 
-        with patch('visionlouisville.services.TwitterService.get_api', get_stub_api):
+        with patch('hatch.services.TwitterService.get_api', get_stub_api):
             data = serializer.data
             # Note that we're using the 'bigger' avatar variants.
             self.assertEqual(data.get('avatar_url'), 'http://www.google.com/happy_ducks_bigger.png')

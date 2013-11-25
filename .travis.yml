@@ -4,39 +4,39 @@ python:
   - "2.7"
 env:
   global:
-    # The SAUCE_USERNAME
-    - secure: "beT2Qo2xQBJitPZktH6fSFbdAB4ICKDort3Jb3IpzlT5tMtXYRuI5uziY86W\ncl89dbs5k5K7GvvDv3pn7BNUdqkqDida0GA/GrU9MBO4cCOHfRuNDji3qX3a\n1tmwSU7jx9n10bMHAeF3IZi0wD4fkQSYyxrdmVITnzVCa/tDyPs="
-    # The SAUCE_ACCESS_KEY
-    - secure: "hUHTPDJKesEZCosKqye/24slOF1qiEzFCk704vTbUCDP53WAQupgnclhQl1o\nRaawtNd0EZhgPOfF2H6NGDVXAWBav3ZNxAV66fJ7op2nyai/W3P5mOsHEVA5\nyWAn5ItOcHdxQFZIUi7XTJnvv7m26QUZMIMbR02fvPuPqDKAzqw="
+    # SauceLabs username and access key
+    secure: "PFdhvKuGnBykALefsoQom1pVtDzwfMzJJFESBnsdB8W0VvQ2EPghKqwxBEpw\nonpin2Cw4ntMqi39LgxKmOJg9I+s1xSwdP4V4Dvk8prrFe0z88NjD1gnCFmM\nzGG+bZCMAOdtP86eJ9wja3NMBHV71LFLbhJcSOlShBGpMJU0V+A="
 
-    # Twitter usernanme
-    - secure: "ClrkGRpMR5IAk255pI3n22BVbL180NbTPeOHxs9EBnFaFXor2CeH+F1HZHGq\nZ5+f0IDegrZYw6Vw4dcpSFga+HlOiY3H2GiGqWMsHA+9OGq8IhUsmwIkIEVf\nETRJ7pWwHhhBQWwAcjrTVPHa+dy2HpcFDidMvL1bmDCEO7v3xTI="
-    # Twitter password
-    - secure: "fJX9pkxhWXt+4EeedJa++w8ffSkd0E6v1KOj2towdag74b9nSBpOPFxTaKH4\nWSaLmLDSGpTOzVx8QxnePJLufEykFD6ZWwMRIdf+ahwfgDGCG4AtMorA8UMj\n90bdaQVlDvv5UzgYH2BSZs08pFMACHs5rPR/rPGTLlFHUtZmUUo="
+    # # Twitter usernanme
+    # - secure: "ClrkGRpMR5IAk255pI3n22BVbL180NbTPeOHxs9EBnFaFXor2CeH+F1HZHGq\nZ5+f0IDegrZYw6Vw4dcpSFga+HlOiY3H2GiGqWMsHA+9OGq8IhUsmwIkIEVf\nETRJ7pWwHhhBQWwAcjrTVPHa+dy2HpcFDidMvL1bmDCEO7v3xTI="
+    # # Twitter password
+    # - secure: "fJX9pkxhWXt+4EeedJa++w8ffSkd0E6v1KOj2towdag74b9nSBpOPFxTaKH4\nWSaLmLDSGpTOzVx8QxnePJLufEykFD6ZWwMRIdf+ahwfgDGCG4AtMorA8UMj\n90bdaQVlDvv5UzgYH2BSZs08pFMACHs5rPR/rPGTLlFHUtZmUUo="
 
-    # TWITTER_CONSUMER_SECRET
-    - secure: "VT4E8dFJa8aagaulCt91sRVPLzZD5PhkfqKHHQjC5JTBS9aWr6DHksjVgv85\nPrYVoJ4FdMJchM7wCLhT4Isw17NAMNV2+EFcsYMLfAZD40qSijKucWTdAaw9\nQvnatKlnLC15Cr2i1zNtNGBOGKE3AoRbz5z6PWiZh7VP4kz6Arw="
-    # TWITTER_CONSUMER_KEY
-    - secure: "I0M4IUhcEzwj1e4Ec/5H9da66qjJO7RMw4R6bNg5Cli5CNEoLGsBDkBjxtCb\no84td3hTxh+PR9Fl7a8yQl6jL4HZH0NWZSVP4J9bia/XFR6D61Dj6lBtz3U3\nevM0kbJ9QdoFQ2rZUIzVf0MdMX9pNIyVR4x1XiGJYn1VPizAWoM="
-    # TWITTER_ACCESS_TOKEN
-    - secure: "WoK/Uv3UzOdXurQ4P7LjV47ssQ2LyBJehSV2zS40zEPmijvhZVf5rAAT+blh\nS4QRFrUl74oLMouYN0ZtFe35mqexMC+NI87/daenbbdidWd9IdmfHyI3sidM\nIguGSyPomBakWn12w+vR5/L5L7wNath7g6hKQiw1k+LCQVUvzGk="
-    # TWITTER_ACCESS_SECRET
-    - secure: "aPH/BmsaH5VwlgisKe4MUtYer6P+vNeOgrNMjkUWpfLgJcGVT7juGnl5qtja\nfGOUocwHC2dP01QJK6txWhWBuvmde8BVLVPDO9XapB3Bw9j3VbYoAmzi2wdM\nSecWbCgoQ6XkXjmJEYO7jMiYRdPiLyv6MSVnUBfh6oqqe08Gqeo="
+    # # TWITTER_CONSUMER_SECRET
+    # - secure: "VT4E8dFJa8aagaulCt91sRVPLzZD5PhkfqKHHQjC5JTBS9aWr6DHksjVgv85\nPrYVoJ4FdMJchM7wCLhT4Isw17NAMNV2+EFcsYMLfAZD40qSijKucWTdAaw9\nQvnatKlnLC15Cr2i1zNtNGBOGKE3AoRbz5z6PWiZh7VP4kz6Arw="
+    # # TWITTER_CONSUMER_KEY
+    # - secure: "I0M4IUhcEzwj1e4Ec/5H9da66qjJO7RMw4R6bNg5Cli5CNEoLGsBDkBjxtCb\no84td3hTxh+PR9Fl7a8yQl6jL4HZH0NWZSVP4J9bia/XFR6D61Dj6lBtz3U3\nevM0kbJ9QdoFQ2rZUIzVf0MdMX9pNIyVR4x1XiGJYn1VPizAWoM="
+    # # TWITTER_ACCESS_TOKEN
+    # - secure: "WoK/Uv3UzOdXurQ4P7LjV47ssQ2LyBJehSV2zS40zEPmijvhZVf5rAAT+blh\nS4QRFrUl74oLMouYN0ZtFe35mqexMC+NI87/daenbbdidWd9IdmfHyI3sidM\nIguGSyPomBakWn12w+vR5/L5L7wNath7g6hKQiw1k+LCQVUvzGk="
+    # # TWITTER_ACCESS_SECRET
+    # - secure: "aPH/BmsaH5VwlgisKe4MUtYer6P+vNeOgrNMjkUWpfLgJcGVT7juGnl5qtja\nfGOUocwHC2dP01QJK6txWhWBuvmde8BVLVPDO9XapB3Bw9j3VbYoAmzi2wdM\nSecWbCgoQ6XkXjmJEYO7jMiYRdPiLyv6MSVnUBfh6oqqe08Gqeo="
 
 install:
   - pip install -r requirements.txt
   - pip install coverage selenium
-  - cp src/visionlouisville/local_settings.py.template src/visionlouisville/local_settings.py
+  - cp src/hatch/local_settings.py.template src/hatch/local_settings.py
 
 before_script:
-  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
-  - psql -c 'create database visionlouisville;' -U postgres
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash -vx
+  - psql -c 'create database hatch;' -U postgres
   - "python src/manage.py runserver &"
 
 script:
-  - python src/manage.py test --with-coverage --cover-package=visionlouisville
+  - python src/manage.py test --with-coverage --cover-package=hatch
 
 notifications:
   email:
     - dev@openplans.org
     - mpoe@openplans.org
+  on_success: change
+  on_failure: always

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from visionlouisville.tasks import refresh_users
+from hatch.tasks import refresh_users
 
 from logging import getLogger
 log = getLogger(__name__)

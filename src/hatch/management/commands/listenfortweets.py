@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.timezone import now, timedelta
-from visionlouisville.tasks import listen_for_tweets
+from hatch.tasks import listen_for_tweets
 
 from twitter import TwitterHTTPError
 from ssl import SSLError

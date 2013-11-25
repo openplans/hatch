@@ -116,7 +116,7 @@ class AppMixin (object):
         else:
             user = None
 
-        context['NS'] = 'VisionLouisville'
+        context['NS'] = 'Hatch'
         context['twitter_config'] = json.dumps(service.get_config(user))
 
         category_query = self.get_category_queryset()
@@ -175,23 +175,23 @@ class EnsureCSRFCookieMixin (object):
 
 # App
 class AppView (AppMixin, EnsureCSRFCookieMixin, TemplateView):
-    template_name = 'visionlouisville/index.html'
+    template_name = 'hatch/index.html'
 
 
 class VisionInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
-    template_name = 'visionlouisville/index.html'
+    template_name = 'hatch/index.html'
     model = Vision
     context_object_name = 'vision'
 
 
 class CategoryInstanceView (AppMixin, EnsureCSRFCookieMixin, DetailView):
-    template_name = 'visionlouisville/index.html'
+    template_name = 'hatch/index.html'
     model = Category
     context_object_name = 'category'
 
 
 class SecretAllySignupView (AppMixin, EnsureCSRFCookieMixin, FormView):
-    template_name = 'visionlouisville/index.html'
+    template_name = 'hatch/index.html'
     form_class = SecretAllySignupForm
 
     def get_success_url(self):
@@ -334,7 +334,7 @@ class ReplyViewSet (AppMixin, ModelViewSet):
 
 
 class SiteMapView (AppMixin, TemplateView):
-    template_name = 'visionlouisville/sitemap.xml'
+    template_name = 'hatch/sitemap.xml'
 
     def get_visions_data(self):
         visions = self.get_vision_queryset()
@@ -442,7 +442,7 @@ home_app_view = AppView.as_view()
 vision_detail_app_view = VisionInstanceView.as_view()
 category_app_view = CategoryInstanceView.as_view()
 secret_ally_signup_view = SecretAllySignupView.as_view()
-robots_view = TemplateView.as_view(template_name='visionlouisville/robots.txt', content_type='text/plain')
+robots_view = TemplateView.as_view(template_name='hatch/robots.txt', content_type='text/plain')
 sitemap_view = SiteMapView.as_view(content_type='text/xml')
 
 

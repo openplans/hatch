@@ -1,6 +1,6 @@
 /*globals Backbone Handlebars $ _ Countable Event Swiper */
 
-var VisionLouisville = VisionLouisville || {};
+var Hatch = Hatch || {};
 
 (function(NS) {
   // Handlebars support for Marionette
@@ -607,4 +607,4 @@ var VisionLouisville = VisionLouisville || {};
     emptyView: NS.NotificationEmptyView
   });
 
-}(VisionLouisville));
+}(Hatch));

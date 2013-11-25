@@ -1,6 +1,6 @@
 /*globals Backbone $ _ */
 
-var VisionLouisville = VisionLouisville || {};
+var Hatch = Hatch || {};
 
 (function(NS) {
   'use strict';
@@ -239,4 +239,4 @@ var VisionLouisville = VisionLouisville || {};
     model: NS.UserModel
   });
 
-}(VisionLouisville));
+}(Hatch));

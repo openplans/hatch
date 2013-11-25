@@ -1,6 +1,6 @@
 /*globals Handlebars $ _ moment */
 
-var VisionLouisville = VisionLouisville || {};
+var Hatch = Hatch || {};
 
 (function(NS) {
   Handlebars.registerHelper('debug', function(obj) {
@@ -238,4 +238,4 @@ var VisionLouisville = VisionLouisville || {};
     }
   });
 
-}(VisionLouisville));
+}(Hatch));
