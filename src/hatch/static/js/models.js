@@ -70,6 +70,8 @@ var Hatch = Hatch || {};
       parent.on('remove', function(model) {
         if (self.get(model.cid)) self.remove(model);
       });
+
+      this.reset(parent.filter(key));
     }
   });
 
