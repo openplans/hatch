@@ -430,16 +430,19 @@ var Hatch = Hatch || {};
 
   // Init =====================================================================
   $(function() {
-    NS.app.visionCollection = new NS.VisionCollection();
-    NS.app.visionCollection.on('reset', function(coll) {
+    var setIsFetched = function(coll) {
       coll.isFetched = true;
-    });
+    };
+
+    NS.app.visionCollection = new NS.VisionCollection();
+    NS.app.visionCollection.on('reset', setIsFetched);
     NS.app.visionCollection.fetch({
       reset: true,
       cache: false
     });
 
     NS.app.userCollection = new NS.UserCollection();
+    NS.app.userCollection.on('reset', setIsFetched);
     NS.app.userCollection.fetch({
       reset: true,
       cache: false,
