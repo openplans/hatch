@@ -19,7 +19,7 @@ var Hatch = Hatch || {};
     };
 
     // Nothing in the collection? It's not done fetching. Let's wait for it.
-    if (collection.size() === 0) {
+    if (!(collection.isFetched || (collection.parent && collection.parent.isFetched))) {
 
       // Show a spinner until we load the content.
       if (options && options.spinner) {
@@ -431,6 +431,9 @@ var Hatch = Hatch || {};
   // Init =====================================================================
   $(function() {
     NS.app.visionCollection = new NS.VisionCollection();
+    NS.app.visionCollection.on('reset', function(coll) {
+      coll.isFetched = true;
+    });
     NS.app.visionCollection.fetch({
       reset: true,
       cache: false
