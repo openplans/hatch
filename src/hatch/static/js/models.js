@@ -51,6 +51,28 @@ var Hatch = Hatch || {};
     }
   });
 
+  NS.FilteredCollection = Backbone.Collection.extend({
+    constructor: function(parent, key) {
+      // Construct as a normal empty collection
+      Backbone.Collection.apply(this);
+
+      var self = this;
+      this.parent = parent;
+      this.key = key;
+
+      // Listen to events on the parent to stay in sync
+      parent.on('reset', function() {
+        self.reset(parent.filter(key));
+      });
+      parent.on('add', function(model) {
+        if (key(model)) self.add(model);
+      });
+      parent.on('remove', function(model) {
+        if (self.get(model.cid)) self.remove(model);
+      });
+    }
+  });
+
   NS.VisionCollection = Backbone.Collection.extend({
     url: '/api/visions/',
     comparator: function(vision) {

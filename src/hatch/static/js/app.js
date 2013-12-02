@@ -86,11 +86,12 @@ var Hatch = Hatch || {};
 
         if (options.listCategory) {
           model = new Backbone.Model({category: options.listCategory});
-          collection = new Backbone.Collection(
-            collection.filter(function(model) {
+          collection = new NS.FilteredCollection(
+            collection,
+            function(model) {
               var category = model.get('category');
               return (!!category ? category : '').toLowerCase() === options.listCategory;
-            }));
+            });
         } else {
           model = new Backbone.Model();
           collection = NS.app.visionCollection;
