@@ -235,11 +235,11 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        attribution = u' —@%s ' % (username,)
-        vision_length = 140 - len(attribution) - url_length - 2
+        attribution = u'@%s ' % (username,)
+        vision_length = 140 - len(attribution) - url_length - 3
         return ''.join([
-            '"', Truncator(vision.text).chars(vision_length, u'…'), '"',
             attribution,
+            '"', Truncator(vision.text).chars(vision_length, u'…'), '" ',
             vision_url
         ])
 
@@ -413,7 +413,7 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         vision = self.get_object()
         service = self.get_twitter_service()
         success, response = service.retweet(
-            vision.tweet_id, self.request.user)
+            vision.app_tweet_id, self.request.user)
 
         if success:
             tweet_id = response['id']

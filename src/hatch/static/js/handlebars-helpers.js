@@ -116,9 +116,9 @@ var Hatch = Hatch || {};
         username = vision.author_details.username,
         urlLength = NS.twitterConf.short_url_length,
 
-        attribution = ' \u2014@' + username + ' ',
-        visionLength = 140 - attribution.length - urlLength - 2;
-    return '"' + NS.Utils.truncateChars(vision.text, visionLength, '\u2026') + '"' + attribution + visionUrl;
+        attribution = '@' + username + ' ',
+        visionLength = 140 - attribution.length - urlLength - 3;
+    return attribution + '"' + NS.Utils.truncateChars(vision.text, visionLength, '\u2026') + '" ' + visionUrl;
   }
 
   function linebreaks(text) {
