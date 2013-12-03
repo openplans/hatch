@@ -55,7 +55,6 @@ class AppMixin (object):
 
     def get_vision_queryset(self, base_queryset=None):
         return (base_queryset or Vision.objects.all())\
-            .filter(category__active=True)\
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('author__groups')\
@@ -83,7 +82,7 @@ class AppMixin (object):
             .prefetch_related('groups')
 
     def get_category_queryset(self, base_queryset=None):
-        return (base_queryset or Category.objects.filter(active=True))
+        return (base_queryset or Category.objects.all())
 
     def get_recent_engagements(self):
         user = self.request.user
@@ -144,7 +143,7 @@ class AppMixin (object):
             user_data = serializer.data
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data, cls=JSONEncoder)
-            
+
             # Bootstrap notifications
             count, qs = user.get_recent_engagements()
 
