@@ -1,9 +1,10 @@
 from django.conf import settings
-from django.core.cache import cache
+from django.core import cache as django_cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from twitter.stream import TwitterStream
 from urlparse import parse_qs
 import re
+from .cache import cache_buffer as cache
 from .utils import chunk
 
 from logging import getLogger
@@ -320,7 +321,9 @@ class TwitterService (object):
             if on_behalf_of is not None:
                 user_ids = cache.get('listening_user_ids', set())
                 if self.get_user_id(on_behalf_of) not in user_ids:
-                    cache.set('restart_listener', True)
+                    # Since we're communicating with a different process, go
+                    # directly to the central cache.
+                    django_cache.cache.set('restart_listener', True)
             return True, result
 
     def add_favorite(self, on_behalf_of, tweet_id, **extra):
