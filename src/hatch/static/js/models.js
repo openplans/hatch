@@ -9,6 +9,7 @@ var Hatch = Hatch || {};
 
   // Visions ==================================================================
   NS.VisionModel = Backbone.RelationalModel.extend({
+    urlRoot: '/api/visions/',
     relations: [{
       type: Backbone.HasMany,
       key: 'replies',
@@ -76,7 +77,7 @@ var Hatch = Hatch || {};
   });
 
   NS.VisionCollection = Backbone.Collection.extend({
-    url: '/api/visions/',
+    url: '/api/visions',
     comparator: function(vision) {
       var dateString = vision.get('tweeted_at'),
           date = new Date(_.isUndefined(dateString) ? null : dateString);
@@ -92,7 +93,7 @@ var Hatch = Hatch || {};
   NS.ReplyModel = Backbone.RelationalModel.extend({});
 
   NS.ReplyCollection = Backbone.Collection.extend({
-    url: '/api/replies/',
+    url: '/api/replies',
     comparator: 'tweeted_at',
     model: NS.ReplyModel
   });
@@ -210,7 +211,7 @@ var Hatch = Hatch || {};
   });
 
   NS.UserCollection = Backbone.Collection.extend({
-    url: '/api/users/',
+    url: '/api/users',
     comparator: function(user1, user2) {
       var orderByGroup = function(group) {
             if (user1.isInGroup(group) && !user2.isInGroup(group)) {

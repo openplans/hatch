@@ -456,7 +456,7 @@ notifications_api_view = NotificationsViewSet.as_view({'get': 'list',
                                                        'delete': 'clear'})
 
 # Setup the API routes
-api_router = DefaultRouter()
+api_router = DefaultRouter(trailing_slash=False)
 api_router.register('visions', VisionViewSet)
 api_router.register('users', UserViewSet)
 api_router.register('replies', ReplyViewSet)

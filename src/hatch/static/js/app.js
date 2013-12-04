@@ -10,14 +10,10 @@ var Hatch = Hatch || {};
     if (!NS.app.visionCollections[category]) {
       NS.app.visionCollections[category] = new NS.VisionCollection();
       NS.app.visionCollections[category].fetch({
-        data: { category: category },
-        success: function() {
-          if (callback) { callback(NS.app.visionCollections[category]); }
-        }
+        data: { category: category }
       });
-    } else {
-      if (callback) { callback(NS.app.visionCollections[category]); }
     }
+    return NS.app.visionCollections[category];
   };
 
   // Create a view and show it in a region only AFTER you get results back from
@@ -98,7 +94,7 @@ var Hatch = Hatch || {};
       document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: category}).prompt;
 
       NS.app.mainRegion.show(new NS.VisionListView({
-        model: new Backbone.Model({category: category}),
+        // model: new Backbone.Model({category: category}),
         collection: NS.app.visionCollections[category]
       }));
     },
@@ -123,6 +119,8 @@ var Hatch = Hatch || {};
       }));
     },
     showVision: function(category, visionId) {
+      var model;
+
       // Set to an int
       visionId = parseInt(visionId, 10);
 
@@ -131,9 +129,8 @@ var Hatch = Hatch || {};
         return;
       }
 
-      NS.getVisionCollection(category, function(collection) {
-        var model = collection.get(visionId),
-            layout = new NS.VisionDetailLayout({
+      function renderVision(model) {
+        var layout = new NS.VisionDetailLayout({
               model: model
             });
 
@@ -159,7 +156,20 @@ var Hatch = Hatch || {};
         if (NS.app.currentUser) {
           NS.app.currentUser.viewVision(visionId);
         }
-      });
+
+      }
+
+      if (NS.app.visionCollections[category] && NS.app.visionCollections[category].get(visionId)) {
+        model = NS.app.visionCollections[category].get(visionId);
+        renderVision(model);
+      } else {
+        model = new NS.VisionModel({id: visionId});
+        model.fetch({
+          success: function(model, response, options) {
+            renderVision(model);
+          }
+        });
+      }
     },
     home: function(category) {
       category = category || NS.app.activeCategory;
@@ -195,12 +205,11 @@ var Hatch = Hatch || {};
       // Render the main view
       NS.app.mainRegion.show(homeView);
 
-      NS.getVisionCollection(category, function(collection) {
-        homeView.visions.show(new NS.VisionListView({
-          model: new Backbone.Model({category: category}),
-          collection: collection
-        }));
-      });
+
+      homeView.visions.show(new NS.VisionListView({
+        // model: new Backbone.Model({category: category}),
+        collection: NS.getVisionCollection(category)
+      }));
 
       // Render visionaries
       NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
@@ -439,10 +448,7 @@ var Hatch = Hatch || {};
     };
 
     NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
-
     NS.app.visionCollections = {};
-    // Init and fetch the active collection
-    NS.getVisionCollection(NS.app.activeCategory);
 
     NS.app.userCollection = new NS.UserCollection();
     NS.app.userCollection.on('reset', setIsFetched);
