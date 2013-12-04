@@ -76,7 +76,29 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.VisionCollection = Backbone.Collection.extend({
+  NS.PaginatedCollection = Backbone.Collection.extend({
+    parse: function(response) {
+      this.metadata = _.clone(response);
+      delete this.metadata.results;
+
+      return response.results;
+    },
+
+    fetchNextPage: function(success, error) {
+      var collection = this;
+
+      if (this.metadata.next) {
+        collection.fetch({
+          remove: false,
+          url: collection.metadata.next,
+          success: success,
+          error: error
+        });
+      }
+    }
+  });
+
+  NS.VisionCollection = NS.PaginatedCollection.extend({
     url: '/api/visions',
     comparator: function(vision) {
       var dateString = vision.get('tweeted_at'),
@@ -210,7 +232,7 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.UserCollection = Backbone.Collection.extend({
+  NS.UserCollection = NS.PaginatedCollection.extend({
     url: '/api/users',
     comparator: function(user1, user2) {
       var orderByGroup = function(group) {
