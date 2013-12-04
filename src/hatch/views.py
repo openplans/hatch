@@ -222,7 +222,7 @@ class VisionViewSet (AppMixin, ModelViewSet):
 
         category = self.request.GET.get('category')
         if (category):
-            queryset = queryset.filter(category__iexact=category)
+            queryset = queryset.filter(category__name__iexact=category)
 
         return queryset
 

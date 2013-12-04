@@ -1,5 +1,5 @@
 {{# if category }}
-<p class="in-response-to"><a href="/{{visions_url_name}}/{{ category }}/list">{{ category_prompt category }}</a></p>
+<p class="in-response-to"><a href="/{{visions_url_name}}/{{ category }}">{{ category_prompt category }}</a></p>
 {{/ if }}
 
 <div class="container container-primary">
@@ -41,7 +41,7 @@
       <span class="tweet-icon"><img class="tweet-icon-reply" src="/static/images/reply-icon.png"></span> Reply</a>
 
       {{# if category }}
-      <!-- <a href="/{{visions_url_name}}/{{ category }}/list" class="category-link"><strong class="capitalize">{{ category }}</strong></a> -->
+      <!-- <a href="/{{visions_url_name}}/{{ category }}" class="category-link"><strong class="capitalize">{{ category }}</strong></a> -->
       {{/ if }}
 
       {{#if_authenticated}}

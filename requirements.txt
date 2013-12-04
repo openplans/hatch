@@ -39,7 +39,7 @@ django-social-auth
 # APIs
 # ==============================
 
-djangorestframework
+djangorestframework==2.3.7
 PIL  # For image verification
 
 

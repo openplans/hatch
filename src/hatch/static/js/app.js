@@ -10,12 +10,13 @@ var Hatch = Hatch || {};
     if (!NS.app.visionCollections[category]) {
       NS.app.visionCollections[category] = new NS.VisionCollection();
       NS.app.visionCollections[category].fetch({
+        data: { category: category },
         success: function() {
-          callback(NS.app.visionCollections[category]);
+          if (callback) { callback(NS.app.visionCollections[category]); }
         }
       });
     } else {
-      callback(NS.app.visionCollections[category]);
+      if (callback) { callback(NS.app.visionCollections[category]); }
     }
   };
 
@@ -440,13 +441,8 @@ var Hatch = Hatch || {};
     NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
 
     NS.app.visionCollections = {};
-    NS.app.visionCollections[NS.app.activeCategory] = new NS.VisionCollection();
-    NS.app.visionCollections[NS.app.activeCategory].fetch({
-      data: {
-        // category: NS.app.activeCategory
-      },
-      cache: false
-    });
+    // Init and fetch the active collection
+    NS.getVisionCollection(NS.app.activeCategory);
 
     NS.app.userCollection = new NS.UserCollection();
     NS.app.userCollection.on('reset', setIsFetched);
