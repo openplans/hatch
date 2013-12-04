@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Countable Event Swiper */
+/*globals Backbone Handlebars $ _ Countable Event */
 
 var Hatch = Hatch || {};
 
@@ -120,13 +120,6 @@ var Hatch = Hatch || {};
       visionaries: '.visionaries-region',
       allies: '.allies-region',
       visions: '.visions-region'
-    },
-    onShow: function() {
-      // TODO: Remove this when we're in a place to update the styles
-      self.swiper = new Swiper(this.$('.swiper-container').get(0), {
-        loop: true,
-        calculateHeight: true
-      });
     }
   });
 
