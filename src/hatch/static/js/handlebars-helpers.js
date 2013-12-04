@@ -218,11 +218,8 @@ var Hatch = Hatch || {};
     return formatTextForHTML(content, {links: false});
   });
 
-  Handlebars.registerHelper('app_config', function(key, capitalize, options) {
+  Handlebars.registerHelper('app_config', function(key, options) {
     var val = NS.appConfig[key];
-    if (capitalize === true) {
-      val = val.toLowerCase().replace( /(^| )(\w)/g, function(x){return x.toUpperCase();} );
-    }
 
     // If this is a block helper, treat it as such.
     if (!!options && ('fn' in options || 'inverse' in options)) {

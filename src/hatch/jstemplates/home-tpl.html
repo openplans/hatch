@@ -2,29 +2,15 @@
   {{> welcome-tpl }}
 
   <div class="visions-region"></div>
-  <div class="visionaries-region"></div>
-  <div class="allies-region"></div>
 
   <div class="container-fullwidth welcome site-footer" id="site-footer">
 
     <h5>What is {{app_config 'title'}}?</h5>
     <p><strong>{{app_config 'title'}}</strong> is a place to share your {{app_config 'vision_plural'}} for making {{app_config 'city'}} better.  All idea shared here will shared with the City of {{app_config 'city'}}.</p>
 
-    <h5>Share your {{app_config 'vision_plural'}}.</h5>
-    <p>Have a great idea for the future of {{app_config 'city'}}?
+    <div class="visionaries-region"></div>
 
-      {{#if_authenticated}}
-      <strong>Add it here!</strong>
-      {{^}}
-      <a href="{{ LOGIN_URL }}"><strong>Sign in with your Twitter account</strong></a>
-      to add it!
-      {{/if_authenticated}}
-      Explore {{app_config 'vision_plural'}} of others, add comments and hearts to show your support.
-    </p>
-    <p>Want to share something you love about {{app_config 'city'}}? Tweet with the hashtag <strong>{{app_config 'title'}}</strong> and see what {{app_config 'vision_plural'}} you inspire from others.</p>
-
-    <h5>{{app_config 'ally_plural' true}} are listening.</h5>
-    <p><strong>{{app_config 'ally_plural' true}}</strong> are community leaders using {{app_config 'title'}} to hear {{app_config 'vision_plural'}} for the future of {{app_config 'city'}}. They're engaging with visionary citizens by reading and sharing {{app_config 'vision_plural'}}, clicking to show support, and adding comments to help {{app_config 'vision_plural'}} become better defined.</p>
+    <div class="allies-region"></div>
 
     <h5>Give us your feedback.</h5>
     <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.

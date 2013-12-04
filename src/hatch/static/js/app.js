@@ -94,7 +94,7 @@ var Hatch = Hatch || {};
       document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: category}).prompt;
 
       NS.app.mainRegion.show(new NS.VisionListView({
-        // model: new Backbone.Model({category: category}),
+        model: new Backbone.Model({category: category}),
         collection: NS.app.visionCollections[category]
       }));
     },
@@ -207,7 +207,7 @@ var Hatch = Hatch || {};
 
 
       homeView.visions.show(new NS.VisionListView({
-        // model: new Backbone.Model({category: category}),
+        model: new Backbone.Model({category: category}),
         collection: NS.getVisionCollection(category)
       }));
 

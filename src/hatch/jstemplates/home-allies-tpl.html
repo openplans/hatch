@@ -1,9 +1,18 @@
   <h5>
     {{#app_config 'allies_label'}}
-      {{.}}
+      {{{.}}}
     {{^}}
       We are {{app_config 'ally_plural'}} in your effort to make {{app_config 'city'}} a better place for young people.
     {{/app_config}}
   </h5>
   <ul class="user-list allies-list unstyled-list clearfix"></ul>
-  <a href="/users/list/allies" class="btn btn-block">See all {{app_config 'ally_plural'}}</a>
+
+  <p>
+    {{#app_config 'allies_description'}}
+      {{.}}
+    {{^}}
+      The {{app_config 'ally_plural'}} are community leaders using {{app_config 'title'}} to hear {{app_config 'vision_plural'}} for the future of {{app_config 'city'}}. They're engaging with visionary citizens by reading and sharing {{app_config 'vision_plural'}}, clicking to show support, and adding comments to help {{app_config 'vision_plural'}} become better defined.
+    {{/app_config}}
+  </p>
+
+  <!-- <a href="/users/list/allies" class="btn btn-block">See all {{app_config 'ally_plural'}}</a> -->

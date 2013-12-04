@@ -1,8 +1,4 @@
 <div class="container-fullwidth welcome">
-  <!-- <div class="welcome-header">
-    <h2 class="welcome-prompt">{{app_config 'welcome_prompt'}}</h2>
-  </div> -->
-
   <div class="container-fullwidth">
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -16,7 +12,7 @@
             <div class="slide-header">
               <h1 class="slide-question"><a href="/{{visions_url_name}}/{{name}}">{{ prompt }}</a></h1>
               <div class="slide-meta">
-                {{#if vision_count}}<span class="slide-stat"><strong class="ideas-count">{{ vision_count }}</strong> {{#if_plural vision_count}}{{app_config 'vision_plural' true}}{{^}}{{app_config 'vision' true}}{{/if_plural}}</span>{{/if}}
+                {{#if vision_count}}<span class="slide-stat"><strong class="ideas-count">{{ vision_count }}</strong> {{#if_plural vision_count}}{{app_config 'vision_plural'}}{{^}}{{app_config 'vision'}}{{/if_plural}}</span>{{/if}}
                 {{#if support_count}}<span class="slide-stat"><strong class="favorites-count">{{ support_count }}</strong> {{#if_plural support_count}}Supporters{{^}}Supporter{{/if_plural}}</span>{{/if}}
                 {{#if reply_count}}<span class="slide-stat"><strong class="comments-count">{{ reply_count }}</strong> {{#if_plural reply_count}}Comments{{^}}Comment{{/if_plural}}</span>{{/if}}
               </div>
