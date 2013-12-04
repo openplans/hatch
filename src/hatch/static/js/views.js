@@ -118,47 +118,15 @@ var Hatch = Hatch || {};
     template: '#home-tpl',
     regions: {
       visionaries: '.visionaries-region',
-      allies: '.allies-region'
+      allies: '.allies-region',
+      visions: '.visions-region'
     },
     onShow: function() {
-      var self = this,
-          interval = 8000,
-          intervalId;
-
-      function clearInterval() {
-        if (intervalId) {
-          window.clearInterval(intervalId);
-          intervalId = null;
-        }
-      }
-
-      // It is important for this everything to be in the DOM for swiper to
-      // be a happy little plugin.
+      // TODO: Remove this when we're in a place to update the styles
       self.swiper = new Swiper(this.$('.swiper-container').get(0), {
         loop: true,
-        pagination: this.$('.pagination').get(0),
-        paginationClickable: true,
-        calculateHeight: true,
-        onTouchStart: function() {
-          clearInterval(intervalId);
-        }
+        calculateHeight: true
       });
-
-      self.$('.pagination-btn-prev').click(function(evt) {
-        evt.preventDefault();
-        clearInterval(intervalId);
-        self.swiper.swipePrev();
-      });
-
-      self.$('.pagination-btn-next').click(function(evt) {
-        evt.preventDefault();
-        clearInterval(intervalId);
-        self.swiper.swipeNext();
-      });
-
-      intervalId = window.setInterval(function() {
-        self.swiper.swipeNext();
-      }, interval);
     }
   });
 
@@ -182,14 +150,7 @@ var Hatch = Hatch || {};
   NS.VisionListView = Backbone.Marionette.CompositeView.extend({
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
-    itemViewContainer: 'ul.vision-list',
-    events: {
-      'click .vision-category-list-toggle-btn': 'toggleCategoryList'
-    },
-    toggleCategoryList: function(evt) {
-      evt.preventDefault();
-      this.$('.vision-category-list').toggleClass('is-toggled-open');
-    }
+    itemViewContainer: 'ul.vision-list'
   });
 
   // Replies ==================================================================

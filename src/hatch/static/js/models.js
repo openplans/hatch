@@ -85,29 +85,6 @@ var Hatch = Hatch || {};
     model: NS.VisionModel,
     getFeatured: function() {
       return this.where({'featured': true});
-    },
-    getMostSupportedByCategory: function() {
-      function sortByCategory(a, b) {
-        var aLen = a.get('supporters').length,
-            bLen = b.get('supporters').length;
-
-        if (aLen < bLen) {
-          return -1;
-        } else if (bLen < aLen) {
-          return 1;
-        }
-        return 0;
-      }
-
-      var visionsByCategory = this.groupBy('category'),
-          mostSupported = [];
-
-      _.each(visionsByCategory, function(modelList, cat) {
-        var model = _.last(modelList.sort(sortByCategory));
-        mostSupported.push(model);
-      });
-
-      return mostSupported;
     }
   });
 
@@ -132,9 +109,9 @@ var Hatch = Hatch || {};
     // NOTE: This was causing a some sort of infinite loop.
     // TODO: Know enough about backbone-relational to know when and why an
     //       infinite loop would be caused by this. When you figure that out
-    //       (and fix it), also change the user list view instantiations in 
+    //       (and fix it), also change the user list view instantiations in
     //       the UserDetailView.
-    // 
+    //
     // relations: [{
     //   type: Backbone.HasMany,
     //   key: 'visions',
@@ -160,7 +137,7 @@ var Hatch = Hatch || {};
 
       if (this.notifications) {
         var changed = false;
-        
+
         this.notifications.each(function(notification) {
           if (notification.get('is_new') && notification.get('properties')['vision'] === vision) {
             notification.set({'is_new': false}, {silent: true});

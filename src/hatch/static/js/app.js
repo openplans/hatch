@@ -6,6 +6,19 @@ var Hatch = Hatch || {};
   'use strict';
 
   // Helpers ==================================================================
+  NS.getVisionCollection = function(category, callback) {
+    if (!NS.app.visionCollections[category]) {
+      NS.app.visionCollections[category] = new NS.VisionCollection();
+      NS.app.visionCollections[category].fetch({
+        success: function() {
+          callback(NS.app.visionCollections[category]);
+        }
+      });
+    } else {
+      callback(NS.app.visionCollections[category]);
+    }
+  };
+
   // Create a view and show it in a region only AFTER you get results back from
   // a collection.
   NS.showViewInRegion = function(collection, region, getView, options) {
@@ -40,19 +53,19 @@ var Hatch = Hatch || {};
   // Router ===================================================================
 
   var appRoutes = {};
-
-  appRoutes[NS.appConfig.vision_plural + '/:category/new'] =  'newVision';
-  appRoutes[NS.appConfig.vision_plural + '/:category/list'] =  'listVisions';
-  appRoutes[NS.appConfig.vision_plural + '/:id'] =  'showVision';
+  appRoutes[NS.appConfig.vision_plural + '/:category/new']  =  'newVision';
+  appRoutes[NS.appConfig.vision_plural + '/:category']      =  'home';
+  appRoutes[NS.appConfig.vision_plural + '/:category/:id']  =  'showVision';
 
   _.extend(appRoutes, {
-    'users/list': 'listUsers',
+    'users/list':     'listUsers',
     'users/list/:id': 'listUsers',
     'users/:id/:tab': 'showUser',
-    'users/:id': 'showUser',
-    'notifications': 'userNotifications',
-    'ally': 'allySignup',
-    '*anything': 'home'
+    'users/:id':      'showUser',
+    'notifications':  'userNotifications',
+    'ally':           'allySignup',
+    '':               'home',
+    '*anything':      'anything'
   });
 
   NS.Router = Backbone.Marionette.AppRouter.extend({
@@ -77,36 +90,18 @@ var Hatch = Hatch || {};
         model: NS.app.currentUser
       }));
     },
-    listVisions: function(listCategory) {
+    listVisions: function(category) {
+      category = category || NS.app.activeCategory;
+
       // TODO: Move to the config settings
-      document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: listCategory}).prompt;
+      document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: category}).prompt;
 
-      var getVisionListView = function(collection, options) {
-        var model;
-
-        if (options.listCategory) {
-          model = new Backbone.Model({category: options.listCategory});
-          collection = new NS.FilteredCollection(
-            collection,
-            function(model) {
-              var category = model.get('category');
-              return (!!category ? category : '').toLowerCase() === options.listCategory;
-            });
-        } else {
-          model = new Backbone.Model();
-          collection = NS.app.visionCollection;
-        }
-
-        return new NS.VisionListView({
-          model: model,
-          collection: collection
-        });
-      };
-
-      NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
-        getVisionListView, {listCategory: listCategory, spinner: NS.app.bigSpinnerOptions});
+      NS.app.mainRegion.show(new NS.VisionListView({
+        model: new Backbone.Model({category: category}),
+        collection: NS.app.visionCollections[category]
+      }));
     },
-    newVision: function(category, momentId) {
+    newVision: function(category) {
       // TODO: Move to the config settings
       document.title = NS.appConfig.title + ' | What\'s your ' + NS.appConfig.vision +'?';
       NS.Utils.log('send', 'event', 'vision', 'new');
@@ -119,15 +114,14 @@ var Hatch = Hatch || {};
 
       NS.app.mainRegion.show(new NS.VisionFormView({
         category: category,
-        collection: NS.app.visionCollection,
+        collection: NS.app.visionCollections[category],
         model: new NS.VisionModel({
           category: category,
-          inspiration: momentId,
           author: NS.app.currentUser.get('id')
         })
       }));
     },
-    showVision: function(visionId) {
+    showVision: function(category, visionId) {
       // Set to an int
       visionId = parseInt(visionId, 10);
 
@@ -136,8 +130,8 @@ var Hatch = Hatch || {};
         return;
       }
 
-      var getVisionDetailView = function(collection, options) {
-        var model = collection.get(options.visionId),
+      NS.getVisionCollection(category, function(collection) {
+        var model = collection.get(visionId),
             layout = new NS.VisionDetailLayout({
               model: model
             });
@@ -159,23 +153,21 @@ var Hatch = Hatch || {};
           }));
         });
 
-        return layout;
-      };
+        NS.app.mainRegion.show(layout);
 
-      NS.showViewInRegion(NS.app.visionCollection, NS.app.mainRegion,
-        getVisionDetailView, {visionId: visionId, spinner: NS.app.bigSpinnerOptions});
-
-      if (NS.app.currentUser) {
-        NS.app.currentUser.viewVision(visionId);
-      }
+        if (NS.app.currentUser) {
+          NS.app.currentUser.viewVision(visionId);
+        }
+      });
     },
-    home: function() {
+    home: function(category) {
+      category = category || NS.app.activeCategory;
+
       // TODO: Move to the config settings
       document.title = NS.appConfig.title + ' | What\'s your '+ NS.appConfig.vision +'?';
-      NS.app.router.navigate('', {replace: true});
 
       var homeView = new NS.HomeView({
-            collection: NS.app.visionCollection
+            model: new Backbone.Model(_.findWhere(NS.categories, {name: category})),
           }),
 
           getVisionariesListView = function(collection) {
@@ -202,10 +194,21 @@ var Hatch = Hatch || {};
       // Render the main view
       NS.app.mainRegion.show(homeView);
 
+      NS.getVisionCollection(category, function(collection) {
+        homeView.visions.show(new NS.VisionListView({
+          model: new Backbone.Model({category: category}),
+          collection: collection
+        }));
+      });
+
       // Render visionaries
       NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
       // Render allies
       NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
+    },
+    anything: function() {
+      NS.app.router.navigate('', {replace: true});
+      this.home();
     },
     listUsers: function(id) {
       document.title = NS.appConfig.title + ' | See the ' + NS.Utils.capitalize(id || 'visionaries');
@@ -434,10 +437,14 @@ var Hatch = Hatch || {};
       coll.isFetched = true;
     };
 
-    NS.app.visionCollection = new NS.VisionCollection();
-    NS.app.visionCollection.on('reset', setIsFetched);
-    NS.app.visionCollection.fetch({
-      reset: true,
+    NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
+
+    NS.app.visionCollections = {};
+    NS.app.visionCollections[NS.app.activeCategory] = new NS.VisionCollection();
+    NS.app.visionCollections[NS.app.activeCategory].fetch({
+      data: {
+        // category: NS.app.activeCategory
+      },
       cache: false
     });
 
@@ -470,9 +477,7 @@ var Hatch = Hatch || {};
     }
     NS.Utils.log('set', 'dimension1', currentUserStatus);
 
-    NS.app.start({
-      visionCollection: NS.app.visionCollection
-    });
+    NS.app.start();
   });
 
 }(Hatch));

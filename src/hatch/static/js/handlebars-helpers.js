@@ -86,6 +86,17 @@ var Hatch = Hatch || {};
     return result;
   });
 
+  Handlebars.registerHelper('first_active_category', function(options) {
+    var i;
+
+    for (i=0; i<NS.categories.length; i++) {
+      if (NS.categories[i].active) {
+        return options.fn(_.extend(this, NS.categories[i]));
+      }
+    }
+  });
+
+
   Handlebars.registerHelper('eq', function(val1, val2, options) {
     return val1 === val2 ? options.fn(this) : options.inverse(this);
   });
