@@ -8,7 +8,7 @@
     </span>
     <span class="user-meta">
       {{#if visions.length}}
-      <span class="user-count user-vision-count nobreak">{{ visions.length }} {{#eq visions.length 1}} {{app_config "vision"}} {{^}} {{app_config "vision_plural"}} {{/eq}}</span>
+      <span class="user-count user-vision-count nobreak capitalize">{{ visions.length }} {{#eq visions.length 1}} {{app_config "vision"}} {{^}} {{app_config "vision_plural"}} {{/eq}}</span>
       {{/if}}
 
       {{#if supported.length}}

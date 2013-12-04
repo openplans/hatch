@@ -86,6 +86,18 @@ var Hatch = Hatch || {};
     return result;
   });
 
+  Handlebars.registerHelper('each_archived_category', function(options) {
+    var result = '';
+
+    _.each(NS.categories, function(category) {
+      if (!category.active) {
+        result += options.fn(_.extend(this, category));
+      }
+    });
+
+    return result;
+  });
+
   Handlebars.registerHelper('first_active_category', function(options) {
     var i;
 

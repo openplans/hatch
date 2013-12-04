@@ -14,5 +14,19 @@
 
     <h5>Give us your feedback.</h5>
     <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.
+
+    <h5>Archives</h5>
+    <ul class="unstyled-list">
+      {{#each_archived_category}}
+        <li>
+          <h6 class="slide-question"><a href="/{{visions_url_name}}/{{name}}">{{ prompt }}</a></h6>
+          <div class="slide-meta">
+            {{#if vision_count}}<span class="slide-stat capitalize"><strong class="ideas-count">{{ vision_count }}</strong> {{#if_plural vision_count}}{{app_config 'vision_plural'}}{{^}}{{app_config 'vision'}}{{/if_plural}}</span>{{/if}}
+            {{#if support_count}}<span class="slide-stat"><strong class="favorites-count">{{ support_count }}</strong> {{#if_plural support_count}}Supporters{{^}}Supporter{{/if_plural}}</span>{{/if}}
+            {{#if reply_count}}<span class="slide-stat"><strong class="comments-count">{{ reply_count }}</strong> {{#if_plural reply_count}}Comments{{^}}Comment{{/if_plural}}</span>{{/if}}
+          </div>
+        </li>
+      {{/each_archived_category}}
+    </ul>
   </div>
 </div>
