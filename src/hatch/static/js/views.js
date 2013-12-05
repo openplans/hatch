@@ -113,6 +113,39 @@ var Hatch = Hatch || {};
     }
   };
 
+  NS.PaginatedCompositeView = Backbone.Marionette.CompositeView.extend({
+    // template: '#paginated-list-tpl',
+    // itemViewContainer: '.content-list',
+    events: {
+      'click .load-more-action': 'onClickLoadMore'
+    },
+
+    collectionEvents: {
+      add: function() {
+        this.setLoadButtonVisibility(this.collection.hasNextPage());
+      },
+      reset: function() {
+        this.setLoadButtonVisibility(this.collection.hasNextPage());
+      }
+    },
+
+    onClickLoadMore: function(evt) {
+      evt.preventDefault();
+      this.loadMoreContentItems();
+    },
+
+    loadMoreContentItems: function() {
+      var self = this;
+      this.collection.fetchNextPage(function(collection, response, options) {
+        self.setLoadButtonVisibility(collection.hasNextPage());
+      });
+    },
+
+    setLoadButtonVisibility: function(show) {
+      this.$('.load-more-action').toggleClass('is-hidden', !show);
+    }
+  });
+
   // Views ====================================================================
   NS.HomeView = Backbone.Marionette.Layout.extend({
     template: '#home-tpl',
@@ -140,7 +173,7 @@ var Hatch = Hatch || {};
     totalSupportString: NS.SupportHandlerMixin.totalSupportString
   });
 
-  NS.VisionListView = Backbone.Marionette.CompositeView.extend({
+  NS.VisionListView = NS.PaginatedCompositeView.extend({
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
     itemViewContainer: 'ul.vision-list'

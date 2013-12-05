@@ -84,6 +84,10 @@ var Hatch = Hatch || {};
       return response.results;
     },
 
+    hasNextPage: function(response) {
+      return !!this.metadata.next;
+    },
+
     fetchNextPage: function(success, error) {
       var collection = this;
 
