@@ -9,7 +9,7 @@ var Hatch = Hatch || {};
 
   // Visions ==================================================================
   NS.VisionModel = Backbone.RelationalModel.extend({
-    urlRoot: '/api/visions/',
+    urlRoot: '/api/visions',
     relations: [{
       type: Backbone.HasMany,
       key: 'replies',
