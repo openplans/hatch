@@ -222,7 +222,7 @@ class TweetException (APIException):
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
-    paginate_by = 20
+    paginate_by = 30
 
     def get_queryset(self):
         queryset = self.get_vision_queryset()
@@ -367,7 +367,7 @@ class SiteMapView (AppMixin, TemplateView):
 class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
-    paginate_by = 50
+    paginate_by = 20
 
     def get_queryset(self):
         """
