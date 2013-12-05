@@ -266,25 +266,16 @@ var Hatch = Hatch || {};
     listUsers: function(id) {
       document.title = NS.appConfig.title + ' | See the ' + NS.Utils.capitalize(id || 'visionaries');
 
-      var userListLayout = new NS.UserListLayout({
-            model: new Backbone.Model({show_allies: id === 'allies'})
+      var showAllies = (id === 'allies'),
+          userListLayout = new NS.UserListLayout({
+            model: new Backbone.Model({show_allies: showAllies})
           }),
-          getUserListView = function(collection, options) {
-            var filterUsers;
-
-            if (options.id === 'allies') {
-              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') > -1; };
-            } else {
-              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') === -1; };
-            }
-
-            return new NS.UserListWithFilterView({
-              collection: new NS.UserCollection(collection.filter(filterUsers))
-            });
+          getUserListView = function(collection) {
+            return new NS.UserListWithFilterView({collection: collection});
           };
 
       NS.app.mainRegion.show(userListLayout);
-      NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
+      NS.showViewInRegion(NS.getUserCollection([(showAllies ? '' : '-') + 'allies']), userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     showUser: function(id, tab) {
       var getUserDetailView = function(collection, options) {

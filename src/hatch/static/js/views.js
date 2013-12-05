@@ -129,6 +129,10 @@ var Hatch = Hatch || {};
       }
     },
 
+    onRender: function() {
+      this.setLoadButtonVisibility(this.collection.hasNextPage());
+    },
+
     onClickLoadMore: function(evt) {
       evt.preventDefault();
       this.loadMoreContentItems();
@@ -541,9 +545,12 @@ var Hatch = Hatch || {};
     emptyView: NS.NoItemsView
   });
 
-  NS.UserListWithFilterView = Backbone.Marionette.CollectionView.extend({
-    tagName: 'ul',
-    className: 'unstyled-list',
+  NS.UserListWithFilterView = NS.PaginatedCompositeView.extend({
+    template: '#user-page-tpl',
+    itemViewContainer: 'ul.filtered-user-list',
+
+    // tagName: 'ul',
+    // className: 'unstyled-list',
     itemView: NS.UserListItemView
   });
 
