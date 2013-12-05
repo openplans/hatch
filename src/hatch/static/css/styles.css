@@ -1104,6 +1104,10 @@ ul.user-list {
   margin-left: 0.25em;
 }
 
+.load-more-action.is-hidden {  /* <-- for increased specificity */
+  display: none;
+}
+
 /* Tabs */
 .tabs-container {
   margin: 0 -10px 10px -10px;
