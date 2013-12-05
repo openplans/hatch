@@ -126,6 +126,8 @@ var Hatch = Hatch || {};
 
   // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
+    urlRoot: '/api/users',
+    
     // Replies not added because the Vision model specifies (rightly) that
     // a reply should be rendered as an ID (to support saving a reply with a
     // vision ID). This does not allow us to render a reply on the user profile

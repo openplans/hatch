@@ -278,9 +278,18 @@ var Hatch = Hatch || {};
       NS.showViewInRegion(NS.getUserCollection([(showAllies ? '' : '-') + 'allies']), userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     showUser: function(id, tab) {
-      var getUserDetailView = function(collection, options) {
-        var model = collection.get(options.id),
-            view = new NS.UserDetailView({
+      var model, userId = id;
+
+      // Set to an int
+      userId = parseInt(userId, 10);
+
+      if (_.isNaN(userId)) {
+        this.home();
+        return;
+      }
+
+      var getUserDetailView = function(model) {
+        var view = new NS.UserDetailView({
               model: model
             }),
             isPersonal = (NS.app.currentUser.isAuthenticated() && id === NS.app.currentUser.id),
@@ -313,7 +322,26 @@ var Hatch = Hatch || {};
 
         return view;
       };
-      NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
+
+      var visionariesCollection = NS.app.userCollections['-allies'] || NS.app.userCollections['-allies:home'],
+          alliesCollection = NS.app.userCollections['allies'] || NS.app.userCollections['allies:home'],
+          relatedUserCollection = Backbone.Relational.store.getCollection(NS.UserModel);
+
+      if (visionariesCollection && visionariesCollection.get(userId)) {
+        model = visionariesCollection.get(userId);
+      }
+      else if (alliesCollection && alliesCollection.get(userId)) {
+        model = alliesCollection.get(userId);
+      }
+      else {
+        // We need to check the Backbone.Relational.store's cached collection
+        // first, because Backbone.Relational doesn't like more than one copy
+        // of a model floating around (it'll throw an Error).
+        model = relatedUserCollection.get(userId) || new NS.UserModel({id: userId});
+        model.fetch({success: NS.setIsFetched});
+      }
+
+      NS.showViewInRegion(model, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     userNotifications: function() {
       if (NS.currentUserData) {
