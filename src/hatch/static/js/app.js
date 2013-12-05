@@ -41,7 +41,7 @@ var Hatch = Hatch || {};
     if (visibleOnHome) { filterOpts['visible_on_home'] = 'on'; }
 
     return NS.getSubCollection(
-      NS.app.userCollections, groups.join(','), NS.UserCollection, filterOpts
+      NS.app.userCollections, groups.join(',') + (visibleOnHome ? ':home' : ''), NS.UserCollection, filterOpts
     );
   };
 
