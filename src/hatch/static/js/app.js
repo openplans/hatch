@@ -6,30 +6,66 @@ var Hatch = Hatch || {};
   'use strict';
 
   // Helpers ==================================================================
-  NS.getVisionCollection = function(category, callback) {
-    if (!NS.app.visionCollections[category]) {
-      NS.app.visionCollections[category] = new NS.VisionCollection();
-      NS.app.visionCollections[category].fetch({
-        data: { category: category }
+  NS.setIsFetched = function(obj) {
+    obj.isFetched = true;
+    obj.trigger('fetched', obj);
+  };
+
+  NS.getSubCollection = function(collectionMap, key, CollectionType, collectionFilter) {
+    if (!collectionMap[key]) {
+      collectionMap[key] = new CollectionType();
+      collectionMap[key].fetch({
+        data: collectionFilter,
+        traditional: true,
+        success: NS.setIsFetched
       });
     }
-    return NS.app.visionCollections[category];
+    return collectionMap[key];
+  };
+
+  NS.getVisionCollection = function(category) {
+    return NS.getSubCollection(
+      NS.app.visionCollections, category, NS.VisionCollection, { category: category }
+    );
+  };
+
+  NS.getUserCollection = function(groups, visibleOnHome) {
+    groups = groups.sort();
+    var posgroups = _.filter(groups, function(group) { return group[0] !== '-'; }),
+        neggroups = _.chain(groups)
+          .filter(function(group) { return group[0] === '-'; })
+          .map(function(neggroup) { return neggroup.slice(1); })
+          .value(),
+        filterOpts = { group: posgroups, notgroup: neggroups };
+
+    if (visibleOnHome) { filterOpts['visible_on_home'] = 'on'; }
+
+    return NS.getSubCollection(
+      NS.app.userCollections, groups.join(',') + (visibleOnHome ? ':home' : ''), NS.UserCollection, filterOpts
+    );
   };
 
   // Create a view and show it in a region only AFTER you get results back from
-  // a collection.
-  NS.showViewInRegion = function(collection, region, getView, options) {
+  // the model or collection.
+  NS.showViewInRegion = function(obj, region, getView, options) {
     var $regionEl = $(region.el),
         origMinHeight = $regionEl.css('min-height'),
 
     render = function() {
       $regionEl.css({minHeight: origMinHeight});
-      var view = getView(collection, options);
+      var view = getView(obj, options);
       region.show(view);
+    },
+
+    hasBeenFetched = function(obj) {
+      if (obj.isFetched) { return true; }
+      if (obj.collection) { return hasBeenFetched(obj.collection); }
+      if (obj.parent) { return hasBeenFetched(obj.parent); }
+      return false;
     };
 
-    // Nothing in the collection? It's not done fetching. Let's wait for it.
-    if (!(collection.isFetched || (collection.parent && collection.parent.isFetched))) {
+    // If the object hasn't been fetched yet, lets wait for it.
+    if (!hasBeenFetched(obj)) {
 
       // Show a spinner until we load the content.
       if (options && options.spinner) {
@@ -38,10 +74,13 @@ var Hatch = Hatch || {};
       }
 
       // Render when the collection resets
-      collection.once('reset', function() {
+      obj.once('fetched', function() {
         render();
       });
-    } else {
+    }
+
+    // If it has already been fetched, render it immediately.
+    else {
       render();
     }
   };
@@ -181,23 +220,31 @@ var Hatch = Hatch || {};
             model: new Backbone.Model(_.findWhere(NS.categories, {name: category})),
           }),
 
+          inFirst = function(model, collection, count) {
+            return _.chain(collection.models)
+              .first(count)
+              .pluck('cid')
+              .contains(model.cid)
+              .value();
+          },
+
+          getVisionsListView = function(collection) {
+            return new NS.VisionListView({
+              model: new Backbone.Model({category: category}),
+              collection: collection
+            });
+          },
+
           getVisionariesListView = function(collection) {
-            var visionaries = collection.filter(function(model) {
-                  return _.indexOf(model.get('groups'), 'allies') === -1;
-                }).slice(0, 20);
             return new NS.UserAvatarListView({
-              collection: new NS.UserCollection(visionaries),
+              collection: new NS.FilteredCollection(collection, function(model) { return inFirst(model, collection, 20); }),
               template: '#home-visionaries-tpl'
             });
           },
 
           getAlliesListView = function(collection) {
-            var allies = collection.filter(function(model) {
-                  return _.indexOf(model.get('groups'), 'allies') > -1;
-                }).slice(0, 20);
-
             return new NS.UserAvatarListView({
-              collection: new NS.UserCollection(allies),
+              collection: new NS.FilteredCollection(collection, function(model) { return inFirst(model, collection, 20); }),
               template: '#home-allies-tpl'
             });
           };
@@ -205,16 +252,12 @@ var Hatch = Hatch || {};
       // Render the main view
       NS.app.mainRegion.show(homeView);
 
-
-      homeView.visions.show(new NS.VisionListView({
-        model: new Backbone.Model({category: category}),
-        collection: NS.getVisionCollection(category)
-      }));
-
+      // Render the visions
+      NS.showViewInRegion(NS.getVisionCollection(category), homeView.visions, getVisionsListView, {spinner: NS.app.bigSpinnerOptions});
       // Render visionaries
-      NS.showViewInRegion(NS.app.userCollection, homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
+      NS.showViewInRegion(NS.getUserCollection(['-allies'], true), homeView.visionaries, getVisionariesListView, {spinner: NS.app.smallSpinnerOptions});
       // Render allies
-      NS.showViewInRegion(NS.app.userCollection, homeView.allies, getAlliesListView);
+      NS.showViewInRegion(NS.getUserCollection(['allies'], true), homeView.allies, getAlliesListView);
     },
     anything: function() {
       NS.app.router.navigate('', {replace: true});
@@ -223,30 +266,30 @@ var Hatch = Hatch || {};
     listUsers: function(id) {
       document.title = NS.appConfig.title + ' | See the ' + NS.Utils.capitalize(id || 'visionaries');
 
-      var userListLayout = new NS.UserListLayout({
-            model: new Backbone.Model({show_allies: id === 'allies'})
+      var showAllies = (id === 'allies'),
+          userListLayout = new NS.UserListLayout({
+            model: new Backbone.Model({show_allies: showAllies})
           }),
-          getUserListView = function(collection, options) {
-            var filterUsers;
-
-            if (options.id === 'allies') {
-              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') > -1; };
-            } else {
-              filterUsers = function(model) { return _.indexOf(model.get('groups'), 'allies') === -1; };
-            }
-
-            return new NS.UserListWithFilterView({
-              collection: new NS.UserCollection(collection.filter(filterUsers))
-            });
+          getUserListView = function(collection) {
+            return new NS.UserListWithFilterView({collection: collection});
           };
 
       NS.app.mainRegion.show(userListLayout);
-      NS.showViewInRegion(NS.app.userCollection, userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
+      NS.showViewInRegion(NS.getUserCollection([(showAllies ? '' : '-') + 'allies']), userListLayout.userList, getUserListView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     showUser: function(id, tab) {
-      var getUserDetailView = function(collection, options) {
-        var model = collection.get(options.id),
-            view = new NS.UserDetailView({
+      var model, userId = id;
+
+      // Set to an int
+      userId = parseInt(userId, 10);
+
+      if (_.isNaN(userId)) {
+        this.home();
+        return;
+      }
+
+      var getUserDetailView = function(model) {
+        var view = new NS.UserDetailView({
               model: model
             }),
             isPersonal = (NS.app.currentUser.isAuthenticated() && id === NS.app.currentUser.id),
@@ -279,7 +322,26 @@ var Hatch = Hatch || {};
 
         return view;
       };
-      NS.showViewInRegion(NS.app.userCollection, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
+
+      var visionariesCollection = NS.app.userCollections['-allies'] || NS.app.userCollections['-allies:home'],
+          alliesCollection = NS.app.userCollections['allies'] || NS.app.userCollections['allies:home'],
+          relatedUserCollection = Backbone.Relational.store.getCollection(NS.UserModel);
+
+      if (visionariesCollection && visionariesCollection.get(userId)) {
+        model = visionariesCollection.get(userId);
+      }
+      else if (alliesCollection && alliesCollection.get(userId)) {
+        model = alliesCollection.get(userId);
+      }
+      else {
+        // We need to check the Backbone.Relational.store's cached collection
+        // first, because Backbone.Relational doesn't like more than one copy
+        // of a model floating around (it'll throw an Error).
+        model = relatedUserCollection.get(userId) || new NS.UserModel({id: userId});
+        model.fetch({success: NS.setIsFetched});
+      }
+
+      NS.showViewInRegion(model, NS.app.mainRegion, getUserDetailView, {id: id, spinner: NS.app.bigSpinnerOptions});
     },
     userNotifications: function() {
       if (NS.currentUserData) {
@@ -443,20 +505,20 @@ var Hatch = Hatch || {};
 
   // Init =====================================================================
   $(function() {
-    var setIsFetched = function(coll) {
-      coll.isFetched = true;
-    };
-
     NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
     NS.app.visionCollections = {};
+    NS.app.userCollections = {};
 
-    NS.app.userCollection = new NS.UserCollection();
-    NS.app.userCollection.on('reset', setIsFetched);
-    NS.app.userCollection.fetch({
-      reset: true,
-      cache: false,
-      data: { visible_on_home: true }
-    });
+    // Init and fetch the active collection
+    NS.getVisionCollection(NS.app.activeCategory);
+
+    // NS.app.userCollection = new NS.UserCollection();
+    // NS.app.userCollection.on('reset', setIsFetched);
+    // NS.app.userCollection.fetch({
+    //   reset: true,
+    //   cache: false,
+    //   data: { visible_on_home: true }
+    // });
 
     NS.app.currentUser = new NS.UserModel(NS.currentUserData || {});
     NS.app.currentUser.notifications = new Backbone.Collection(NS.notificationsData);

@@ -9,7 +9,7 @@ var Hatch = Hatch || {};
 
   // Visions ==================================================================
   NS.VisionModel = Backbone.RelationalModel.extend({
-    urlRoot: '/api/visions/',
+    urlRoot: '/api/visions',
     relations: [{
       type: Backbone.HasMany,
       key: 'replies',
@@ -76,7 +76,33 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.VisionCollection = Backbone.Collection.extend({
+  NS.PaginatedCollection = Backbone.Collection.extend({
+    parse: function(response) {
+      this.metadata = _.clone(response);
+      delete this.metadata.results;
+
+      return response.results;
+    },
+
+    hasNextPage: function(response) {
+      return !!this.metadata.next;
+    },
+
+    fetchNextPage: function(success, error) {
+      var collection = this;
+
+      if (this.metadata.next) {
+        collection.fetch({
+          remove: false,
+          url: collection.metadata.next,
+          success: success,
+          error: error
+        });
+      }
+    }
+  });
+
+  NS.VisionCollection = NS.PaginatedCollection.extend({
     url: '/api/visions',
     comparator: function(vision) {
       var dateString = vision.get('tweeted_at'),
@@ -100,6 +126,8 @@ var Hatch = Hatch || {};
 
   // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
+    urlRoot: '/api/users',
+    
     // Replies not added because the Vision model specifies (rightly) that
     // a reply should be rendered as an ID (to support saving a reply with a
     // vision ID). This does not allow us to render a reply on the user profile
@@ -210,7 +238,7 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.UserCollection = Backbone.Collection.extend({
+  NS.UserCollection = NS.PaginatedCollection.extend({
     url: '/api/users',
     comparator: function(user1, user2) {
       var orderByGroup = function(group) {

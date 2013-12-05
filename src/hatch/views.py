@@ -20,6 +20,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
+from .cache import cache_buffer
 from .models import Reply, User, Vision, Category, Tweet, AppConfig
 from .forms import SecretAllySignupForm
 from .serializers import (
@@ -30,6 +31,11 @@ from .services import default_twitter_service
 
 class AppMixin (object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def dispatch(self, *args, **kwargs):
+        result = super(AppMixin, self).dispatch(*args, **kwargs)
+        cache_buffer.flush()
+        return result
 
     @classmethod
     def get_twitter_service(self):
@@ -216,6 +222,7 @@ class TweetException (APIException):
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
+    paginate_by = 30
 
     def get_queryset(self):
         queryset = self.get_vision_queryset()
@@ -360,6 +367,7 @@ class SiteMapView (AppMixin, TemplateView):
 class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
+    paginate_by = 20
 
     def get_queryset(self):
         """

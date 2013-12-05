@@ -28,7 +28,6 @@ class VisionsTest (TestCase):
             ally_plural='allies',
             allies_label='',
             city='',
-            welcome_prompt='',
         )
 
         # Reload the urls to reinitialize the vision routes
