@@ -24,7 +24,9 @@ class CacheBuffer (object):
 
         for key in keys:
             try:
-                results[key] = self.buffer[key]
+                value = self.buffer[key]
+                if value is not unspecified:
+                    results[key] = value
             except KeyError:
                 unseen_keys.append(key)
 
@@ -36,12 +38,14 @@ class CacheBuffer (object):
 
         # TODO: Is this what's supposed to happen? get_many returns None for
         #       each key that wasn't found?
-        self.buffer.update({key: None for key in set(keys) - set(results.keys())})
+        all_results = dict([(key, unspecified) for key in set(keys) - set(results.keys())])
+        self.buffer.update(all_results)
         return results
 
     def get(self, key):
         try:
-            return self.buffer[key]
+            value = self.buffer[key]
+            return None if value is unspecified else value
         except KeyError:
             value = django_cache.cache.get(key)
             self.buffer[key] = value
