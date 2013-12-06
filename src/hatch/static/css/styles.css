@@ -975,6 +975,13 @@ h6.category-prompt {
 .archives-list .slide-question {
   margin-bottom: 0;
 }
+.inactive-message {
+  background-color: #ef037d;
+  background-color: rgba(239,3,125,0.5);
+  padding: 15px 10px; 
+  margin: -15px -10px 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.75);
+}
 
 
 /* =User Lists
