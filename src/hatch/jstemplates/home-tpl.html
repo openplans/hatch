@@ -13,10 +13,12 @@
     <div class="allies-region"></div>
 
     <h5>Give us your feedback.</h5>
-    <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.
+    <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.</p>
+
+    <hr>
 
     <h5>Archives</h5>
-    <ul class="unstyled-list">
+    <ul class="unstyled-list archives-list">
       {{#each_archived_category}}
         <li>
           <h6 class="slide-question"><a href="/{{visions_url_name}}/{{name}}">{{ prompt }}</a></h6>
