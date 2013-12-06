@@ -72,6 +72,10 @@ hr {
   border-right: 0;
   border-left: 0;
 }
+.welcome hr {
+  border-top-color: rgba(0,0,0,0.5);
+  border-bottom-color: rgba(255,255,255,0.2);
+}
 .container hr {
   margin-right: -10px;
   margin-left: -10px;
@@ -961,6 +965,15 @@ h6.category-prompt {
   font-family: serif;
   font-size: 1.25em;
   line-height: 1;
+}
+
+/* Archives */
+.archives-list {}
+.archives-list li {
+  margin-bottom: 1.25em;
+}
+.archives-list .slide-question {
+  margin-bottom: 0;
 }
 
 
