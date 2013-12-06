@@ -2,7 +2,7 @@
 <p class="in-response-to"><a href="/{{visions_url_name}}/{{ category }}">{{ category_prompt category }}</a></p>
 {{/ if }}
 
-<div class="container container-primary">
+<div class="container container-primary {{^if_active_category category}}is-archived{{/if_active_category}}">
   {{# if media_url }}
   <a href="#" class="vision-media-container is-collapsed" style="background-image:url({{ media_url }});"><img class="vision-media" src="{{ media_url }}"></a>
   {{/ if }}
@@ -30,6 +30,7 @@
 
     <p class="vision-description">{{ formattext text }}</p>
 
+    {{#if_active_category category}}
     <footer class="vision-footer clearfix">
       <a href="#" class="retweet-link{{#if_shared}} retweeted{{/if_shared}} hint--right"
       {{^ if_authenticated}}data-hint="Sign in to retweet this {{app_config "vision"}}!"{{/if_authenticated}}>
@@ -58,11 +59,12 @@
       </div>
       {{/if_authenticated}}
     </footer>
+    {{/if_active_category }}
 
   </article><!-- end .vision -->
 </div>
 
-<div class="container">
+<div class="container {{^if_active_category category}}is-archived{{/if_active_category}}">
   <div class="support-region"></div>
   <div class="replies-region"></div>
 </div>

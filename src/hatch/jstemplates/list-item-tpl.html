@@ -1,4 +1,4 @@
-<article class="vision clearfix">
+<article class="vision clearfix {{^if_active_category category}}is-archived{{/if_active_category}}">
 
   <header class="vision-header">
     <a href="/users/{{ author_details.id }}" class="user-link"><img src="{{ author_details.avatar_url }}" class="avatar" /></a>

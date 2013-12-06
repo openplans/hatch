@@ -12,23 +12,22 @@ var Hatch = Hatch || {};
   NS.SupportHandlerMixin = {
     handleSupport: function(evt) {
       evt.preventDefault();
+      var vision = this.model,
+          category = NS.getCategory(vision.get('category')),
+          supporters = vision.get('supporters'),
+          user = NS.app.currentUser,
+          index;
 
-      if (NS.app.currentUser.isAuthenticated()) {
-        var vision = this.model,
-            supporters = vision.get('supporters'),
-            user = NS.app.currentUser,
-            visionFromMainCollection, index;
-
+      if (NS.app.currentUser.isAuthenticated() && category.active) {
         // supporters is an array of ids in some cases, a collection (with
         // contains) in others.
         if (_.isArray(supporters)){
           // if supported, unsupport
           index = _.indexOf(supporters, user.id);
-          visionFromMainCollection = NS.app.visionCollection.get(this.model.id);
           if(index > -1) {
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
-            user.unsupport(visionFromMainCollection);
+            user.unsupport(vision);
 
             // Remove from the supporters array for rendering
             supporters.splice(index, 1);
@@ -37,7 +36,7 @@ var Hatch = Hatch || {};
           } else {
             NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
-            user.support(visionFromMainCollection);
+            user.support(vision);
             supporters.push(user.id);
             this.$('.support').addClass('supported');
           }
@@ -563,7 +562,7 @@ var Hatch = Hatch || {};
       this.$('.tab').removeClass('is-current');
       this.$('a[href*="'+ NS.appConfig.vision_plural +'"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
-        collection: new Backbone.Collection(this.model.get('visions'))
+        collection: new NS.VisionCollection(this.model.get('visions'))
       }));
     },
     showSupported: function() {

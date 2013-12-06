@@ -6,6 +6,10 @@ var Hatch = Hatch || {};
   'use strict';
 
   // Helpers ==================================================================
+  NS.getCategory = function(name) {
+    return _.findWhere(NS.categories, {name: name});
+  };
+
   NS.setIsFetched = function(obj) {
     obj.isFetched = true;
     obj.trigger('fetched', obj);
@@ -130,7 +134,7 @@ var Hatch = Hatch || {};
       category = category || NS.app.activeCategory;
 
       // TODO: Move to the config settings
-      document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: category}).prompt;
+      document.title = NS.appConfig.title + ' | ' + NS.getCategory(category).prompt;
 
       NS.app.mainRegion.show(new NS.VisionListView({
         model: new Backbone.Model({category: category}),
@@ -169,7 +173,8 @@ var Hatch = Hatch || {};
       }
 
       function renderVision(model) {
-        var layout = new NS.VisionDetailLayout({
+        var category = NS.getCategory(model.get('category')),
+            layout = new NS.VisionDetailLayout({
               model: model
             });
 
@@ -177,20 +182,23 @@ var Hatch = Hatch || {};
         document.title = NS.appConfig.title + ' | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
         NS.Utils.log('send', 'event', 'vision', 'show', visionId);
 
-        // TODO: why is this necessary?
-        layout.on('show', function() {
+        NS.app.mainRegion.show(layout);
+
+        // Don't show replies if an inactive category and no existing replies
+        if (category.active || (!category.active && model.get('replies').length > 0)) {
           layout.replies.show(new NS.ReplyListView({
             model: model,
             collection: model.get('replies')
           }));
+        }
 
+        // Don't show supporters if an inactive category and no existing replies
+        if (category.active || (!category.active && model.get('supporters').length > 0)) {
           layout.support.show(new NS.SupportListView({
             model: model,
             collection: model.get('supporters')
           }));
-        });
-
-        NS.app.mainRegion.show(layout);
+        }
 
         if (NS.app.currentUser) {
           NS.app.currentUser.viewVision(visionId);
@@ -208,6 +216,7 @@ var Hatch = Hatch || {};
             renderVision(model);
           }
         });
+        NS.getVisionCollection(category).add(model);
       }
     },
     home: function(category) {
@@ -217,7 +226,7 @@ var Hatch = Hatch || {};
       document.title = NS.appConfig.title + ' | What\'s your '+ NS.appConfig.vision +'?';
 
       var homeView = new NS.HomeView({
-            model: new Backbone.Model(_.findWhere(NS.categories, {name: category})),
+            model: new Backbone.Model(NS.getCategory(category)),
           }),
 
           inFirst = function(model, collection, count) {

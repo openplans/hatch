@@ -108,6 +108,10 @@ var Hatch = Hatch || {};
     }
   });
 
+  Handlebars.registerHelper('if_active_category', function(name, options) {
+    var category = NS.getCategory(name);
+    return category && category.active ? options.fn(this) : options.inverse(this);
+  });
 
   Handlebars.registerHelper('eq', function(val1, val2, options) {
     return val1 === val2 ? options.fn(this) : options.inverse(this);
@@ -149,7 +153,7 @@ var Hatch = Hatch || {};
   }
 
   Handlebars.registerHelper('category_prompt', function(category) {
-    return _.findWhere(NS.categories, {name: category}).prompt;
+    return NS.getCategory(category).prompt;
   });
 
   Handlebars.registerHelper('window_location', function() {
