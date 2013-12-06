@@ -268,7 +268,7 @@ body {
 }
 .welcome.site-footer {
   top: 0;
-  margin-top: 30px;
+  margin-top: 0;
   margin-bottom: -20px;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -884,6 +884,7 @@ h6.category-prompt {
   padding: 0 10px;
   background: #444;
   color: #fff;
+  margin-bottom: -20px;
 }
 
 .welcome h1,.welcome h2,.welcome h3,.welcome h4,.welcome h5,.welcome h6 {
