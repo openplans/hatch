@@ -235,6 +235,13 @@ LOGGING = {
 
 
 ###############################################################################
+# Use the heroku settings, if we're on Heroku
+import os
+if os.environ.get('IS_HEROKU'):
+    from heroku_settings import *
+
+
+###############################################################################
 # Local settings overrides
 try:
     from local_settings import *
