@@ -162,7 +162,8 @@ var Hatch = Hatch || {};
       }));
     },
     showVision: function(category, visionId) {
-      var model;
+      var model,
+          relatedVisionCollection = Backbone.Relational.store.getCollection(NS.VisionModel);
 
       // Set to an int
       visionId = parseInt(visionId, 10);
@@ -210,13 +211,12 @@ var Hatch = Hatch || {};
         model = NS.app.visionCollections[category].get(visionId);
         renderVision(model);
       } else {
-        model = new NS.VisionModel({id: visionId});
+        model = relatedVisionCollection.get(visionId) || new NS.VisionModel({id: visionId});
         model.fetch({
           success: function(model, response, options) {
             renderVision(model);
           }
         });
-        NS.getVisionCollection(category).add(model);
       }
     },
     home: function(category) {
