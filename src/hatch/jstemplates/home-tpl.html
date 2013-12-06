@@ -15,6 +15,7 @@
     <h5>Give us your feedback.</h5>
     <p>Tweet your comments and suggestions to <a href="http://twitter.com/{{app_config 'twitter_handle'}}">@{{app_config 'twitter_handle'}}</a>.</p>
 
+    {{#has_archived_categories}}
     <hr>
 
     <h5>Archives</h5>
@@ -30,5 +31,6 @@
         </li>
       {{/each_archived_category}}
     </ul>
+    {{/has_archived_categories}}
   </div>
 </div>

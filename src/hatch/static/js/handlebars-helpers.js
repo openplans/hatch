@@ -98,6 +98,18 @@ var Hatch = Hatch || {};
     return result;
   });
 
+  Handlebars.registerHelper('has_archived_categories', function(options) {
+    var i;
+
+    for(i=0; i<NS.categories.length; i++) {
+      if (!NS.categories[i].active) {
+        return options.fn(this);
+      }
+    }
+
+    return options.inverse(this);
+  });
+
   Handlebars.registerHelper('first_active_category', function(options) {
     var i;
 
