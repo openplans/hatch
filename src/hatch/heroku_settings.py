@@ -12,6 +12,12 @@ DEBUG = (os.environ.get('DEBUG', 'False') in ['true', 'True'])
 TEMPLATE_DEBUG = DEBUG
 SHOW_DEBUG_TOOLBAR = DEBUG
 
+STATIC_ROOT = 'staticfiles'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    rel_path('../static'),
+)
+
 SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 
