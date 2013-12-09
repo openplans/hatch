@@ -54,6 +54,10 @@ TWITTER_USERNAME = os.environ.get('TWITTER_USERNAME', '')
 TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN', '')
 TWITTER_ACCESS_SECRET = os.environ.get('TWITTER_ACCESS_SECRET', '')
 
+STREAMING_KEYWORDS = \
+    os.environ['STREAMING_KEYWORDS'].split(',') if 'STREAMING_KEYWORDS' in os.environ \
+    else ['#' + os.environ.get('TWITTER_USERNAME', 'hatch')]
+
 ## ===========================================================================
 
 # For sitemaps and caching -- will be a new value every time the server starts
