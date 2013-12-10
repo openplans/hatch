@@ -696,6 +696,10 @@ ul.user-menu:after {
   padding: 5px 0 10px;
 }
 
+.vision-list .btn-block {
+  margin-bottom: 2.2em;
+}
+
 /* Support */
 .support,
 a.support {
@@ -1023,6 +1027,14 @@ ul.user-list {
   opacity: 0.25;
   margin-right: 0.25em;
   margin-left: 0.25em;
+}
+
+.load-more-action {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .load-more-action.is-hidden {  /* <-- for increased specificity */

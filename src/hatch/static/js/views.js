@@ -172,6 +172,13 @@ var Hatch = Hatch || {};
     events: {
       'click .support-link': 'handleSupport'
     },
+    templateHelpers: function(){
+      var modelIndex = this.model.collection.indexOf(this.model);
+      return {
+        index: modelIndex,
+        show_add_button: modelIndex % 4 === 0
+      };
+    },
     handleSupport: NS.SupportHandlerMixin.handleSupport,
     updateSupportCount: NS.SupportHandlerMixin.updateSupportCount,
     totalSupportString: NS.SupportHandlerMixin.totalSupportString
