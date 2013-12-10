@@ -376,6 +376,9 @@ class Category (models.Model):
     image = models.ImageField(null=True, upload_to='category_images')
     active = models.BooleanField(default=True, help_text='Uncheck this field to retire the category')
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __unicode__(self):
         return unicode(self.name)
 
