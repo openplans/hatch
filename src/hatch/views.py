@@ -241,11 +241,11 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        attribution = u'@%s ' % (username,)
-        vision_length = 140 - len(attribution) - url_length - 3
+        attribution = u'@%s' % (username,)
+        vision_length = 140 - len(attribution) - url_length - 7
         return ''.join([
             attribution,
-            '"', Truncator(vision.text).chars(vision_length, u'…'), '" ',
+            ' said ', Truncator(vision.text).chars(vision_length, u'…'), ' ',
             vision_url
         ])
 
