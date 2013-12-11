@@ -214,7 +214,7 @@ class CategorySerializer (ModelSerializer):
     def image_url(self, obj):
         try:
             return obj.image.storage.url(obj.image.file.name)
-        except ValueError:
+        except (ValueError, IOError):
             return None
 
     def get_vision_count(self, obj):
