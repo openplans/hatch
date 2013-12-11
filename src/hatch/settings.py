@@ -89,6 +89,7 @@ WSGI_APPLICATION = 'hatch.wsgi.application'
 ROOT_URLCONF = 'hatch.urls'
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,7 +99,6 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_auth.middleware.SocialAuthExceptionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'hatch.middleware.HatchAuthMiddleware',
 )
 
