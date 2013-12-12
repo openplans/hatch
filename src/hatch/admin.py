@@ -1,3 +1,4 @@
+import django
 from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -169,11 +170,53 @@ class VisionAdmin (admin.ModelAdmin):
 
 class CategoryAdmin (admin.ModelAdmin):
     list_display = ('full_name', 'active')
+    list_editable = ('active',)
     list_filter = ('active',)
     search_fields = ('name', 'title', 'prompt')
 
     def full_name(self, category):
-        return '%s -- %s' % (category.name, category.title)
+        return '%s (%s)' % (category.title, category.name)
+
+    def get_queryset(self, request):
+        # Get the base queryset.
+        if django.VERSION < (1, 6):
+            qs = super(CategoryAdmin, self).queryset(request)
+        else:
+            qs = super(CategoryAdmin, self).get_queryset(request)
+        
+        # If this is not a simple GET request, just return the base queryset
+        # immediately.
+        if request.method.lower() != 'get':
+            return qs
+
+        # Otherwise, calculate the number of active categories and display a
+        # message if necessary.
+        total_count = qs.count()
+        active_count = qs.filter(active=True).count()
+
+        if total_count == 0:
+            self.message_user(
+                request, "You must have at least one category!",
+                level=messages.ERROR)
+        elif active_count == 0:
+            self.message_user(
+                request, "There are no active categories selected! You must "
+                         "select an active category.",
+                level=messages.ERROR)
+        elif active_count > 1:
+            self.message_user(
+                request, "You have more than one category selected as active. "
+                         "One of the categories will be arbitrarily chosen by "
+                         "the app as active. To remove ambiguity, you should "
+                         "always choose EXACTLY ONE category to be active at "
+                         "a time.",
+                level=messages.WARNING)
+
+        return qs
+
+    if django.VERSION < (1, 6):
+        # https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.get_queryset
+        queryset = get_queryset
 
 
 class ReplyAdmin (admin.ModelAdmin):
