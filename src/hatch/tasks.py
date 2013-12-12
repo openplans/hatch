@@ -6,7 +6,8 @@ from django.db.models import Max
 from django.db.transaction import commit_on_success
 from celery import task
 from time import sleep
-from .models import User, Tweet
+from .cache import cache_buffer
+from .models import User, Tweet, AppConfig
 from .utils import chunk
 from .services import default_twitter_service as twitter_service
 
@@ -39,7 +40,9 @@ def listen_for_tweets():
 
     log.info('\n*** Listening for tweets...\n')
 
-    streaming_keywords = settings.STREAMING_KEYWORDS
+    app_config = AppConfig.get(cache=cache)
+    streaming_keywords = app_config.twitter_tracking_keywords.split('\n')
+    streaming_keywords = map(lambda keyword: keyword.strip(), streaming_keywords)
 
     def contains_keywords(text):
         """
