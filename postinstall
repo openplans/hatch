@@ -97,20 +97,6 @@ SHOW_DEBUG_TOOLBAR = DEBUG
 # Set these explicitly here to override whatever may have come from settings
 STATIC_URL = '/static/'
 
-# For authenticating users with Twitter
-TWITTER_CONSUMER_KEY = env['TWITTER_CONSUMER_KEY']
-TWITTER_CONSUMER_SECRET = env['TWITTER_CONSUMER_SECRET']
-
-# For accessing the app's Twitter account
-TWITTER_USERNAME = env['TWITTER_USERNAME']
-TWITTER_ACCESS_TOKEN = env['TWITTER_ACCESS_TOKEN']
-TWITTER_ACCESS_SECRET = env['TWITTER_ACCESS_SECRET']
-
-# For monitoring the Twitter streaming API
-STREAMING_KEYWORDS = \
-    env['STREAMING_KEYWORDS'].split(',') if 'STREAMING_KEYWORDS' in env \
-    else ['#' + env['TWITTER_USERNAME']]
-
 ALLOWED_HOSTS = ['*']
 
 LAST_DEPLOY_DATE = '$(date --iso-8601=minutes)'
