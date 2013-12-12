@@ -10,6 +10,12 @@ from django.contrib import admin
 admin.autodiscover()
 
 
+def favicon_view(request):
+    from django.shortcuts import redirect
+    from django.conf import settings
+    return redirect(settings.STATIC_URL + 'images/favicon.png')
+
+
 def vision_patterns():
     app_config_query = AppConfig.objects.all()[:1]
 
@@ -40,6 +46,7 @@ urlpatterns = (
         # Meta
         url(r'^robots.txt$', robots_view, name='robots'),
         url(r'^sitemap.xml$', sitemap_view, name='sitemap'),
+        url(r'^favicon\..+$', favicon_view, name='favicon'),
 
         # Admin
         url(r'^admin/', include(admin.site.urls)),

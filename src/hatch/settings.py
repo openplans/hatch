@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'hatch.wsgi.application'
 ROOT_URLCONF = 'hatch.urls'
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -101,7 +102,6 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_auth.middleware.SocialAuthExceptionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'hatch.middleware.HatchAuthMiddleware',
 )
 
@@ -131,9 +131,6 @@ LOGIN_ERROR_URL    = '/'
 #
 # 3rd-party service configuration and keys
 #
-
-TWITTER_CONSUMER_KEY         = ''  # Set me in local settings
-TWITTER_CONSUMER_SECRET      = ''  # Set me in local settings
 
 ###############################################################################
 #
@@ -235,6 +232,13 @@ LOGGING = {
         },
     }
 }
+
+
+###############################################################################
+# Use the heroku settings, if we're on Heroku
+import os
+if os.environ.get('IS_HEROKU'):
+    from heroku_settings import *
 
 
 ###############################################################################
