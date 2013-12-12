@@ -42,7 +42,8 @@ local_settings.py
 .dotcloud
 
 # App
+node_modules
 src/hatch/node_modules/
-src/hatch/static/components/
+src/hatch/static/bower_components/
 src/hatch/static/js/*.min.js
 src/hatch/static/css/*.min.css
