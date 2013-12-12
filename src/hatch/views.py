@@ -308,7 +308,8 @@ class ReplyViewSet (AppMixin, ModelViewSet):
     serializer_class = ReplySerializer
 
     def get_tweet_text(self, request, reply):
-        app_username = settings.TWITTER_USERNAME
+        app_config = AppConfig.get(cache=cache_buffer)
+        app_username = app_config.twitter_handle
         if not app_username.startswith('@'):
             app_username = '@' + app_username
 
