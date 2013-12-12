@@ -132,9 +132,6 @@ LOGIN_ERROR_URL    = '/'
 # 3rd-party service configuration and keys
 #
 
-TWITTER_CONSUMER_KEY         = ''  # Set me in local settings
-TWITTER_CONSUMER_SECRET      = ''  # Set me in local settings
-
 ###############################################################################
 #
 # URL Shortening

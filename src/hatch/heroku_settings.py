@@ -47,24 +47,6 @@ GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', "', ''); alert('Set 
 GOOGLE_ANALYTICS_DOMAIN = os.environ.get('GOOGLE_ANALYTICS_DOMAIN', 'dotcloud.com')
 
 ## ===========================================================================
-## Twitter configuration
-##
-## TODO: These will make their way to the app config
-
-# For authenticating users with Twitter
-TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY', '')
-TWITTER_CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET', '')
-
-# For accessing the app's Twitter account
-TWITTER_USERNAME = os.environ.get('TWITTER_USERNAME', '')
-TWITTER_ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN', '')
-TWITTER_ACCESS_SECRET = os.environ.get('TWITTER_ACCESS_SECRET', '')
-
-STREAMING_KEYWORDS = \
-    os.environ['STREAMING_KEYWORDS'].split(',') if 'STREAMING_KEYWORDS' in os.environ \
-    else ['#' + os.environ.get('TWITTER_USERNAME', 'hatch')]
-
-## ===========================================================================
 
 # For sitemaps and caching -- will be a new value every time the server starts
 LAST_DEPLOY_DATE = datetime.datetime.now().isoformat()

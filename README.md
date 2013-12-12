@@ -2,7 +2,7 @@
 
 Hatch helps community members share what they love about their communities, and their ideas for the future. Discovering and sharing visions happens over Twitter and directly on the app. City leadership and staff, community leaders, and other adult allies can use the tool to share visions they like, offer comments and help make connections.
 
-Hatch started as \#VizLou, an experimental new tool for civic engagement, created in partnership with Louisville Metro, with support from Living Cities. [Read more about the project](http://www.livingcities.org/blog/?id=90). 
+Hatch started as \#VizLou, an experimental new tool for civic engagement, created in partnership with Louisville Metro, with support from Living Cities. [Read more about the project](http://www.livingcities.org/blog/?id=90).
 
 ## Setup
 
@@ -36,17 +36,7 @@ Copy the `local_settings.py.template` file to `local_settings.py` and set the fo
     AWS_STORAGE_BUCKET_NAME
     AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY
-    
+
     # Google Analytics logging information
     GOOGLE_ANALYTICS_DOMAIN  # The domain for the app, e.g. 'hatchery.phila.gov'
     GOOGLE_ANALYTICS_ID      # The ID from Google Analytics, e.g. 'UA-12345678-1'
-    
-    # Twitter credentials
-    TWITTER_USERNAME         # The app's Twitter username, no '@' symbol
-    TWITTER_ACCESS_SECRET
-    TWITTER_ACCESS_TOKEN
-    TWITTER_CONSUMER_KEY
-    TWITTER_CONSUMER_SECRET
-    
-    # Twitter tracking
-    STREAMING_KEYWORDS       # A comma-separated list of words or hash tags to watch
