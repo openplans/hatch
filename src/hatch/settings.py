@@ -26,6 +26,9 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
+APP_CONFIG_CACHE_KEY = 'app_config'
+APP_CONFIG_INDEX = 0
+
 ###############################################################################
 #
 # Time Zones

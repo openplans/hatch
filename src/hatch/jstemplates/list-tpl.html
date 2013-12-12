@@ -1,11 +1,5 @@
 <div class="container">
-  {{#if_authenticated}}
-  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
-  {{^}}
-  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
-  {{/if_authenticated}}
-
   <ul class="vision-list unstyled-list"></ul>
 
-  <a href="#" class="btn btn-block btn-tertiary load-more-action">Load more {{app_config 'vision_plural'}}</a>
+  <a href="#" class="load-more-action">Load more {{app_config 'vision_plural'}}</a>
 <div>
