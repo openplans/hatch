@@ -188,17 +188,8 @@ if [ `dotcloud_get_env DOTCLOUD_SERVICE_NAME` = www ] ; then
     which node
     which npm
 
-    echo "Install bower and grunt"
-    npm install -g bower grunt-cli
-
-    echo "Fetch client dependencies"
-    cd src/hatch
-    bower install
-
-    echo "Minify client dependencies"
+    echo "Install bower and grunt; minify js and css files"
     npm install
-    grunt
-    cd ../..
 
     echo "Setting up static file service..."
     safe src/manage.py collectstatic --noinput
