@@ -30,7 +30,7 @@ def vision_patterns():
     # App
     return patterns(
         '',
-        url(r'^' + app_config.vision_plural + '/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
+        url(r'^' + app_config.vision_plural + '/(?P<category>[^/]+)/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
         url(r'^' + app_config.vision_plural + '/(?P<pk>\w+)/list$', category_app_view,      name='app-vision-list'),
     )
 
