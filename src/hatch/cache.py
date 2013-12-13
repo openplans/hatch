@@ -42,12 +42,12 @@ class CacheBuffer (object):
         self.buffer.update(all_results)
         return results
 
-    def get(self, key):
+    def get(self, key, default=None):
         try:
             value = self.buffer[key]
             return None if value is unspecified else value
         except KeyError:
-            value = django_cache.cache.get(key)
+            value = django_cache.cache.get(key, default)
             self.buffer[key] = value
             return value
 
