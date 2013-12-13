@@ -554,7 +554,9 @@ ul.user-menu:after {
   text-decoration: underline;
 }
 
-.vision-meta-list {}
+.vision-meta-list {
+  overflow: hidden;
+}
 .vision-meta-item {
   float: left;
   margin-right: 20px;
