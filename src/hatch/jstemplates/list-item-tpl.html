@@ -20,7 +20,7 @@
   {{/ if }}
 
   <ul class="vision-meta-list unstyled-list clearfix">
-    <li class="vision-meta-item">
+    <li class="vision-meta-item{{#eq supporters.length 0}} is-hidden{{/eq}}">
       <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
       {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
       <img class="heart heart-inline" src="/static/images/heart.png">
@@ -29,7 +29,7 @@
       </span></a>
     </li>
     {{^eq replies.length 0 }}
-    <li class="vision-meta-item">
+    <li class="vision-meta-item vision-meta-item-replies">
       <a href="/{{visions_url_name}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
     </li>
     {{/eq}}
