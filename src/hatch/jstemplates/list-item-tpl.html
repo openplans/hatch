@@ -20,7 +20,7 @@
   {{/ if }}
 
   <ul class="vision-meta-list unstyled-list clearfix">
-    <li class="vision-meta-item{{#eq supporters.length 0}} is-hidden{{/eq}}">
+    <li class="vision-meta-item{{#eq supporters.length 0}} vision-meta-item-unsupported{{/eq}}">
       <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
       {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
       <img class="heart heart-inline" src="/static/images/heart.png">

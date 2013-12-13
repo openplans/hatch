@@ -558,6 +558,7 @@ ul.user-menu:after {
 .vision-meta-item {
   float: left;
   margin-right: 20px;
+  margin-bottom: 0 !important;
 }
 
 .replies-count {
@@ -685,6 +686,7 @@ ul.user-menu:after {
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
   margin-bottom: 20px;
   padding-right: 10px;
+  padding-bottom: 10px;
 }
 .vision-list .user-link {
   margin-top: 5px;
@@ -972,6 +974,9 @@ h6.category-prompt {
 .archives-list li {
   margin-bottom: 1.25em;
 }
+.is-archived .vision-meta-item-unsupported {
+  display: none;
+}
 .archives-list .slide-question {
   margin-bottom: 0;
 }
@@ -981,6 +986,12 @@ h6.category-prompt {
   padding: 15px 10px; 
   margin: -15px -10px 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.75);
+}
+.in-response-to.is-archived {
+  background-color: #8c114b;
+}
+.is-archived form {
+  display: none;
 }
 
 
