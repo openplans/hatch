@@ -127,6 +127,18 @@ LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/'
 
+# The Twitter configuration variable have to be present and truthy in order
+# for social_auth to recognize the Twitter log in as enabled. We have to use
+# lazy instantiation of the values because hatch.models imports this settings
+# module.
+def get_app_config_attr(attr):
+    from hatch.models import AppConfig
+    return getattr(AppConfig.get(), attr)
+
+from django.utils.functional import SimpleLazyObject
+TWITTER_CONSUMER_KEY = SimpleLazyObject(lambda: get_app_config_attr('twitter_consumer_key'))
+TWITTER_CONSUMER_SECRET = SimpleLazyObject(lambda: get_app_config_attr('twitter_consumer_secret'))
+
 ###############################################################################
 #
 # 3rd-party service configuration and keys
