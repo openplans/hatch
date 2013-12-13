@@ -12,7 +12,7 @@
   <h4 class="vision-description"><a href="/{{visions_url_name}}/{{ category }}/{{ id }}" class="undecorated">{{ formattruncated text 140 }}</a></h4>
 
   {{# if media_url }}
-  <a href="/{{visions_url_name}}/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
+  <a href="/{{visions_url_name}}/{{category}}/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
   {{/ if }}
 
   {{# if category }}
@@ -30,7 +30,7 @@
     </li>
     {{^eq replies.length 0 }}
     <li class="vision-meta-item">
-      <a href="/{{visions_url_name}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
+      <a href="/{{visions_url_name}}/{{category}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
     </li>
     {{/eq}}
   </ul>
