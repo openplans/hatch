@@ -17,10 +17,8 @@ def favicon_view(request):
 
 
 def vision_patterns():
-    app_config_query = AppConfig.objects.all()[:1]
-
     try:
-        app_config = app_config_query[0]
+        app_config = AppConfig.get()
     except IndexError:
         # This app has not been configured. Please add a
         # record to the AppConfig model to set your app-specific
