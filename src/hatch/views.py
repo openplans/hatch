@@ -57,7 +57,7 @@ class AppMixin (object):
     def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
             # '/visions/%s' % vision.pk)
-            reverse('app-vision-detail', kwargs={'pk': vision.pk}))
+            reverse('app-vision-detail', kwargs={'category': vision.category.name, 'pk': vision.pk}))
 
     def get_vision_queryset(self, base_queryset=None):
         return (base_queryset or Vision.objects.all())\
