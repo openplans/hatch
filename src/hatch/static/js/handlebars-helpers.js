@@ -80,7 +80,7 @@ var Hatch = Hatch || {};
     var result = '';
 
     NS.app.categoryCollection.each(function(category) {
-      result += options.fn(_.extend(this, category));
+      result += options.fn(_.extend(this, category.toJSON()));
     });
 
     return result;

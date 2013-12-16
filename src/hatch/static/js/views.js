@@ -445,16 +445,12 @@ var Hatch = Hatch || {};
     template: '#form-tpl',
     events: {
       'submit form': 'handleFormSubmission',
-      'change .vision-category-list input': 'handleCategoryChange',
       'change .vision-media input': 'handleMediaFileChange'
     },
     ui: {
       file: 'input[type=file]',
       imagePreview: '.image-preview',
       submit: 'input[type=submit]'
-    },
-    onRender: function() {
-      this.handleCategoryChange();
     },
     getFirstInvalidElement: function(form) {
       var invalidEl = null,
@@ -517,16 +513,6 @@ var Hatch = Hatch || {};
         }
       });
 
-    },
-    handleCategoryChange: function() {
-      var category = this.$('.vision-category-list input:checked').val();
-
-      if (category) {
-        NS.Utils.log('send', 'event', 'vision', 'change-category', category);
-      }
-
-      this.$('.category-prompt').addClass('is-hidden')
-        .filter('.' + category + '-prompt').removeClass('is-hidden');
     },
     handleMediaFileChange: function(evt) {
       var self = this,
