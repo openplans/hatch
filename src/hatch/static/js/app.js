@@ -11,6 +11,10 @@ var Hatch = Hatch || {};
     obj.trigger('fetched', obj);
   };
 
+  NS.getCategory = function(name) {
+    return NS.app.categoryCollection.findWhere({name: name});
+  };
+
   NS.getSubCollection = function(collectionMap, key, CollectionType, collectionFilter) {
     if (!collectionMap[key]) {
       collectionMap[key] = new CollectionType();
@@ -127,10 +131,10 @@ var Hatch = Hatch || {};
       }));
     },
     listVisions: function(category) {
-      category = category || NS.app.activeCategory;
+      category = category || NS.app.activeCategoryName;
 
       // TODO: Move to the config settings
-      document.title = NS.appConfig.title + ' | ' + _.findWhere(NS.categories, {name: category}).prompt;
+      document.title = NS.appConfig.title + ' | ' + NS.getCategory(category).get('prompt');
 
       NS.app.mainRegion.show(new NS.VisionListView({
         model: new Backbone.Model({category: category}),
@@ -211,13 +215,14 @@ var Hatch = Hatch || {};
       }
     },
     home: function(category) {
-      category = category || NS.app.activeCategory;
+      category = category || NS.app.activeCategoryName;
 
       // TODO: Move to the config settings
       document.title = NS.appConfig.title + ' | What\'s your '+ NS.appConfig.vision +'?';
 
-      var homeView = new NS.HomeView({
-            model: new Backbone.Model(_.findWhere(NS.categories, {name: category})),
+      var categoryModel = NS.getCategory(category),
+          homeView = new NS.HomeView({
+            model: categoryModel
           }),
 
           inFirst = function(model, collection, count) {
@@ -251,6 +256,10 @@ var Hatch = Hatch || {};
 
       // Render the main view
       NS.app.mainRegion.show(homeView);
+
+      homeView.category.show(new NS.HomeCategoryView({
+        model: categoryModel
+      }));
 
       // Render the visions
       NS.showViewInRegion(NS.getVisionCollection(category), homeView.visions, getVisionsListView, {spinner: NS.app.bigSpinnerOptions});
@@ -505,12 +514,13 @@ var Hatch = Hatch || {};
 
   // Init =====================================================================
   $(function() {
-    NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
+    NS.app.categoryCollection = new Backbone.Collection(NS.categories);
+    NS.app.activeCategoryName = NS.app.categoryCollection.findWhere({active: true}).get('name');
     NS.app.visionCollections = {};
     NS.app.userCollections = {};
 
     // Init and fetch the active collection
-    NS.getVisionCollection(NS.app.activeCategory);
+    NS.getVisionCollection(NS.app.activeCategoryName);
 
     // NS.app.userCollection = new NS.UserCollection();
     // NS.app.userCollection.on('reset', setIsFetched);

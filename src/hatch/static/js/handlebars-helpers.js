@@ -79,7 +79,7 @@ var Hatch = Hatch || {};
   Handlebars.registerHelper('each_category', function(options) {
     var result = '';
 
-    _.each(NS.categories, function(category) {
+    NS.app.categoryCollection.each(function(category) {
       result += options.fn(_.extend(this, category));
     });
 
@@ -89,9 +89,9 @@ var Hatch = Hatch || {};
   Handlebars.registerHelper('each_archived_category', function(options) {
     var result = '';
 
-    _.each(NS.categories, function(category) {
-      if (!category.active) {
-        result += options.fn(_.extend(this, category));
+    NS.app.categoryCollection.each(function(category) {
+      if (!category.get('active')) {
+        result += options.fn(_.extend(this, category.toJSON()));
       }
     });
 
@@ -99,10 +99,11 @@ var Hatch = Hatch || {};
   });
 
   Handlebars.registerHelper('has_archived_categories', function(options) {
-    var i;
+    var categories = NS.app.categoryCollection.toJSON(),
+        i;
 
-    for(i=0; i<NS.categories.length; i++) {
-      if (!NS.categories[i].active) {
+    for(i=0; i<categories.length; i++) {
+      if (!categories[i].active) {
         return options.fn(this);
       }
     }
@@ -111,11 +112,12 @@ var Hatch = Hatch || {};
   });
 
   Handlebars.registerHelper('first_active_category', function(options) {
-    var i;
+    var categories = NS.app.categoryCollection.toJSON(),
+        i;
 
-    for (i=0; i<NS.categories.length; i++) {
-      if (NS.categories[i].active) {
-        return options.fn(_.extend(this, NS.categories[i]));
+    for (i=0; i<categories.length; i++) {
+      if (categories[i].active) {
+        return options.fn(_.extend(this, categories[i]));
       }
     }
   });
@@ -160,7 +162,7 @@ var Hatch = Hatch || {};
   }
 
   Handlebars.registerHelper('category_prompt', function(category) {
-    return _.findWhere(NS.categories, {name: category}).prompt;
+    return NS.app.categoryCollection.findWhere({name: category}).get('prompt');
   });
 
   Handlebars.registerHelper('window_location', function() {

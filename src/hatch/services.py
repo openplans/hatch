@@ -182,7 +182,7 @@ class TwitterService (object):
 
             # Update the social media found status for all the users.
             from .models import User
-            
+
             seen_users = User.objects.filter(social_auth__uid__in=seen_ids)
             seen_users.update(sm_not_found=False)
 
