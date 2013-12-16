@@ -5,7 +5,6 @@ def create_app_config():
     AppConfig.objects.create(
         title='',
         subtitle='',
-        name='',
         description='',
         twitter_handle='',
         share_title='',
