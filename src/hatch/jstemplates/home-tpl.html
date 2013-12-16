@@ -4,9 +4,21 @@
   <div class="visions-region container-fullwidth"></div>
 
   <div class="container-fullwidth welcome site-footer" id="site-footer">
+    <h5>
+      {{#app_config 'app_label'}}
+        {{{.}}}
+      {{^}}
+        What is {{app_config 'title'}}?
+      {{/app_config}}
+    </h5>
 
-    <h5>What is {{app_config 'title'}}?</h5>
-    <p><strong>{{app_config 'title'}}</strong> is a place to share your {{app_config 'vision_plural'}} for making {{app_config 'city'}} better.  All idea shared here will shared with the City of {{app_config 'city'}}.</p>
+    <p>
+      {{#app_config 'app_description'}}
+        {{.}}
+      {{^}}
+        <strong>{{app_config 'title'}}</strong> is a place to share your {{app_config 'vision_plural'}} for making {{app_config 'city'}} better.  All idea shared here will shared with the City of {{app_config 'city'}}.
+      {{/app_config}}
+    </p>
 
     <div class="visionaries-region"></div>
 

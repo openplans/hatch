@@ -494,7 +494,6 @@ class Reply (TweetedModelMixin, models.Model):
 class AppConfig (models.Model):
     title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=100)
-    name = models.CharField(max_length=50)
     description = models.TextField()
     share_title = models.CharField(max_length=100)
     url = models.CharField(max_length=1024)
@@ -506,6 +505,13 @@ class AppConfig (models.Model):
     twitter_access_token_secret = models.CharField(max_length=100)
     twitter_tracking_keywords = models.TextField(max_length=1024)
 
+    app_label = models.CharField(max_length=250, help_text="This is "
+        "the first heading that appears in the footer. The default is"
+        "\"What is {{title}}?\".",
+        null=True, blank=True)
+    app_description = models.CharField(max_length=1024, help_text="This is "
+        "the text that describes app on the home page.",
+        null=True, blank=True)
     vision = models.CharField(max_length=50)
     vision_plural = models.CharField(max_length=50)
     visionary = models.CharField(max_length=50)
@@ -544,6 +550,3 @@ class AppConfig (models.Model):
             app_config = app_config_query[settings.APP_CONFIG_INDEX]
             cache.set(settings.APP_CONFIG_CACHE_KEY, app_config)
         return app_config
-
-
-
