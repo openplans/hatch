@@ -9,7 +9,7 @@ gunicorn
 dj_static
 dj_database_url
 django_cache_url
-
+newrelic
 
 
 # ==============================
