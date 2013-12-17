@@ -338,9 +338,11 @@ var Hatch = Hatch || {};
 
       if (visionariesCollection && visionariesCollection.get(userId)) {
         model = visionariesCollection.get(userId);
+        model.isFetched = true;
       }
       else if (alliesCollection && alliesCollection.get(userId)) {
         model = alliesCollection.get(userId);
+        model.isFetched = true;
       }
       else {
         // We need to check the Backbone.Relational.store's cached collection
