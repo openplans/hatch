@@ -10,7 +10,7 @@ def rel_path(*subs):
 # Debug is False by default, true if set in the environment.
 DEBUG = (os.environ.get('DEBUG', 'False') in ['true', 'True'])
 TEMPLATE_DEBUG = DEBUG
-SHOW_DEBUG_TOOLBAR = DEBUG
+SHOW_DEBUG_TOOLBAR = (os.environ.get('SHOW_DEBUG_TOOLBAR', 'False') in ['true', 'True']) or DEBUG
 
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
