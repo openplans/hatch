@@ -56,7 +56,7 @@ SITE_ID = 1
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
