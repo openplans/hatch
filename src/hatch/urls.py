@@ -32,6 +32,10 @@ def vision_patterns():
         url(r'^' + app_config.vision_plural + '/(?P<pk>\w+)/list$', category_app_view,      name='app-vision-list'),
     )
 
+
+def generate_exception_view(request):
+    raise Exception('DIE!!!')
+
 urlpatterns = (
     patterns(
         '',
@@ -56,6 +60,9 @@ urlpatterns = (
         url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,         name='share-vision-action'),
         url(r'^api/notifications$',                 notifications_api_view, name='notifications-list'),
         url(r'^api/', include(api_router.urls)),
+
+        # Error logging testing
+        url(r'^generate-500$', generate_exception_view),
     ) +
     vision_patterns() +
     patterns(
