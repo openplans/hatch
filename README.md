@@ -56,14 +56,19 @@ Copy the `local_settings.py.template` file to `local_settings.py` and set the fo
 
 You will need to setup your database settings also to point to your local postgres instance.
 
-#### Create a Superuser
+#### Setup the database
+
+You don't have any tables yet! Run this to get everything setup for the first time.
+
+    src/manage.py syncdb --migrate
+
+#### Create a superuser
 
 A superuser will allow you to login to the site admin. Run this command and follow the prompts.
 
     src/manage.py createsuperuser
 
-
-#### Configure the App
+#### Configure the app
 
 1. Start the app by running `src/manage.py runserver` in your terminal from your app directory. This runs on port 8080 by default.
 2. Go to [http://localhost:8080/admin/](http://localhost:8080/admin/) and login with the credentials you created in the previous step.
@@ -73,3 +78,52 @@ A superuser will allow you to login to the site admin. Run this command and foll
 6. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
 7. Log out, restart your server (`src/manage.py runserver`), and then visit [your app](http://localhost:8080/admin/). Things should be setup correctly if you can login with your Twitter account and submit an idea.
 
+
+### Deploy to Heroku
+
+#### Create the app
+
+1. Create a Heroku app for your Hatch git repo `heroku apps:create my-app-name`
+2. Make sure you add the following Heroku Add-ons
+  * Postgresql
+  * Rediscloud (or your favorite Redis add-on)
+
+#### Set environment variables
+
+Set the first batch of environment variables on your app. Be sure to replace the dummy values.
+
+    heroku config:set AWS_ACCESS_KEY_ID=[my-aws-access-key-id] \
+      AWS_SECRET_ACCESS_KEY=[my-aws-secret-access-key] \
+      AWS_STORAGE_BUCKET_NAME=[my-aws-bucket-name] \
+      BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git \
+      GOOGLE_ANALYTICS_DOMAIN=[my-ga-domain] \
+      GOOGLE_ANALYTICS_ID=[my-ga-id] \
+      IS_HEROKU=True
+
+Next run `heroku config` to see your current environment variables. Heroku names things differently depending on what flavor of add-on you choose, so we need to remap a few of them so that Hatch knows how to read them.
+
+Set `DATABASE_URL` to the value of `HEROKU_POSTGRESQL_[SOME_COLOR]_URL`
+
+    heroku config:set DATABASE_URL=postgres://[blahblahblah]
+
+Set `REDIS_URL` to the value of `[REDISVENDOR]_URL`
+
+    heroku config:set REDIS_URL=redis://[blahblahblah]
+
+#### Deploy the app
+
+Deploy your code to Heroku now that the environment is all setup.
+
+    git push heroku master
+
+#### Setup and configure the app
+
+Your app is now deployed! Finally, we need to do the final steps which mirror what we did above when setting up our local instance.
+
+1. [Setup the database](#setup-the-database)
+2. [Create a superuser](#create-a-superuser)
+3. [Configure the app](#configure-the-app)
+
+#### Hatch a conversation
+
+Congratulations! You should now be up and running.
