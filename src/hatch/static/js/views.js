@@ -12,21 +12,21 @@ var Hatch = Hatch || {};
   NS.SupportHandlerMixin = {
     handleSupport: function(evt) {
       evt.preventDefault();
+      var vision = this.model,
+          supporters = vision.get('supporters'),
+          user = NS.app.currentUser,
+          category = NS.getCategory(vision.get('category')),
+          supportCount = category.get('support_count'),
+          visionFromMainCollection, index;
 
-      if (NS.app.currentUser.isAuthenticated()) {
-        var vision = this.model,
-            supporters = vision.get('supporters'),
-            user = NS.app.currentUser,
-            category = NS.getCategory(vision.get('category')),
-            supportCount = category.get('support_count'),
-            visionFromMainCollection, index;
-
+      if (NS.app.currentUser.isAuthenticated() && category.get('active')) {
         // supporters is an array of ids in some cases, a collection (with
         // contains) in others.
         if (_.isArray(supporters)){
           // if supported, unsupport
           index = _.indexOf(supporters, user.id);
-          visionFromMainCollection = NS.app.visionCollection.get(this.model.id);
+          visionFromMainCollection = NS.app.visionCollections[category.get('name')].get(this.model.id);
+
           if(index > -1) {
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
@@ -586,7 +586,7 @@ var Hatch = Hatch || {};
       this.$('.tab').removeClass('is-current');
       this.$('a[href*="'+ NS.appConfig.vision_plural +'"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
-        collection: new Backbone.Collection(this.model.get('visions'))
+        collection: new NS.VisionCollection(this.model.get('visions'))
       }));
     },
     showSupported: function() {

@@ -162,7 +162,8 @@ var Hatch = Hatch || {};
       }));
     },
     showVision: function(category, visionId) {
-      var model;
+      var model,
+          relatedVisionCollection = Backbone.Relational.store.getCollection(NS.VisionModel);
 
       // Set to an int
       visionId = parseInt(visionId, 10);
@@ -173,7 +174,8 @@ var Hatch = Hatch || {};
       }
 
       function renderVision(model) {
-        var layout = new NS.VisionDetailLayout({
+        var category = NS.getCategory(model.get('category')),
+            layout = new NS.VisionDetailLayout({
               model: model
             });
 
@@ -181,20 +183,23 @@ var Hatch = Hatch || {};
         document.title = NS.appConfig.title + ' | "' + NS.Utils.truncateChars(model.get('text'), 70) + '" by @' + model.get('author_details').username;
         NS.Utils.log('send', 'event', 'vision', 'show', visionId);
 
-        // TODO: why is this necessary?
-        layout.on('show', function() {
+        NS.app.mainRegion.show(layout);
+
+        // Don't show replies if an inactive category and no existing replies
+        if (category.get('active') || (!category.get('active') && model.get('replies').length > 0)) {
           layout.replies.show(new NS.ReplyListView({
             model: model,
             collection: model.get('replies')
           }));
+        }
 
+        // Don't show supporters if an inactive category and no existing replies
+        if (category.get('active') || (!category.get('active') && model.get('supporters').length > 0)) {
           layout.support.show(new NS.SupportListView({
             model: model,
             collection: model.get('supporters')
           }));
-        });
-
-        NS.app.mainRegion.show(layout);
+        }
 
         if (NS.app.currentUser) {
           NS.app.currentUser.viewVision(visionId);
@@ -206,7 +211,7 @@ var Hatch = Hatch || {};
         model = NS.app.visionCollections[category].get(visionId);
         renderVision(model);
       } else {
-        model = new NS.VisionModel({id: visionId});
+        model = relatedVisionCollection.get(visionId) || new NS.VisionModel({id: visionId});
         model.fetch({
           success: function(model, response, options) {
             renderVision(model);
