@@ -87,6 +87,7 @@ A superuser will allow you to login to the site admin. Run this command and foll
 2. Make sure you add the following Heroku Add-ons
   * Postgresql
   * Rediscloud (or your favorite Redis add-on)
+  * Heroku Scheduler
 
 #### Set environment variables
 
@@ -115,6 +116,15 @@ Set `REDIS_URL` to the value of `[REDISVENDOR]_URL`
 Deploy your code to Heroku now that the environment is all setup.
 
     git push heroku master
+
+#### Keep the user information fresh
+
+On your Heroku dashboard, click the Heroku Scheduler addon. Add the following
+scheduled task (job):
+
+    src/manage.py refreshusers
+
+Schedule it to run with a frequency of every 10 minutes.
 
 #### Setup and configure the app
 
