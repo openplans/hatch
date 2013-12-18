@@ -6,10 +6,6 @@ var Hatch = Hatch || {};
   'use strict';
 
   // Helpers ==================================================================
-  NS.getCategory = function(name) {
-    return _.findWhere(NS.categories, {name: name});
-  };
-
   NS.setIsFetched = function(obj) {
     obj.isFetched = true;
     obj.trigger('fetched', obj);
