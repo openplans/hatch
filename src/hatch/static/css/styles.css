@@ -989,7 +989,7 @@ h6.category-prompt {
 .inactive-message {
   background-color: #ef037d;
   background-color: rgba(239,3,125,0.5);
-  padding: 15px 10px; 
+  padding: 15px 10px;
   margin: -15px -10px 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.75);
 }
@@ -1000,6 +1000,9 @@ h6.category-prompt {
   display: none;
 }
 
+.is-archived .support-link {
+  cursor: default;
+}
 
 /* =User Lists
 -------------------------------------------------------------- */

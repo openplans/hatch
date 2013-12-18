@@ -22,7 +22,7 @@
   <ul class="vision-meta-list unstyled-list clearfix">
     <li class="vision-meta-item{{#eq supporters.length 0}} vision-meta-item-unsupported{{/eq}}">
       <a href="#" class="support-link support{{#if_supported}} supported{{/if_supported}} hint--right"
-      {{^ if_authenticated}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_authenticated}}>
+      {{^ if_authenticated}}{{#if_active_category category}}data-hint="Sign in to support this {{app_config "vision"}}!"{{/if_active_category}}{{/if_authenticated}}>
       <img class="heart heart-inline" src="/static/images/heart.png">
       <span class="support-count total-support-count">
         {{#eq supporters.length 0}} Support this! {{^}} {{ supporters.length }} {{/eq}}
@@ -36,11 +36,12 @@
   </ul>
 
 </article><!-- end .vision -->
-
-{{#if show_add_button}}
-  {{#if_authenticated}}
-  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
-  {{^}}
-  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
-  {{/if_authenticated}}
-{{/if}}
+{{#if_active_category category}}
+  {{#if show_add_button}}
+    {{#if_authenticated}}
+    <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
+    {{^}}
+    <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
+    {{/if_authenticated}}
+  {{/if}}
+{{/if_active_category}}
