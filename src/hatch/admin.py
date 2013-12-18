@@ -135,7 +135,7 @@ class TweetAdmin (admin.ModelAdmin):
 class ShareInline (admin.TabularInline):
     model = Share
     extra = 1
-    raw_id_fields = ('tweet', 'user',)
+    raw_id_fields = ('user',)
 
 
 class ReplyInline (admin.TabularInline):
