@@ -15,6 +15,10 @@ var Hatch = Hatch || {};
     obj.trigger('fetched', obj);
   };
 
+  NS.getCategory = function(name) {
+    return NS.app.categoryCollection.findWhere({name: name});
+  };
+
   NS.getSubCollection = function(collectionMap, key, CollectionType, collectionFilter) {
     if (!collectionMap[key]) {
       collectionMap[key] = new CollectionType();
@@ -131,10 +135,10 @@ var Hatch = Hatch || {};
       }));
     },
     listVisions: function(category) {
-      category = category || NS.app.activeCategory;
+      category = category || NS.app.activeCategoryName;
 
       // TODO: Move to the config settings
-      document.title = NS.appConfig.title + ' | ' + NS.getCategory(category).prompt;
+      document.title = NS.appConfig.title + ' | ' + NS.getCategory(category).get('prompt');
 
       NS.app.mainRegion.show(new NS.VisionListView({
         model: new Backbone.Model({category: category}),
@@ -186,7 +190,7 @@ var Hatch = Hatch || {};
         NS.app.mainRegion.show(layout);
 
         // Don't show replies if an inactive category and no existing replies
-        if (category.active || (!category.active && model.get('replies').length > 0)) {
+        if (category.get('active') || (!category.get('active') && model.get('replies').length > 0)) {
           layout.replies.show(new NS.ReplyListView({
             model: model,
             collection: model.get('replies')
@@ -194,7 +198,7 @@ var Hatch = Hatch || {};
         }
 
         // Don't show supporters if an inactive category and no existing replies
-        if (category.active || (!category.active && model.get('supporters').length > 0)) {
+        if (category.get('active') || (!category.get('active') && model.get('supporters').length > 0)) {
           layout.support.show(new NS.SupportListView({
             model: model,
             collection: model.get('supporters')
@@ -220,13 +224,14 @@ var Hatch = Hatch || {};
       }
     },
     home: function(category) {
-      category = category || NS.app.activeCategory;
+      category = category || NS.app.activeCategoryName;
 
       // TODO: Move to the config settings
       document.title = NS.appConfig.title + ' | What\'s your '+ NS.appConfig.vision +'?';
 
-      var homeView = new NS.HomeView({
-            model: new Backbone.Model(NS.getCategory(category)),
+      var categoryModel = NS.getCategory(category),
+          homeView = new NS.HomeView({
+            model: categoryModel
           }),
 
           inFirst = function(model, collection, count) {
@@ -260,6 +265,10 @@ var Hatch = Hatch || {};
 
       // Render the main view
       NS.app.mainRegion.show(homeView);
+
+      homeView.category.show(new NS.HomeCategoryView({
+        model: categoryModel
+      }));
 
       // Render the visions
       NS.showViewInRegion(NS.getVisionCollection(category), homeView.visions, getVisionsListView, {spinner: NS.app.bigSpinnerOptions});
@@ -338,9 +347,11 @@ var Hatch = Hatch || {};
 
       if (visionariesCollection && visionariesCollection.get(userId)) {
         model = visionariesCollection.get(userId);
+        model.isFetched = true;
       }
       else if (alliesCollection && alliesCollection.get(userId)) {
         model = alliesCollection.get(userId);
+        model.isFetched = true;
       }
       else {
         // We need to check the Backbone.Relational.store's cached collection
@@ -514,12 +525,13 @@ var Hatch = Hatch || {};
 
   // Init =====================================================================
   $(function() {
-    NS.app.activeCategory = _.findWhere(NS.categories, {active: true}).name;
+    NS.app.categoryCollection = new Backbone.Collection(NS.categories);
+    NS.app.activeCategoryName = NS.app.categoryCollection.findWhere({active: true}).get('name');
     NS.app.visionCollections = {};
     NS.app.userCollections = {};
 
     // Init and fetch the active collection
-    NS.getVisionCollection(NS.app.activeCategory);
+    NS.getVisionCollection(NS.app.activeCategoryName);
 
     // NS.app.userCollection = new NS.UserCollection();
     // NS.app.userCollection.on('reset', setIsFetched);

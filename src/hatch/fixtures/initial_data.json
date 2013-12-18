@@ -1,1 +1,140 @@
-[{"pk": 1, "model": "auth.group", "fields": {"name": "allies", "permissions": []}}, {"pk": 2, "model": "auth.group", "fields": {"name": "mayors", "permissions": []}}, {"pk": 3, "model": "auth.group", "fields": {"name": "vips", "permissions": []}}]
+[
+{
+  "pk": 1, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "allies", 
+    "permissions": []
+  }
+},
+{
+  "pk": 2, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "mayors", 
+    "permissions": []
+  }
+},
+{
+  "pk": 3, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "vips", 
+    "permissions": []
+  }
+},
+{
+  "pk": 4, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "moderators", 
+    "permissions": [
+      [
+        "add_appconfig", 
+        "hatch", 
+        "appconfig"
+      ], 
+      [
+        "change_appconfig", 
+        "hatch", 
+        "appconfig"
+      ], 
+      [
+        "delete_appconfig", 
+        "hatch", 
+        "appconfig"
+      ], 
+      [
+        "add_category", 
+        "hatch", 
+        "category"
+      ], 
+      [
+        "change_category", 
+        "hatch", 
+        "category"
+      ], 
+      [
+        "delete_category", 
+        "hatch", 
+        "category"
+      ], 
+      [
+        "add_reply", 
+        "hatch", 
+        "reply"
+      ], 
+      [
+        "change_reply", 
+        "hatch", 
+        "reply"
+      ], 
+      [
+        "delete_reply", 
+        "hatch", 
+        "reply"
+      ], 
+      [
+        "add_share", 
+        "hatch", 
+        "share"
+      ], 
+      [
+        "change_share", 
+        "hatch", 
+        "share"
+      ], 
+      [
+        "delete_share", 
+        "hatch", 
+        "share"
+      ], 
+      [
+        "add_tweet", 
+        "hatch", 
+        "tweet"
+      ], 
+      [
+        "change_tweet", 
+        "hatch", 
+        "tweet"
+      ], 
+      [
+        "delete_tweet", 
+        "hatch", 
+        "tweet"
+      ], 
+      [
+        "add_user", 
+        "hatch", 
+        "user"
+      ], 
+      [
+        "change_user", 
+        "hatch", 
+        "user"
+      ], 
+      [
+        "delete_user", 
+        "hatch", 
+        "user"
+      ], 
+      [
+        "add_vision", 
+        "hatch", 
+        "vision"
+      ], 
+      [
+        "change_vision", 
+        "hatch", 
+        "vision"
+      ], 
+      [
+        "delete_vision", 
+        "hatch", 
+        "vision"
+      ]
+    ]
+  }
+}
+]

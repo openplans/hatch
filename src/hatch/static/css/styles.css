@@ -554,7 +554,9 @@ ul.user-menu:after {
   text-decoration: underline;
 }
 
-.vision-meta-list {}
+.vision-meta-list {
+  overflow: hidden;
+}
 .vision-meta-item {
   float: left;
   margin-right: 20px;
@@ -696,6 +698,10 @@ ul.user-menu:after {
   float: right;
   color: #b2b2a6;
   padding: 5px 0 10px;
+}
+
+.vision-list .btn-block {
+  margin-bottom: 2.2em;
 }
 
 /* Support */
@@ -1041,6 +1047,14 @@ ul.user-list {
   opacity: 0.25;
   margin-right: 0.25em;
   margin-left: 0.25em;
+}
+
+.load-more-action {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .load-more-action.is-hidden {  /* <-- for increased specificity */

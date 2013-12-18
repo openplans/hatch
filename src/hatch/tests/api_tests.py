@@ -2,6 +2,7 @@ from django.test import TestCase, RequestFactory
 from django.conf import settings
 from django.core.urlresolvers import reverse, clear_url_caches
 from django.core.cache import cache
+from .utils import create_app_config
 from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
 from ..views import VisionViewSet, UserViewSet, ReplyViewSet
@@ -13,22 +14,7 @@ import json
 
 class VisionsTest (TestCase):
     def setUp(self):
-        AppConfig.objects.create(
-            title='',
-            subtitle='',
-            name='',
-            description='',
-            twitter_handle='',
-            share_title='',
-            url='',
-            vision='vision',
-            vision_plural='visions',
-            visionaries_label='',
-            ally='ally',
-            ally_plural='allies',
-            allies_label='',
-            city='',
-        )
+        create_app_config()
 
         # Reload the urls to reinitialize the vision routes
         import hatch.urls
@@ -176,6 +162,9 @@ class VisionsTest (TestCase):
 
 
 class ReplyTest (TestCase):
+    def setUp(self):
+        create_app_config()
+
     def tearDown(self):
         User.objects.all().delete()
         Vision.objects.all().delete()
@@ -221,7 +210,7 @@ class ReplyTest (TestCase):
             self.assertIn('in_reply_to_status_id', StubTwitterService.tweet.call_args[1])
             self.assertEqual(len(StubTwitterService.tweet.call_args[0]), 2)
             self.assertEqual(StubTwitterService.tweet.call_args[0][1], user)
-            self.assertIn('@'+settings.TWITTER_USERNAME, StubTwitterService.tweet.call_args[0][0])
+            self.assertIn('@'+AppConfig.get().twitter_handle, StubTwitterService.tweet.call_args[0][0])
 
     def test_handle_reply_tweeting_failure(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')

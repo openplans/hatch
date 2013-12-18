@@ -57,7 +57,7 @@ class AppMixin (object):
     def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
             # '/visions/%s' % vision.pk)
-            reverse('app-vision-detail', kwargs={'pk': vision.pk}))
+            reverse('app-vision-detail', kwargs={'category': vision.category.name, 'pk': vision.pk}))
 
     def get_vision_queryset(self, base_queryset=None):
         return (base_queryset or Vision.objects.all())\
@@ -241,11 +241,11 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        attribution = u'@%s ' % (username,)
-        vision_length = 140 - len(attribution) - url_length - 3
+        attribution = u'@%s' % (username,)
+        vision_length = 140 - len(attribution) - url_length - 7
         return ''.join([
             attribution,
-            '"', Truncator(vision.text).chars(vision_length, u'…'), '" ',
+            ' said ', Truncator(vision.text).chars(vision_length, u'…'), ' ',
             vision_url
         ])
 
@@ -308,7 +308,8 @@ class ReplyViewSet (AppMixin, ModelViewSet):
     serializer_class = ReplySerializer
 
     def get_tweet_text(self, request, reply):
-        app_username = settings.TWITTER_USERNAME
+        app_config = AppConfig.get(cache=cache_buffer)
+        app_username = app_config.twitter_handle
         if not app_username.startswith('@'):
             app_username = '@' + app_username
 

@@ -1,5 +1,5 @@
 <div class="notification notification-{{ type }} {{# if is_new }}new-notification{{/ if }}">
-  <a href="/{{app_config 'vision_plural'}}/{{ properties.vision }}" class="notification-link clearfix">
+  <a href="/{{app_config 'vision_plural'}}/{{ vision.category }}/{{ properties.vision }}" class="notification-link clearfix">
     <span class="action-taker"><img src="{{ properties.author_details.avatar_url }}" class="avatar" />{{ properties.author_details.full_name }}</span> 
     
     {{# eq type 'reply' }}

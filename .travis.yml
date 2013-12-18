@@ -36,7 +36,8 @@ script:
 
 notifications:
   email:
-    - dev@openplans.org
-    - mpoe@openplans.org
-  on_success: change
-  on_failure: always
+    recipients:
+      - dev@openplans.org
+      - mpoe@openplans.org
+    on_success: change
+    on_failure: always

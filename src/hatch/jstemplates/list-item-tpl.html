@@ -12,7 +12,7 @@
   <h4 class="vision-description"><a href="/{{visions_url_name}}/{{ category }}/{{ id }}" class="undecorated">{{ formattruncated text 140 }}</a></h4>
 
   {{# if media_url }}
-  <a href="/{{visions_url_name}}/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
+  <a href="/{{visions_url_name}}/{{category}}/{{ id }}" class="vision-media-container"><img class="vision-media" src="{{ media_url }}"></a>
   {{/ if }}
 
   {{# if category }}
@@ -30,9 +30,17 @@
     </li>
     {{^eq replies.length 0 }}
     <li class="vision-meta-item vision-meta-item-replies">
-      <a href="/{{visions_url_name}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
+      <a href="/{{visions_url_name}}/{{category}}/{{ id }}" class="replies-count">{{replies.length}} {{pluralize replies.length 'Reply' 'Replies'}}</a>
     </li>
     {{/eq}}
   </ul>
 
 </article><!-- end .vision -->
+
+{{#if show_add_button}}
+  {{#if_authenticated}}
+  <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
+  {{^}}
+  <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
+  {{/if_authenticated}}
+{{/if}}

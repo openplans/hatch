@@ -11,7 +11,7 @@
 
 {% for category in categories %}
    <url>
-      <loc>http://{{ request.get_host }}/{{ app.vision_plural }}/{{ category.name }}/list</loc>
+      <loc>http://{{ request.get_host }}/{{ app.vision_plural }}/{{ category.name }}</loc>
       <lastmod>{{ settings.LAST_DEPLOY_DATE|slice:":10" }}</lastmod>
       <changefreq>daily</changefreq>
       <priority>0.8</priority>
@@ -19,17 +19,19 @@
 {% endfor %}
 
 {% for category in categories %}
+   {% if category.active %}
    <url>
       <loc>http://{{ request.get_host }}/{{ app.vision_plural }}/{{ category.name }}/new</loc>
       <lastmod>{{ settings.LAST_DEPLOY_DATE|slice:":10" }}</lastmod>
       <changefreq>daily</changefreq>
       <priority>0.6</priority>
    </url>
+   {% endif %}
 {% endfor %}
 
 {% for vision in visions %}
    <url>
-      <loc>http://{{ request.get_host }}/{{ app.vision_plural }}/{{ vision.id }}</loc>
+      <loc>http://{{ request.get_host }}/{{ app.vision_plural }}/{{ vision.category }}/{{ vision.id }}</loc>
       <lastmod>{{ vision.created_at|date:"c"|slice:":10" }}</lastmod>
       <changefreq>daily</changefreq>
       <priority>0.5</priority>

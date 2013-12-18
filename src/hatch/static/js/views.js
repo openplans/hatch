@@ -13,21 +13,26 @@ var Hatch = Hatch || {};
     handleSupport: function(evt) {
       evt.preventDefault();
       var vision = this.model,
-          category = NS.getCategory(vision.get('category')),
           supporters = vision.get('supporters'),
           user = NS.app.currentUser,
-          index;
+          category = NS.getCategory(vision.get('category')),
+          supportCount = category.get('support_count'),
+          visionFromMainCollection, index;
 
-      if (NS.app.currentUser.isAuthenticated() && category.active) {
+      if (NS.app.currentUser.isAuthenticated() && category.get('active')) {
         // supporters is an array of ids in some cases, a collection (with
         // contains) in others.
         if (_.isArray(supporters)){
           // if supported, unsupport
           index = _.indexOf(supporters, user.id);
+          visionFromMainCollection = NS.app.visionCollections[category.get('name')].get(this.model.id);
+
           if(index > -1) {
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
-            user.unsupport(vision);
+            user.unsupport(visionFromMainCollection);
+            // Update counts on the home page
+            category.set('support_count', supportCount-1);
 
             // Remove from the supporters array for rendering
             supporters.splice(index, 1);
@@ -36,7 +41,10 @@ var Hatch = Hatch || {};
           } else {
             NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
-            user.support(vision);
+            user.support(visionFromMainCollection);
+            // Update counts on the home page
+            category.set('support_count', supportCount+1);
+
             supporters.push(user.id);
             this.$('.support').addClass('supported');
           }
@@ -45,11 +53,15 @@ var Hatch = Hatch || {};
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
             user.unsupport(vision);
+            // Update counts on the home page
+            category.set('support_count', supportCount-1);
             this.$('.support').removeClass('supported');
           } else {
             NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
             user.support(vision);
+            // Update counts on the home page
+            category.set('support_count', supportCount+1);
             this.$('.support').addClass('supported');
           }
         }
@@ -153,9 +165,20 @@ var Hatch = Hatch || {};
   NS.HomeView = Backbone.Marionette.Layout.extend({
     template: '#home-tpl',
     regions: {
+      category: '.category-region',
       visionaries: '.visionaries-region',
       allies: '.allies-region',
       visions: '.visions-region'
+    }
+  });
+
+  NS.HomeCategoryView = Backbone.Marionette.ItemView.extend({
+    template: '#home-category-tpl',
+    modelEvents: {
+      'change': 'onChange'
+    },
+    onChange: function() {
+      this.render();
     }
   });
 
@@ -170,6 +193,13 @@ var Hatch = Hatch || {};
     tagName: 'li',
     events: {
       'click .support-link': 'handleSupport'
+    },
+    templateHelpers: function(){
+      var modelIndex = this.model.collection.indexOf(this.model);
+      return {
+        index: modelIndex,
+        show_add_button: modelIndex % 4 === 0
+      };
     },
     handleSupport: NS.SupportHandlerMixin.handleSupport,
     updateSupportCount: NS.SupportHandlerMixin.updateSupportCount,
@@ -251,7 +281,9 @@ var Hatch = Hatch || {};
       evt.preventDefault();
       var form = evt.target,
           data = NS.Utils.serializeObject(form),
-          reply = data.attrs;
+          reply = data.attrs,
+          category = NS.getCategory(this.model.get('category')),
+          replyCount = category.get('reply_count');
 
       reply.author = NS.app.currentUser.get('id');
       reply.author_details = NS.app.currentUser.toJSON();
@@ -263,6 +295,8 @@ var Hatch = Hatch || {};
       if (this.charsLeft >= 0 && this.chars > 0) {
         // Save the reply
         this.collection.create(reply);
+        // Update the counts on the home page
+        category.set('reply_count', replyCount+1);
 
         // Reset the form
         form.reset();
@@ -411,16 +445,12 @@ var Hatch = Hatch || {};
     template: '#form-tpl',
     events: {
       'submit form': 'handleFormSubmission',
-      'change .vision-category-list input': 'handleCategoryChange',
       'change .vision-media input': 'handleMediaFileChange'
     },
     ui: {
       file: 'input[type=file]',
       imagePreview: '.image-preview',
       submit: 'input[type=submit]'
-    },
-    onRender: function() {
-      this.handleCategoryChange();
     },
     getFirstInvalidElement: function(form) {
       var invalidEl = null,
@@ -453,7 +483,9 @@ var Hatch = Hatch || {};
     },
     saveForm: function(form) {
       var self = this,
-          data = NS.Utils.serializeObject(form);
+          data = NS.Utils.serializeObject(form),
+          category = NS.getCategory(this.model.get('category')),
+          visionCount = category.get('vision_count');
 
       // Disable the submit button until we get a response
       this.ui.submit.prop('disabled', true);
@@ -475,20 +507,12 @@ var Hatch = Hatch || {};
           var tweetFlag = (this.$('.vision-tweet input').is(':checked') ? 1 : 0);
           NS.Utils.log('send', 'event', 'vision', 'save', 'success', tweetFlag);
 
+          // Set the count on the home page
+          category.set('vision_count', visionCount+1);
           NS.app.router.navigate('/'+NS.appConfig.vision_plural+'/' + model.get('category') + '/' + model.id, {trigger: true});
         }
       });
 
-    },
-    handleCategoryChange: function() {
-      var category = this.$('.vision-category-list input:checked').val();
-
-      if (category) {
-        NS.Utils.log('send', 'event', 'vision', 'change-category', category);
-      }
-
-      this.$('.category-prompt').addClass('is-hidden')
-        .filter('.' + category + '-prompt').removeClass('is-hidden');
     },
     handleMediaFileChange: function(evt) {
       var self = this,

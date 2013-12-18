@@ -19,15 +19,6 @@ BROKER_URL = 'django://'
 SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 
-# For authenticating users with Twitter
-TWITTER_CONSUMER_KEY = environ.get('TWITTER_CONSUMER_KEY', '')
-TWITTER_CONSUMER_SECRET = environ.get('TWITTER_CONSUMER_SECRET', '')
-
-# For accessing the app's Twitter account
-TWITTER_USERNAME = environ.get('TWITTER_USERNAME', '')
-TWITTER_ACCESS_TOKEN = environ.get('TWITTER_ACCESS_TOKEN', '')
-TWITTER_ACCESS_SECRET = environ.get('TWITTER_ACCESS_SECRET', '')
-
 # For UI testing
 SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME') + ':' + environ.get('SAUCE_ACCESS_KEY') + '@ondemand.saucelabs.com:80/wd/hub'
 

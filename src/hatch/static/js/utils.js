@@ -1,4 +1,4 @@
-/*globals _ jQuery */
+/*globals _ jQuery Handlebars */
 
 var Hatch = Hatch || {};
 
@@ -31,7 +31,7 @@ var Hatch = Hatch || {};
         "(?:" +
           "\\/" +
           "(?:[a-z0-9_\\-\\.]*)" +
-          "(?:\\?[a-z0-9+_\\-\\.%=&]*)?" +
+          "(?:\\?[a-z0-9+_\\-\\.%=&;]*)?" +
         ")?" +
 
         // The hash
@@ -42,7 +42,7 @@ var Hatch = Hatch || {};
       // the end of the string.
       "(" +
         "[^a-z0-9_\\-\\.]*" +
-        "(?:\\s+|$)" +
+        "(?:\\.*\\s+|$)" +
       ")",
 
       'gi'
@@ -63,6 +63,15 @@ var Hatch = Hatch || {};
   );
 
   NS.Utils = {
+    htmlDecode: function(input){
+      var e = document.createElement('div');
+      e.innerHTML = input;
+      return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    },
+
+    // NOTE: Handlebars is not so great. There are other options.
+    htmlEncode: Handlebars.Utils.escapeExpression,
+
     serializeObject: function(form) {
       var $form = jQuery(form),
           formArray = $form.serializeArray(),
@@ -116,6 +125,8 @@ var Hatch = Hatch || {};
     // Replace URLs like https://github.com with <a href='https://github.com'>github.com</a>
     linkify: function(safeContent) {
       return safeContent.replace(LINK_DETECTION_REGEX, function(match, url, suffix) {
+        url = NS.Utils.htmlDecode(url);
+
         var address = (/[a-z]+:\/\//.test(url) ? url : "http://" + url);
 
         if (address[address.length-1] === '.') {
@@ -126,7 +137,8 @@ var Hatch = Hatch || {};
 
         url = url.replace(/^https?:\/\//, '');
         url = NS.Utils.truncateChars(url, 40);
-        return "<a href='" + address + "' target='_blank'>" + url + "</a>" + suffix;
+
+        return "<a href='" + encodeURI(address) + "' target='_blank'>" + NS.Utils.htmlEncode(url) + "</a>" + suffix;
       });
     },
 

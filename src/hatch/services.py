@@ -1,9 +1,9 @@
-from django.conf import settings
 from django.core import cache as django_cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from twitter.stream import TwitterStream
 from urlparse import parse_qs
 import re
+from .models import AppConfig
 from .cache import cache_buffer as cache
 from .utils import chunk
 
@@ -182,7 +182,7 @@ class TwitterService (object):
 
             # Update the social media found status for all the users.
             from .models import User
-            
+
             seen_users = User.objects.filter(social_auth__uid__in=seen_ids)
             seen_users.update(sm_not_found=False)
 
@@ -264,11 +264,12 @@ class TwitterService (object):
                      'provider') % social_auth.provider
                 )
 
+            app_config = AppConfig.get()
             oauth_args = (
                 access_token['oauth_token'][0],
                 access_token['oauth_token_secret'][0],
-                settings.TWITTER_CONSUMER_KEY,
-                settings.TWITTER_CONSUMER_SECRET
+                app_config.twitter_consumer_key,
+                app_config.twitter_consumer_secret,
             )
             # Cache for just long enough to complete the current batch of
             # lookups without having to hit the DB again.
@@ -281,11 +282,12 @@ class TwitterService (object):
     # against Twitter on behalf of the app
     # ==================================================================
     def get_app_oauth(self):
+        app_config = AppConfig.get()
         return OAuth(
-            settings.TWITTER_ACCESS_TOKEN,
-            settings.TWITTER_ACCESS_SECRET,
-            settings.TWITTER_CONSUMER_KEY,
-            settings.TWITTER_CONSUMER_SECRET,
+            app_config.twitter_access_token,
+            app_config.twitter_access_token_secret,
+            app_config.twitter_consumer_key,
+            app_config.twitter_consumer_secret,
         )
 
     def get_api(self, on_behalf_of=None):
