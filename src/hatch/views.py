@@ -421,7 +421,7 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         vision = self.get_object()
         service = self.get_twitter_service()
         success, response = service.retweet(
-            vision.app_tweet_id, self.request.user)
+            vision.tweet_id or vision.app_tweet_id, self.request.user)
 
         if success:
             tweet_id = response['id']

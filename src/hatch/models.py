@@ -32,7 +32,7 @@ class User (AbstractUser):
 
     def share(self, vision, share_id=None):
         self.support(vision)
-        share = Share(vision=vision, user=self, tweet_id=share_id)
+        share = Share(vision=vision, user=self, retweet_id=share_id)
         share.save()
         return share
 
@@ -450,9 +450,9 @@ class Vision (TweetedModelMixin, models.Model):
 
 
 class Share (models.Model):
-    vision = models.ForeignKey(Vision)
+    vision = models.ForeignKey(Vision, related_name='shares')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shares')
-    tweet = models.ForeignKey('Tweet', related_name='shares')
+    retweet_id = models.CharField(max_length=64)
 
     def __unicode__(self):
         return '%s shared "%s"' % (self.user, self.vision)

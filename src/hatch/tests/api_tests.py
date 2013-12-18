@@ -5,8 +5,8 @@ from django.core.cache import cache
 from .utils import create_app_config
 from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
-from ..views import VisionViewSet, UserViewSet, ReplyViewSet
-from ..models import Vision, User, Reply, Category, Tweet, AppConfig
+from ..views import VisionViewSet, UserViewSet, ReplyViewSet, VisionActionViewSet
+from ..models import Vision, User, Reply, Category, Tweet, AppConfig, Share
 from social_auth.models import UserSocialAuth
 from mock import patch, Mock
 import json
@@ -238,6 +238,61 @@ class ReplyTest (TestCase):
             self.assertEqual(Reply.objects.all().count(), 0)
             self.assertEqual(response.status_code, 400)
             self.assertIn('tweet', response.content)
+
+
+class ShareTest (TestCase):
+    def setUp(self):
+        create_app_config()
+
+    def tearDown(self):
+        User.objects.all().delete()
+        Vision.objects.all().delete()
+        Share.objects.all().delete()
+        cache.clear()
+
+    def test_share_retweeting(self):
+        user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
+        tweet = Tweet.objects.create(tweet_id='c', tweet_data={'text': 'abc'})
+        vision = Vision.objects.create(author=user, text='abc', tweet_id='c')
+        factory = RequestFactory()
+        url = reverse('support-vision-action', kwargs={'pk': vision.pk})
+
+        class StubTwitterService (object):
+            retweet = Mock(return_value=(True, {'id': 12345, 'user': {'id_str': '24680', 'screen_name': 'abc'}}))
+
+            def get_avatar_url(self, user, actor=None):
+                return ''
+
+            def get_full_name(self, user, actor=None):
+                return ''
+
+            def get_bio(self, user, actor=None):
+                return ''
+
+            def get_url_length(self, url, actor=None):
+                return 20
+
+        with patch('hatch.views.VisionActionViewSet.get_twitter_service', classmethod(lambda cls: StubTwitterService())):
+            view = VisionActionViewSet.as_view({'post': 'share'})
+            request = factory.post(url, data='{}', content_type='application/json')
+            request.user = user
+            request.csrf_processing_done = True
+
+            response = view(request, pk=vision.pk)
+            response.render()
+
+            self.assertEqual(StubTwitterService.retweet.call_count, 1, response.content)
+            self.assertEqual(204, response.status_code)
+            self.assertEqual(len(StubTwitterService.retweet.call_args[0]), 2)
+            self.assertEqual(StubTwitterService.retweet.call_args[0][1], user)
+            self.assertEqual(StubTwitterService.retweet.call_args[0][0], 'c')
+
+            try:
+                share = Share.objects.get(vision=vision, user=user)
+            except Share.DoesNotExist:
+                self.assert_(False, 'Share object not found')
+
+            self.assertEqual(share.retweet_id, '12345')
 
 
 class UserSerializerTest (TestCase):
