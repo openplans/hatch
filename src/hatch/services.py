@@ -210,6 +210,36 @@ class TwitterService (object):
         user_info = self.get_user_info(user, on_behalf_of)
         return user_info['description']
 
+    def get_followed_users(self, user, on_behalf_of=None):
+        cache_key = self.get_user_cache_key(user, 'follows')
+        followed_user_ids = cache.get(cache_key)
+
+        if followed_user_ids is None:
+            user_id = self.get_user_id(user)
+
+            log_string = (
+                '\n'
+                '============================================================\n'
+                'Hitting the API for %s to get IDs for users that %s (%s)\n'
+                'follows\n'
+                '============================================================\n'
+            ) % (
+                on_behalf_of.username if on_behalf_of else 'the app',
+                user.username, user_id
+            )
+            log.info(log_string)
+
+            t = self.get_api(on_behalf_of)
+            try:
+                followed_user_ids = t.friends.ids(user_id=user_id)
+            except TwitterHTTPError:
+                user.sm_not_found = True
+                user.save(update_fields=['sm_not_found'])
+                raise SocialMediaException('User %s (%s) not found on Twitter' % (user.username, user_id))
+            followed_user_ids = followed_user_ids['ids']
+            cache.set(cache_key, followed_user_ids)
+        return followed_user_ids
+
     # ==================================================================
     # User-specific info, from the database, used for authenticating
     # against Twitter on behalf of a specific user

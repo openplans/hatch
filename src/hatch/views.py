@@ -73,11 +73,12 @@ class AppMixin (object):
             .prefetch_related('sharers')
 
     def get_user_queryset(self, base_queryset=None):
-        return (base_queryset or User.objects.all())\
+        qs = (base_queryset or User.objects.all())\
             .annotate(social_count=Count('social_auth'))\
             .filter(social_count__gt=0)\
             .prefetch_related('visions')\
             .prefetch_related('visions__supporters')\
+            .prefetch_related('visions__replies')\
             .prefetch_related('replies')\
             .prefetch_related('replies__vision__author__social_auth')\
             .prefetch_related('replies__vision__supporters')\
@@ -86,6 +87,17 @@ class AppMixin (object):
             .prefetch_related('supported__supporters')\
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
+
+        user = self.request.user
+        if user.is_authenticated():
+            followed_ids = self.get_twitter_service().get_followed_users(user, on_behalf_of=user)
+            qs = qs.extra(
+                tables=['social_auth_usersocialauth'],
+                where=['hatch_user.id=social_auth_usersocialauth.user_id'],
+                select={'is_followed': 'social_auth_usersocialauth.uid IN (%s)' % ','.join(["'%s'" % uid for uid in followed_ids])})\
+                .order_by('-is_followed')
+
+        return qs
 
     def get_category_queryset(self, base_queryset=None):
         return (base_queryset or Category.objects.all())
