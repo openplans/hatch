@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Countable Event */
+/*globals Backbone Handlebars $ _ Countable Event Swiper */
 
 var Hatch = Hatch || {};
 
@@ -622,6 +622,40 @@ var Hatch = Hatch || {};
     itemViewContainer: 'ul',
     itemView: NS.NotificationItemView,
     emptyView: NS.NotificationEmptyView
+  });
+
+  NS.WalkthroughView = Backbone.Marionette.ItemView.extend({
+    template: '#walkthrough-tpl',
+    className: 'overlay-content',
+    events: {
+      'click .btn-close': 'close'
+    },
+    onShow: function() {
+      var self = this;
+
+      $('body').addClass('walkthrough');
+
+      // It is important for this everything to be in the DOM for swiper to
+      // be a happy little plugin.
+      self.swiper = new Swiper(this.$('.swiper-container').get(0), {
+        pagination: this.$('.pagination').get(0),
+        paginationClickable: true,
+        grabCursor: true
+      });
+
+      self.$('.pagination-btn-prev').click(function(evt) {
+        evt.preventDefault();
+        self.swiper.swipePrev();
+      });
+
+      self.$('.pagination-btn-next').click(function(evt) {
+        evt.preventDefault();
+        self.swiper.swipeNext();
+      });
+    },
+    onClose: function() {
+      $('body').removeClass('walkthrough');
+    }
   });
 
 }(Hatch));

@@ -281,6 +281,86 @@ body {
   font-size: medium;
   box-shadow: inset 0 3px 3px rgba(0,0,0,0.25);
 }
+.overlay {
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9999;
+  padding: 0.5em;
+  display:none;
+}
+
+.walkthrough .overlay {
+  display: block;
+}
+
+.walkthrough .site-header,
+.walkthrough .main {
+  display: none;
+}
+
+.overlay-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 50px rgba(0,0,0,0.75);
+  background-color: #e7e7d7;
+  border-radius: 5px;
+}
+
+.overlay-content .swiper-container {
+  height: 100%;
+}
+
+.overlay-content .swiper-slide {
+  text-align: center;
+  padding: 1em 0;
+  position: relative;
+}
+
+.overlay-content .pagination {
+  position: absolute;
+  left: 0;
+  text-align: center;
+  bottom: 10px;
+  width: 100%;
+  height:10px;
+  z-index: 9999;
+}
+
+.swiper-pagination-switch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background: #999;
+  box-shadow: 0px 1px 2px #555 inset;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.swiper-active-switch {
+  background: #333;
+}
+
+.pagination-btn-prev,
+.pagination-btn-next {
+  position: absolute;
+  font-size: 4em;
+  top: 50%;
+  margin-top: -1em;
+  cursor: pointer;
+}
+
+.pagination-btn-prev {
+  left: 5px;
+}
+.pagination-btn-next {
+  right: 5px;
+}
 
 
 /* =Site Header
@@ -1215,6 +1295,11 @@ a.notification-link {
     box-shadow: 0 0 50px rgba(0,0,0,0.75);
     background-color: #e7e7d7;
     border-radius: 0 0 5px 5px;
+  }
+
+  .overlay-content {
+    width: 480px;
+    margin: 0 auto;
   }
 }
 
