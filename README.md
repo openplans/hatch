@@ -107,9 +107,11 @@ Set `DATABASE_URL` to the value of `HEROKU_POSTGRESQL_[SOME_COLOR]_URL`
 
     heroku config:set DATABASE_URL=postgres://[blahblahblah]
 
-Set `REDIS_URL` to the value of `[REDISVENDOR]_URL`
+Set `CACHE_URL` to the value of `[REDISVENDOR]_URL`
 
-    heroku config:set REDIS_URL=redis://[blahblahblah]
+    heroku config:set CACHE_URL=redis://[blahblahblah]/0
+
+**NOTE the** `/0` **at the end. This is the Redis database number and must be included. The actual number is arbitrary, and 0 is a good choice.**
 
 #### Deploy the app
 

@@ -40,7 +40,7 @@ import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
 
 import django_cache_url
-CACHE = {'default': django_cache_url.config()}
+CACHES = {'default': django_cache_url.config()}
 
 # Image storing
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
