@@ -6,10 +6,10 @@ from django.utils.timezone import now, timedelta
 unspecified = object()
 
 class CacheBuffer (object):
-    def __init__(self):
+    def __init__(self, initial_buffer=None):
         # When we get a value from the remote cache, it goes in to the buffer
         # so that we can retrieve it quickly on our next try.
-        self.buffer = {}
+        self.buffer = initial_buffer or {}
         self.timeouts = {}
 
         # When we set a value, it goes into the queue as well as the buffer.
@@ -91,7 +91,7 @@ class CacheBuffer (object):
             try: del self.timeouts[key]
             except KeyError: pass
 
-        self.delete_queue.add(keys)
+        self.delete_queue.update(keys)
 
     def flush(self):
         timed_queues = defaultdict(dict)

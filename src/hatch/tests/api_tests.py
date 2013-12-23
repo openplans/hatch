@@ -7,6 +7,7 @@ from ..services import TwitterService
 from ..serializers import VisionSerializer, UserSerializer
 from ..views import VisionViewSet, UserViewSet, ReplyViewSet, VisionActionViewSet
 from ..models import Vision, User, Reply, Category, Tweet, AppConfig, Share
+from ..cache import cache_buffer
 from social_auth.models import UserSocialAuth
 from mock import patch, Mock
 import json
@@ -15,6 +16,8 @@ import json
 class VisionsTest (TestCase):
     def setUp(self):
         create_app_config()
+        cache.clear()
+        cache_buffer.reset()
 
         # Reload the urls to reinitialize the vision routes
         import hatch.urls
@@ -26,6 +29,7 @@ class VisionsTest (TestCase):
         Vision.objects.all().delete()
         AppConfig.objects.all().delete()
         cache.clear()
+        cache_buffer.reset()
 
     def test_vision_contents(self):
         user = User.objects.create_user('mjumbe', 'mjumbe@example.com', 'password')
