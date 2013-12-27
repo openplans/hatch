@@ -260,7 +260,28 @@ class UserAdmin (BaseUserAdmin):
     found_on_twitter.boolean = True
 
 
-admin.site.register(AppConfig)
+class AppConfigAdmin (admin.ModelAdmin):
+    class Meta:
+        model = AppConfig
+
+    fieldsets = (
+        (None, {'fields': ('title', 'subtitle', 'description')}),
+        ('Interface Text', {'fields': (
+            'app_label', 'app_description', 
+            'vision', 'vision_plural',
+            'visionary', 'visionary_plural', 'visionaries_label', 'visionaries_description', 
+            'ally', 'ally_plural', 'allies_label', 'allies_description', 
+            'city')}),
+        ('Twitter Integration Configuration', {'fields': (
+            'twitter_handle', 
+            'twitter_consumer_key', 'twitter_consumer_secret', 
+            'twitter_access_token', 'twitter_access_token_secret', 
+            'twitter_tracking_keywords',)}),
+        ('Sharing', {'fields': ('share_title', 'url')}),
+    )
+
+
+admin.site.register(AppConfig, AppConfigAdmin)
 admin.site.register(Vision, VisionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Reply, ReplyAdmin)

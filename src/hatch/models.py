@@ -498,12 +498,25 @@ class AppConfig (models.Model):
     share_title = models.CharField(max_length=100)
     url = models.CharField(max_length=1024)
 
-    twitter_handle = models.CharField(max_length=50)
+    twitter_handle = models.CharField(max_length=50, help_text="The username "
+        "for the app's Twitter account. Each user's vision entered through "
+        "the application will be tweeted from this account, and the app keys "
+        "(see below) should be set up through this account.")
     twitter_consumer_key = models.CharField(max_length=100)
     twitter_consumer_secret = models.CharField(max_length=100)
     twitter_access_token = models.CharField(max_length=100)
     twitter_access_token_secret = models.CharField(max_length=100)
-    twitter_tracking_keywords = models.TextField(max_length=1024)
+    twitter_tracking_keywords = models.TextField(max_length=1024, help_text=
+        "Hatch will watch for tweets containing these keywords, and import "
+        "them to be moderated. Each search should appear on a new line. For "
+        "example: <br>"
+        "<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;#civicinnovation<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;mayor of my city<br>"
+        "<br>"
+        "For more information about how the line should be formatted, see "
+        "Twitter's guidelines on <a href=\"https://dev.twitter.com/docs/using"
+        "-search\">How to build a query</a>.")
 
     app_label = models.CharField(max_length=250, help_text="This is "
         "the first heading that appears in the footer. The default is"
@@ -520,17 +533,16 @@ class AppConfig (models.Model):
         "the text that appears above the list of visionary icons on the home "
         "page. The default is \"We're sharing our {{vision_plural}}!\".",
         null=True, blank=True)
-    visionaries_description = models.CharField(max_length=1024, help_text="This is "
-        "the text that describes visionaries on the home page.",
-        null=True, blank=True)
+    visionaries_description = models.TextField(help_text="This is the text "
+        "that describes visionaries on the home page.", null=True, blank=True)
     ally = models.CharField(max_length=50)
     ally_plural = models.CharField(max_length=50)
     allies_label = models.CharField(max_length=250, help_text="This is "
         "the text that appears above the list of ally icons on the home page."
         " The default is \"We are {{ally_plural}} in your effort to make "
         "{{city}} a better place.\".", null=True, blank=True)
-    allies_description = models.CharField(max_length=1024, help_text="This is "
-        "the text that describes allies on the home page.", null=True, blank=True)
+    allies_description = models.TextField(help_text="This is the text that "
+        "describes allies on the home page.", null=True, blank=True)
     city = models.CharField(max_length=50)
 
     def __unicode__(self):
