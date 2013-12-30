@@ -240,6 +240,7 @@ var Hatch = Hatch || {};
           max = 132;
 
       this.$replyArea = this.$('.reply-text');
+      this.initialReply = this.$replyArea.val();
 
       if (this.$replyArea.length) {
         Countable.live(this.$replyArea.get(0), function (counter) {
@@ -247,7 +248,7 @@ var Hatch = Hatch || {};
           self.charsLeft = max - counter.all;
           $countLabel.html(self.charsLeft);
 
-          if (self.chars > 0 && self.chars <= max) {
+          if (self.chars > 0 && self.chars <= max && self.$replyArea.val() != self.initialReply) {
             $submitBtn.prop('disabled', false);
           } else {
             $submitBtn.prop('disabled', true);
