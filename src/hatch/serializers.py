@@ -235,7 +235,7 @@ class AppConfigSerializer (ModelSerializer):
 class VisionSerializer (ManyToNativeMixin, ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
-    supporters = MinimalUserSerializer(many=True, read_only=True)
+    supporters = MinimalTwitterUserSerializer(many=True, read_only=True)
     sharers = PrimaryKeyRelatedField(many=True, read_only=True)
     tweet_id = IntegerField(read_only=True)
     category = PrimaryKeyRelatedField(required=False)
