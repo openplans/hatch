@@ -10,11 +10,15 @@ from django.contrib import admin
 admin.autodiscover()
 
 
-def vision_patterns():
-    app_config_query = AppConfig.objects.all()[:1]
+def favicon_view(request):
+    from django.shortcuts import redirect
+    from django.conf import settings
+    return redirect(settings.STATIC_URL + 'images/favicon.png')
 
+
+def vision_patterns():
     try:
-        app_config = app_config_query[0]
+        app_config = AppConfig.get()
     except IndexError:
         # This app has not been configured. Please add a
         # record to the AppConfig model to set your app-specific
@@ -24,9 +28,13 @@ def vision_patterns():
     # App
     return patterns(
         '',
-        url(r'^' + app_config.vision_plural + '/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
+        url(r'^' + app_config.vision_plural + '/(?P<category>[^/]+)/(?P<pk>\d+)$',      vision_detail_app_view, name='app-vision-detail'),
         url(r'^' + app_config.vision_plural + '/(?P<pk>\w+)/list$', category_app_view,      name='app-vision-list'),
     )
+
+
+def generate_exception_view(request):
+    raise Exception('DIE!!!')
 
 urlpatterns = (
     patterns(
@@ -40,6 +48,7 @@ urlpatterns = (
         # Meta
         url(r'^robots.txt$', robots_view, name='robots'),
         url(r'^sitemap.xml$', sitemap_view, name='sitemap'),
+        url(r'^favicon\..+$', favicon_view, name='favicon'),
 
         # Admin
         url(r'^admin/', include(admin.site.urls)),
@@ -51,6 +60,9 @@ urlpatterns = (
         url(r'^api/visions/(?P<pk>\d+)/share$',     share_api_view,         name='share-vision-action'),
         url(r'^api/notifications$',                 notifications_api_view, name='notifications-list'),
         url(r'^api/', include(api_router.urls)),
+
+        # Error logging testing
+        url(r'^generate-500$', generate_exception_view),
     ) +
     vision_patterns() +
     patterns(

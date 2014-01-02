@@ -1,3 +1,4 @@
+from itertools import chain
 from rest_framework.serializers import (
     CharField, ImageField, IntegerField, ModelSerializer,
     PrimaryKeyRelatedField, SerializerMethodField, DateTimeField,
@@ -213,7 +214,7 @@ class CategorySerializer (ModelSerializer):
     def image_url(self, obj):
         try:
             return obj.image.storage.url(obj.image.file.name)
-        except ValueError:
+        except (ValueError, IOError):
             return None
 
     def get_vision_count(self, obj):
@@ -231,7 +232,7 @@ class AppConfigSerializer (ModelSerializer):
         model = AppConfig
 
 
-class VisionSerializer (ModelSerializer):
+class VisionSerializer (ManyToNativeMixin, ModelSerializer):
     author_details = MinimalTwitterUserSerializer(source='author', read_only=True)
     replies = ReplySerializer(many=True, read_only=True)
     supporters = MinimalUserSerializer(many=True, read_only=True)
@@ -245,6 +246,26 @@ class VisionSerializer (ModelSerializer):
     class Meta:
         model = Vision
         exclude = ('tweet',)
+
+    def get_twitter_service(self):
+        return self.context['twitter_service']
+
+    def get_requesting_user(self):
+        return self.context['requesting_user']
+
+    def many_to_native(self, many_obj):
+        many_authors = [v.author for v in many_obj]
+        many_authors += [r.author for r in chain(*(v.replies.all() for v in many_obj))]
+        if any(not user.sm_not_found for user in many_authors):
+            service = self.get_twitter_service()
+            on_behalf_of = self.get_requesting_user()
+
+            # Hit the service so that all the users' info is cached.
+            service.get_users_info(many_authors, on_behalf_of)
+
+        # We don't want to call BaseTwitterInfoSerializer's many_to_native, so
+        # just skip past it.
+        return super(VisionSerializer, self).many_to_native(many_obj)
 
     def from_native(self, data, files):
         # Validate any uploaded media

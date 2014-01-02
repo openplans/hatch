@@ -2,21 +2,8 @@
   <form class="vision-form">
 
     <input type="hidden" name="author" value="{{ author }}">
-    <input type="hidden" name="inspiration" value="{{ inspiration }}">
 
-    <ul class="vision-category-list unstyled-list is-visuallyhidden">
-      {{#select category}}
-        {{#each_category}}
-          <li class="vision-category-{{ name }}">
-            <label><input type="radio" name="category" value="{{ name }}" class="category-icon is-visuallyhidden">{{ title }}</label>
-          </li>
-        {{/each_category}}
-      {{/select}}
-    </ul>
-
-    {{#each_category}}
-    <h3 class="category-prompt {{ name }}-prompt">{{ prompt }}</h3>
-    {{/each_category}}
+    <h3 class="category-prompt {{ name }}-prompt">{{category_prompt category}}</h3>
 
     <p class="vision-description">
       <textarea name="text" placeholder="My response..." required></textarea>

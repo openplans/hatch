@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import cache as django_cache
 from django.core.files.storage import default_storage
 from django.db import models, IntegrityError, transaction
 from django.db.models import query
@@ -10,6 +11,7 @@ from random import randint
 from social_auth.models import UserSocialAuth
 from os.path import join as path_join
 from uuid import uuid1, uuid4
+from .cache import cache_buffer
 import json
 import re
 
@@ -30,7 +32,7 @@ class User (AbstractUser):
 
     def share(self, vision, share_id=None):
         self.support(vision)
-        share = Share(vision=vision, user=self, tweet_id=share_id)
+        share = Share(vision=vision, user=self, retweet_id=share_id)
         share.save()
         return share
 
@@ -376,6 +378,9 @@ class Category (models.Model):
     image = models.ImageField(null=True, upload_to='category_images')
     active = models.BooleanField(default=True, help_text='Uncheck this field to retire the category')
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __unicode__(self):
         return unicode(self.name)
 
@@ -445,9 +450,9 @@ class Vision (TweetedModelMixin, models.Model):
 
 
 class Share (models.Model):
-    vision = models.ForeignKey(Vision)
+    vision = models.ForeignKey(Vision, related_name='shares')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='shares')
-    tweet = models.ForeignKey('Tweet', related_name='shares')
+    retweet_id = models.CharField(max_length=64)
 
     def __unicode__(self):
         return '%s shared "%s"' % (self.user, self.vision)
@@ -489,12 +494,37 @@ class Reply (TweetedModelMixin, models.Model):
 class AppConfig (models.Model):
     title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=100)
-    name = models.CharField(max_length=50)
     description = models.TextField()
-    twitter_handle = models.CharField(max_length=50)
     share_title = models.CharField(max_length=100)
     url = models.CharField(max_length=1024)
 
+    twitter_handle = models.CharField(max_length=50, help_text="The username "
+        "for the app's Twitter account. Each user's vision entered through "
+        "the application will be tweeted from this account, and the app keys "
+        "(see below) should be set up through this account.")
+    twitter_consumer_key = models.CharField(max_length=100)
+    twitter_consumer_secret = models.CharField(max_length=100)
+    twitter_access_token = models.CharField(max_length=100)
+    twitter_access_token_secret = models.CharField(max_length=100)
+    twitter_tracking_keywords = models.TextField(max_length=1024, help_text=
+        "Hatch will watch for tweets containing these keywords, and import "
+        "them to be moderated. Each search should appear on a new line. For "
+        "example: <br>"
+        "<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;#civicinnovation<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;mayor of my city<br>"
+        "<br>"
+        "For more information about how the line should be formatted, see "
+        "Twitter's guidelines on <a href=\"https://dev.twitter.com/docs/using"
+        "-search\">How to build a query</a>.")
+
+    app_label = models.CharField(max_length=250, help_text="This is "
+        "the first heading that appears in the footer. The default is"
+        "\"What is {{title}}?\".",
+        null=True, blank=True)
+    app_description = models.CharField(max_length=1024, help_text="This is "
+        "the text that describes app on the home page.",
+        null=True, blank=True)
     vision = models.CharField(max_length=50)
     vision_plural = models.CharField(max_length=50)
     visionary = models.CharField(max_length=50)
@@ -503,16 +533,32 @@ class AppConfig (models.Model):
         "the text that appears above the list of visionary icons on the home "
         "page. The default is \"We're sharing our {{vision_plural}}!\".",
         null=True, blank=True)
+    visionaries_description = models.TextField(help_text="This is the text "
+        "that describes visionaries on the home page.", null=True, blank=True)
     ally = models.CharField(max_length=50)
     ally_plural = models.CharField(max_length=50)
     allies_label = models.CharField(max_length=250, help_text="This is "
         "the text that appears above the list of ally icons on the home page."
         " The default is \"We are {{ally_plural}} in your effort to make "
         "{{city}} a better place.\".", null=True, blank=True)
+    allies_description = models.TextField(help_text="This is the text that "
+        "describes allies on the home page.", null=True, blank=True)
     city = models.CharField(max_length=50)
-
-    welcome_prompt = models.CharField(max_length=1024)
-
 
     def __unicode__(self):
         return '%s | "%s"' % (self.title, self.subtitle)
+
+    def save(self, *args, **kwargs):
+        result = super(AppConfig, self).save(*args, **kwargs)
+        django_cache.cache.set(settings.APP_CONFIG_CACHE_KEY, self)
+        django_cache.cache.set('restart_listener', True)
+        return result
+
+    @classmethod
+    def get(cls, cache=django_cache.cache):
+        app_config = cache.get(settings.APP_CONFIG_CACHE_KEY)
+        if app_config is None:
+            app_config_query = cls.objects.all()
+            app_config = app_config_query[settings.APP_CONFIG_INDEX]
+            cache.set(settings.APP_CONFIG_CACHE_KEY, app_config)
+        return app_config

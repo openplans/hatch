@@ -79,11 +79,52 @@ var Hatch = Hatch || {};
   Handlebars.registerHelper('each_category', function(options) {
     var result = '';
 
-    _.each(NS.categories, function(category) {
-      result += options.fn(_.extend(this, category));
+    NS.app.categoryCollection.each(function(category) {
+      result += options.fn(_.extend(this, category.toJSON()));
     });
 
     return result;
+  });
+
+  Handlebars.registerHelper('each_archived_category', function(options) {
+    var result = '';
+
+    NS.app.categoryCollection.each(function(category) {
+      if (!category.get('active')) {
+        result += options.fn(_.extend(this, category.toJSON()));
+      }
+    });
+
+    return result;
+  });
+
+  Handlebars.registerHelper('has_archived_categories', function(options) {
+    var categories = NS.app.categoryCollection.toJSON(),
+        i;
+
+    for(i=0; i<categories.length; i++) {
+      if (!categories[i].active) {
+        return options.fn(this);
+      }
+    }
+
+    return options.inverse(this);
+  });
+
+  Handlebars.registerHelper('first_active_category', function(options) {
+    var categories = NS.app.categoryCollection.toJSON(),
+        i;
+
+    for (i=0; i<categories.length; i++) {
+      if (categories[i].active) {
+        return options.fn(_.extend(this, categories[i]));
+      }
+    }
+  });
+
+  Handlebars.registerHelper('if_active_category', function(name, options) {
+    var category = NS.getCategory(name);
+    return category && category.get('active') ? options.fn(this) : options.inverse(this);
   });
 
   Handlebars.registerHelper('eq', function(val1, val2, options) {
@@ -126,7 +167,7 @@ var Hatch = Hatch || {};
   }
 
   Handlebars.registerHelper('category_prompt', function(category) {
-    return _.findWhere(NS.categories, {name: category}).prompt;
+    return NS.getCategory(category).get('prompt');
   });
 
   Handlebars.registerHelper('window_location', function() {
@@ -207,11 +248,8 @@ var Hatch = Hatch || {};
     return formatTextForHTML(content, {links: false});
   });
 
-  Handlebars.registerHelper('app_config', function(key, capitalize, options) {
+  Handlebars.registerHelper('app_config', function(key, options) {
     var val = NS.appConfig[key];
-    if (capitalize === true) {
-      val = val.toLowerCase().replace( /(^| )(\w)/g, function(x){return x.toUpperCase();} );
-    }
 
     // If this is a block helper, treat it as such.
     if (!!options && ('fn' in options || 'inverse' in options)) {

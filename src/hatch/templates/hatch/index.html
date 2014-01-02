@@ -57,15 +57,13 @@
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css'>
 
   {% if debug %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}components/normalize-css/normalize.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}components/hint.css/hint.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/normalize-css/normalize.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/hint.css/hint.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css" type="text/css" media="screen, projection" />
 
-  <script src="{{ STATIC_URL }}components/modernizr/modernizr.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/modernizr/modernizr.js"></script>
   {% else %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/components.min.css?_=1" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/swiper.min.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.min.css?_=1" type="text/css" media="screen, projection" />
   <script src="{{ STATIC_URL }}js/modernizr.min.js"></script>
   {% endif %}
@@ -131,22 +129,21 @@
   </script>
 
   {% if debug %}
-  <script src="{{ STATIC_URL }}components/jquery/jquery.js"></script>
-  <script src="{{ STATIC_URL }}components/handlebars.js/dist/handlebars.js"></script>
-  <script src="{{ STATIC_URL }}components/underscore/underscore-min.js"></script>
-  <script src="{{ STATIC_URL }}components/backbone/backbone.js"></script>
-  <script src="{{ STATIC_URL }}components/backbone-relational/backbone-relational.js"></script>
-  <script src="{{ STATIC_URL }}components/backbone.marionette/lib/backbone.marionette.js"></script>
-  <script src="{{ STATIC_URL }}components/moment/moment.js"></script>
-  <script src="{{ STATIC_URL }}components/swiper/dist/idangerous.swiper-2.0.js"></script>
-  <script src="{{ STATIC_URL }}components/Countable/Countable.js"></script>
-  <script src="{{ STATIC_URL }}components/spin.js/spin.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/jquery/jquery.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/handlebars.js/dist/handlebars.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/underscore/underscore-min.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/backbone/backbone.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/backbone-relational/backbone-relational.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/backbone.marionette/lib/backbone.marionette.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/moment/moment.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/Countable/Countable.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/spin.js/spin.js"></script>
 
   <!-- Image processing tools -->
-  <script src="{{ STATIC_URL }}components/exif-js/binaryajax.js"></script>
-  <script src="{{ STATIC_URL }}components/exif-js/exif.js"></script>
-  <script src="{{ STATIC_URL }}components/blueimp-load-image/js/load-image.js"></script>
-  <script src="{{ STATIC_URL }}components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/exif-js/binaryajax.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/exif-js/exif.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/blueimp-load-image/js/load-image.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
 
   {% handlebarsjs '(.*)' precompile register_partials %}
 

@@ -1,9 +1,31 @@
   <h5>
     {{#app_config 'visionaries_label'}}
-      {{.}}
+      {{{.}}}
     {{^}}
       We're sharing our {{app_config 'vision_plural'}}!
     {{/app_config}}
   </h5>
+
   <ul class="user-list visionaries-list unstyled-list clearfix"></ul>
-  <a href="/users/list/visionaries" class="btn btn-block">See Everyone</a>
+
+  <p>
+    {{#app_config 'visionaries_description'}}
+      {{.}}
+    {{^}}
+      Explore {{app_config 'vision_plural'}} of others, add comments and hearts to show your support.
+      Want to share something you love about {{app_config 'city'}}? Tweet with the hashtag <strong>{{app_config 'title'}}</strong> and see what {{app_config 'vision_plural'}} you inspire from others.
+    {{/app_config}}
+  </p>
+
+  <p>
+    Have a great {{app_config 'vision'}}?
+
+    {{#if_authenticated}}
+    <strong>Add it here!</strong>
+    {{^}}
+    <a href="{{ LOGIN_URL }}"><strong>Sign in with your Twitter account</strong></a>
+    to add it!
+    {{/if_authenticated}}
+  </p>
+
+  <!-- <a href="/users/list/visionaries" class="btn btn-block">See Everyone</a> -->

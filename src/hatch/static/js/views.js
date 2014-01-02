@@ -1,4 +1,4 @@
-/*globals Backbone Handlebars $ _ Countable Event Swiper */
+/*globals Backbone Handlebars $ _ Countable Event */
 
 var Hatch = Hatch || {};
 
@@ -12,23 +12,27 @@ var Hatch = Hatch || {};
   NS.SupportHandlerMixin = {
     handleSupport: function(evt) {
       evt.preventDefault();
+      var vision = this.model,
+          supporters = vision.get('supporters'),
+          user = NS.app.currentUser,
+          category = NS.getCategory(vision.get('category')),
+          supportCount = category.get('support_count'),
+          visionFromMainCollection, index;
 
-      if (NS.app.currentUser.isAuthenticated()) {
-        var vision = this.model,
-            supporters = vision.get('supporters'),
-            user = NS.app.currentUser,
-            visionFromMainCollection, index;
-
+      if (NS.app.currentUser.isAuthenticated() && category.get('active')) {
         // supporters is an array of ids in some cases, a collection (with
         // contains) in others.
         if (_.isArray(supporters)){
           // if supported, unsupport
           index = _.indexOf(supporters, user.id);
-          visionFromMainCollection = NS.app.visionCollection.get(this.model.id);
+          visionFromMainCollection = NS.app.visionCollections[category.get('name')].get(this.model.id);
+
           if(index > -1) {
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
             user.unsupport(visionFromMainCollection);
+            // Update counts on the home page
+            category.set('support_count', supportCount-1);
 
             // Remove from the supporters array for rendering
             supporters.splice(index, 1);
@@ -38,6 +42,9 @@ var Hatch = Hatch || {};
             NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
             user.support(visionFromMainCollection);
+            // Update counts on the home page
+            category.set('support_count', supportCount+1);
+
             supporters.push(user.id);
             this.$('.support').addClass('supported');
           }
@@ -46,11 +53,15 @@ var Hatch = Hatch || {};
             NS.Utils.log('send', 'event', 'vision-support', 'remove', this.model.id);
 
             user.unsupport(vision);
+            // Update counts on the home page
+            category.set('support_count', supportCount-1);
             this.$('.support').removeClass('supported');
           } else {
             NS.Utils.log('send', 'event', 'vision-support', 'add', this.model.id);
 
             user.support(vision);
+            // Update counts on the home page
+            category.set('support_count', supportCount+1);
             this.$('.support').addClass('supported');
           }
         }
@@ -113,52 +124,61 @@ var Hatch = Hatch || {};
     }
   };
 
+  NS.PaginatedCompositeView = Backbone.Marionette.CompositeView.extend({
+    // template: '#paginated-list-tpl',
+    // itemViewContainer: '.content-list',
+    events: {
+      'click .load-more-action': 'onClickLoadMore'
+    },
+
+    collectionEvents: {
+      add: function() {
+        this.setLoadButtonVisibility(this.collection.hasNextPage());
+      },
+      reset: function() {
+        this.setLoadButtonVisibility(this.collection.hasNextPage());
+      }
+    },
+
+    onRender: function() {
+      this.setLoadButtonVisibility(this.collection.hasNextPage());
+    },
+
+    onClickLoadMore: function(evt) {
+      evt.preventDefault();
+      this.loadMoreContentItems();
+    },
+
+    loadMoreContentItems: function() {
+      var self = this;
+      this.collection.fetchNextPage(function(collection, response, options) {
+        self.setLoadButtonVisibility(collection.hasNextPage());
+      });
+    },
+
+    setLoadButtonVisibility: function(show) {
+      this.$('.load-more-action').toggleClass('is-hidden', !show);
+    }
+  });
+
   // Views ====================================================================
   NS.HomeView = Backbone.Marionette.Layout.extend({
     template: '#home-tpl',
     regions: {
+      category: '.category-region',
       visionaries: '.visionaries-region',
-      allies: '.allies-region'
+      allies: '.allies-region',
+      visions: '.visions-region'
+    }
+  });
+
+  NS.HomeCategoryView = Backbone.Marionette.ItemView.extend({
+    template: '#home-category-tpl',
+    modelEvents: {
+      'change': 'onChange'
     },
-    onShow: function() {
-      var self = this,
-          interval = 8000,
-          intervalId;
-
-      function clearInterval() {
-        if (intervalId) {
-          window.clearInterval(intervalId);
-          intervalId = null;
-        }
-      }
-
-      // It is important for this everything to be in the DOM for swiper to
-      // be a happy little plugin.
-      self.swiper = new Swiper(this.$('.swiper-container').get(0), {
-        loop: true,
-        pagination: this.$('.pagination').get(0),
-        paginationClickable: true,
-        calculateHeight: true,
-        onTouchStart: function() {
-          clearInterval(intervalId);
-        }
-      });
-
-      self.$('.pagination-btn-prev').click(function(evt) {
-        evt.preventDefault();
-        clearInterval(intervalId);
-        self.swiper.swipePrev();
-      });
-
-      self.$('.pagination-btn-next').click(function(evt) {
-        evt.preventDefault();
-        clearInterval(intervalId);
-        self.swiper.swipeNext();
-      });
-
-      intervalId = window.setInterval(function() {
-        self.swiper.swipeNext();
-      }, interval);
+    onChange: function() {
+      this.render();
     }
   });
 
@@ -174,22 +194,22 @@ var Hatch = Hatch || {};
     events: {
       'click .support-link': 'handleSupport'
     },
+    templateHelpers: function(){
+      var modelIndex = this.model.collection.indexOf(this.model);
+      return {
+        index: modelIndex,
+        show_add_button: modelIndex % 4 === 0
+      };
+    },
     handleSupport: NS.SupportHandlerMixin.handleSupport,
     updateSupportCount: NS.SupportHandlerMixin.updateSupportCount,
     totalSupportString: NS.SupportHandlerMixin.totalSupportString
   });
 
-  NS.VisionListView = Backbone.Marionette.CompositeView.extend({
+  NS.VisionListView = NS.PaginatedCompositeView.extend({
     template: '#list-tpl',
     itemView: NS.VisionListItemView,
-    itemViewContainer: 'ul.vision-list',
-    events: {
-      'click .vision-category-list-toggle-btn': 'toggleCategoryList'
-    },
-    toggleCategoryList: function(evt) {
-      evt.preventDefault();
-      this.$('.vision-category-list').toggleClass('is-toggled-open');
-    }
+    itemViewContainer: 'ul.vision-list'
   });
 
   // Replies ==================================================================
@@ -220,6 +240,7 @@ var Hatch = Hatch || {};
           max = 132;
 
       this.$replyArea = this.$('.reply-text');
+      this.initialReply = this.$replyArea.val();
 
       if (this.$replyArea.length) {
         Countable.live(this.$replyArea.get(0), function (counter) {
@@ -227,7 +248,7 @@ var Hatch = Hatch || {};
           self.charsLeft = max - counter.all;
           $countLabel.html(self.charsLeft);
 
-          if (self.chars > 0 && self.chars <= max) {
+          if (self.chars > 0 && self.chars <= max && self.$replyArea.val() != self.initialReply) {
             $submitBtn.prop('disabled', false);
           } else {
             $submitBtn.prop('disabled', true);
@@ -261,7 +282,9 @@ var Hatch = Hatch || {};
       evt.preventDefault();
       var form = evt.target,
           data = NS.Utils.serializeObject(form),
-          reply = data.attrs;
+          reply = data.attrs,
+          category = NS.getCategory(this.model.get('category')),
+          replyCount = category.get('reply_count');
 
       reply.author = NS.app.currentUser.get('id');
       reply.author_details = NS.app.currentUser.toJSON();
@@ -273,6 +296,8 @@ var Hatch = Hatch || {};
       if (this.charsLeft >= 0 && this.chars > 0) {
         // Save the reply
         this.collection.create(reply);
+        // Update the counts on the home page
+        category.set('reply_count', replyCount+1);
 
         // Reset the form
         form.reset();
@@ -421,16 +446,12 @@ var Hatch = Hatch || {};
     template: '#form-tpl',
     events: {
       'submit form': 'handleFormSubmission',
-      'change .vision-category-list input': 'handleCategoryChange',
       'change .vision-media input': 'handleMediaFileChange'
     },
     ui: {
       file: 'input[type=file]',
       imagePreview: '.image-preview',
       submit: 'input[type=submit]'
-    },
-    onRender: function() {
-      this.handleCategoryChange();
     },
     getFirstInvalidElement: function(form) {
       var invalidEl = null,
@@ -463,7 +484,9 @@ var Hatch = Hatch || {};
     },
     saveForm: function(form) {
       var self = this,
-          data = NS.Utils.serializeObject(form);
+          data = NS.Utils.serializeObject(form),
+          category = NS.getCategory(this.model.get('category')),
+          visionCount = category.get('vision_count');
 
       // Disable the submit button until we get a response
       this.ui.submit.prop('disabled', true);
@@ -485,20 +508,12 @@ var Hatch = Hatch || {};
           var tweetFlag = (this.$('.vision-tweet input').is(':checked') ? 1 : 0);
           NS.Utils.log('send', 'event', 'vision', 'save', 'success', tweetFlag);
 
-          NS.app.router.navigate('/'+NS.appConfig.vision_plural+'/' + model.id, {trigger: true});
+          // Set the count on the home page
+          category.set('vision_count', visionCount+1);
+          NS.app.router.navigate('/'+NS.appConfig.vision_plural+'/' + model.get('category') + '/' + model.id, {trigger: true});
         }
       });
 
-    },
-    handleCategoryChange: function() {
-      var category = this.$('.vision-category-list input:checked').val();
-
-      if (category) {
-        NS.Utils.log('send', 'event', 'vision', 'change-category', category);
-      }
-
-      this.$('.category-prompt').addClass('is-hidden')
-        .filter('.' + category + '-prompt').removeClass('is-hidden');
     },
     handleMediaFileChange: function(evt) {
       var self = this,
@@ -554,9 +569,12 @@ var Hatch = Hatch || {};
     emptyView: NS.NoItemsView
   });
 
-  NS.UserListWithFilterView = Backbone.Marionette.CollectionView.extend({
-    tagName: 'ul',
-    className: 'unstyled-list',
+  NS.UserListWithFilterView = NS.PaginatedCompositeView.extend({
+    template: '#user-page-tpl',
+    itemViewContainer: 'ul.filtered-user-list',
+
+    // tagName: 'ul',
+    // className: 'unstyled-list',
     itemView: NS.UserListItemView
   });
 
@@ -569,7 +587,7 @@ var Hatch = Hatch || {};
       this.$('.tab').removeClass('is-current');
       this.$('a[href*="'+ NS.appConfig.vision_plural +'"]').parent('.tab').addClass('is-current');
       this.content.show(new NS.UserListView({
-        collection: new Backbone.Collection(this.model.get('visions'))
+        collection: new NS.VisionCollection(this.model.get('visions'))
       }));
     },
     showSupported: function() {

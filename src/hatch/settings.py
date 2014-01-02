@@ -26,6 +26,9 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
+APP_CONFIG_CACHE_KEY = 'app_config'
+APP_CONFIG_INDEX = 0
+
 ###############################################################################
 #
 # Time Zones
@@ -53,7 +56,7 @@ SITE_ID = 1
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -89,6 +92,7 @@ WSGI_APPLICATION = 'hatch.wsgi.application'
 ROOT_URLCONF = 'hatch.urls'
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,7 +102,6 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_auth.middleware.SocialAuthExceptionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'hatch.middleware.HatchAuthMiddleware',
 )
 
@@ -124,13 +127,22 @@ LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/'
 
+# The Twitter configuration variable have to be present and truthy in order
+# for social_auth to recognize the Twitter log in as enabled. We have to use
+# lazy instantiation of the values because hatch.models imports this settings
+# module.
+def get_app_config_attr(attr):
+    from hatch.models import AppConfig
+    return getattr(AppConfig.get(), attr)
+
+from django.utils.functional import SimpleLazyObject
+TWITTER_CONSUMER_KEY = SimpleLazyObject(lambda: get_app_config_attr('twitter_consumer_key'))
+TWITTER_CONSUMER_SECRET = SimpleLazyObject(lambda: get_app_config_attr('twitter_consumer_secret'))
+
 ###############################################################################
 #
 # 3rd-party service configuration and keys
 #
-
-TWITTER_CONSUMER_KEY         = ''  # Set me in local settings
-TWITTER_CONSUMER_SECRET      = ''  # Set me in local settings
 
 ###############################################################################
 #
@@ -232,6 +244,13 @@ LOGGING = {
         },
     }
 }
+
+
+###############################################################################
+# Use the heroku settings, if we're on Heroku
+import os
+if os.environ.get('IS_HEROKU'):
+    from heroku_settings import *
 
 
 ###############################################################################

@@ -13,7 +13,7 @@
       <ul class="tabs tabs-{{get_tab_count visions.length supported.length replies.length}} unstyled-list">
 
         {{#if visions.length}}
-        <li class="tab"><a href="/users/{{id}}/{{visions_url_name}}" data-noscroll data-replace>{{ visions.length }} {{#eq visions.length 1}} {{app_config "vision" true}} {{^}} {{app_config "vision_plural" true}} {{/eq}}</a></li>
+        <li class="tab"><a href="/users/{{id}}/{{visions_url_name}}" class="capitalize" data-noscroll data-replace>{{ visions.length }} {{#eq visions.length 1}} {{app_config "vision"}} {{^}} {{app_config "vision_plural"}} {{/eq}}</a></li>
         {{/if}}
 
         {{#if supported.length}}

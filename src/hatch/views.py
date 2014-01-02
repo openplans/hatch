@@ -20,6 +20,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.utils.encoders import JSONEncoder
+from .cache import cache_buffer
 from .models import Reply, User, Vision, Category, Tweet, AppConfig
 from .forms import SecretAllySignupForm
 from .serializers import (
@@ -30,6 +31,11 @@ from .services import default_twitter_service
 
 class AppMixin (object):
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def dispatch(self, *args, **kwargs):
+        result = super(AppMixin, self).dispatch(*args, **kwargs)
+        cache_buffer.flush()
+        return result
 
     @classmethod
     def get_twitter_service(self):
@@ -51,11 +57,10 @@ class AppMixin (object):
     def get_vision_url(cls, request, vision):
         return request.build_absolute_uri(
             # '/visions/%s' % vision.pk)
-            reverse('app-vision-detail', kwargs={'pk': vision.pk}))
+            reverse('app-vision-detail', kwargs={'category': vision.category.name, 'pk': vision.pk}))
 
     def get_vision_queryset(self, base_queryset=None):
         return (base_queryset or Vision.objects.all())\
-            .filter(category__active=True)\
             .select_related('author')\
             .prefetch_related('author__social_auth')\
             .prefetch_related('author__groups')\
@@ -68,11 +73,12 @@ class AppMixin (object):
             .prefetch_related('sharers')
 
     def get_user_queryset(self, base_queryset=None):
-        return (base_queryset or User.objects.all())\
+        qs = (base_queryset or User.objects.all())\
             .annotate(social_count=Count('social_auth'))\
             .filter(social_count__gt=0)\
             .prefetch_related('visions')\
             .prefetch_related('visions__supporters')\
+            .prefetch_related('visions__replies')\
             .prefetch_related('replies')\
             .prefetch_related('replies__vision__author__social_auth')\
             .prefetch_related('replies__vision__supporters')\
@@ -82,8 +88,19 @@ class AppMixin (object):
             .prefetch_related('social_auth')\
             .prefetch_related('groups')
 
+        user = self.request.user
+        if user.is_authenticated():
+            followed_ids = self.get_twitter_service().get_followed_users(user, on_behalf_of=user)
+            qs = qs.extra(
+                tables=['social_auth_usersocialauth'],
+                where=['hatch_user.id=social_auth_usersocialauth.user_id'],
+                select={'is_followed': 'social_auth_usersocialauth.uid IN (%s)' % ','.join(["'%s'" % uid for uid in followed_ids])})\
+                .order_by('-is_followed')
+
+        return qs
+
     def get_category_queryset(self, base_queryset=None):
-        return (base_queryset or Category.objects.filter(active=True))
+        return (base_queryset or Category.objects.all())
 
     def get_recent_engagements(self):
         user = self.request.user
@@ -144,7 +161,7 @@ class AppMixin (object):
             user_data = serializer.data
             context['user_data'] = user_data
             context['user_json'] = json.dumps(user_data, cls=JSONEncoder)
-            
+
             # Bootstrap notifications
             count, qs = user.get_recent_engagements()
 
@@ -217,13 +234,14 @@ class TweetException (APIException):
 class VisionViewSet (AppMixin, ModelViewSet):
     model = Vision
     serializer_class = VisionSerializer
+    paginate_by = 30
 
     def get_queryset(self):
         queryset = self.get_vision_queryset()
 
         category = self.request.GET.get('category')
         if (category):
-            queryset = queryset.filter(category__iexact=category)
+            queryset = queryset.filter(category__name__iexact=category)
 
         return queryset
 
@@ -235,11 +253,11 @@ class VisionViewSet (AppMixin, ModelViewSet):
         username = vision.author.username
         url_length = service.get_url_length(vision_url)
 
-        attribution = u'@%s ' % (username,)
-        vision_length = 140 - len(attribution) - url_length - 3
+        attribution = u'@%s' % (username,)
+        vision_length = 140 - len(attribution) - url_length - 7
         return ''.join([
             attribution,
-            '"', Truncator(vision.text).chars(vision_length, u'…'), '" ',
+            ' said ', Truncator(vision.text).chars(vision_length, u'…'), ' ',
             vision_url
         ])
 
@@ -302,7 +320,8 @@ class ReplyViewSet (AppMixin, ModelViewSet):
     serializer_class = ReplySerializer
 
     def get_tweet_text(self, request, reply):
-        app_username = settings.TWITTER_USERNAME
+        app_config = AppConfig.get(cache=cache_buffer)
+        app_username = app_config.twitter_handle
         if not app_username.startswith('@'):
             app_username = '@' + app_username
 
@@ -361,6 +380,7 @@ class SiteMapView (AppMixin, TemplateView):
 class UserViewSet (AppMixin, ModelViewSet):
     model = User
     serializer_class = UserSerializer
+    paginate_by = 20
 
     def get_queryset(self):
         """
@@ -413,7 +433,7 @@ class VisionActionViewSet (SingleObjectMixin, AppMixin, ViewSet):
         vision = self.get_object()
         service = self.get_twitter_service()
         success, response = service.retweet(
-            vision.app_tweet_id, self.request.user)
+            vision.tweet_id or vision.app_tweet_id, self.request.user)
 
         if success:
             tweet_id = response['id']
@@ -457,7 +477,7 @@ notifications_api_view = NotificationsViewSet.as_view({'get': 'list',
                                                        'delete': 'clear'})
 
 # Setup the API routes
-api_router = DefaultRouter()
+api_router = DefaultRouter(trailing_slash=False)
 api_router.register('visions', VisionViewSet)
 api_router.register('users', UserViewSet)
 api_router.register('replies', ReplyViewSet)

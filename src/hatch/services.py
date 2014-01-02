@@ -1,9 +1,10 @@
-from django.conf import settings
-from django.core.cache import cache
+from django.core import cache as django_cache
 from twitter import Twitter, OAuth, TwitterHTTPError
 from twitter.stream import TwitterStream
 from urlparse import parse_qs
 import re
+from .models import AppConfig
+from .cache import cache_buffer as cache
 from .utils import chunk
 
 from logging import getLogger
@@ -181,7 +182,7 @@ class TwitterService (object):
 
             # Update the social media found status for all the users.
             from .models import User
-            
+
             seen_users = User.objects.filter(social_auth__uid__in=seen_ids)
             seen_users.update(sm_not_found=False)
 
@@ -208,6 +209,36 @@ class TwitterService (object):
     def get_bio(self, user, on_behalf_of):
         user_info = self.get_user_info(user, on_behalf_of)
         return user_info['description']
+
+    def get_followed_users(self, user, on_behalf_of=None):
+        cache_key = self.get_user_cache_key(user, 'follows')
+        followed_user_ids = cache.get(cache_key)
+
+        if followed_user_ids is None:
+            user_id = self.get_user_id(user)
+
+            log_string = (
+                '\n'
+                '============================================================\n'
+                'Hitting the API for %s to get IDs for users that %s (%s)\n'
+                'follows\n'
+                '============================================================\n'
+            ) % (
+                on_behalf_of.username if on_behalf_of else 'the app',
+                user.username, user_id
+            )
+            log.info(log_string)
+
+            t = self.get_api(on_behalf_of)
+            try:
+                followed_user_ids = t.friends.ids(user_id=user_id)
+            except TwitterHTTPError:
+                user.sm_not_found = True
+                user.save(update_fields=['sm_not_found'])
+                raise SocialMediaException('User %s (%s) not found on Twitter' % (user.username, user_id))
+            followed_user_ids = followed_user_ids['ids']
+            cache.set(cache_key, followed_user_ids)
+        return followed_user_ids
 
     # ==================================================================
     # User-specific info, from the database, used for authenticating
@@ -263,11 +294,12 @@ class TwitterService (object):
                      'provider') % social_auth.provider
                 )
 
+            app_config = AppConfig.get()
             oauth_args = (
                 access_token['oauth_token'][0],
                 access_token['oauth_token_secret'][0],
-                settings.TWITTER_CONSUMER_KEY,
-                settings.TWITTER_CONSUMER_SECRET
+                app_config.twitter_consumer_key,
+                app_config.twitter_consumer_secret,
             )
             # Cache for just long enough to complete the current batch of
             # lookups without having to hit the DB again.
@@ -280,11 +312,12 @@ class TwitterService (object):
     # against Twitter on behalf of the app
     # ==================================================================
     def get_app_oauth(self):
+        app_config = AppConfig.get()
         return OAuth(
-            settings.TWITTER_ACCESS_TOKEN,
-            settings.TWITTER_ACCESS_SECRET,
-            settings.TWITTER_CONSUMER_KEY,
-            settings.TWITTER_CONSUMER_SECRET,
+            app_config.twitter_access_token,
+            app_config.twitter_access_token_secret,
+            app_config.twitter_consumer_key,
+            app_config.twitter_consumer_secret,
         )
 
     def get_api(self, on_behalf_of=None):
@@ -320,7 +353,9 @@ class TwitterService (object):
             if on_behalf_of is not None:
                 user_ids = cache.get('listening_user_ids', set())
                 if self.get_user_id(on_behalf_of) not in user_ids:
-                    cache.set('restart_listener', True)
+                    # Since we're communicating with a different process, go
+                    # directly to the central cache.
+                    django_cache.cache.set('restart_listener', True)
             return True, result
 
     def add_favorite(self, on_behalf_of, tweet_id, **extra):

@@ -9,7 +9,6 @@
     "handlebars.js": "~1.0.12",
     "backbone.marionette": "~1.0.3",
     "moment": "~2.1.0",
-    "swiper": "latest",
     "modernizr": "~2.6.2",
     "Countable": "~2.0.0",
     "backbone-relational": "~0.8.5",

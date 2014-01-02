@@ -9,6 +9,7 @@ var Hatch = Hatch || {};
 
   // Visions ==================================================================
   NS.VisionModel = Backbone.RelationalModel.extend({
+    urlRoot: '/api/visions',
     relations: [{
       type: Backbone.HasMany,
       key: 'replies',
@@ -75,8 +76,34 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.VisionCollection = Backbone.Collection.extend({
-    url: '/api/visions/',
+  NS.PaginatedCollection = Backbone.Collection.extend({
+    parse: function(response) {
+      this.metadata = _.clone(response);
+      delete this.metadata.results;
+
+      return response.results;
+    },
+
+    hasNextPage: function(response) {
+      return !!this.metadata.next;
+    },
+
+    fetchNextPage: function(success, error) {
+      var collection = this;
+
+      if (this.metadata.next) {
+        collection.fetch({
+          remove: false,
+          url: collection.metadata.next,
+          success: success,
+          error: error
+        });
+      }
+    }
+  });
+
+  NS.VisionCollection = NS.PaginatedCollection.extend({
+    url: '/api/visions',
     comparator: function(vision) {
       var dateString = vision.get('tweeted_at'),
           date = new Date(_.isUndefined(dateString) ? null : dateString);
@@ -85,29 +112,6 @@ var Hatch = Hatch || {};
     model: NS.VisionModel,
     getFeatured: function() {
       return this.where({'featured': true});
-    },
-    getMostSupportedByCategory: function() {
-      function sortByCategory(a, b) {
-        var aLen = a.get('supporters').length,
-            bLen = b.get('supporters').length;
-
-        if (aLen < bLen) {
-          return -1;
-        } else if (bLen < aLen) {
-          return 1;
-        }
-        return 0;
-      }
-
-      var visionsByCategory = this.groupBy('category'),
-          mostSupported = [];
-
-      _.each(visionsByCategory, function(modelList, cat) {
-        var model = _.last(modelList.sort(sortByCategory));
-        mostSupported.push(model);
-      });
-
-      return mostSupported;
     }
   });
 
@@ -115,13 +119,15 @@ var Hatch = Hatch || {};
   NS.ReplyModel = Backbone.RelationalModel.extend({});
 
   NS.ReplyCollection = Backbone.Collection.extend({
-    url: '/api/replies/',
+    url: '/api/replies',
     comparator: 'tweeted_at',
     model: NS.ReplyModel
   });
 
   // Users ====================================================================
   NS.UserModel = Backbone.RelationalModel.extend({
+    urlRoot: '/api/users',
+    
     // Replies not added because the Vision model specifies (rightly) that
     // a reply should be rendered as an ID (to support saving a reply with a
     // vision ID). This does not allow us to render a reply on the user profile
@@ -132,9 +138,9 @@ var Hatch = Hatch || {};
     // NOTE: This was causing a some sort of infinite loop.
     // TODO: Know enough about backbone-relational to know when and why an
     //       infinite loop would be caused by this. When you figure that out
-    //       (and fix it), also change the user list view instantiations in 
+    //       (and fix it), also change the user list view instantiations in
     //       the UserDetailView.
-    // 
+    //
     // relations: [{
     //   type: Backbone.HasMany,
     //   key: 'visions',
@@ -160,7 +166,7 @@ var Hatch = Hatch || {};
 
       if (this.notifications) {
         var changed = false;
-        
+
         this.notifications.each(function(notification) {
           if (notification.get('is_new') && notification.get('properties')['vision'] === vision) {
             notification.set({'is_new': false}, {silent: true});
@@ -232,8 +238,8 @@ var Hatch = Hatch || {};
     }
   });
 
-  NS.UserCollection = Backbone.Collection.extend({
-    url: '/api/users/',
+  NS.UserCollection = NS.PaginatedCollection.extend({
+    url: '/api/users',
     comparator: function(user1, user2) {
       var orderByGroup = function(group) {
             if (user1.isInGroup(group) && !user2.isInGroup(group)) {
