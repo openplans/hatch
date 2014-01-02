@@ -39,8 +39,25 @@ SERVER_EMAIL = EMAIL_HOST_USER
 import dj_database_url
 DATABASES = {'default': dj_database_url.config()}
 
-import django_cache_url
-CACHES = {'default': django_cache_url.config()}
+# import django_cache_url
+# CACHES = {'default': django_cache_url.config()}
+
+scheme, connstring = os.environ['CACHE_URL'].split('://')
+userpass, fullnetloc = connstring.split('@')
+netloc, path = fullnetloc.split('/', 1)
+userename, password = userpass.split(':')
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.cache.RedisCache",
+        "LOCATION": "%s:%s" % (netloc, path),
+        "OPTIONS": {
+            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+            "PASSWORD": password,
+        }
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Image storing
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
