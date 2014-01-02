@@ -508,7 +508,7 @@ class AppConfig (models.Model):
         "<br>"
         "If you change any of the values in this section you will have to "
         "restart your server and your Tweet listener. Learn more in the "
-        "<a href=\"https://github.com/openplans/hatch/blob/master/README.md\">"
+        "<a href=\"https://github.com/openplans/hatch/blob/master/README.md\" target=\"_blank\">"
         "documentation.</a>")
     twitter_consumer_key = models.CharField(max_length=100)
     twitter_consumer_secret = models.CharField(max_length=100)
@@ -524,7 +524,7 @@ class AppConfig (models.Model):
         "<br>"
         "For more information about how the line should be formatted, see "
         "Twitter's guidelines on <a href=\"https://dev.twitter.com/docs/using"
-        "-search\">How to build a query</a>.")
+        "-search\" target=\"_blank\">How to build a query</a>.")
 
     app_label = models.CharField(max_length=250, help_text="This is "
         "the first heading that appears in the footer. It should be something"
