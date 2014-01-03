@@ -560,6 +560,9 @@ class AppConfig (models.Model):
         "{{city}} a better place.\".", null=True, blank=True)
     allies_description = models.TextField(help_text="This is the text that "
         "describes allies on the home page.", null=True, blank=True)
+    add_vision_text = models.CharField(max_length=50, null=True, blank=True,
+        help_text="Button text inviting users to share a vision. The default "
+        "is \"Add my {{vision}}\"")
     city = models.CharField(max_length=50)
 
     def __unicode__(self):
