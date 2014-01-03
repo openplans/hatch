@@ -39,7 +39,13 @@
 {{#if_active_category category}}
   {{#if show_add_button}}
     {{#if_authenticated}}
-    <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span> Add my {{app_config 'vision'}}</a>
+    <a href="/{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary"><span class="plus">+</span>
+      {{#app_config 'add_vision_text'}}
+        {{{.}}}
+      {{^}}
+        Add my {{app_config 'vision'}}
+      {{/app_config}}
+      </a>
     {{^}}
     <a href="{{ LOGIN_URL '/' }}{{visions_url_name}}/{{ category }}/new" class="btn btn-block btn-tertiary">Sign In and Contribute <img src="{{ STATIC_URL }}images/nav-twitter.png" class="icon-inline"></a>
     {{/if_authenticated}}

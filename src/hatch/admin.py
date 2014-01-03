@@ -183,7 +183,7 @@ class CategoryAdmin (admin.ModelAdmin):
             qs = super(CategoryAdmin, self).queryset(request)
         else:
             qs = super(CategoryAdmin, self).get_queryset(request)
-        
+
         # If this is not a simple GET request, just return the base queryset
         # immediately.
         if request.method.lower() != 'get':
@@ -267,15 +267,16 @@ class AppConfigAdmin (admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'subtitle', 'description')}),
         ('Interface Text', {'fields': (
-            'app_label', 'app_description', 
+            'app_label', 'app_description',
             'vision', 'vision_plural',
-            'visionary', 'visionary_plural', 'visionaries_label', 'visionaries_description', 
-            'ally', 'ally_plural', 'allies_label', 'allies_description', 
+            'visionary', 'visionary_plural', 'visionaries_label', 'visionaries_description',
+            'ally', 'ally_plural', 'allies_label', 'allies_description',
+            'add_vision_text',
             'city')}),
         ('Twitter Integration Configuration', {'fields': (
-            'twitter_handle', 
-            'twitter_consumer_key', 'twitter_consumer_secret', 
-            'twitter_access_token', 'twitter_access_token_secret', 
+            'twitter_handle',
+            'twitter_consumer_key', 'twitter_consumer_secret',
+            'twitter_access_token', 'twitter_access_token_secret',
             'twitter_tracking_keywords',)}),
         ('Sharing', {'fields': ('share_title', 'url')}),
     )
