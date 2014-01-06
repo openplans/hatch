@@ -54,10 +54,7 @@ var Hatch = Hatch || {};
     "([^\\w]|^)" +
 
     // No more than 15 characters
-    "@([a-z0-9_]{1,15})" +
-
-    // Followed by non-valid Twitter username characters
-    "([^a-z0-9_]|$)",
+    "@([a-z0-9_]{1,15})",
 
     'gi'
   );
@@ -144,9 +141,9 @@ var Hatch = Hatch || {};
 
     // Replace Twitter usernames like @atogle with <a href='https://twitter.com/atogle'>@atogle</a>
     twitterify: function(safeContent) {
-      return safeContent.replace(TWITTER_USER_REGEX, function(match, leading, username, trailing) {
+      return safeContent.replace(TWITTER_USER_REGEX, function(match, leading, username) {
         var address = 'http://www.twitter.com/' + username;
-        return leading + "<a href='" + address + "' target='_blank'>@" + username + "</a>" + trailing;
+        return leading + "<a href='" + address + "' target='_blank'>@" + username + "</a>";
       });
     },
 

@@ -70,13 +70,13 @@ A superuser will allow you to login to the site admin. Run this command and foll
 
 #### Configure the app
 
-1. Start the app by running `src/manage.py runserver` in your terminal from your app directory. This runs on port 8080 by default.
-2. Go to [http://localhost:8080/admin/](http://localhost:8080/admin/) and login with the credentials you created in the previous step.
-3. Click on the [Add link](http://localhost:8080/admin/hatch/appconfig/add/) in the [App configs](http://localhost:8080/admin/hatch/appconfig/) section.
+1. Start the app by running `src/manage.py runserver` in your terminal from your app directory. This runs on port 8000 by default.
+2. Go to [http://localhost:8000/admin/](http://localhost:8000/admin/) and login with the credentials you created in the previous step.
+3. Click on the [Add link](http://localhost:8000/admin/hatch/appconfig/add/) in the [App configs](http://localhost:8000/admin/hatch/appconfig/) section.
 4. Fill in all of the required fields, especially the Twitter app settings. Remember, you can find them with your application settings at [https://dev.twitter.com/](https://dev.twitter.com/). Note that you can change any of these settings later.
-5. Click on the [Add link](http://localhost:8080/admin/hatch/category/add/) in the [Categories](http://localhost:8080/admin/hatch/category/) section.
+5. Click on the [Add link](http://localhost:8000/admin/hatch/category/add/) in the [Categories](http://localhost:8000/admin/hatch/category/) section.
 6. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
-7. Log out, restart your server (`src/manage.py runserver`), and then visit [your app](http://localhost:8080/admin/). Things should be setup correctly if you can login with your Twitter account and submit an idea.
+7. Log out, restart your server (`src/manage.py runserver`), and then visit [your app](http://localhost:8000). Things should be setup correctly if you can login with your Twitter account and submit an idea.
 
 
 ### Deploy to Heroku
@@ -107,9 +107,11 @@ Set `DATABASE_URL` to the value of `HEROKU_POSTGRESQL_[SOME_COLOR]_URL`
 
     heroku config:set DATABASE_URL=postgres://[blahblahblah]
 
-Set `REDIS_URL` to the value of `[REDISVENDOR]_URL`
+Set `CACHE_URL` to the value of `[REDISVENDOR]_URL`
 
-    heroku config:set REDIS_URL=redis://[blahblahblah]
+    heroku config:set CACHE_URL=redis://[blahblahblah]/0
+
+**NOTE the** `/0` **at the end. This is the Redis database number and must be included. The actual number is arbitrary, and 0 is a good choice.**
 
 #### Deploy the app
 
@@ -130,9 +132,26 @@ Schedule it to run with a frequency of every 10 minutes.
 
 Your app is now deployed! Finally, we need to do the final steps which mirror what we did above when setting up our local instance.
 
-1. [Setup the database](#setup-the-database)
-2. [Create a superuser](#create-a-superuser)
-3. [Configure the app](#configure-the-app)
+#### Setup the database
+
+You don't have any tables yet! Run this to get everything setup for the first time.
+
+    heroku run src/manage.py syncdb --migrate
+
+#### Create a superuser
+
+A superuser will allow you to login to the site admin. Run this command and follow the prompts.
+
+    heroku run src/manage.py createsuperuser
+
+#### Configure the app
+
+1. Go to `http://[myappname].herokuapp.com/admin/` and login with the credentials you created in the previous step.
+2. Click on the Add link in the App configs section.
+3. Fill in all of the required fields, especially the Twitter app settings. Remember, you can find them with your application settings at [https://dev.twitter.com/](https://dev.twitter.com/). Note that you can change any of these settings later.
+4. Click on the Add link in the Categories section.
+5. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
+6. Log out, restart your server (`heroku restart`), and then visit your app at `http://[myappname].herokuapp.com`. Things should be setup correctly if you can login with your Twitter account and submit an idea.
 
 #### Hatch a conversation
 

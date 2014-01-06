@@ -41,9 +41,7 @@
 
       <span class="tweet-icon"><img class="tweet-icon-reply" src="/static/images/reply-icon.png"></span> Reply</a>
 
-      {{# if category }}
-      <!-- <a href="/{{visions_url_name}}/{{ category }}" class="category-link"><strong class="capitalize">{{ category }}</strong></a> -->
-      {{/ if }}
+      <a href="http://twitter.com/{{ app_config 'twitter_handle' }}/status/{{ app_tweet }}" target="_blank" class="twitter-link"><strong>View on Twitter</strong></a>
 
       {{#if_authenticated}}
       <div class="confirm-retweet-prompt retweet-prompt-box is-hidden">

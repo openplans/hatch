@@ -492,45 +492,77 @@ class Reply (TweetedModelMixin, models.Model):
 
 
 class AppConfig (models.Model):
-    title = models.CharField(max_length=50)
-    subtitle = models.CharField(max_length=100)
+    title = models.CharField(max_length=50, help_text="This appears in the"
+        " app's header on every page.")
+    subtitle = models.CharField(max_length=100, help_text="When someone"
+        " searches for your app on Google, they will see the subtitle and"
+        " description after the title.")
     description = models.TextField()
     share_title = models.CharField(max_length=100)
     url = models.CharField(max_length=1024)
 
-    twitter_handle = models.CharField(max_length=50)
+    twitter_handle = models.CharField(max_length=50, help_text="The username "
+        "for the app's Twitter account. Each user's vision entered through "
+        "the application will be tweeted from this account, and the app keys "
+        "(see below) should be set up through this account.<br>"
+        "<br>"
+        "If you change any of the values in this section you will have to "
+        "restart your server and your Tweet listener. Learn more in the "
+        "<a href=\"https://github.com/openplans/hatch/blob/master/README.md\" target=\"_blank\">"
+        "documentation.</a>")
     twitter_consumer_key = models.CharField(max_length=100)
     twitter_consumer_secret = models.CharField(max_length=100)
     twitter_access_token = models.CharField(max_length=100)
     twitter_access_token_secret = models.CharField(max_length=100)
-    twitter_tracking_keywords = models.TextField(max_length=1024)
+    twitter_tracking_keywords = models.TextField(max_length=1024, help_text=
+        "Hatch will watch for tweets containing these keywords, and import "
+        "them to be moderated. Each search should appear on a new line. For "
+        "example: <br>"
+        "<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;#civicinnovation<br>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;mayor of my city<br>"
+        "<br>"
+        "For more information about how the line should be formatted, see "
+        "Twitter's guidelines on <a href=\"https://dev.twitter.com/docs/using"
+        "-search\" target=\"_blank\">How to build a query</a>.")
 
     app_label = models.CharField(max_length=250, help_text="This is "
-        "the first heading that appears in the footer. The default is"
+        "the first heading that appears in the footer. It should be something"
+        " like \"What is Hatch?\" or \"About this app\". The default is"
         "\"What is {{title}}?\".",
         null=True, blank=True)
-    app_description = models.CharField(max_length=1024, help_text="This is "
+    app_description = models.TextField(max_length=1024, help_text="This is "
         "the text that describes app on the home page.",
         null=True, blank=True)
-    vision = models.CharField(max_length=50)
+    vision = models.CharField(max_length=50, help_text="A \"vision\" is what"
+        " you want users to share. You can call your \"visions\" whatever you"
+        " want: \"idea\", \"story\", etc.")
     vision_plural = models.CharField(max_length=50)
-    visionary = models.CharField(max_length=50)
+    visionary = models.CharField(max_length=50, help_text="A \"visionary\" is"
+        " any user that shares a \"vision\". This is how you describe your"
+        " users. It could be \"citizen\", \"resident\", \"participant\","
+        " \"attendee\", etc.")
     visionary_plural = models.CharField(max_length=50)
     visionaries_label = models.CharField(max_length=250, help_text="This is "
         "the text that appears above the list of visionary icons on the home "
         "page. The default is \"We're sharing our {{vision_plural}}!\".",
         null=True, blank=True)
-    visionaries_description = models.CharField(max_length=1024, help_text="This is "
-        "the text that describes visionaries on the home page.",
-        null=True, blank=True)
-    ally = models.CharField(max_length=50)
+    visionaries_description = models.TextField(help_text="This is the text "
+        "that describes visionaries on the home page.", null=True, blank=True)
+    ally = models.CharField(max_length=50, help_text="An \"ally\" is a"
+        " user that has agreed to take an active role in supporting and"
+        " encouraging conversation on the site. You could call them"
+        " \"organizer\", \"expert\", \"mentor\", etc.")
     ally_plural = models.CharField(max_length=50)
     allies_label = models.CharField(max_length=250, help_text="This is "
         "the text that appears above the list of ally icons on the home page."
         " The default is \"We are {{ally_plural}} in your effort to make "
         "{{city}} a better place.\".", null=True, blank=True)
-    allies_description = models.CharField(max_length=1024, help_text="This is "
-        "the text that describes allies on the home page.", null=True, blank=True)
+    allies_description = models.TextField(help_text="This is the text that "
+        "describes allies on the home page.", null=True, blank=True)
+    add_vision_text = models.CharField(max_length=50, null=True, blank=True,
+        help_text="Button text inviting users to share a vision. The default "
+        "is \"Add my {{vision}}\"")
     city = models.CharField(max_length=50)
 
     def __unicode__(self):
