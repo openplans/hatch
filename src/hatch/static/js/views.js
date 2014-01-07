@@ -377,6 +377,7 @@ var Hatch = Hatch || {};
       'click .show-reply': 'showReplyForm',
       'click .support-link': 'handleSupport',
       'click .retweet-link': 'handleRetweet',
+      'click .twitter-link': 'handleTwitter',
       'click .confirm-retweet-action': 'handleConfirmRetweet',
       'click .cancel-retweet-action': 'handleCancelRetweet',
       'click .vision-media-container': 'handleVisionMediaClick'
@@ -392,6 +393,9 @@ var Hatch = Hatch || {};
       } else {
         this.$('.support-login-prompt').addClass('is-hidden');
       }
+    },
+    handleTwitter: function(evt) {
+      NS.Utils.log('send', 'event', 'vision', 'view-in-twitter', this.model.id);
     },
     handleRetweet: function(evt) {
       evt.preventDefault();
