@@ -4,8 +4,20 @@ Hatch helps community members share what they love about their communities, and 
 
 Hatch started as \#VizLou, an experimental new tool for civic engagement, created in partnership with Louisville Metro, with support from Living Cities. [Read more about the project](http://www.livingcities.org/blog/?id=90).
 
-## Setup
+## Features
 
+* Collect ideas and start conversations
+* Built on the Twitter platform, Hatch will:
+  * Import tweets that match your search terms
+  * Import any activity that happens on Twitter so won't miss any of the conversation
+  * Share activity from the app on Twitter
+* Set the topic of conversation; start new topics after older ones have run their course
+* Configurable text and images
+* Support, comment, or retweet ideas
+* Explore user profiles and activity
+* Activity notifications
+
+## Setup
 
 ### Prerequisites
 
