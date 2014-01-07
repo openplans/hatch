@@ -409,7 +409,8 @@ var Hatch = Hatch || {};
   };
 
   NS.app.addRegions({
-    mainRegion: '.main'
+    mainRegion: '.main',
+    overlayRegion: '.overlay'
   });
 
 
@@ -499,8 +500,17 @@ var Hatch = Hatch || {};
       } else if (href.indexOf('/logout') === 0) {
         NS.Utils.log('send', 'event', 'authentication', 'logout');
       }
-
     });
+
+    if (Modernizr.localstorage && NS.appConfig.show_walkthrough) {
+      var hasVisited = localStorage.getItem('hatch-visited');
+      if (!hasVisited) {
+        NS.app.overlayRegion.show(new NS.WalkthroughView({
+          model: NS.getCategory(NS.app.activeCategoryName)
+        }));
+        localStorage.setItem('hatch-visited', true);
+      }
+    }
   });
 
   NS.app.updateNotificationCount = function() {

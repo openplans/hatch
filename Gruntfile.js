@@ -24,7 +24,8 @@ module.exports = function(grunt) {
               'src/hatch/static/bower_components/exif-js/exif.js',
               'src/hatch/static/bower_components/blueimp-load-image/js/load-image.js',
               'src/hatch/static/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.js',
-              'src/hatch/static/bower_components/spin.js/spin.js'
+              'src/hatch/static/bower_components/spin.js/spin.js',
+              'src/hatch/static/bower_components/swiper/dist/idangerous.swiper-2.4.1.js'
             ]
           },
           {
@@ -58,7 +59,8 @@ module.exports = function(grunt) {
             dest: 'src/hatch/static/css/components.min.css',
             src: [
               'src/hatch/static/bower_components/normalize-css/normalize.css',
-              'src/hatch/static/bower_components/hint.css/hint.css'
+              'src/hatch/static/bower_components/hint.css/hint.css',
+              'src/hatch/static/bower_components/swiper/dist/idangerous.swiper.css'
             ]
           },
           {

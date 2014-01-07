@@ -269,16 +269,22 @@ class AppConfigAdmin (admin.ModelAdmin):
         ('Interface Text', {'fields': (
             'app_label', 'app_description',
             'vision', 'vision_plural',
-            'visionary', 'visionary_plural', 'visionaries_label', 'visionaries_description',
-            'ally', 'ally_plural', 'allies_label', 'allies_description',
-            'add_vision_text',
-            'city')}),
+            'visionary', 'visionary_plural',
+            'visionaries_label', 'visionaries_description',
+            'ally', 'ally_plural',
+            'allies_label', 'allies_description',
+            'add_vision_text', 'city')}),
         ('Twitter Integration Configuration', {'fields': (
             'twitter_handle',
             'twitter_consumer_key', 'twitter_consumer_secret',
             'twitter_access_token', 'twitter_access_token_secret',
             'twitter_tracking_keywords',)}),
         ('Sharing', {'fields': ('share_title', 'url')}),
+        ('App Walkthrough Text', {'fields': ('show_walkthrough',
+            'walkthrough_title_1', 'walkthrough_description_1',
+            'walkthrough_title_2', 'walkthrough_description_2',
+            'walkthrough_title_3', 'walkthrough_description_3',
+            )}),
     )
 
 

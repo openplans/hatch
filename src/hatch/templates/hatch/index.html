@@ -59,6 +59,7 @@
   {% if debug %}
   <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/normalize-css/normalize.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/hint.css/hint.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/swiper/dist/idangerous.swiper.css" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css" type="text/css" media="screen, projection" />
 
   <script src="{{ STATIC_URL }}bower_components/modernizr/modernizr.js"></script>
@@ -75,6 +76,7 @@
 
 </head>
 <body>
+  <div class="overlay"></div>
 
   <div class="site-header">
     <div class="container clearfix">
@@ -138,6 +140,7 @@
   <script src="{{ STATIC_URL }}bower_components/moment/moment.js"></script>
   <script src="{{ STATIC_URL }}bower_components/Countable/Countable.js"></script>
   <script src="{{ STATIC_URL }}bower_components/spin.js/spin.js"></script>
+  <script src="{{ STATIC_URL }}bower_components/swiper/dist/idangerous.swiper-2.4.1.js"></script>
 
   <!-- Image processing tools -->
   <script src="{{ STATIC_URL }}bower_components/exif-js/binaryajax.js"></script>
