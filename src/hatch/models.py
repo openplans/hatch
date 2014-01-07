@@ -565,6 +565,22 @@ class AppConfig (models.Model):
         "is \"Add my {{vision}}\"")
     city = models.CharField(max_length=50)
 
+    show_walkthrough = models.BooleanField(default=True, help_text="This "
+        "shows a short walkthrough the first, and only first, time a user "
+        "visits the app.")
+    walkthrough_title_1 = models.CharField(max_length=250, help_text="This is "
+        "the title of page 1 of the walkthrough.", null=True, blank=True)
+    walkthrough_description_1 = models.TextField(help_text="This is the description "
+        "of page 1 of the walkthrough.", null=True, blank=True)
+    walkthrough_title_2 = models.CharField(max_length=250, help_text="This is "
+        "the title of page 2 of the walkthrough.", null=True, blank=True)
+    walkthrough_description_2 = models.TextField(help_text="This is the description "
+        "of page 2 of the walkthrough.", null=True, blank=True)
+    walkthrough_title_3 = models.CharField(max_length=250, help_text="This is "
+        "the title of page 3 of the walkthrough.", null=True, blank=True)
+    walkthrough_description_3 = models.TextField(help_text="This is the description "
+        "of page 3 of the walkthrough.", null=True, blank=True)
+
     def __unicode__(self):
         return '%s | "%s"' % (self.title, self.subtitle)
 

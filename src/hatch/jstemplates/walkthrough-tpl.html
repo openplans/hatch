@@ -11,16 +11,40 @@
 
     <div class="swiper-slide">
       <div class="swiper-slide-container">
-        <h1>{{app_config 'title'}} is collecting {{app_config 'vision_plural'}} for how to make our city better. </h1>
-        <p>Explore what others are saying. </p>
+        <h1>
+          {{#app_config 'walkthrough_title_1'}}
+            {{{.}}}
+          {{^}}
+            {{app_config 'title'}} is collecting {{app_config 'vision_plural'}} for how to make our city better
+          {{/app_config}}
+        </h1>
+        <p>
+          {{#app_config 'walkthrough_description_1'}}
+            {{{.}}}
+          {{^}}
+            Explore what others are saying.
+          {{/app_config}}
+        </p>
         <div class="pagination-btn pagination-btn-next btn btn-primary">Next&nbsp;<span class="pagination-btn-icon">&#10142;</span></div>
       </div>
     </div>
 
     <div class="swiper-slide">
       <div class="swiper-slide-container">
-        <h1>Join the conversation.</h1>
-        <p>Sign in with Twitter to show support for your favorite {{app_config 'vision_plural'}}, leave comments, and share your own {{app_config 'vision_plural'}}. Don't worry. {{app_config 'title'}} doesn't tweet for you automatically.</p>
+        <h1>
+          {{#app_config 'walkthrough_title_2'}}
+            {{{.}}}
+          {{^}}
+            Join the conversation
+          {{/app_config}}
+        </h1>
+        <p>
+          {{#app_config 'walkthrough_description_2'}}
+            {{{.}}}
+          {{^}}
+            Sign in with Twitter to show support for your favorite {{app_config 'vision_plural'}}, leave comments, and share your own {{app_config 'vision_plural'}}. Don't worry. {{app_config 'title'}} doesn't tweet for you automatically.
+          {{/app_config}}
+        </p>
         <div class="pagination-btn pagination-btn-prev btn btn-secondary"><span class="pagination-btn-icon">&#8617;</span></div>
         <div class="pagination-btn pagination-btn-next btn btn-primary">Next&nbsp;<span class="pagination-btn-icon">&#10142;</span></div>
       </div>
@@ -28,8 +52,20 @@
 
     <div class="swiper-slide">
       <div class="swiper-slide-container">
-        <h1>Get involved on Twitter.</h1>
-        <p>You don't have to sign in to participate. You can also tweet using the {{app_config 'title'}} hashtag and your ideas will be added here.</p>
+        <h1>
+          {{#app_config 'walkthrough_title_3'}}
+            {{{.}}}
+          {{^}}
+            Get involved on Twitter
+          {{/app_config}}
+        </h1>
+        <p>
+          {{#app_config 'walkthrough_description_3'}}
+            {{{.}}}
+          {{^}}
+            You don't have to sign in to participate. You can also tweet using the {{app_config 'title'}} hashtag and your ideas will be added here.
+          {{/app_config}}
+        </p>
         <div class="pagination-btn pagination-btn-prev btn btn-secondary"><span class="pagination-btn-icon">&#8617;</span></div>
         <button class="pagination-btn btn btn-primary btn-close"><span class="pagination-btn-icon">&nbsp;</span>Get Started<span class="pagination-btn-icon">&nbsp;</span></button>
       </div>

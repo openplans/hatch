@@ -502,7 +502,7 @@ var Hatch = Hatch || {};
       }
     });
 
-    if (Modernizr.localstorage) {
+    if (Modernizr.localstorage && NS.appConfig.show_walkthrough) {
       var hasVisited = localStorage.getItem('hatch-visited');
       if (!hasVisited) {
         NS.app.overlayRegion.show(new NS.WalkthroughView({
