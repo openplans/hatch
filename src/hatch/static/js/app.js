@@ -505,7 +505,9 @@ var Hatch = Hatch || {};
     if (Modernizr.localstorage) {
       var hasVisited = localStorage.getItem('hatch-visited');
       if (!hasVisited) {
-        NS.app.overlayRegion.show(new NS.WalkthroughView());
+        NS.app.overlayRegion.show(new NS.WalkthroughView({
+          model: NS.getCategory(NS.app.activeCategoryName)
+        }));
         localStorage.setItem('hatch-visited', true);
       }
     }
