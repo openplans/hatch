@@ -277,7 +277,7 @@ var Hatch = Hatch || {};
     },
     handleFormSubmission: function(evt) {
 
-      NS.Utils.log('event', 'vision-reply', 'save', this.model.id);
+      NS.Utils.log('send', 'event', 'vision-reply', 'save', this.model.id);
 
       evt.preventDefault();
       var form = evt.target,
