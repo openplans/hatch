@@ -1,8 +1,19 @@
 # Hatch
 
-Hatch helps community members share what they love about their communities, and their ideas for the future. Discovering and sharing visions happens over Twitter and directly on the app. City leadership and staff, community leaders, and other adult allies can use the tool to share visions they like, offer comments and help make connections.
+Hatch is an open source public input tool, targeted at young adults. Use it to expand your outreach and engagement by bringing Twitter conversations into the mix alongside other activities like public meetings. Pose a question or topic, and have a conversation using tweets or directly on your Hatch site. It’s intended to be engaging, visually compelling, and simple to use on mobile devices.
 
 Hatch started as \#VizLou, an experimental new tool for civic engagement, created in partnership with Louisville Metro, with support from Living Cities. [Read more about the project](http://www.livingcities.org/blog/?id=90).
+
+## Is Hatch right for your project?
+Hatch is just a tool. You decide how to use it well. Here are the ingredients for a successful Hatch project. Use these questions to decide if Hatch is a good fit for your project. If it is, get started:
+
+* The need: What are the topics you want to gather input on? Pick topics that are suited to gathering and sharing short messages on Twitter, and consider who you want to hear from. What makes this call for input authentic and meaningful to young adults? 
+* The convener: Who will lead the conversation, responding to questions? Could be a city hall team, a youth services organization or network of youth services organizations, planning professionals, or a grassroots nonprofit. Who will be watching the hashtag and writing replies?
+* The partners: Who will help with outreach and getting the word out? Who are your neighborhood Twitter nodes, to help shape the conversation and engage with young adults? 
+* The outreach: Does your project have an outreach plan? How will your intended users find out about your project and your Hatch site? What kind of face-to-face outreach are you planning?  
+
+We’re still evolving these questions, so please give us your feedback on what else you think is important to consider.
+
 
 ## Features
 
