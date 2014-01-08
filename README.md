@@ -72,7 +72,7 @@ You will need to setup your database settings also to point to your local postgr
 
 You don't have any tables yet! Run this to get everything setup for the first time.
 
-    src/manage.py syncdb --migrate
+    src/manage.py syncdb --all
 
 #### Create a superuser
 
@@ -88,7 +88,10 @@ A superuser will allow you to login to the site admin. Run this command and foll
 4. Fill in all of the required fields, especially the Twitter app settings. Remember, you can find them with your application settings at [https://dev.twitter.com/](https://dev.twitter.com/). Note that you can change any of these settings later.
 5. Click on the [Add link](http://localhost:8000/admin/hatch/category/add/) in the [Categories](http://localhost:8000/admin/hatch/category/) section.
 6. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
-7. Log out, restart your server (`src/manage.py runserver`), and then visit [your app](http://localhost:8000). Things should be setup correctly if you can login with your Twitter account and submit an idea.
+
+#### Restart your server
+
+Log out, restart your server (`src/manage.py runserver`), and then visit [your app](http://localhost:8000). Things should be setup correctly if you can login with your Twitter account and submit an idea.
 
 
 ### Deploy to Heroku
@@ -131,15 +134,6 @@ Deploy your code to Heroku now that the environment is all setup.
 
     git push heroku master
 
-#### Keep the user information fresh
-
-On your Heroku dashboard, click the Heroku Scheduler addon. Add the following
-scheduled task (job):
-
-    src/manage.py refreshusers
-
-Schedule it to run with a frequency of every 10 minutes.
-
 #### Setup and configure the app
 
 Your app is now deployed! Finally, we need to do the final steps which mirror what we did above when setting up our local instance.
@@ -148,7 +142,7 @@ Your app is now deployed! Finally, we need to do the final steps which mirror wh
 
 You don't have any tables yet! Run this to get everything setup for the first time.
 
-    heroku run src/manage.py syncdb --migrate
+    heroku run src/manage.py syncdb --all
 
 #### Create a superuser
 
@@ -163,7 +157,20 @@ A superuser will allow you to login to the site admin. Run this command and foll
 3. Fill in all of the required fields, especially the Twitter app settings. Remember, you can find them with your application settings at [https://dev.twitter.com/](https://dev.twitter.com/). Note that you can change any of these settings later.
 4. Click on the Add link in the Categories section.
 5. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
-6. Log out, restart your server (`heroku restart`), and then visit your app at `http://[myappname].herokuapp.com`. Things should be setup correctly if you can login with your Twitter account and submit an idea.
+
+#### Restart your server
+
+Log out, restart your server (`heroku restart`), and then visit your app at `http://[myappname].herokuapp.com`. Things should be setup correctly if you can login with your Twitter account and submit an idea.
+
+#### Keep the user information fresh
+
+On your Heroku dashboard, click the Heroku Scheduler addon. Add the following
+scheduled task (job):
+
+    src/manage.py refreshusers
+
+Schedule it to run with a frequency of every 10 minutes.
+
 
 #### Hatch a conversation
 
