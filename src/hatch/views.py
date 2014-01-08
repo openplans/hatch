@@ -94,7 +94,7 @@ class AppMixin (object):
             qs = qs.extra(
                 tables=['social_auth_usersocialauth'],
                 where=['hatch_user.id=social_auth_usersocialauth.user_id'],
-                select={'is_followed': 'social_auth_usersocialauth.uid IN (%s)' % ','.join(["'%s'" % uid for uid in followed_ids])})\
+                select={'is_followed': 'social_auth_usersocialauth.uid IN (%s)' % ','.join(["'%s'" % uid for uid in (followed_ids or [000000])])})\
                 .order_by('-is_followed')
 
         return qs
