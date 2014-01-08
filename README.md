@@ -172,6 +172,13 @@ scheduled task (job):
 Schedule it to run with a frequency of every 10 minutes.
 
 
+#### Scale your app
+
+On your Heroku dashboard, go to the Resources section.
+
+* Scale the worker process to 1 dyno. This is what monitors Twitter for new activity.
+* Optionally, scale your web process to 2 dynos. This will keep the app from going to sleep.
+
 #### Hatch a conversation
 
 Congratulations! You should now be up and running.
