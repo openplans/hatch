@@ -127,6 +127,16 @@ var Hatch = Hatch || {};
     return category && category.get('active') ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('first_of', function() {
+    var options = _.last(arguments),
+        values = _.initial(arguments),
+        i;
+
+    for (i = 0; i < values.length; ++i) {
+      if (values[i]) return values[i];
+    }
+  });
+
   Handlebars.registerHelper('eq', function(val1, val2, options) {
     return val1 === val2 ? options.fn(this) : options.inverse(this);
   });
