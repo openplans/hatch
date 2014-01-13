@@ -13,6 +13,15 @@ DATABASES = {
     }
 }
 
+# For AWS
+AWS_STORAGE_BUCKET_NAME = ''
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+
+# Google Analytics logging information
+GOOGLE_ANALYTICS_DOMAIN = '' # The domain for the app, e.g. 'hatchery.phila.gov'
+GOOGLE_ANALYTICS_ID = '' # The ID from Google Analytics, e.g. 'UA-12345678-1'
+
 # For task queuing
 BROKER_URL = 'django://'
 
@@ -20,7 +29,7 @@ SECRET_KEY = 'changemeloremipsumdolorsitametconsecteturadipisicingelit'
 ALLOWED_HOSTS = ['*']
 
 # For UI testing
-SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME') + ':' + environ.get('SAUCE_ACCESS_KEY') + '@ondemand.saucelabs.com:80/wd/hub'
+SELENIUM_COMMAND_EXECUTOR = 'http://' + environ.get('SAUCE_USERNAME', '') + ':' + environ.get('SAUCE_ACCESS_KEY', '') + '@ondemand.saucelabs.com:80/wd/hub'
 
 # For sitemaps and caching
 LAST_DEPLOY_DATE = '2013-09-01T12:00:00'
