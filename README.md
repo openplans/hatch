@@ -36,6 +36,7 @@ We’re still evolving these questions, so please give us your feedback on what 
 * A Twitter application
 * A Google Analytics ID and domain (optional)
 * AWS access key and secret, and S3 bucket (optional)
+* postgres on your computer (for local testing)
 
 #### Twitter application
 
@@ -63,6 +64,17 @@ If you want to use S3 for your image storage, do the following:
 
 
 ### Local Setup
+
+#### Check out the repo
+
+   git clone https://github.com/openplans/hatch.git
+   
+Set up your local development environment:
+    
+    cd hatch
+    virtualenv env
+    source env/bin/activate
+    pip install -r requirements.txt
 
 #### Settings
 
