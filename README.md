@@ -106,7 +106,7 @@ A superuser will allow you to login to the site admin. Run this command and foll
 
 1. Start the app by running `src/manage.py runserver` in your terminal from your app directory. This runs on port 8000 by default.
 2. Go to [http://localhost:8000/admin/](http://localhost:8000/admin/) and login with the credentials you created in the previous step.
-3. Click on the [Add link](http://localhost:8000/admin/hatch/appconfig/add/) in the [App configs](http://localhost:8000/admin/hatch/appconfig/) section.
+3. Click on [Add App Config](http://localhost:8000/admin/hatch/appconfig/add/) in the [App configs](http://localhost:8000/admin/hatch/appconfig/) section.
 4. Fill in all of the required fields, especially the Twitter app settings. Remember, you can find them with your application settings at [https://dev.twitter.com/](https://dev.twitter.com/). Note that you can change any of these settings later.
 5. Click on the [Add link](http://localhost:8000/admin/hatch/category/add/) in the [Categories](http://localhost:8000/admin/hatch/category/) section.
 6. Fill in all of the fields. A category describes the prompt you will give your users when they visit the site. Hatch supports multiple categories, but only one at a time.
