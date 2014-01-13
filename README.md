@@ -36,7 +36,6 @@ We’re still evolving these questions, so please give us your feedback on what 
 * A Twitter application
 * A Google Analytics ID and domain (optional)
 * AWS access key and secret, and S3 bucket (optional)
-* postgres on your computer (for local testing)
 
 #### Twitter application
 
