@@ -175,12 +175,8 @@ Your app is now deployed! Finally, we need to do the final steps which mirror wh
 You don't have any tables yet! Run this to get everything setup for the first time.
 
     heroku run src/manage.py syncdb --all
-
-#### Create a superuser
-
-A superuser will allow you to login to the site admin. Run this command and follow the prompts.
-
-    heroku run src/manage.py createsuperuser
+    
+When prompted, create a superuser. You'll use this account to log in and set up the account. 
 
 #### Configure the app
 
