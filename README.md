@@ -92,15 +92,10 @@ You will need to setup your database settings also to point to your local postgr
 
 #### Setup the database
 
-You don't have any tables yet! Run this to get everything setup for the first time.
+You don't have any tables yet! Run this to get everything setup for the first time. **When prompted, create a superuser.** You'll use this account to log in and set up the account.
 
     src/manage.py syncdb --all
-
-#### Create a superuser
-
-A superuser will allow you to login to the site admin. Run this command and follow the prompts.
-
-    src/manage.py createsuperuser
+    src/manage.py migrate --fake
 
 #### Configure the app
 
@@ -172,12 +167,11 @@ Your app is now deployed! Finally, we need to do the final steps which mirror wh
 
 #### Setup the database
 
-You don't have any tables yet! Run this to get everything setup for the first time.
+You don't have any tables yet! Run this to get everything setup for the first time. **When prompted, create a superuser.** You'll use this account to log in and set up the account.
 
     heroku run src/manage.py syncdb --all
+    heroku run src/manage.py migrate --fake
     
-When prompted, create a superuser. You'll use this account to log in and set up the account. 
-
 #### Configure the app
 
 1. Go to `http://[myappname].herokuapp.com/admin/` and login with the credentials you created in the previous step.
