@@ -122,9 +122,19 @@ Log out, restart your server (`src/manage.py runserver`), and then visit [your a
 
 1. Create a Heroku app for your Hatch git repo `heroku apps:create my-app-name`
 2. Make sure you add the following Heroku Add-ons
-  * Postgresql
-  * Rediscloud (or your favorite Redis add-on)
-  * Heroku Scheduler
+
+Postgresql
+     
+     heroku addons:add heroku-postgresql:dev
+
+Rediscloud (or your favorite Redis add-on)
+     
+     heroku addons:add rediscloud
+
+Heroku Scheduler
+
+     heroku addons:add scheduler
+
 
 #### Set environment variables
 
