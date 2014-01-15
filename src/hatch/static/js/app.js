@@ -93,6 +93,12 @@ var Hatch = Hatch || {};
   // Router ===================================================================
 
   var appRoutes = {};
+  appRoutes[NS.appConfig.vision_plural + '/:category/new']  =  'newVision';
+  appRoutes[NS.appConfig.vision_plural + '/:category']      =  'home';
+  appRoutes[NS.appConfig.vision_plural + '/:category/:id']  =  'showVision';
+
+  // Also register the encoded version of the vision_plural, in case the admin
+  // uses non-URL characters (e.g., space) in the string.
   appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category/new']  =  'newVision';
   appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category']      =  'home';
   appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category/:id']  =  'showVision';
