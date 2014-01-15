@@ -93,9 +93,9 @@ var Hatch = Hatch || {};
   // Router ===================================================================
 
   var appRoutes = {};
-  appRoutes[NS.appConfig.vision_plural + '/:category/new']  =  'newVision';
-  appRoutes[NS.appConfig.vision_plural + '/:category']      =  'home';
-  appRoutes[NS.appConfig.vision_plural + '/:category/:id']  =  'showVision';
+  appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category/new']  =  'newVision';
+  appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category']      =  'home';
+  appRoutes[encodeURIComponent(NS.appConfig.vision_plural) + '/:category/:id']  =  'showVision';
 
   _.extend(appRoutes, {
     'users/list':     'listUsers',
