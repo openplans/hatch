@@ -54,7 +54,7 @@ PIL  # For image verification
 # External Services
 # ==============================
 
-twitter
+twitter==1.13.1
 
 
 
