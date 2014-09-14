@@ -66,7 +66,7 @@ If you want to use S3 for your image storage, do the following:
 
 #### Check out the repo
 
-   git clone https://github.com/openplans/hatch.git
+    git clone https://github.com/openplans/hatch.git
    
 Set up your local development environment:
     
