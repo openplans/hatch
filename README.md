@@ -54,7 +54,7 @@ We’re still evolving these questions, so please give us your feedback on what 
 
 If you want to use S3 for your image storage, do the following:
 
-1. Log in to the AWS Management Console at aws.amazon.com (My Account/Console)
+1. Log in to the AWS Management Console at [http://aws.amazon.com/](aws.amazon.com) (My Account/Console)
 2. Select S3 from "Storage and Content Delivery"
 3. Create a bucket named *your-app*-media
 4. Get your security credentials, currently found in a menu under your name in the header. You'll need:
